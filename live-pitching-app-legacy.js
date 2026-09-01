@@ -502,10 +502,17 @@
       }
     }
     function livePitcherFromFeed(feed, team) {
-      var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
+      var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B;
       const boxTeam = teamBox(feed, (_a = team == null ? void 0 : team.team) == null ? void 0 : _a.id) || {};
-      const probableId = (_b = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _b.id;
+      const linescore = ((_b = feed == null ? void 0 : feed.liveData) == null ? void 0 : _b.linescore) || {};
+      const currentSection = [linescore.defense, linescore.offense].find((section) => {
+        var _a2, _b2;
+        return String((_a2 = section == null ? void 0 : section.team) == null ? void 0 : _a2.id) === String((_b2 = team == null ? void 0 : team.team) == null ? void 0 : _b2.id);
+      });
+      const currentId = (_c = currentSection == null ? void 0 : currentSection.pitcher) == null ? void 0 : _c.id;
+      const probableId = (_d = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _d.id;
       const ids = [];
+      if (currentId) ids.push(currentId);
       if (probableId) ids.push(probableId);
       (boxTeam.pitchers || []).forEach((id2) => {
         if (ids.indexOf(id2) < 0) ids.push(id2);
@@ -516,33 +523,35 @@
         return (_b2 = (_a2 = players[`ID${pid}`]) == null ? void 0 : _a2.stats) == null ? void 0 : _b2.pitching;
       }) || ids[0];
       const player = id ? players[`ID${id}`] || {} : {};
-      const stats = ((_c = player.stats) == null ? void 0 : _c.pitching) || {};
-      const season = ((_d = player.seasonStats) == null ? void 0 : _d.pitching) || {};
+      const stats = ((_e = player.stats) == null ? void 0 : _e.pitching) || {};
+      const season = ((_f = player.seasonStats) == null ? void 0 : _f.pitching) || {};
       return {
-        name: ((_e = player.person) == null ? void 0 : _e.fullName) || ((_f = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _f.fullName) || "STARTER TBD",
-        hand: ((_h = (_g = player.person) == null ? void 0 : _g.pitchHand) == null ? void 0 : _h.code) || ((_j = (_i = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _i.pitchHand) == null ? void 0 : _j.code) || "",
-        innings: (_k = stats.inningsPitched) != null ? _k : "\u2014",
-        pitches: (_n = (_m = (_l = stats.numberOfPitches) != null ? _l : stats.pitchesThrown) != null ? _m : stats.pitches) != null ? _n : "\u2014",
-        strikes: (_p = (_o = stats.numberOfStrikes) != null ? _o : stats.strikes) != null ? _p : "\u2014",
-        hits: (_q = stats.hits) != null ? _q : "\u2014",
-        runs: (_r = stats.runs) != null ? _r : "\u2014",
-        earnedRuns: (_s = stats.earnedRuns) != null ? _s : "\u2014",
-        walks: (_u = (_t = stats.baseOnBalls) != null ? _t : stats.walks) != null ? _u : "\u2014",
-        strikeOuts: (_w = (_v = stats.strikeOuts) != null ? _v : stats.strikeouts) != null ? _w : "\u2014",
-        era: (_x = season.era) != null ? _x : "\u2014",
-        whip: (_y = season.whip) != null ? _y : "\u2014"
+        name: ((_g = player.person) == null ? void 0 : _g.fullName) || ((_h = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _h.fullName) || "STARTER TBD",
+        hand: ((_j = (_i = player.person) == null ? void 0 : _i.pitchHand) == null ? void 0 : _j.code) || ((_l = (_k = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _k.pitchHand) == null ? void 0 : _l.code) || "",
+        current: !!currentId && String(currentId) === String(id),
+        innings: (_m = stats.inningsPitched) != null ? _m : "\u2014",
+        pitches: (_p = (_o = (_n = stats.numberOfPitches) != null ? _n : stats.pitchesThrown) != null ? _o : stats.pitches) != null ? _p : "\u2014",
+        strikes: (_r = (_q = stats.numberOfStrikes) != null ? _q : stats.strikes) != null ? _r : "\u2014",
+        balls: (_s = stats.balls) != null ? _s : "\u2014",
+        hits: (_t = stats.hits) != null ? _t : "\u2014",
+        runs: (_u = stats.runs) != null ? _u : "\u2014",
+        earnedRuns: (_v = stats.earnedRuns) != null ? _v : "\u2014",
+        walks: (_x = (_w = stats.baseOnBalls) != null ? _w : stats.walks) != null ? _x : "\u2014",
+        strikeOuts: (_z = (_y = stats.strikeOuts) != null ? _y : stats.strikeouts) != null ? _z : "\u2014",
+        era: (_A = season.era) != null ? _A : "\u2014",
+        whip: (_B = season.whip) != null ? _B : "\u2014"
       };
     }
     function livePitcherCard(team, p, right = false) {
-      var _a, _b, _c, _d, _e;
+      var _a, _b, _c;
       const name = (p == null ? void 0 : p.name) || ((_a = team == null ? void 0 : team.probablePitcher) == null ? void 0 : _a.fullName) || "STARTER TBD";
       const hand = (p == null ? void 0 : p.hand) ? `${p.hand}HP` : "";
       const teamName = ((_b = team == null ? void 0 : team.team) == null ? void 0 : _b.teamName) || ((_c = team == null ? void 0 : team.team) == null ? void 0 : _c.name) || "TEAM";
       const stat = (label, value) => `<div class="live-pitcher-stat"><span>${label}</span><b>${esc(value != null ? value : "\u2014")}</b></div>`;
+      const handLine = [hand, (p == null ? void 0 : p.innings) && `${p.innings} IP`].filter(Boolean).join(" \u2022 ");
       return `<div class="live-pitcher-card ${right ? "opp" : "bos"}">
-      <div class="live-pitcher-head"><img src="${mlbTeamLogo(team.team)}" alt=""><div><div class="live-pitcher-team">${esc(teamAbbr(team.team))} \u2022 ${esc(teamName)}</div><div class="live-pitcher-name">${esc(name)}</div><div class="live-pitcher-hand">${esc(hand)} <span class="live-pitcher-state">LIVE</span></div></div></div>
-      <div class="live-pitcher-grid">${stat("IP", p == null ? void 0 : p.innings)}${stat("P", p == null ? void 0 : p.pitches)}${stat("K", p == null ? void 0 : p.strikeOuts)}${stat("BB", p == null ? void 0 : p.walks)}${stat("H", p == null ? void 0 : p.hits)}${stat("ER", p == null ? void 0 : p.earnedRuns)}${stat("R", p == null ? void 0 : p.runs)}${stat("ERA", p == null ? void 0 : p.era)}</div>
-      <div class="live-pitcher-footer"><span>STRIKES <b>${esc((_d = p == null ? void 0 : p.strikes) != null ? _d : "\u2014")}</b></span><span>WHIP <b>${esc((_e = p == null ? void 0 : p.whip) != null ? _e : "\u2014")}</b></span></div>
+      <div class="live-pitcher-head"><img src="${mlbTeamLogo(team.team)}" alt=""><div><div class="live-pitcher-team">${esc(teamAbbr(team.team))} \u2022 ${esc(teamName)} <span class="live-pitcher-state">${(p == null ? void 0 : p.current) ? "ON MOUND" : "LIVE"}</span></div><div class="live-pitcher-name">${esc(name)}</div><div class="live-pitcher-hand">${esc(handLine)}</div></div></div>
+      <div class="live-pitcher-grid">${stat("PITCH", p == null ? void 0 : p.pitches)}${stat("STR", p == null ? void 0 : p.strikes)}${stat("BALL", p == null ? void 0 : p.balls)}${stat("BB", p == null ? void 0 : p.walks)}${stat("K", p == null ? void 0 : p.strikeOuts)}${stat("H", p == null ? void 0 : p.hits)}${stat("R", p == null ? void 0 : p.runs)}${stat("ER", p == null ? void 0 : p.earnedRuns)}</div>
     </div>`;
     }
     async function renderLivePitching(game) {
@@ -565,7 +574,7 @@
       try {
         const feed = await getJSON(MLB.gameFeed(game.gamePk));
         const bosP = livePitcherFromFeed(feed, bos), oppP = livePitcherFromFeed(feed, opp);
-        $("pitchers").innerHTML = `<div class="live-pitching-wrap">${livePitcherCard(bos, bosP)}${livePitcherCard(opp, oppP, true)}</div>`;
+        $("pitchers").innerHTML = `<div class="live-pitching-wrap">${livePitcherCard(bos, bosP)}<div class="live-pitching-vs">VS</div>${livePitcherCard(opp, oppP, true)}</div>`;
       } catch (e) {
         console.warn("Live pitching failed", e);
         $("pitchers").innerHTML = `<div class="detail-loading">LIVE PITCHING DATA RETRYING\u2026</div>`;
