@@ -1,0 +1,39 @@
+
+@media(max-width:820px){
+  html,body{
+    background:
+      radial-gradient(circle at 12% 4%,rgba(255,70,88,.05),transparent 20%),
+      radial-gradient(circle at 85% 6%,rgba(56,189,248,.05),transparent 24%),
+      linear-gradient(180deg,#080d12,#05080c)!important;
+  }
+  .sports-center{background:transparent!important}
+  .topbar{
+    background:rgba(8,13,18,.96)!important;
+    border-bottom-color:#2d3640!important;
+  }
+  .command-title,.clock{color:#f7f9fb!important}
+  .data-live{color:#e8edf2!important}
+  .header-center-logo{filter:none!important}
+  .hero-card,.score-panel,.detail-panel{
+    background:linear-gradient(180deg,#171e25,#0e141a)!important;
+    box-shadow:0 3px 10px rgba(0,0,0,.24)!important;
+  }
+  .hero-main.hero-balanced,.hero-card.is-live .hero-main.hero-balanced{
+    grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr)!important;
+  }
+  .hero-abbr,.hero-city,.hero-score,.row-team,.row-team-name,.row-score,.match-abbr,.match-name,
+  .pitcher-name,#lineupPanel .lineup-row .num,#lineupPanel .lineup-row .player-name,
+  #lineupPanel .lineup-row .pos,#lineupPanel .lineup-row .stat{
+    color:#fff!important;
+  }
+  .score-row{border-bottom-color:#303942!important}
+  .row-detail{border-top-color:#303942!important}
+  .news-bar{
+    background:rgba(10,15,20,.98)!important;
+    border-top-color:#e34b5b!important;
+  }
+  .news-track{color:#f2f5f7!important}
+  .matchup-projection{width:112px!important;font-size:6px!important}
+  .matchup-projection-label strong{font-size:7px!important}
+  #redSoxHero:not(.is-live) .hero-prob{display:none!important}
+}
