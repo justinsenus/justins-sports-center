@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0c10" />
+  <title>Justin's Sports Center</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="justin-logo-white.png" alt="Justin's logo" class="brand-logo" />
+        <div class="brand-copy">
+          <div class="eyebrow">LIVE SPORTS DASHBOARD</div>
+          <h1>JUSTIN'S SPORTS CENTER</h1>
+        </div>
+      </div>
+
+      <div class="top-status">
+        <div class="live-pill"><span class="live-dot"></span> AUTO LIVE</div>
+        <div class="clock-block">
+          <div id="clock">--:--</div>
+          <div id="dateLine">Loading date...</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="priority-row">
+        <article class="priority-card" id="redSoxCard">
+          <div class="card-header">
+            <span class="sport-label">⚾ MLB · PRIORITY TEAM</span>
+            <span class="data-status" id="mlbStatus">UPDATING</span>
+          </div>
+          <div id="redSoxContent" class="priority-content skeleton-text">Loading Red Sox...</div>
+        </article>
+
+        <article class="priority-card" id="patriotsCard">
+          <div class="card-header">
+            <span class="sport-label">🏈 NFL · PRIORITY TEAM</span>
+            <span class="data-status" id="nflStatus">UPDATING</span>
+          </div>
+          <div id="patriotsContent" class="priority-content skeleton-text">Loading Patriots...</div>
+        </article>
+      </section>
+
+      <section class="score-grid">
+        <article class="panel scoreboard-panel">
+          <div class="panel-title-row">
+            <div>
+              <span class="panel-kicker">LIVE + RECENT + UPCOMING</span>
+              <h2>MLB SCOREBOARD</h2>
+            </div>
+            <div class="panel-actions">
+              <button class="date-chip active" data-mlb-date="yesterday">YESTERDAY</button>
+              <button class="date-chip" data-mlb-date="today">TODAY</button>
+              <button class="date-chip" data-mlb-date="tomorrow">NEXT</button>
+            </div>
+          </div>
+          <div id="mlbGames" class="game-list"></div>
+        </article>
+
+        <article class="panel scoreboard-panel">
+          <div class="panel-title-row">
+            <div>
+              <span class="panel-kicker">LIVE + THIS NFL WINDOW</span>
+              <h2>NFL SCOREBOARD</h2>
+            </div>
+            <span class="refresh-note">AUTO REFRESH · 30 SEC</span>
+          </div>
+          <div id="nflGames" class="game-list"></div>
+        </article>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel matchup-panel">
+          <div class="panel-title-row">
+            <div>
+              <span class="panel-kicker">NEXT RED SOX GAME</span>
+              <h2>PITCHING MATCHUP</h2>
+            </div>
+          </div>
+          <div id="pitchingMatchup" class="matchup-content">
+            <div class="empty-state">Looking for the next announced pitching matchup...</div>
+          </div>
+        </article>
+
+        <article class="panel news-panel">
+          <div class="panel-title-row">
+            <div>
+              <span class="panel-kicker">LATEST</span>
+              <h2>SPORTS NEWS</h2>
+            </div>
+          </div>
+          <div id="newsFeed" class="news-feed">
+            <div class="empty-state">Loading latest MLB and NFL news...</div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="ticker">
+      <div class="ticker-label">LIVE FEED</div>
+      <div class="ticker-window">
+        <div id="tickerText" class="ticker-text">Connecting to MLB and NFL data...</div>
+      </div>
+      <div id="lastUpdated" class="last-updated">LAST SYNC — --:--</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

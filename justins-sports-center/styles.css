@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #080a0e;
+  --bg-2: #0d1016;
+  --panel: #11151d;
+  --panel-2: #151a23;
+  --line: rgba(255,255,255,.09);
+  --line-strong: rgba(255,255,255,.16);
+  --text: #f4f6fa;
+  --muted: #8992a3;
+  --soft: #c7ced9;
+  --accent: #e7ebf2;
+  --live: #ff4d57;
+  --good: #58e0a0;
+  --favorite: #273346;
+  --shadow: 0 18px 45px rgba(0,0,0,.28);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 78% 0%, rgba(74,86,110,.14), transparent 28%),
+    radial-gradient(circle at 8% 40%, rgba(255,255,255,.035), transparent 24%),
+    var(--bg);
+}
+
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  height: 92px;
+  padding: 12px 26px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(8,10,14,.88);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand { display: flex; align-items: center; gap: 15px; min-width: 0; }
+.brand-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 16px rgba(255,255,255,.08));
+}
+.brand-copy { line-height: 1; }
+.eyebrow, .panel-kicker {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .18em;
+  font-weight: 800;
+}
+.brand h1, h2 {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  letter-spacing: .045em;
+  margin: 4px 0 0;
+}
+.brand h1 { font-size: clamp(25px, 2vw, 38px); }
+
+.top-status { display: flex; align-items: center; gap: 20px; }
+.live-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 11px; border: 1px solid var(--line);
+  border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: .12em;
+}
+.live-dot { width: 7px; height: 7px; background: var(--live); border-radius: 50%; box-shadow: 0 0 14px var(--live); animation: pulse 1.6s infinite; }
+.clock-block { text-align: right; }
+#clock { font-family: "Barlow Condensed", sans-serif; font-size: 34px; font-weight: 700; line-height: .9; }
+#dateLine { margin-top: 5px; font-size: 10px; color: var(--muted); letter-spacing: .08em; }
+
+.dashboard {
+  width: min(100%, 1920px);
+  margin: 0 auto;
+  padding: 18px 26px 14px;
+  flex: 1;
+  display: grid;
+  gap: 14px;
+}
+
+.priority-row, .score-grid, .lower-grid {
+  display: grid;
+  gap: 14px;
+}
+.priority-row { grid-template-columns: 1fr 1fr; }
+.score-grid { grid-template-columns: 1.16fr .84fr; min-height: 370px; }
+.lower-grid { grid-template-columns: .78fr 1.22fr; }
+
+.panel, .priority-card {
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, rgba(20,25,34,.96), rgba(13,16,22,.96));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.priority-card {
+  min-height: 132px;
+  position: relative;
+}
+.priority-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(var(--accent), rgba(255,255,255,.12));
+}
+.card-header, .panel-title-row {
+  padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+.sport-label { font-size: 10px; font-weight: 800; letter-spacing: .12em; color: var(--soft); }
+.data-status, .refresh-note { color: var(--muted); font-size: 9px; letter-spacing: .1em; font-weight: 800; }
+.priority-content { padding: 12px 16px 15px; }
+
+.team-priority {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+.team-priority img { width: 50px; height: 50px; object-fit: contain; }
+.priority-name { font-family: "Barlow Condensed"; font-size: 25px; font-weight: 800; letter-spacing: .04em; }
+.priority-sub { color: var(--muted); font-size: 11px; margin-top: 3px; }
+.priority-score { text-align: right; }
+.big-score { font-family: "Barlow Condensed"; font-size: 40px; font-weight: 800; line-height: .85; }
+.game-status { font-size: 10px; color: var(--soft); margin-top: 7px; font-weight: 700; }
+.game-status.live { color: var(--live); }
+.game-status.final { color: var(--muted); }
+.game-status.upcoming { color: var(--good); }
+
+.panel-title-row h2 { font-size: 26px; }
+.panel-actions { display: flex; gap: 6px; }
+.date-chip {
+  appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted);
+  font: 700 9px Inter; letter-spacing: .08em; padding: 7px 8px; cursor: pointer;
+}
+.date-chip.active, .date-chip:hover { background: var(--accent); color: #0c0e12; border-color: var(--accent); }
+
+.game-list { padding: 7px 10px 10px; max-height: 310px; overflow: auto; }
+.game-list::-webkit-scrollbar { width: 5px; }
+.game-list::-webkit-scrollbar-thumb { background: #2a313d; }
+
+.game-card {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  min-height: 68px;
+  padding: 8px 7px;
+  border-bottom: 1px solid var(--line);
+}
+.game-card:last-child { border-bottom: 0; }
+.game-card.favorite { background: linear-gradient(90deg, rgba(255,255,255,.075), transparent); }
+.team-col { display: flex; flex-direction: column; gap: 4px; }
+.team-line { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; }
+.team-line img { width: 23px; height: 23px; object-fit: contain; }
+.score-num { margin-left: auto; font-family: "Barlow Condensed"; font-size: 24px; }
+.game-mid { text-align: center; font-size: 10px; color: var(--muted); font-weight: 700; }
+.game-mid .live-tag { color: var(--live); display: block; margin-bottom: 4px; font-size: 9px; letter-spacing: .08em; }
+.game-meta { color: var(--muted); font-size: 9px; margin-top: 4px; }
+
+.matchup-content { padding: 14px 16px; }
+.matchup-head { color: var(--muted); font-size: 10px; letter-spacing: .09em; margin-bottom: 10px; }
+.matchup-teams { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; gap: 10px; }
+.pitcher { display: flex; flex-direction: column; gap: 4px; }
+.pitcher.right { text-align: right; }
+.pitcher-team { font-family: "Barlow Condensed"; font-size: 24px; font-weight: 800; }
+.pitcher-name { font-size: 12px; color: var(--soft); font-weight: 700; }
+.pitcher-note { font-size: 10px; color: var(--muted); }
+.vs { text-align: center; color: var(--muted); font-family: "Barlow Condensed"; font-size: 25px; font-weight: 800; }
+.matchup-time { margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--line); color: var(--good); font-size: 10px; font-weight: 800; letter-spacing: .06em; }
+
+.news-feed { padding: 5px 13px 12px; max-height: 195px; overflow: auto; }
+.news-item {
+  display: grid; grid-template-columns: 72px 1fr; gap: 11px;
+  padding: 8px 0; border-bottom: 1px solid var(--line);
+}
+.news-item:last-child { border-bottom: 0; }
+.news-item img { width: 72px; height: 50px; object-fit: cover; border-radius: 3px; background: var(--panel-2); }
+.news-title { font-size: 11px; line-height: 1.35; font-weight: 700; color: var(--text); }
+.news-meta { color: var(--muted); font-size: 9px; margin-top: 4px; }
+
+.empty-state, .skeleton-text { color: var(--muted); font-size: 11px; padding: 20px 0; }
+
+.ticker {
+  min-height: 42px;
+  border-top: 1px solid var(--line);
+  background: #0b0e13;
+  display: grid;
+  grid-template-columns: 110px 1fr 180px;
+  align-items: center;
+}
+.ticker-label {
+  height: 100%; display: flex; align-items: center; justify-content: center;
+  font: 800 13px "Barlow Condensed"; letter-spacing: .12em;
+  background: var(--accent); color: #0b0e13;
+}
+.ticker-window { overflow: hidden; white-space: nowrap; }
+.ticker-text {
+  display: inline-block; padding-left: 20px; font-size: 10px; font-weight: 700; color: var(--soft);
+  animation: ticker 38s linear infinite;
+}
+.last-updated { text-align: center; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .07em; }
+
+@keyframes pulse { 50% { transform: scale(.72); opacity: .45; } }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-35%); } }
+
+@media (max-width: 1100px) {
+  .score-grid, .lower-grid { grid-template-columns: 1fr; }
+  .dashboard { padding: 12px; }
+  .topbar { padding: 10px 14px; }
+}
+
+@media (max-width: 720px) {
+  .topbar { height: auto; gap: 10px; }
+  .priority-row { grid-template-columns: 1fr; }
+  .brand-logo { width: 48px; height: 48px; }
+  .brand h1 { font-size: 25px; }
+  .live-pill { display: none; }
+  .ticker { grid-template-columns: 88px 1fr; }
+  .last-updated { display: none; }
+}
