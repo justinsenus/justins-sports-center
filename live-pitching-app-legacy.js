@@ -500,6 +500,8 @@
         pitcherHeader.classList.toggle("live-mode", live);
         pitcherHeader.innerHTML = `${live ? "LIVE STARTING PITCHERS" : "STARTING PITCHERS"} <span id="tvNetwork" class="tv-badge">TV: TBD</span>`;
       }
+      const pitchers = $("pitchers");
+      if (pitchers) pitchers.classList.toggle("live-pitchers", live);
     }
     function livePitcherFromFeed(feed, team) {
       var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B;
