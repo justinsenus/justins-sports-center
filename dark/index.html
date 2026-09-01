@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f4f6f8" />
+  <title>Justin's Command Center — Dark</title>
+  <style>html,body{margin:0;background:#080d12}</style>
+</head>
+<body>
+  <div id="sportsCenter" class="sports-center">
+    <header class="topbar">
+      <div class="header-left">
+        <div class="command-title">JUSTIN'S COMMAND CENTER</div>
+      </div>
+
+      <div class="header-center-brand" aria-label="Justin logo">
+        <img src="../justins-sports-center/justin-logo-white.png" class="header-center-logo" alt="Justin logo">
+      </div>
+
+      <div class="header-right">
+        <div class="data-live"><span class="status-dot red"></span> LIVE DATA</div>
+        <div class="divider"></div>
+        <div id="clock" class="clock">--:-- --</div>
+        <div class="divider"></div>
+        <div id="dateLine" class="date-line">---</div>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="hero-row">
+        <article id="redSoxHero" class="hero-card mlb-neon">
+          <div class="hero-loading">LOADING RED SOX…</div>
+        </article>
+
+        <article id="patriotsHero" class="hero-card nfl-neon">
+          <div class="hero-loading">LOADING PATRIOTS…</div>
+        </article>
+      </section>
+
+      <section class="data-row">
+        <article class="score-panel mlb-panel">
+          <div class="panel-header">
+            <div class="panel-title red-title">
+              <span class="league-badge">MLB</span>
+              <span>MLB SCORES</span>
+            </div>
+            <div class="panel-meta"><span id="mlbPageLabel">TODAY</span><span class="tiny-dot red-bg"></span><span>AUTO ROTATE</span></div>
+          </div>
+          <div id="mlbRows" class="score-rows"></div>
+        </article>
+
+        <article class="score-panel nfl-panel">
+          <div class="panel-header">
+            <div class="panel-title blue-title">
+              <span class="league-badge nfl-badge">NFL</span>
+              <span>NFL SCORES</span>
+            </div>
+            <div class="panel-meta"><span id="nflPageLabel">CURRENT</span><span class="tiny-dot blue-bg"></span><span>AUTO ROTATE</span></div>
+          </div>
+          <div id="nflRows" class="score-rows"></div>
+        </article>
+
+        <aside class="right-rail">
+          <article class="detail-panel next-panel">
+            <div class="detail-header">NEXT RED SOX MATCHUP</div>
+            <div id="nextMatchup" class="next-matchup">
+              <div class="detail-loading">LOADING MATCHUP…</div>
+            </div>
+          </article>
+
+          <article class="detail-panel pitchers-panel">
+            <div class="detail-header">STARTING PITCHERS <span id="tvNetwork" class="tv-badge">TV: TBD</span></div>
+            <div id="pitchers" class="pitchers">
+              <div class="detail-loading">LOADING PROBABLES…</div>
+            </div>
+          </article>
+
+          <article id="lineupPanel" class="detail-panel lineup-panel">
+            <div class="detail-header">
+              <span id="lineupTitle">RED SOX LINEUP</span>
+              <span id="lineupMode" class="lineup-mode">PROJECTED</span>
+            </div>
+            <div class="lineup-table-head">
+              <span id="col1">#</span><span id="col2">PLAYER</span><span id="col3">POS</span><span id="col4">AVG</span><span id="col5">HR</span><span id="col6">RBI</span><span id="col7">OPS</span>
+            </div>
+            <div id="lineupRows" class="lineup-rows"></div>
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="news-bar">
+      <div class="news-label"><span>SPORTS NEWS</span><i></i><i></i></div>
+      <div class="ticker-window">
+        <div id="newsTicker" class="news-track">CONNECTING TO SPORTS NEWS…</div>
+      </div>
+      <div id="lastSync" class="sync">SYNC --:--</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
