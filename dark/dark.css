@@ -1,0 +1,249 @@
+
+/* JUSTIN'S COMMAND CENTER — DARK EDITION
+   Keeps V18 geometry/data behavior, swaps only the visual treatment. */
+:root{
+  --dark-bg:#070b10;
+  --dark-card:#11171d;
+  --dark-card-2:#151c23;
+  --dark-line:#313942;
+  --dark-white:#f7f9fb;
+  --dark-soft:#c5cdd5;
+  --dark-muted:#87929d;
+  --dark-red:#ff4658;
+  --dark-blue:#38bdf8;
+  --dark-green:#71d66b;
+}
+html,body{
+  background:
+    radial-gradient(circle at 12% 6%,rgba(255,70,88,.055),transparent 22%),
+    radial-gradient(circle at 79% 7%,rgba(56,189,248,.055),transparent 24%),
+    linear-gradient(180deg,#080c11 0%,#05080c 100%)!important;
+  color:var(--dark-white)!important;
+}
+.sports-center{
+  background:transparent!important;
+}
+.topbar{
+  border-bottom:1px solid #262e36!important;
+  background:rgba(7,11,16,.82)!important;
+}
+.header-left .command-title{color:#f4f7fa!important}
+.header-right,.data-live,.clock{color:#f7f9fb!important}
+.date-line{color:var(--dark-red)!important}
+.divider{background:#69737d!important}
+.status-dot.red{background:var(--dark-red)!important;box-shadow:none!important}
+.status-dot.blue{background:var(--dark-blue)!important;box-shadow:none!important}
+.header-center-logo{filter:none!important}
+
+/* Dark glass cards — deliberately restrained. */
+.hero-card,.score-panel,.detail-panel,.news-bar{
+  background:
+    linear-gradient(180deg,rgba(25,32,40,.97),rgba(13,18,24,.98))!important;
+  backdrop-filter:blur(12px) saturate(112%)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(112%)!important;
+}
+.mlb-neon,.mlb-panel,.detail-panel{
+  border-color:#f04b5a!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.24)!important;
+}
+.nfl-neon,.nfl-panel{
+  border-color:#36aee4!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.24)!important;
+}
+
+/* Core type. Live hero scores and labels stay white. */
+.hero-abbr,.hero-city,.row-team,.row-team-name,.row-score,.pitcher-name,.match-abbr,.match-name,.lineup-row,.clock,
+.hero-score,.score-divider,.hero-at-clean,.hero-live-copy,.hero-live-copy span,.nfl-live-detail span{
+  color:var(--dark-white)!important;
+  text-shadow:none!important;
+}
+.hero-record,.match-record,.next-record{color:#4dc1f2!important}
+.hero-score.home-score,.mlb-neon .hero-score.home-score{color:#fff!important}
+.hero-kicker.red-text,.red-title,.detail-header{color:#ff5968!important}
+.hero-kicker.blue-text,.blue-title{color:#46c2f7!important}
+.hero-kicker-detail{color:#c8d0d8!important}
+.hero-kicker.red-text .hero-kicker-detail{color:#ff6b78!important}
+.hero-kicker.blue-text .hero-kicker-detail{color:#58c7f5!important}
+.hero-live-pill{
+  color:#fff!important;background:#1b1014!important;border-color:#ff5968!important;
+  box-shadow:none!important;
+}
+.nfl-live-pill{
+  color:#fff!important;background:#0c1820!important;border-color:#46b9e9!important;
+  box-shadow:none!important;
+}
+.hero-game-state{color:#ff5968!important}
+.nfl-neon .hero-game-state{color:#46b9e9!important}
+.hero-loading,.detail-loading,.empty-row{color:#8f9aa5!important}
+.next-info,.mlb-neon .next-info{color:#ff5968!important}
+.nfl-neon .next-info{color:#46b9e9!important}
+
+/* Keep the two hero cards perfectly symmetrical. */
+.hero-row{grid-template-columns:1fr 1fr!important}
+.hero-main.hero-balanced{
+  grid-template-columns:minmax(0,1fr) 220px minmax(0,1fr)!important;
+  text-align:center!important;
+}
+.hero-main.hero-balanced .hero-team{align-items:center!important}
+.hero-center-panel{align-items:center!important;justify-content:center!important;text-align:center!important}
+#redSoxHero .hero-center-panel,
+#redSoxHero .hero-score-center,
+#redSoxHero .hero-live-detail{
+  margin-left:auto!important;margin-right:auto!important;
+  justify-content:center!important;text-align:center!important;
+}
+#redSoxHero .hero-live-copy{align-items:center!important}
+
+/* Original logos only — no artificial outline or bloom. */
+.hero-team-logo,.row-team img,.match-team img,.pitcher img{
+  filter:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+
+/* Baseball live field. */
+.base{background:transparent!important;border-color:#d9dee3!important;box-shadow:none!important}
+.base.home{background:transparent!important;border-color:#78828d!important}
+.base.on{background:#fff!important;border-color:#fff!important;box-shadow:none!important}
+.row-mini-field .mini-diamond .base{background:transparent!important;border-color:#c5ccd3!important}
+.row-mini-field .mini-diamond .base.on{background:#fff!important;border-color:#fff!important}
+.mini-count,.hero-count{color:#d4d9de!important}
+
+/* Score tables. */
+.panel-header,.detail-header{border-bottom-color:currentColor!important}
+.score-row{border-bottom-color:#303841!important;background:rgba(255,255,255,.006)!important}
+.score-row:nth-child(even){background:rgba(255,255,255,.012)!important}
+.score-status small{color:#bac2ca!important}
+.score-status.live{color:#ff5968!important}
+.score-status.upcoming{color:#f0f3f6!important}
+.score-status.final{color:#9ba5af!important}
+.score-separator{color:#ff5968!important}
+.nfl-panel .score-separator{color:#89949f!important}
+.row-game-info{color:#d1d7dd!important}
+.row-venue{color:#47bcec!important}
+.row-detail{border-left-color:#343d46!important}
+.row-detail-title{color:#87929d!important}
+.pitcher-mini,.bet-line b,.live-detail{color:#edf1f4!important}
+.pitcher-mini span,.bet-line span{color:#87929d!important}
+.live-title{color:#78d477!important}
+.live-sub{color:#5cc5ef!important}
+
+/* Cleaner probability rails: dark, modern, minimal glow. */
+.win-prob{filter:none!important}
+.prob-title{color:#838e99!important}
+.prob-side b{color:#dce2e8!important}
+.prob-side strong{color:#8be684!important}
+.prob-track{
+  background:#2e3740!important;
+  box-shadow:inset 0 0 0 1px #3b454f!important;
+}
+.prob-left{background:#61c866!important}
+.prob-marker{
+  background:#78db72!important;
+  border-color:#0d1217!important;
+  box-shadow:0 0 0 1px #9aee96!important;
+}
+.score-prob .prob-side b{color:#aab3bc!important}
+
+/* Do not show a projection on the finished Red Sox hero card.
+   When Boston goes live, the live win-probability rail returns automatically. */
+#redSoxHero:not(.is-live) .hero-prob{display:none!important}
+
+/* Matchup projection lives in the upcoming matchup card instead. */
+.match-center-stack{gap:2px!important}
+.matchup-projection{
+  width:150px;
+  margin:3px auto 0;
+  color:#cdd4db;
+  font:800 7px Inter,Arial,sans-serif;
+  letter-spacing:.04em;
+}
+.matchup-projection-label{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.matchup-projection-label strong{color:#8be684;font-size:8px}
+.matchup-projection-track{
+  position:relative;height:4px;margin-top:2px;border-radius:99px;
+  background:#2d363f;overflow:visible;
+  box-shadow:inset 0 0 0 1px #3a444d;
+}
+.matchup-projection-fill{
+  position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:#5fc766;
+}
+.matchup-projection-dot{
+  position:absolute;top:50%;width:7px;height:7px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:#82dc78;border:1px solid #0f1419;
+  box-shadow:0 0 0 1px #9be895;
+}
+
+/* Center the red game timing below the MLB center column. */
+.mlb-neon .hero-bottom-info{
+  left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+  width:300px!important;text-align:center!important;color:#ff5968!important;
+}
+
+/* Matchup + pitchers. */
+.match-at-box{
+  color:#fff!important;background:#171e25!important;border-color:#59636e!important;
+}
+.match-center-red,.match-meta-red{color:#ff5968!important}
+.match-meta-main{color:#e6ebef!important}
+.pitcher-meta{color:#b5bec7!important}
+.pitcher-stat{color:#9ba6b0!important}
+.tv-badge,.mode-badge{
+  color:#edf1f4!important;background:#161d24!important;border-color:#4c5661!important;
+}
+
+/* Lineup keeps Boston red, and only the opponent view changes via --lineup-accent. */
+#lineupPanel{
+  background:linear-gradient(180deg,#151b21,#0f1419)!important;
+  border-color:var(--lineup-accent)!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.22)!important;
+}
+#lineupPanel .detail-header,
+#lineupPanel #lineupTitle,
+#lineupPanel .lineup-table-head,
+#lineupPanel .lineup-mode{
+  color:var(--lineup-accent)!important;
+  border-bottom-color:var(--lineup-accent)!important;
+}
+#lineupPanel .lineup-table-head{background:#11171c!important}
+#lineupPanel .lineup-row{
+  color:#fff!important;border-bottom-color:#303942!important;
+}
+#lineupPanel .lineup-row:nth-child(even){background:#171e25!important}
+#lineupPanel .lineup-row .num,
+#lineupPanel .lineup-row .player-name,
+#lineupPanel .lineup-row .pos,
+#lineupPanel .lineup-row .stat{
+  color:#f6f8fa!important;opacity:1!important;
+}
+#lineupPanel .lineup-row .stat,#lineupPanel .lineup-row .pos{font-weight:800!important}
+#lineupPanel.live-stats .lineup-mode{color:#7cda79!important}
+
+/* Footer. */
+.news-bar{border-color:#ed4f5e!important;box-shadow:0 3px 12px rgba(0,0,0,.23)!important}
+.news-label{color:#ff5968!important;text-shadow:none!important;border-right-color:#ed4f5e!important}
+.news-label i{border-color:#ed4f5e!important}
+.news-track{color:#f1f4f7!important}
+.news-track .bullet{color:#ff5968!important}
+.sync{color:#ff5968!important;background:#0d1217!important;border-left-color:#343d46!important}
+
+/* Live score animation stays visible without neon bloom. */
+.row-score.leader{color:#fff!important;text-shadow:none!important}
+@keyframes leaderDark{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+.live-leader{animation:leaderDark 2s ease-in-out infinite!important}
+@keyframes scorePopDark{
+  0%{transform:scale(1)}
+  22%{transform:scale(1.22);color:#8be684}
+  55%{transform:scale(1.08);color:#fff}
+  100%{transform:scale(1)}
+}
+.row-score.score-change,.hero-score.score-change{animation:scorePopDark 2.1s ease-out both!important}
+
+@media(max-width:1500px){
+  .hero-main.hero-balanced{grid-template-columns:minmax(0,1fr) 180px minmax(0,1fr)!important}
+  .mlb-neon .hero-bottom-info{width:250px!important}
+  .matchup-projection{width:128px}
+}
