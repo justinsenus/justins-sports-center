@@ -157,24 +157,24 @@ body { overflow-x: hidden; }
 .red-heading { color: var(--red); }
 .blue-heading { color: var(--blue); }
 .amber-heading { color: var(--amber); }
-.panel-meta { margin-left: auto; color: var(--muted); font-size: 11px; font-weight: 900; letter-spacing: .06em; white-space: nowrap; }
+.panel-meta { max-width: 46%; margin-left: auto; overflow: hidden; color: var(--muted); text-overflow: ellipsis; font-size: 11px; font-weight: 900; letter-spacing: .06em; white-space: nowrap; }
 .panel-content { min-height: 0; padding: 18px; overflow: hidden; }
 
 .pitching-content { display: flex; flex-direction: column; gap: 14px; height: 100%; }
-.pitcher-card { display: flex; flex-direction: column; min-height: 0; flex: 1 1 0; padding: 16px; border: 2px solid var(--red); border-radius: 14px; background: var(--panel-alt); }
+.pitcher-card { display: flex; flex-direction: column; min-height: 0; flex: 1 1 0; overflow: hidden; padding: 13px; border: 2px solid var(--red); border-radius: 14px; background: var(--panel-alt); }
 .pitcher-card.away { border-color: var(--blue); }
 .pitcher-top { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
 .pitcher-logo { width: 28px; height: 28px; object-fit: contain; flex: 0 0 28px; }
 .pitcher-copy { min-width: 0; flex: 1; }
 .live-label { color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .07em; }
-.pitcher-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 6px; font-size: 24px; font-weight: 900; }
-.pitcher-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: .04em; }
+.pitcher-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 5px; font-size: 22px; font-weight: 900; }
+.pitcher-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .04em; }
 .team-chip { flex: 0 0 auto; border-radius: 999px; padding: 7px 13px 6px; color: #fff; background: var(--red); font-size: 11px; font-weight: 900; letter-spacing: .07em; }
 .away .team-chip { background: var(--blue); }
 .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-top: auto; padding-top: 14px; }
-.stat-cell { min-width: 0; padding: 8px 6px 9px; border-radius: 8px; background: #172840; text-align: center; }
+.stat-cell { min-width: 0; padding: 5px 4px 6px; border-radius: 8px; background: #172840; text-align: center; }
 .stat-label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .05em; }
-.stat-value { margin-top: 5px; color: var(--text); font-size: 23px; line-height: .9; }
+.stat-value { margin-top: 4px; color: var(--text); font-size: 20px; line-height: .9; }
 .pitcher-card:not(.away) .stat-value { color: var(--red); }
 .pitcher-card.away .stat-value { color: var(--blue); }
 
