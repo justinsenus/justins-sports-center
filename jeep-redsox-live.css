@@ -118,7 +118,7 @@ body { overflow-x: hidden; }
 .team-side.away { flex-direction: row-reverse; text-align: right; }
 .team-logo { width: 88px; height: 88px; object-fit: contain; flex: 0 0 88px; }
 .team-copy { flex: 1 1 auto; min-width: 0; }
-.team-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: clamp(16px, 1.28vw, 29px); font-weight: 900; letter-spacing: .01em; }
+.team-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: clamp(15px, 1.22vw, 29px); font-weight: 900; letter-spacing: -.005em; }
 .team-record { margin-top: 7px; color: var(--muted); font-size: 14px; font-weight: 900; letter-spacing: .04em; }
 .score-stack { display: grid; justify-items: center; flex: 0 0 90px; min-width: 90px; }
 .score-label { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: .06em; }
