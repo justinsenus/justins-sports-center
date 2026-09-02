@@ -21,7 +21,7 @@
     const ROWS_PER_PAGE = 6;
     const RED_SOX_RED = "#ff2738";
     const PLAY_ALERT_MS = 2e4;
-    const WALLY_GIF = new URL("../wally-home-run.gif", ((_a = document.currentScript) == null ? void 0 : _a.src) || location.href).href;
+    const WALLY_GIF = new URL("wally-home-run.gif", ((_a = document.currentScript) == null ? void 0 : _a.src) || new URL("../", location.href)).href;
     const TEAM_COLORS = {
       108: "#ff7580",
       109: "#ff6a71",
