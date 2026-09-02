@@ -236,3 +236,11 @@
   .home-run-type{font-size:13px}
   .home-run-detail{font-size:7px}
 }
+
+/* The inherited mobile ticker is light outside its media query; keep this new route dark at every Chromebook width. */
+.wally-mobile .news-bar{
+  background:linear-gradient(180deg,rgba(25,32,40,.97),rgba(13,18,24,.98))!important;
+  border-color:#ed4f5e!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.23)!important;
+}
+.wally-mobile .news-label,.wally-mobile .news-track{color:#f7f9fb!important}
