@@ -1,0 +1,238 @@
+/* Live stats stay inside the original compact red pitcher panel. */
+.next-panel .detail-header.live-mode,
+.pitchers-panel .detail-header.live-mode{
+  color:#7cda79!important;
+}
+.next-panel .detail-header.live-mode{
+  border-bottom-color:#7cda79!important;
+}
+.pitchers-panel .detail-header.live-mode .tv-badge{
+  color:#dff7dc!important;
+  border-color:#66c965!important;
+}
+.live-at-box{
+  color:#7cda79!important;
+  border-color:#66c965!important;
+  background:#102016!important;
+}
+.live-score-line{
+  font-size:18px!important;
+  font-weight:900!important;
+  letter-spacing:.04em!important;
+}
+.live-pitching-wrap{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
+  align-items:center;
+  gap:5px;
+  height:100%;
+  min-width:0;
+  padding:3px 10px 4px;
+  box-sizing:border-box;
+}
+.pitchers.live-pitchers{
+  display:block!important;
+  grid-template-columns:none!important;
+  height:calc(100% - 35px)!important;
+  min-width:0;
+  overflow:hidden!important;
+  padding:0!important;
+}
+.pitchers-panel.live-pitching-panel,
+.pitchers-panel:has(.live-pitchers){
+  flex:0 0 102px!important;
+}
+.live-pitching-vs{
+  color:#89949f;
+  font:900 9px/1 Inter,Arial,sans-serif;
+  letter-spacing:.05em;
+  text-align:center;
+}
+.live-pitcher-card{
+  min-width:0;
+  overflow:hidden;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.live-pitcher-card.bos{border-right:1px solid rgba(230,75,92,.35)}
+.live-pitcher-card.opp{border-left:1px solid rgba(74,174,215,.35)}
+.live-pitcher-head{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-width:0;
+}
+.live-pitcher-card.opp .live-pitcher-head{
+  flex-direction:row-reverse;
+  text-align:right;
+}
+.live-pitcher-head img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  flex:0 0 22px;
+}
+.live-pitcher-head>div{min-width:0;overflow:hidden}
+.live-pitcher-team{
+  overflow:hidden;
+  color:#9eabb7;
+  font:800 6px/1.05 Inter,Arial,sans-serif;
+  letter-spacing:.035em;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.live-pitcher-name{
+  overflow:hidden;
+  color:#f7f9fb;
+  font:900 11px/1.05 Inter,Arial,sans-serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.live-pitcher-hand{
+  overflow:hidden;
+  color:#aeb9c3;
+  font:700 6px/1.05 Inter,Arial,sans-serif;
+  letter-spacing:.02em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.live-pitcher-state{
+  margin-left:3px;
+  color:#7cda79;
+  font-weight:900;
+}
+.live-pitcher-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:2px;
+  margin-top:2px;
+}
+.live-pitcher-stat{
+  min-width:0;
+  padding:1px;
+  border-radius:2px;
+  background:#111920;
+  text-align:center;
+}
+.live-pitcher-stat span{
+  display:block;
+  overflow:hidden;
+  color:#82909d;
+  font:800 5px/1 Inter,Arial,sans-serif;
+  letter-spacing:.025em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.live-pitcher-stat b{
+  display:block;
+  overflow:hidden;
+  margin-top:0;
+  color:#f5f7f8;
+  font:900 9px/1 Inter,Arial,sans-serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+@media(max-width:820px){
+  .live-pitching-wrap{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:3px;padding:2px 8px 3px}
+  .live-pitcher-head{gap:4px}
+  .live-pitcher-head img{width:20px;height:20px;flex-basis:20px}
+  .live-pitcher-name{font-size:10px}
+  .live-pitcher-grid{gap:1px;margin-top:2px}
+  .live-pitcher-stat span{font-size:4.5px}
+  .live-pitcher-stat b{font-size:8px}
+}
+
+/* Wally play alerts cover the hero contents while keeping the Red Sox outline visible. */
+.mlb-neon{position:relative;overflow:hidden}
+.home-run-alert{
+  position:absolute;
+  z-index:20;
+  inset:1px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(260px,48%);
+  align-items:stretch;
+  gap:10px;
+  box-sizing:border-box;
+  padding:10px 12px;
+  overflow:hidden;
+  border-radius:7px;
+  background:linear-gradient(112deg,#090e14 0%,#0b1118 52%,#080b10 100%);
+  pointer-events:none;
+}
+.home-run-copy{
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  justify-content:center;
+  overflow:hidden;
+}
+.home-run-kicker{
+  overflow:hidden;
+  color:#ff6a75;
+  font:900 10px/1.1 Inter,Arial,sans-serif;
+  letter-spacing:.13em;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.home-run-player{
+  overflow:hidden;
+  margin-top:6px;
+  color:#f7f9fb;
+  font:900 clamp(18px,2.35vw,32px)/.98 Inter,Arial,sans-serif;
+  letter-spacing:-.025em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.home-run-type{
+  overflow:hidden;
+  margin-top:6px;
+  color:#ff3447;
+  font:900 clamp(17px,2.1vw,28px)/1 Inter,Arial,sans-serif;
+  letter-spacing:.035em;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.home-run-detail{
+  overflow:hidden;
+  margin-top:8px;
+  color:#b9c4ce;
+  font:800 10px/1.2 Inter,Arial,sans-serif;
+  letter-spacing:.04em;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.home-run-wally{
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  border-radius:5px;
+  background:#05080c;
+}
+.home-run-wally img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+@media(max-width:820px){
+  .home-run-alert{grid-template-columns:minmax(0,1fr) minmax(0,54%);gap:6px;padding:7px 8px;border-radius:6px}
+  .home-run-kicker{font-size:8px;letter-spacing:.1em}
+  .home-run-player{margin-top:4px;font-size:17px}
+  .home-run-type{margin-top:4px;font-size:16px}
+  .home-run-detail{margin-top:5px;font-size:8px}
+}
+@media(max-width:480px){
+  .home-run-alert{grid-template-columns:minmax(0,1fr) minmax(0,52%);gap:5px;padding:6px}
+  .home-run-player{font-size:14px}
+  .home-run-type{font-size:13px}
+  .home-run-detail{font-size:7px}
+}
