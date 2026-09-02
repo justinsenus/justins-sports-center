@@ -13,6 +13,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c]);
   const n = (value, fallback = "—") => `<span class="num">${esc(value == null || value === "" ? fallback : value)}</span>`;
+  const textWithNums = (value) => esc(value).replace(/\d+(?:\.\d+)?/g, (digits) => `<span class="num">${digits}</span>`);
   const numText = (value, fallback = "—") => String(value == null || value === "" ? fallback : value);
   const pad = (value) => String(value).padStart(2, "0");
 
@@ -94,8 +95,8 @@
     const linescore = selected.linescore || {};
     const bosScore = live || final ? numText(bos.score, "0") : "—";
     const oppScore = live || final ? numText(opp.score, "0") : "—";
-    const center = live ? `${esc(inningText(selected))}<div class="inning-detail">${n(linescore.outs || 0)} OUT • COUNT ${n(linescore.balls || 0)}–${n(linescore.strikes || 0)}</div><div class="base-row">${diamond(linescore)}<span class="base-copy">${esc(baseText(linescore))}</span></div>` : `<div class="inning-label">${final ? "FINAL" : "NEXT GAME"}</div><div class="inning-detail">${esc(dateTime(selected.gameDate))}</div><div class="base-row"><span class="base-copy">${final ? "GAME COMPLETE" : esc(selected.venue && selected.venue.name || "VENUE TBD")}</span></div>`;
-    return `<div class="score-topline"><div class="score-title">JUSTIN'S RED SOX LIVE</div><span class="state-pill ${live ? "live" : ""}">${live ? "LIVE • " + esc(inningText(selected)) : final ? "FINAL" : "NEXT GAME"}</span><span class="sample-pill">${state.demo ? "DEMO DATA" : "READ-ONLY LIVE FEED"}</span></div>
+    const center = live ? `${textWithNums(inningText(selected))}<div class="inning-detail">${n(linescore.outs || 0)} OUT • COUNT ${n(linescore.balls || 0)}–${n(linescore.strikes || 0)}</div><div class="base-row">${diamond(linescore)}<span class="base-copy">${textWithNums(baseText(linescore))}</span></div>` : `<div class="inning-label">${final ? "FINAL" : "NEXT GAME"}</div><div class="inning-detail">${textWithNums(dateTime(selected.gameDate))}</div><div class="base-row"><span class="base-copy">${final ? "GAME COMPLETE" : esc(selected.venue && selected.venue.name || "VENUE TBD")}</span></div>`;
+    return `<div class="score-topline"><div class="score-title">JUSTIN'S RED SOX LIVE</div><span class="state-pill ${live ? "live" : ""}">${live ? "LIVE • " + textWithNums(inningText(selected)) : final ? "FINAL" : "NEXT GAME"}</span><span class="sample-pill">${state.demo ? "DEMO DATA" : "READ-ONLY LIVE FEED"}</span></div>
       <div class="score-main">
         <div class="team-side home"><img class="team-logo" src="${TEAM_LOGO(bos.team.id)}" alt="${esc(teamName(bos))}"><div class="team-copy"><div class="team-name">${esc(teamName(bos))}</div><div class="team-record">${live || final ? "HOME" : "HOME • NEXT"} • ${n(record(bos))}</div></div><div class="score-stack"><div class="score-label">BOS SCORE</div><div class="score-number">${n(bosScore)}</div></div></div>
         <div class="score-center"><div class="inning-label">${center}</div></div>
@@ -180,7 +181,7 @@
     const current = currentId && rows.find((row) => row.id === Number(currentId));
     $("lineupMeta").textContent = live && rows.length ? "LIVE STATS" : "LINEUP PENDING";
     if (!rows.length) {
-      $("lineupContent").innerHTML = `<div class="loading-state">LINEUP NOT POSTED YET<br><span class="num">${esc(dateTime(game.gameDate))}</span></div>`;
+      $("lineupContent").innerHTML = `<div class="loading-state">LINEUP NOT POSTED YET<br>${textWithNums(dateTime(game.gameDate))}</div>`;
       return;
     }
     $("lineupContent").innerHTML = `<div class="at-bat-card"><div class="eyebrow">${current ? "AT THE PLATE" : "RED SOX BATTING ORDER"}</div><div class="at-bat-name">${esc(current ? current.name : rows[0].name)}</div><div class="at-bat-detail">${esc(current ? current.pos : rows[0].pos)} • ${current ? "LIVE BATTER" : "LINEUP"} • COUNT ${n(linescore.balls || 0)}–${n(linescore.strikes || 0)}</div></div><div class="lineup-rows">${rows.map((row) => `<div class="lineup-row ${current && current.id === row.id ? "active" : ""}"><span class="lineup-number num">${n(row.order)}</span><span class="lineup-name">${esc(row.name)}</span><span class="lineup-pos">${esc(row.pos)}</span><span class="lineup-line">${row.line.replace(/(\d+)/g, '<span class="num">$1</span>')}</span></div>`).join("")}</div><div class="on-deck"><div class="on-deck-label">ON DECK</div><div class="on-deck-name">${esc((current && rows[(rows.indexOf(current) + 1) % rows.length] || rows[1] || rows[0]).name)}</div></div>`;
@@ -229,8 +230,8 @@
     const batter = batterId && players[`ID${batterId}`] && players[`ID${batterId}`].person && players[`ID${batterId}`].person.fullName || "CURRENT BATTER";
     const pitches = pitchEvents(feed), plays = recentPlays(feed), count = currentPlay.count || {};
     const dots = pitches.map((pitch, index) => `<span class="zone-dot ${["red", "blue", "amber", "green"][index % 4]}" style="left:${pitch.px}%;top:${pitch.py}%">${esc(pitch.short)}</span>`).join("");
-    const pitchRows = pitches.length ? pitches.slice().reverse().map((pitch, index) => `<div class="pitch-row ${index === 0 ? "latest" : ""}"><span class="pitch-index num">${index + 1}</span>${esc(pitch.type)} • <span class="pitch-speed">${n(pitch.speed)} MPH</span> • ${esc(pitch.result)}</div>`).join("") : `<div class="pitch-row">AWAITING PITCH DATA</div>`;
-    const playRows = plays.length ? plays.map((play, index) => `<div class="play-row"><span class="play-time num">${esc(play.time)}</span><span class="play-text">${esc(play.text)}</span><span class="play-tag">${esc(play.tag)}</span></div>`).join("") : `<div class="play-row"><span class="play-text">NO PLAY UPDATES YET</span></div>`;
+    const pitchRows = pitches.length ? pitches.slice().reverse().map((pitch, index) => `<div class="pitch-row ${index === 0 ? "latest" : ""}"><span class="pitch-index num">${index + 1}</span>${textWithNums(pitch.type)} • <span class="pitch-speed">${n(pitch.speed)} MPH</span> • ${textWithNums(pitch.result)}</div>`).join("") : `<div class="pitch-row">AWAITING PITCH DATA</div>`;
+    const playRows = plays.length ? plays.map((play, index) => `<div class="play-row"><span class="play-time num">${esc(play.time)}</span><span class="play-text">${textWithNums(play.text)}</span><span class="play-tag">${textWithNums(play.tag)}</span></div>`).join("") : `<div class="play-row"><span class="play-text">NO PLAY UPDATES YET</span></div>`;
     const prob = winProbability(game);
     $("breakdownMeta").textContent = "LIVE • REFRESH 15S";
     $("breakdownContent").innerHTML = `<div class="current-at-bat"><div class="breakdown-batter"><div class="eyebrow">CURRENT AT-BAT</div><h3>${esc(batter)}</h3><div class="situation">COUNT ${n(count.balls || 0)}–${n(count.strikes || 0)} • ${n(linescore.outs || 0)} OUT • ${esc(baseText(linescore))}</div><div class="pitch-track-title">PITCH TRACK</div><div class="pitch-list">${pitchRows}</div></div><div class="zone-wrap"><div><div class="strike-zone">${dots}</div><div class="zone-caption">STRIKE ZONE</div></div></div></div><div class="probability"><div class="probability-line"><span>WIN PROBABILITY</span><span class="win-value">BOS ${n(prob)}%</span></div><div class="prob-bar"><div class="prob-fill" style="width:${prob}%"></div></div></div><div class="plays-title">LAST 3 PLAYS</div><div class="play-list">${playRows}</div><div class="sync-line">FEED LAST SYNC • <span class="num">${state.lastSync ? Math.max(0, Math.round((Date.now() - state.lastSync) / 1000)) : 0}</span> SEC AGO</div>`;
