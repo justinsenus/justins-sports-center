@@ -44,7 +44,13 @@
   function isBoston(game) { return [team(game, "away"), team(game, "home")].some((x) => x && x.team && Number(x.team.id) === BOS_ID); }
   function opponent(game) { return Number(team(game, "away").team.id) === BOS_ID ? team(game, "home") : team(game, "away"); }
   function bostonSide(game) { return Number(team(game, "away").team.id) === BOS_ID ? "away" : "home"; }
-  function teamName(teamData) { return teamData && (teamData.team.teamName || teamData.team.name) || "TEAM"; }
+  function teamName(teamData) {
+    if (!teamData || !teamData.team) return "TEAM";
+    if (Number(teamData.team.id) === BOS_ID) return "Boston Red Sox";
+    const location = teamData.team.locationName || "";
+    const shortName = teamData.team.teamName || teamData.team.name || "Team";
+    return location && shortName.toLowerCase().indexOf(location.toLowerCase()) !== 0 ? `${location} ${shortName}` : shortName;
+  }
   function teamAbbr(teamData) { return teamData && (teamData.team.abbreviation || teamData.team.teamCode || teamName(teamData).slice(0, 3).toUpperCase()) || "TEAM"; }
   function record(teamData) {
     const r = teamData && teamData.leagueRecord;
@@ -171,7 +177,7 @@
     const offense = feed && feed.liveData && feed.liveData.linescore && feed.liveData.linescore.offense;
     const currentId = offense && offense.team && Number(offense.team.id) === BOS_ID && offense.batter && offense.batter.id;
     const current = currentId && rows.find((row) => row.id === Number(currentId));
-    $("lineupMeta").textContent = live && rows.length ? "LIVE STATS" : "OFFICIAL LINEUP WHEN POSTED";
+    $("lineupMeta").textContent = live && rows.length ? "LIVE STATS" : "LINEUP PENDING";
     if (!rows.length) {
       $("lineupContent").innerHTML = `<div class="loading-state">LINEUP NOT POSTED YET<br><span class="num">${esc(dateTime(game.gameDate))}</span></div>`;
       return;
@@ -212,7 +218,7 @@
   function renderBreakdown(game, feed) {
     const live = game && status(game).live;
     if (!game || !live || !feed) {
-      $("breakdownMeta").textContent = live ? "WAITING FOR PITCH FEED" : "NEXT GAME PREVIEW";
+      $("breakdownMeta").textContent = live ? "PITCH FEED PENDING" : "NEXT GAME";
       $("breakdownContent").innerHTML = `<div class="loading-state">${live ? "PITCH TRACK WILL APPEAR AFTER THE FIRST LIVE PITCH" : "REAL-TIME BREAKDOWN WILL ACTIVATE WHEN THE GAME STARTS"}</div>`;
       return;
     }
@@ -244,16 +250,20 @@
     try {
       const data = await getJSON(scheduleUrl(isoDate(-3), isoDate(10)));
       const games = gamesFrom(data), found = findGames(games);
-      state.game = found.live || found.final || null;
+      // Once a live game ends, move the top box to the next matchup when one
+      // is available.  The final score remains available in the feed history,
+      // while the Jeep display is ready for the next Red Sox game.
+      state.game = found.live || found.next || found.final || null;
       state.next = found.next;
       state.demo = false;
       if (found.live) {
         try { state.feed = await getJSON(API.feed(found.live.gamePk)); } catch (error) { state.feed = null; }
       } else state.feed = null;
-      $("scoreBox").innerHTML = scoreBox(found.live || found.final, found.next);
-      renderPitching(found.live || found.next, state.feed);
-      renderLineup(found.live || found.next, state.feed);
-      renderBreakdown(found.live || found.final, state.feed);
+      const primaryGame = found.live || found.next || found.final;
+      $("scoreBox").innerHTML = scoreBox(primaryGame, found.next);
+      renderPitching(primaryGame, state.feed);
+      renderLineup(primaryGame, state.feed);
+      renderBreakdown(primaryGame, state.feed);
       state.lastSync = Date.now();
       $("connectionDot").className = "status-dot live";
       $("connectionText").textContent = found.live ? "LIVE DATA CONNECTED" : "MLB DATA CONNECTED";
