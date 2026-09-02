@@ -38,6 +38,10 @@
   overflow:hidden!important;
   padding:0!important;
 }
+.pitchers-panel.live-pitching-panel,
+.pitchers-panel:has(.live-pitchers){
+  flex:0 0 102px!important;
+}
 .live-pitching-vs{
   color:#89949f;
   font:900 9px/1 Inter,Arial,sans-serif;
