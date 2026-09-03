@@ -1,10 +1,381 @@
 {
-  "ready": false,
-  "savedAt": null,
+  "ready": true,
+  "source": "PRIVATE SYNC",
+  "savedAt": "2026-09-03T10:19:52.341Z",
   "season": "2026",
   "leagueId": "919590140",
-  "scoringPeriodId": null,
-  "matchupPeriodId": null,
-  "myTeam": null,
-  "opponent": null
+  "scoringPeriodId": 1,
+  "matchupPeriodId": 1,
+  "myTeam": {
+    "id": "10",
+    "name": "Gumbys Big D",
+    "total": 0,
+    "projected": null,
+    "starters": [
+      {
+        "id": "4430878",
+        "name": "Jaxon Smith-Njigba",
+        "team": "SEA",
+        "position": "WR",
+        "points": 0,
+        "projected": 18.9,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4890973",
+        "name": "Ashton Jeanty",
+        "team": "LV",
+        "position": "RB",
+        "points": 0,
+        "projected": 18.1,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4432665",
+        "name": "Brock Bowers",
+        "team": "LV",
+        "position": "TE",
+        "points": 0,
+        "projected": 15.6,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4595348",
+        "name": "Malik Nabers",
+        "team": "NYG",
+        "position": "WR",
+        "points": 0,
+        "projected": 13.8,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4035538",
+        "name": "David Montgomery",
+        "team": "HOU",
+        "position": "RB",
+        "points": 0,
+        "projected": 12.7,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4689114",
+        "name": "Jaxson Dart",
+        "team": "NYG",
+        "position": "QB",
+        "points": 0,
+        "projected": 18.5,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4034949",
+        "name": "Eddy Pineiro",
+        "team": "SF",
+        "position": "K",
+        "points": 0,
+        "projected": 8.7,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "-16027",
+        "name": "Buccaneers D/ST",
+        "team": "TB",
+        "position": "DEF",
+        "points": 0,
+        "projected": 4.5,
+        "injuryStatus": "",
+        "headshot": "",
+        "starter": true
+      }
+    ],
+    "bench": [
+      {
+        "id": "4239993",
+        "name": "Tee Higgins",
+        "team": "CIN",
+        "position": "WR",
+        "points": 0,
+        "projected": 13,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4432708",
+        "name": "Marvin Harrison Jr.",
+        "team": "ARI",
+        "position": "WR",
+        "points": 0,
+        "projected": 11.5,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4371733",
+        "name": "Kenny Gainwell",
+        "team": "TB",
+        "position": "RB",
+        "points": 0,
+        "projected": 10.8,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4360310",
+        "name": "Trevor Lawrence",
+        "team": "JAX",
+        "position": "QB",
+        "points": 0,
+        "projected": 17,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "3916433",
+        "name": "Jakobi Meyers",
+        "team": "JAX",
+        "position": "WR",
+        "points": 0,
+        "projected": 10.4,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4870795",
+        "name": "Makai Lemon",
+        "team": "PHI",
+        "position": "WR",
+        "points": 0,
+        "projected": 8.5,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4361529",
+        "name": "Isiah Pacheco",
+        "team": "DET",
+        "position": "RB",
+        "points": 0,
+        "projected": null,
+        "injuryStatus": "INJURY_RESERVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4362619",
+        "name": "Chris Rodriguez Jr.",
+        "team": "JAX",
+        "position": "RB",
+        "points": 0,
+        "projected": 4.8,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      }
+    ]
+  },
+  "opponent": {
+    "id": "12",
+    "name": "Probably Winning Pats",
+    "total": 0,
+    "projected": null,
+    "starters": [
+      {
+        "id": "4379399",
+        "name": "James Cook III",
+        "team": "BUF",
+        "position": "RB",
+        "points": 0,
+        "projected": 14.9,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "3043078",
+        "name": "Derrick Henry",
+        "team": "BAL",
+        "position": "RB",
+        "points": 0,
+        "projected": 16.4,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4429615",
+        "name": "Zay Flowers",
+        "team": "BAL",
+        "position": "WR",
+        "points": 0,
+        "projected": 14.2,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4685472",
+        "name": "Tetairoa McMillan",
+        "team": "CAR",
+        "position": "WR",
+        "points": 0,
+        "projected": 14.8,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "3915511",
+        "name": "Joe Burrow",
+        "team": "CIN",
+        "position": "QB",
+        "points": 0,
+        "projected": 18.2,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4572680",
+        "name": "Tucker Kraft",
+        "team": "GB",
+        "position": "TE",
+        "points": 0,
+        "projected": 9.1,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "-16017",
+        "name": "Patriots D/ST",
+        "team": "NE",
+        "position": "DEF",
+        "points": 0,
+        "projected": 4.7,
+        "injuryStatus": "",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "3055899",
+        "name": "Harrison Butker",
+        "team": "KC",
+        "position": "K",
+        "points": 0,
+        "projected": 8.5,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      }
+    ],
+    "bench": [
+      {
+        "id": "4360078",
+        "name": "Alec Pierce",
+        "team": "IND",
+        "position": "WR",
+        "points": 0,
+        "projected": 9.7,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4685415",
+        "name": "Travis Hunter",
+        "team": "JAX",
+        "position": "WR",
+        "points": 0,
+        "projected": 6,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "3116165",
+        "name": "Chris Godwin Jr.",
+        "team": "TB",
+        "position": "WR",
+        "points": 0,
+        "projected": 9.7,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "3116365",
+        "name": "Mark Andrews",
+        "team": "BAL",
+        "position": "TE",
+        "points": 0,
+        "projected": 10.1,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4429096",
+        "name": "Blake Corum",
+        "team": "LAR",
+        "position": "RB",
+        "points": 0,
+        "projected": 9.4,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4032473",
+        "name": "Rashid Shaheed",
+        "team": "SEA",
+        "position": "WR",
+        "points": 0,
+        "projected": 8.4,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4428850",
+        "name": "Dontayvion Wicks",
+        "team": "PHI",
+        "position": "WR",
+        "points": 0,
+        "projected": 7.3,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4430539",
+        "name": "Brenton Strange",
+        "team": "JAX",
+        "position": "TE",
+        "points": 0,
+        "projected": 8.1,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      }
+    ]
+  }
 }
