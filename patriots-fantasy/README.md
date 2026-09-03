@@ -1,12 +1,12 @@
 # Patriots + Fantasy Live
 
-Jeep/Chrome-friendly dark dashboard route for the 2026 season.
+Shared live-data app for the 2026 Patriots and fantasy football dashboards.
 
 - Patriots live score and game center: public ESPN NFL scoreboard/summary feeds.
 - Sleeper team: **The Big Senus** in league `1387635903379300352`.
 - ESPN team label: **Gumby's Big D** in league `919590140`.
 - Sleeper matchup rosters now render side by side, with Sleeper CDN player photos and ESPN headshot fallbacks.
-- ESPN tries the public league feed first. Before kickoff it shows player and team projections; once games are live/final it switches to fantasy points.
+- ESPN tries the public league feed first. Before kickoff it shows player and team projections; once games are live/final it switches to fantasy points. If ESPN has not supplied a projection yet, the UI shows `—` instead of a fake `0.0`.
 - Injury strips show status, practice notes, source chips, and a green median play-probability estimate from available Sleeper practice plus ESPN/NFL injury-news signals.
 - No passwords, cookies, or private credentials are stored in the repository.
 - Sleeper player metadata is cached locally so the large player map is not downloaded every refresh.
@@ -25,4 +25,4 @@ If either secret expires, replace it with a fresh value from ESPN and run the wo
 
 Open the route at `/patriots-fantasy/` after the GitHub Pages deployment is updated.
 
-The separate full-screen monitor layout is at `/patriots-fantasy-monitor/`.
+The full-screen monitor layout is at `/patriots-fantasy-monitor/`; the compact phone layout is at `/patriots-fantasy-mobile/`.
