@@ -229,6 +229,9 @@ button { font: inherit; }
 .score-number.score-counting { transition: color .14s ease; }
 .score-number.score-counting.up { color: var(--green); }
 .score-number.score-counting.down { color: var(--red-soft); }
+.fantasy-score-number { color: inherit; transition: color .14s ease; }
+.fantasy-score-number.score-counting.up { color: var(--green); }
+.fantasy-score-number.score-counting.down { color: var(--red-soft); }
 .live-schedule { min-width: 0; height: 100%; padding: 3px 0 0; }
 .schedule-heading { display: flex; align-items: center; gap: 7px; color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .1em; }
 .schedule-heading::before { content: ""; width: 5px; height: 16px; border-radius: 3px; background: var(--blue); }
