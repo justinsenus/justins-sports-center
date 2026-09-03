@@ -40,7 +40,8 @@
     patriotsEvent: null,
     patriotsSummary: null,
     liveStats: new Map(),
-    espn: { checked: false, data: null, error: null }
+    espn: { checked: false, data: null, error: null },
+    scoreValues: { patriots: null }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -165,49 +166,77 @@
     };
   }
 
+  function animateScore(node, key, rawValue, upcoming = false) {
+    if (!node) return;
+    const next = upcoming ? null : Number(rawValue);
+    const previous = state.scoreValues[key];
+    node.classList.remove("score-counting", "up", "down");
+    if (!Number.isFinite(next)) {
+      node.textContent = "—";
+      state.scoreValues[key] = null;
+      return;
+    }
+    if (previous == null || previous === next || typeof requestAnimationFrame !== "function") {
+      node.textContent = String(next);
+      state.scoreValues[key] = next;
+      return;
+    }
+    const direction = next > previous ? "up" : "down";
+    node.classList.add("score-counting", direction);
+    const start = performance.now();
+    const duration = 900;
+    const from = previous;
+    const draw = (now) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      node.textContent = String(Math.round(from + (next - from) * eased));
+      if (progress < 1) requestAnimationFrame(draw);
+      else {
+        node.textContent = String(next);
+        node.classList.remove("score-counting", direction);
+      }
+    };
+    state.scoreValues[key] = next;
+    requestAnimationFrame(draw);
+  }
+
+  function scheduleCard(event) {
+    const status = eventState(event);
+    const away = competitorBySide(event, "away");
+    const home = competitorBySide(event, "home");
+    const label = status.live ? "LIVE" : status.final ? "FINAL" : "NEXT";
+    const clock = status.live ? `${displayPeriod(competition(event).status && competition(event).status.period)} • ${safeText(competition(event).status && competition(event).status.displayClock, "LIVE")}` : status.final ? "" : formatDate(event.date, true);
+    const score = (competitor) => status.upcoming ? "—" : safeText(competitor && competitor.score, "0");
+    return `<article class="schedule-card ${status.live ? "live" : status.final ? "final" : "upcoming"}"><div class="schedule-card-top"><span class="schedule-card-state">${label}</span><span class="schedule-card-clock">${esc(clock)}</span></div><div class="schedule-team-row"><img src="${teamLogo(teamAbbrFromCompetitor(away))}" alt=""><span class="schedule-team-name">${esc(teamAbbrFromCompetitor(away))}</span><span class="schedule-team-score">${esc(score(away))}</span></div><div class="schedule-team-row"><img src="${teamLogo(teamAbbrFromCompetitor(home))}" alt=""><span class="schedule-team-name">${esc(teamAbbrFromCompetitor(home))}</span><span class="schedule-team-score">${esc(score(home))}</span></div></article>`;
+  }
+
+  function renderLiveSchedule(excludeEvent) {
+    const events = sortByDate(state.scoreboardEvents.filter((event) => event !== excludeEvent), 1).sort((a, b) => Number(eventState(b).live) - Number(eventState(a).live)).slice(0, 9);
+    if (!events.length) return `<div class="schedule-empty">NO OTHER NFL GAMES LIVE<br><span>FULL SCHEDULE RETURNS ON GAME DAY</span></div>`;
+    return events.map(scheduleCard).join("");
+  }
+
   function renderScoreBox(event, summary) {
     if (!event) {
-      setHTML("scoreBox", `<div class="score-topline"><div class="score-title">JUSTIN'S PATRIOTS LIVE</div><span class="state-pill">NO SCHEDULE FOUND</span><span class="sample-pill">RETRYING LIVE FEED</span></div><div class="empty-state">PATRIOTS SCHEDULE WILL RETRY AUTOMATICALLY</div>`);
+      state.scoreValues.patriots = null;
+      setHTML("scoreBox", `<div class="score-topline"><div class="score-title">JUSTIN'S PATRIOTS LIVE</div><span class="state-pill">NO GAME TODAY</span><span class="sample-pill">RETRYING LIVE FEED</span></div><div class="score-main"><div class="patriots-score-side"><div class="score-team-line"><img class="team-logo" src="${teamLogo("NE")}" alt="New England Patriots logo"><div><div class="score-team-abbr">NE</div><div class="score-team-name">NEW ENGLAND PATRIOTS</div><div class="score-team-record">SCORE WILL APPEAR LIVE</div></div><div class="score-stack"><div class="score-label">NE SCORE</div><div id="neScoreNumber" class="score-number">—</div></div></div><div class="score-opponent">NEXT PATRIOTS MATCHUP WILL LOAD FROM THE 2026 SCHEDULE</div></div><div class="live-schedule"><div class="schedule-heading">LIVE NFL SCHEDULE</div><div class="schedule-grid">${renderLiveSchedule(null)}</div></div></div>`);
       return;
     }
     const status = eventState(event);
-    const home = competitorBySide(event, "home");
-    const away = competitorBySide(event, "away");
     const pats = patriotsCompetitor(event);
     const opp = opponentCompetitor(event);
-    const patsIsHome = pats === home;
     const upcoming = status.upcoming;
-    const detail = status.type.detail || status.type.shortDetail || (upcoming ? formatDate(event.date) : status.final ? "FINAL" : "LIVE NOW");
     const situation = situationFrom(summary, event);
-    const patsStats = summary ? teamStats(summary, pats.id) : { firstDowns: "—", yards: "—", turnovers: "—" };
-    const oppStats = summary ? teamStats(summary, opp.id) : { firstDowns: "—", yards: "—", turnovers: "—" };
-    const possession = status.live && situation.possession !== "—" ? `POSSESSION • ${situation.possession}` : (patsIsHome ? "HOME GAME" : "AWAY GAME");
     const stateLabel = status.live ? `${displayPeriod(competition(event).status && competition(event).status.period)} • ${safeText(competition(event).status && competition(event).status.displayClock, "LIVE")}` : status.final ? "FINAL" : "NEXT GAME";
+    const detail = status.type.detail || status.type.shortDetail || (upcoming ? formatDate(event.date) : status.final ? "GAME COMPLETE" : "LIVE NOW");
+    const patsIsHome = pats === competitorBySide(event, "home");
+    const opponentName = bostonLikeName(opp.team || {});
+    const opponentAbbr = teamAbbrFromCompetitor(opp);
+    const stats = summary ? teamStats(summary, pats.id) : { yards: "—", turnovers: "—" };
+    const possession = status.live && situation.possession !== "—" ? `POSSESSION • ${situation.possession}` : patsIsHome ? "HOME GAME" : "AWAY GAME";
     const pillClass = status.live ? "live" : status.final ? "final" : "";
-    setHTML("scoreBox", `
-      <div class="score-topline"><div class="score-title">JUSTIN'S PATRIOTS LIVE</div><span class="state-pill ${pillClass}">${esc(stateLabel)}</span><span class="sample-pill">READ-ONLY LIVE FEED</span></div>
-      <div class="score-main">
-        <div class="team-side ${patsIsHome ? "home" : "away"}">
-          <img class="team-logo" src="${teamLogo(teamAbbrFromCompetitor(pats))}" alt="New England Patriots logo">
-          <div class="team-copy"><div class="team-name">NEW ENGLAND PATRIOTS</div><div class="team-record">${patsIsHome ? "HOME" : "AWAY"} • ${esc(recordsFor(pats))}</div></div>
-          <div class="score-stack"><div class="score-label">NE SCORE</div><div class="score-number">${num(scoreValue(pats, upcoming))}</div></div>
-        </div>
-        <div class="score-center">
-          <div class="game-state">${esc(stateLabel)}</div>
-          <div class="game-detail">${esc(detail)}</div>
-          <div class="score-stats">
-            <div class="score-stat"><div class="score-stat-label">NE YDS</div><div class="score-stat-value">${num(patsStats.yards)}</div></div>
-            <div class="score-stat"><div class="score-stat-label">OPP YDS</div><div class="score-stat-value">${num(oppStats.yards)}</div></div>
-            <div class="score-stat"><div class="score-stat-label">TO</div><div class="score-stat-value">${num(patsStats.turnovers)}</div></div>
-          </div>
-          <div class="score-notes">${esc(possession)}${status.live && situation.down !== "—" ? ` • ${esc(situation.down)}` : ""}</div>
-        </div>
-        <div class="team-side ${patsIsHome ? "away" : "home"}">
-          <img class="team-logo" src="${teamLogo(teamAbbrFromCompetitor(opp))}" alt="${esc(bostonLikeName(opp.team || {}))} logo">
-          <div class="team-copy"><div class="team-name">${esc(bostonLikeName(opp.team || {}))}</div><div class="team-record">${patsIsHome ? "AWAY" : "HOME"} • ${esc(recordsFor(opp))}</div></div>
-          <div class="score-stack"><div class="score-label">${esc(teamAbbrFromCompetitor(opp))} SCORE</div><div class="score-number">${num(scoreValue(opp, upcoming))}</div></div>
-        </div>
-      </div>`);
+    setHTML("scoreBox", `<div class="score-topline"><div class="score-title">JUSTIN'S PATRIOTS LIVE</div><span class="state-pill ${pillClass}">${esc(stateLabel)}</span><span class="sample-pill">READ-ONLY LIVE FEED</span></div><div class="score-main"><div class="patriots-score-side"><div class="score-team-line"><img class="team-logo" src="${teamLogo("NE")}" alt="New England Patriots logo"><div><div class="score-team-abbr">NE ${patsIsHome ? "HOME" : "AWAY"}</div><div class="score-team-name">NEW ENGLAND PATRIOTS</div><div class="score-team-record">${esc(recordsFor(pats))}</div></div><div class="score-stack"><div class="score-label">NE SCORE</div><div id="neScoreNumber" class="score-number">${num(scoreValue(pats, upcoming))}</div></div></div><div class="score-state-line">${esc(stateLabel)} • ${esc(detail)}</div><div class="score-opponent">VS ${esc(opponentAbbr)} • ${esc(opponentName)}${status.live && situation.down !== "—" ? ` • ${esc(situation.down)}` : ""}</div><div class="score-stats"><div class="score-stat"><div class="score-stat-label">NE YDS</div><div class="score-stat-value">${num(stats.yards)}</div></div><div class="score-stat"><div class="score-stat-label">NE TO</div><div class="score-stat-value">${num(stats.turnovers)}</div></div><div class="score-stat"><div class="score-stat-label">${esc(possession.split(" • ")[0])}</div><div class="score-stat-value">${esc(status.live ? situation.possession : patsIsHome ? "HOME" : "AWAY")}</div></div></div></div><div class="live-schedule"><div class="schedule-heading">LIVE NFL SCHEDULE</div><div class="schedule-grid">${renderLiveSchedule(event)}</div></div></div>`);
+    animateScore($("neScoreNumber"), "patriots", pats.score, upcoming);
   }
 
   function sleeperRoster() {
@@ -289,52 +318,85 @@
     return parts.length ? parts.slice(0, 5).join(" • ") : "LIVE • STAT LINE PENDING";
   }
 
-  function renderFantasy() {
-    if (state.view === "espn") { renderESPN(); return; }
+  function playerInitials(player) {
+    const first = player && (player.first_name || String(player.full_name || "").split(" ")[0]) || "?";
+    const last = player && (player.last_name || String(player.full_name || "").split(" ").slice(-1)[0]) || "";
+    return `${first[0] || ""}${last[0] || ""}`.toUpperCase().slice(0, 2);
+  }
+
+  function playerFace(player) {
+    const id = player && player.espn_id;
+    const photo = id ? `<img src="https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png" alt="" loading="lazy" onerror="this.style.display='none'">` : "";
+    return `<span class="player-avatar">${photo}<span class="avatar-initials">${esc(playerInitials(player))}</span></span>`;
+  }
+
+  function rosterTeamName(rosterId, users) {
+    const user = (users || []).find((candidate) => String(candidate.user_id) === String((state.sleeper && (state.sleeper.rosters || []).find((roster) => Number(roster.roster_id) === Number(rosterId)) || {}).owner_id));
+    return user && user.metadata && user.metadata.team_name || user && user.display_name || `TEAM ${rosterId}`;
+  }
+
+  function renderPlayerRows(ids, players, pointsMap, starters, section) {
+    return ids.map((id) => {
+      const player = players[id] || { full_name: id, position: "—", team: "FA", player_id: id };
+      const enriched = { ...player, player_id: id };
+      const live = findLiveStat(enriched);
+      const status = playerStatus(enriched);
+      const points = Number(pointsMap[id] || 0);
+      const injury = player.injury_status ? " injury" : "";
+      const statusText = player.injury_status ? `${String(player.injury_status).toUpperCase()}${player.injury_body_part ? ` • ${player.injury_body_part}` : ""}` : status;
+      const statusClass = player.injury_status ? " injury" : "";
+      return `<article class="player-row${injury}">${playerFace(player)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${num(points.toFixed(1))}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
+    }).join("");
+  }
+
+  function matchupMarkup(data, ownRoster, users, leagueName) {
+    const own = data && data.matchup || {};
+    const opponent = data && data.opponentMatchup || {};
+    const ownName = leagueName || rosterTeamName(ownRoster && ownRoster.roster_id, users);
+    const opponentName = opponent && opponent.roster_id ? rosterTeamName(opponent.roster_id, users) : "OPPONENT";
+    const ownScore = Number(own.points || 0).toFixed(1);
+    const opponentScore = opponent && opponent.points != null ? Number(opponent.points || 0).toFixed(1) : "—";
+    return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${num(ownScore)}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${num(opponentScore)}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
+  }
+
+  function renderSleeperLeague() {
     const data = state.sleeper;
     const roster = sleeperRoster();
     if (!data || !roster) {
-      setText("fantasyMeta", "UNAVAILABLE");
-      setHTML("fantasyContent", `<div class="empty-state">SLEEPER ROSTER COULD NOT BE LOADED • RETRYING</div>`);
+      setText("sleeperMeta", "UNAVAILABLE");
+      setHTML("sleeperContent", `<div class="empty-state">SLEEPER ROSTER COULD NOT BE LOADED • RETRYING</div>`);
       return;
     }
     const players = data.players || state.players || {};
     const matchup = data.matchup || {};
     const pointsMap = matchup.players_points || {};
-    const starters = new Set((roster.starters || []).map(String));
-    const ids = rosterPlayerIds(roster);
+    const starters = (roster.starters || []).map(String);
+    const starterSet = new Set(starters);
+    const bench = (roster.players || []).map(String).filter((id) => !starterSet.has(id));
     const total = Number(matchup.points || 0);
-    const starterPoints = ids.filter((id) => starters.has(id)).reduce((sum, id) => sum + Number(pointsMap[id] || 0), 0);
-    const injured = ids.filter((id) => players[id] && players[id].injury_status).length;
-    const liveCount = ids.filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
-    setText("fantasySubheading", CONFIG.sleeperTeamName.toUpperCase());
-    setText("fantasyMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : "PREVIEW"}`);
-    const summary = `<div class="fantasy-summary"><div class="summary-card"><div class="summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="summary-value red">${num(total.toFixed(1))}</div></div><div class="summary-card"><div class="summary-label">STARTERS</div><div class="summary-value">${num(starterPoints.toFixed(1))}</div></div><div class="summary-card"><div class="summary-label">STATUS</div><div class="summary-value ${injured ? "" : "green"}">${injured ? num(injured) + " INJ" : "READY"}</div></div></div>`;
-    const rows = ids.map((id) => {
-      const player = players[id] || { full_name: id, position: "—", team: "—" };
-      const enriched = { ...player, player_id: id };
-      const live = findLiveStat(enriched);
-      const status = playerStatus(enriched);
-      const isStarter = starters.has(id);
-      const points = pointsMap[id] == null ? 0 : Number(pointsMap[id]);
-      const injury = player.injury_status ? " alert" : "";
-      const role = isStarter ? "STARTER" : "BENCH";
-      const statusText = player.injury_status ? `${String(player.injury_status).toUpperCase()}${player.injury_body_part ? ` • ${player.injury_body_part}` : ""}` : status;
-      return `<article class="fantasy-row ${isStarter ? "starter" : "bench"}${injury}"><div class="player-chip">${esc(player.position || "—")}</div><div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(role)} • ${esc(statusText)}</div></div><div class="fantasy-points">${num(points.toFixed(1))}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
-    }).join("");
-    setHTML("fantasyContent", summary + `<div class="fantasy-grid">${rows || `<div class="empty-state">NO PLAYERS FOUND</div>`}</div><div class="source-note">Sleeper roster, scoring rules, matchup points, and player status are read-only. Live player stat lines appear as their NFL games update.</div>`);
+    const starterPoints = starters.reduce((sum, id) => sum + Number(pointsMap[id] || 0), 0);
+    const injured = [...starters, ...bench].filter((id) => players[id] && players[id].injury_status).length;
+    const liveCount = [...starters, ...bench].filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
+    setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : "PREVIEW"}`);
+    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${num(total.toFixed(1))}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${num(starterPoints.toFixed(1))}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
+    const starterRows = renderPlayerRows(starters, players, pointsMap, starterSet, "STARTERS");
+    const benchRows = renderPlayerRows(bench, players, pointsMap, starterSet, "BENCH");
+    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} ACTIVE SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div><div class="league-note">Sleeper roster and matchup points update from the league feed. Player faces use available ESPN headshots with initials as a fallback.</div>`);
   }
 
-  function renderESPN() {
-    setText("fantasySubheading", CONFIG.espnTeamName.toUpperCase());
-    setText("fantasyMeta", state.espn.data ? "CONNECTED" : "AUTH NEEDED");
+  function renderESPNLeague() {
+    setText("espnMeta", state.espn.data ? "CONNECTED" : "AUTH NEEDED");
+    const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(CONFIG.espnTeamName)}</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">ESPN MATCHUP</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${state.espn.data ? "SECURE DATA READY" : "SECURE SYNC NEEDED"}</div></div>`;
     if (state.espn.data) {
-      const teams = state.espn.data.teams || [];
-      const team = teams.find((candidate) => String(candidate.name || "").toLowerCase().includes("gumby")) || teams[0];
-      setHTML("fantasyContent", `<div class="fantasy-summary"><div class="summary-card"><div class="summary-label">ESPN TEAM</div><div class="summary-value red">${esc(team && team.name || CONFIG.espnTeamName)}</div></div><div class="summary-card"><div class="summary-label">SEASON</div><div class="summary-value">${num(CONFIG.season)}</div></div><div class="summary-card"><div class="summary-label">STATUS</div><div class="summary-value green">CONNECTED</div></div></div><div class="empty-state">ESPN ROSTER DATA IS AVAILABLE • PLAYER DETAIL VIEW WILL POPULATE ON THE NEXT REFRESH</div>`);
+      setHTML("espnContent", `${matchup}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>ESPN SYNC</span></div><div class="secure-note"><h3>ESPN DATA CONNECTION READY</h3><p>Your ESPN roster and scoring settings can populate this same starters/bench layout once the secure connector returns the league response.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)}</div></div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
       return;
     }
-    setHTML("fantasyContent", `<div class="espn-lock"><h3>ESPN LEAGUE SYNC NEEDS A SECURE CONNECTION</h3><p>This league can stay in the dashboard, but private ESPN roster data should not be exposed in a public GitHub file. The Patriots game feed and Sleeper league remain live here. Add a secure connector or import the ESPN roster/scoring settings to turn this tab on.</p><div class="espn-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="source-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
+    setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A SECURE SYNC</h3><p>ESPN league data is protected here because this is a public GitHub page. I will not place your login or password in the site. A secure connector or a roster/scoring import is required to populate your ESPN starters, bench, and matchup.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
+  }
+
+  function renderFantasy() {
+    renderSleeperLeague();
+    renderESPNLeague();
   }
 
   function renderPatriotsPulse(event, summary) {
@@ -424,7 +486,9 @@
     state.week = Number(nflState && nflState.week || 1);
     const matchupList = await getJSON(`${API.sleeper}/league/${CONFIG.sleeperLeagueId}/matchups/${state.week}`);
     state.players = players || {};
-    state.sleeper = { league, users, rosters, matchup: (matchupList || []).find((matchup) => Number(matchup.roster_id) === 11) || {}, players: state.players };
+    const matchup = (matchupList || []).find((candidate) => Number(candidate.roster_id) === 11) || {};
+    const opponentMatchup = (matchupList || []).find((candidate) => candidate.matchup_id != null && String(candidate.matchup_id) === String(matchup.matchup_id) && Number(candidate.roster_id) !== 11) || {};
+    state.sleeper = { league, users, rosters, matchup, opponentMatchup, matchups: matchupList || [], players: state.players };
   }
 
   async function loadFootball() {
@@ -454,40 +518,27 @@
       // Load the roster first so the football summary pass knows which player
       // games are relevant to this team.
       await loadSleeper();
-      await loadFootball();
+      await Promise.all([loadFootball(), checkESPN()]);
       state.connected = true;
       state.lastSync = new Date();
       $("connectionDot").className = "status-dot live";
       setText("connectionText", "LIVE DATA CONNECTED");
       renderScoreBox(state.patriotsEvent, state.patriotsSummary);
-      renderPatriotsPulse(state.patriotsEvent, state.patriotsSummary);
       renderFantasy();
-      renderAlerts(state.patriotsSummary);
       setText("lastSync", `SYNC ${formatClock(state.lastSync)}`);
-      setText("newsTicker", state.patriotsEvent && eventState(state.patriotsEvent).live ? "PATRIOTS GAME CENTER LIVE • FANTASY ROSTER WATCH ACTIVE" : `PATRIOTS + FANTASY WATCH • WEEK ${state.week} • NEXT REFRESH ${CONFIG.refreshMs / 1000}S`);
+      setText("footerNote", state.patriotsEvent && eventState(state.patriotsEvent).live ? "PATRIOTS GAME CENTER LIVE • FANTASY ROSTER WATCH ACTIVE" : `PATRIOTS + FANTASY WATCH • WEEK ${state.week} • NEXT REFRESH ${CONFIG.refreshMs / 1000}S`);
     } catch (error) {
       console.error(error);
       state.connected = false;
       $("connectionDot").className = "status-dot offline";
       setText("connectionText", "RETRYING DATA FEED");
-      setText("newsTicker", "ONE OR MORE LIVE FEEDS DID NOT RESPOND • RETRYING AUTOMATICALLY");
+      setText("footerNote", "ONE OR MORE LIVE FEEDS DID NOT RESPOND • RETRYING AUTOMATICALLY");
       setText("lastSync", "SYNC ERROR");
-      if (!state.sleeper) setHTML("fantasyContent", `<div class="empty-state">LIVE DATA DID NOT RESPOND • RETRYING AUTOMATICALLY</div>`);
+      if (!state.sleeper) setHTML("sleeperContent", `<div class="empty-state">LIVE DATA DID NOT RESPOND • RETRYING AUTOMATICALLY</div>`);
     } finally { state.busy = false; }
   }
 
   function tickClock() { setText("clock", formatClock()); }
-  function chooseView(view) {
-    state.view = view;
-    $("sleeperTab").classList.toggle("active", view === "sleeper");
-    $("espnTab").classList.toggle("active", view === "espn");
-    $("sleeperTab").setAttribute("aria-selected", String(view === "sleeper"));
-    $("espnTab").setAttribute("aria-selected", String(view === "espn"));
-    if (view === "espn") checkESPN().finally(renderFantasy); else renderFantasy();
-  }
-
-  $("sleeperTab").addEventListener("click", () => chooseView("sleeper"));
-  $("espnTab").addEventListener("click", () => chooseView("espn"));
   tickClock();
   setInterval(tickClock, 1000);
   refresh();
