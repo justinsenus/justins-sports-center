@@ -31,41 +31,27 @@
     </section>
 
     <main class="dashboard-grid">
-      <section class="panel fantasy-panel">
+      <section class="panel league-panel sleeper-league-panel">
         <div class="panel-heading red-heading">
           <span class="heading-rule"></span>
-          <div class="heading-copy"><h2>MY FANTASY PLAYERS</h2><small id="fantasySubheading">THE BIG SENUS</small></div>
-          <div class="source-tabs" role="tablist" aria-label="Fantasy league source">
-            <button id="sleeperTab" class="source-tab active" type="button" role="tab" aria-selected="true">SLEEPER</button>
-            <button id="espnTab" class="source-tab" type="button" role="tab" aria-selected="false">ESPN</button>
-          </div>
-          <span id="fantasyMeta" class="panel-meta">LOADING</span>
+          <div class="heading-copy"><h2>SLEEPER • THE BIG SENUS</h2><small>STARTERS • BENCH • MATCHUP</small></div>
+          <span id="sleeperMeta" class="panel-meta">LOADING</span>
         </div>
-        <div id="fantasyContent" class="panel-content"><div class="loading-state">LOADING YOUR ROSTER…</div></div>
+        <div id="sleeperContent" class="panel-content"><div class="loading-state">LOADING SLEEPER ROSTER…</div></div>
       </section>
 
-      <aside class="right-rail">
-        <section class="panel patriots-panel">
-          <div class="panel-heading blue-heading">
-            <span class="heading-rule"></span><div class="heading-copy"><h2>PATRIOTS PULSE</h2><small>NEW ENGLAND</small></div>
-            <span id="patriotsMeta" class="panel-meta">WAITING</span>
-          </div>
-          <div id="patriotsContent" class="panel-content"><div class="loading-state">LOADING PATRIOTS INFO…</div></div>
-        </section>
-
-        <section class="panel alerts-panel">
-          <div class="panel-heading amber-heading">
-            <span class="heading-rule"></span><div class="heading-copy"><h2>SCORING + INJURY ALERTS</h2><small>LIVE WATCH</small></div>
-            <span id="alertsMeta" class="panel-meta">REFRESH 20S</span>
-          </div>
-          <div id="alertsContent" class="panel-content"><div class="loading-state">WAITING FOR UPDATES…</div></div>
-        </section>
-      </aside>
+      <section class="panel league-panel espn-league-panel">
+        <div class="panel-heading blue-heading">
+          <span class="heading-rule"></span>
+          <div class="heading-copy"><h2>ESPN • GUMBY'S BIG D</h2><small>STARTERS • BENCH • MATCHUP</small></div>
+          <span id="espnMeta" class="panel-meta">CHECKING</span>
+        </div>
+        <div id="espnContent" class="panel-content"><div class="loading-state">CHECKING ESPN LEAGUE…</div></div>
+      </section>
     </main>
 
-    <footer class="news-bar">
-      <div class="news-label"><span>LIVE NOTES</span><i></i><i></i></div>
-      <div class="ticker-window"><div id="newsTicker" class="news-track">CONNECTING TO SPORTS DATA…</div></div>
+    <footer class="footer-bar">
+      <div class="footer-status"><span class="footer-dot"></span><span id="footerNote">PATRIOTS + FANTASY LIVE DATA</span></div>
       <div id="lastSync" class="sync">SYNC --:--</div>
     </footer>
   </div>
