@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05080d">
+  <meta name="description" content="Justin's full-screen Patriots and fantasy football monitor dashboard.">
+  <title>Justin's Patriots + Fantasy Monitor</title>
+  <link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+  <div class="monitor-shell">
+    <header class="monitor-header">
+      <div class="monitor-brand">
+        <span class="brand-mark">J</span>
+        <div>
+          <div class="monitor-title">JUSTIN'S COMMAND CENTER</div>
+          <div class="monitor-subtitle">PATRIOTS + FANTASY • FULL-SCREEN MONITOR • 2026 NFL SEASON</div>
+        </div>
+      </div>
+      <div class="monitor-status">
+        <span id="connectionDot" class="status-dot"></span>
+        <span id="connectionText">CONNECTING LIVE DATA</span>
+        <span class="status-divider"></span>
+        <span id="clock" class="num">--:--</span>
+      </div>
+    </header>
+
+    <section id="scoreBox" class="score-box" aria-live="polite">
+      <div class="loading-state">CONNECTING TO PATRIOTS LIVE DATA…</div>
+    </section>
+
+    <main class="monitor-grid">
+      <section class="monitor-panel sleeper-panel">
+        <div class="monitor-panel-heading red-heading">
+          <span class="heading-rule"></span>
+          <div class="heading-copy"><h2>SLEEPER • THE BIG SENUS</h2><small>STARTERS • BENCH • MATCHUP</small></div>
+          <span id="sleeperMeta" class="panel-meta">LOADING</span>
+        </div>
+        <div id="sleeperContent" class="monitor-panel-content"><div class="loading-state">LOADING SLEEPER ROSTER…</div></div>
+      </section>
+
+      <section class="monitor-panel espn-panel">
+        <div class="monitor-panel-heading blue-heading">
+          <span class="heading-rule"></span>
+          <div class="heading-copy"><h2>ESPN • GUMBY'S BIG D</h2><small>STARTERS • BENCH • MATCHUP • PROJECTIONS → LIVE</small></div>
+          <span id="espnMeta" class="panel-meta">CHECKING</span>
+        </div>
+        <div id="espnContent" class="monitor-panel-content"><div class="loading-state">CHECKING ESPN LEAGUE…</div></div>
+      </section>
+    </main>
+
+    <footer class="monitor-footer">
+      <div><span class="footer-dot"></span><span id="footerNote">PATRIOTS + FANTASY LIVE DATA</span></div>
+      <div id="lastSync" class="sync">SYNC --:--</div>
+    </footer>
+  </div>
+  <script src="../patriots-fantasy/app.js?v=9" defer></script>
+</body>
+</html>
