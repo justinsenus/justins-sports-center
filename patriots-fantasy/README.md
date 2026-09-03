@@ -6,7 +6,7 @@ Jeep/Chrome-friendly dark dashboard route for the 2026 season.
 - Sleeper team: **The Big Senus** in league `1387635903379300352`.
 - ESPN team label: **Gumby's Big D** in league `919590140`.
 - Sleeper matchup rosters now render side by side, with Sleeper CDN player photos and ESPN headshot fallbacks.
-- Injury strips show status, practice notes, source chips, and a green median play-probability estimate from available Sleeper practice plus ESPN injury/news signals.
+- Injury strips show status, practice notes, source chips, and a green median play-probability estimate from available Sleeper practice plus ESPN/NFL injury-news signals.
 - No passwords, cookies, or private credentials are stored in the repository.
 - Sleeper player metadata is cached locally so the large player map is not downloaded every refresh.
 
