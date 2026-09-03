@@ -1,0 +1,46 @@
+name: ESPN private fantasy sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: espn-private-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out dashboard
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync private ESPN roster
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: "919590140"
+          ESPN_SEASON: "2026"
+          ESPN_TEAM_NAME: "Gumby's Big D"
+        run: node scripts/espn-sync.mjs
+
+      - name: Commit refreshed dashboard data
+        run: |
+          if git diff --quiet -- patriots-fantasy/espn-data.json; then
+            echo "No ESPN changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add patriots-fantasy/espn-data.json
+          git commit -m "Refresh ESPN fantasy sync"
+          git push
