@@ -314,11 +314,11 @@ button { font: inherit; }
 /* Side-by-side fantasy rosters and compact injury reports. */
 .matchup-rosters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; min-width: 0; }
 .roster-side { min-width: 0; padding: 8px; border: 1px solid #36516c; border-radius: 11px; background: #0c1727; }
-.roster-side.opponent { border-color: #3c5267; background: #0b1624; }
+.roster-side.opponent, .roster-side.espn-opponent { border-color: #3c5267; background: #0b1624; }
 .roster-side-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; padding-bottom: 7px; border-bottom: 1px solid #263e56; }
 .roster-side-name { overflow: hidden; color: var(--text); text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: 900; letter-spacing: .035em; }
 .roster-side-role { flex: 0 0 auto; color: var(--red-soft); font-size: 8px; font-weight: 900; letter-spacing: .06em; }
-.roster-side.opponent .roster-side-role { color: var(--blue); }
+.roster-side.opponent .roster-side-role, .roster-side.espn-opponent .roster-side-role { color: var(--blue); }
 .roster-side .player-list { grid-template-columns: 1fr; }
 .roster-side .player-row { min-height: 53px; padding: 5px 7px; }
 .roster-side .player-name { font-size: 11px; }
