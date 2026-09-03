@@ -10,6 +10,16 @@ Jeep/Chrome-friendly dark dashboard route for the 2026 season.
 - No passwords, cookies, or private credentials are stored in the repository.
 - Sleeper player metadata is cached locally so the large player map is not downloaded every refresh.
 
-ESPN private-league data cannot be read by a public GitHub Pages page. The ESPN panel stays in secure-sync mode until a trusted connector or a manual roster/scoring import is used. Never paste an ESPN password into this page or commit it to GitHub.
+## ESPN private sync
+
+The repository includes a GitHub Actions workflow named **ESPN private fantasy sync**. It runs on demand and every five minutes, reads the authenticated ESPN response on GitHub's server, and commits only the roster/matchup snapshot to `espn-data.json`. The public page never receives the ESPN cookie.
+
+To turn it on:
+
+1. Open this repository's **Settings → Secrets and variables → Actions**.
+2. Add repository secrets named `ESPN_S2` and `ESPN_SWID` from your own signed-in ESPN session. These are session values, not your ESPN password; never paste either value into chat or into a file.
+3. Open **Actions → ESPN private fantasy sync → Run workflow** once. Later runs are scheduled automatically every five minutes.
+
+If either secret expires, replace it with a fresh value from ESPN and run the workflow again. The dashboard shows a secure-sync placeholder until the first successful run publishes data.
 
 Open the route at `/patriots-fantasy/` after the GitHub Pages deployment is updated.
