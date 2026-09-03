@@ -728,11 +728,22 @@
       const html = await getText(API.nflNews());
       const parsed = new DOMParser().parseFromString(html, "text/html");
       const seen = new Set();
-      nflNews = [...parsed.querySelectorAll('a[data-link_type="NEWS"]')].map((link) => {
+      const domNews = [...parsed.querySelectorAll('a[data-link_type="NEWS"]')].map((link) => {
         const headline = (link.getAttribute("title") || link.getAttribute("data-link_name") || link.textContent || "").replace(/\s+/g, " ").trim();
         const href = link.getAttribute("href") || "";
         return { headline, description: "", published: "", source: "NFL NEWS", href };
-      }).filter((article) => article.headline && !seen.has(article.headline) && seen.add(article.headline)).slice(0, 120);
+      });
+      // The current NFL page also embeds its article cards in a streamed JSON
+      // payload, so keep a small regex fallback for browsers that see no links
+      // after parsing the HTML shell.
+      const embeddedNews = [...html.matchAll(/\\?"title\\?":\\?"(.*?)(?:\\?"[,}])/g)].map((match) => ({
+        headline: String(match[1] || "").replace(/\\"/g, '"').replace(/\\u([0-9a-f]{4})/gi, (_, code) => String.fromCharCode(parseInt(code, 16))).replace(/\\\\/g, "\\").replace(/\s+/g, " ").trim(),
+        description: "",
+        published: "",
+        source: "NFL NEWS",
+        href: ""
+      }));
+      nflNews = [...domNews, ...embeddedNews].filter((article) => article.headline && !seen.has(article.headline) && seen.add(article.headline)).slice(0, 300);
     } catch (_) { /* NFL's HTML feed is optional when a browser blocks it. */ }
     state.injury = { saved: Date.now(), byPlayer, news, nflNews, teams };
   }
