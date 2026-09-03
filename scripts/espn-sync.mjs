@@ -87,18 +87,19 @@ function normalizePlayer(entry, index) {
   const name = clean(player && (player.fullName || player.displayName || [player.firstName, player.lastName].filter(Boolean).join(" "))) || `PLAYER ${index + 1}`;
   const status = clean(player && (player.injuryStatus || player.injury_status || player.status));
   const stats = player && Array.isArray(player.stats) ? player.stats : [];
-  const latestStats = stats.length ? stats[stats.length - 1] : {};
+  const actualStats = [...stats].reverse().find((row) => Number(row && row.statSourceId) === 0 || row && row.appliedTotal != null || row && row.appliedStatTotal != null) || {};
+  const projectedStats = stats.find((row) => Number(row && row.statSourceId) === 1 || row && row.projectedTotal != null || row && row.projectedPoints != null) || {};
   const points = firstNumber(
     entry && entry.appliedStatTotal,
     entry && entry.playerPoolEntry && entry.playerPoolEntry.appliedStatTotal,
     entry && entry.points,
-    latestStats && (latestStats.appliedTotal || latestStats.appliedStatTotal || latestStats.total)
+    actualStats && (actualStats.appliedTotal || actualStats.appliedStatTotal || actualStats.total)
   );
   const projectedValue = firstNumberOrNull(
     entry && (entry.projectedTotal || entry.projectedPoints),
     entry && entry.playerPoolEntry && (entry.playerPoolEntry.projectedTotal || entry.playerPoolEntry.projectedPoints),
     player && (player.projectedTotal || player.projectedPoints),
-    latestStats && (latestStats.projectedTotal || latestStats.projectedPoints)
+    projectedStats && (projectedStats.projectedTotal || projectedStats.projectedPoints || projectedStats.appliedTotal || projectedStats.appliedStatTotal)
   );
   const lineupSlotId = numberOrNull(entry && (entry.lineupSlotId || entry.lineupSlot && (entry.lineupSlot.id || entry.lineupSlot.lineupSlotId)));
   return {
@@ -210,6 +211,7 @@ async function main() {
   }
   const output = {
     ready: true,
+    source: "PRIVATE SYNC",
     savedAt: new Date().toISOString(),
     season,
     leagueId,
