@@ -29,7 +29,8 @@
     news: () => "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=300",
     nflNews: () => "https://www.nfl.com/news/",
     espnSync: () => new URL(`../patriots-fantasy/espn-data.json?ts=${Date.now()}`, location.href).toString(),
-    espnPublic: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`
+    espnPublic: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring`,
+    sleeperProjections: (week) => `${API.sleeper}/projections/nfl/${CONFIG.season}/${week}?season_type=regular`
   };
 
   const state = {
@@ -46,6 +47,7 @@
     patriotsSummary: null,
     liveStats: new Map(),
     injury: { saved: 0, byPlayer: new Map(), news: [], nflNews: [], teams: [] },
+    projection: { saved: 0, week: null, data: null },
     espn: { checked: false, data: null, error: null },
     scoreValues: { patriots: null }
   };
@@ -214,6 +216,7 @@
   }
 
   function scoreSpan(key, value, decimals = 1) {
+    if (value == null || value === "") return num("—");
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) return num("—");
     const display = numeric.toFixed(decimals);
@@ -491,6 +494,66 @@
     return `<span class="player-avatar"><img src="${esc(source)}" alt="${esc(name)}" loading="lazy"${fallbackMarkup}></span>`;
   }
 
+  function projectionForName(name) {
+    const wanted = normalizeName(name);
+    if (!wanted || !state.espn || !state.espn.data) return null;
+    const data = state.espn.data;
+    const teams = [data.myTeam, data.opponent].filter(Boolean);
+    for (const team of teams) {
+      for (const player of [...(team.starters || []), ...(team.bench || [])]) {
+        if (normalizeName(player && (player.name || player.fullName)) !== wanted) continue;
+        const value = Number(player && player.projected);
+        if (Number.isFinite(value)) return value;
+      }
+    }
+    return null;
+  }
+
+  function sleeperProjectionValue(row, league) {
+    if (!row || typeof row !== "object") return null;
+    const scoring = league && league.scoring_settings || {};
+    const receptionPoints = Number(scoring.rec);
+    const preferred = receptionPoints >= 0.75
+      ? ["pts_ppr", "fantasy_points_ppr", "projected_points_ppr", "ppr"]
+      : receptionPoints > 0
+        ? ["pts_half_ppr", "fantasy_points_half_ppr", "projected_points_half_ppr", "half_ppr"]
+        : ["pts_std", "fantasy_points_std", "projected_points_std", "standard"];
+    const keys = [...preferred, "fantasy_points", "projected_points", "projection", "points"];
+    for (const key of keys) {
+      const value = Number(row[key]);
+      if (Number.isFinite(value)) return value;
+    }
+    return null;
+  }
+
+  function mergeSleeperProjections(players, projectionData, league) {
+    if (!projectionData || typeof projectionData !== "object") return players || {};
+    const entries = Array.isArray(projectionData)
+      ? projectionData.map((row) => [row && (row.player_id || row.playerId || row.id), row])
+      : Object.entries(projectionData);
+    const merged = { ...(players || {}) };
+    entries.forEach(([id, row]) => {
+      if (id == null || !merged[String(id)]) return;
+      const value = sleeperProjectionValue(row, league);
+      if (!Number.isFinite(value)) return;
+      const playerId = String(id);
+      merged[playerId] = { ...merged[playerId], projected: Number(value.toFixed(1)), projectionSource: "SLEEPER PROJECTIONS" };
+    });
+    return merged;
+  }
+
+  function rosterProjectionTotal(roster, players) {
+    const ids = (roster && roster.starters || []).map(String);
+    const values = ids.map((id) => {
+      const player = players && players[id];
+      const direct = Number(player && player.projected);
+      if (Number.isFinite(direct)) return direct;
+      const fallback = projectionForName(player && player.full_name);
+      return Number.isFinite(fallback) ? fallback : null;
+    }).filter((value) => Number.isFinite(value));
+    return values.length ? values.reduce((sum, value) => sum + value, 0) : null;
+  }
+
   function rosterTeamName(rosterId, users) {
     const user = (users || []).find((candidate) => String(candidate.user_id) === String((state.sleeper && (state.sleeper.rosters || []).find((roster) => Number(roster.roster_id) === Number(rosterId)) || {}).owner_id));
     return user && user.metadata && user.metadata.team_name || user && user.display_name || `TEAM ${rosterId}`;
@@ -504,9 +567,12 @@
       const status = playerStatus(enriched);
       const report = injuryReportFor(enriched);
       const points = Number(pointsMap[id] || 0);
-      const showProjection = String(side).startsWith("espn") && Number.isFinite(Number(player.projected)) && (!playerEvent(enriched) || eventState(playerEvent(enriched)).upcoming);
-      const displayPoints = showProjection ? Number(player.projected) : points;
-      const pointLabel = showProjection ? "PROJ" : "PTS";
+      const event = playerEvent(enriched);
+      const projection = Number.isFinite(Number(player.projected)) ? Number(player.projected) : projectionForName(player.full_name);
+      const pregame = !event || eventState(event).upcoming;
+      const showProjection = pregame && Number.isFinite(Number(projection));
+      const displayPoints = showProjection ? Number(projection) : (pregame ? null : points);
+      const pointLabel = pregame ? "PROJ" : "PTS";
       const injury = report.flagged ? " injury" : "";
       const statusText = report.flagged ? `${report.status}${report.bodyPart ? ` • ${report.bodyPart}` : ""}` : status;
       const statusClass = report.flagged ? " injury" : "";
@@ -551,16 +617,18 @@
     });
   }
 
-  function matchupMarkup(data, ownRoster, users, leagueName) {
+  function matchupMarkup(data, ownRoster, users, leagueName, options = {}) {
     const own = data && data.matchup || {};
     const opponent = data && data.opponentMatchup || {};
     const ownName = leagueName || rosterTeamName(ownRoster && ownRoster.roster_id, users);
     const opponentName = opponent && opponent.roster_id ? rosterTeamName(opponent.roster_id, users) : "OPPONENT";
-    const ownScore = Number(own.points || 0).toFixed(1);
-    const opponentScore = opponent && opponent.points != null ? Number(opponent.points || 0).toFixed(1) : "—";
+    const projectionMode = Boolean(options.projectionMode);
+    const ownScore = projectionMode ? options.ownProjection : Number(own.points || 0).toFixed(1);
+    const opponentScore = projectionMode ? options.opponentProjection : opponent && opponent.points != null ? Number(opponent.points || 0).toFixed(1) : "—";
     const ownScoreMarkup = scoreSpan(`fantasy:matchup:${leagueName}:own`, ownScore, 1);
-    const opponentScoreMarkup = opponentScore === "—" ? num("—") : scoreSpan(`fantasy:matchup:${leagueName}:opponent`, opponentScore, 1);
-    return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
+    const opponentScoreMarkup = opponentScore == null || opponentScore === "—" ? num("—") : scoreSpan(`fantasy:matchup:${leagueName}:opponent`, opponentScore, 1);
+    const phase = projectionMode ? "PREGAME PROJECTIONS" : (own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING");
+    return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${esc(phase)}</div></div>`;
   }
 
   function rosterColumnMarkup(label, roster, players, pointsMap, side, nameOverride = "") {
@@ -592,13 +660,22 @@
     const bench = (roster.players || []).map(String).filter((id) => !starterSet.has(id));
     const total = Number(matchup.points || 0);
     const starterPoints = starters.reduce((sum, id) => sum + Number(pointsMap[id] || 0), 0);
+    const rosterStarted = [...starters, ...bench].some((id) => {
+      const event = playerEvent(players[id] && { ...players[id], player_id: id });
+      return event && (eventState(event).live || eventState(event).final);
+    });
+    const opponentPointsMap = data.opponentMatchup && data.opponentMatchup.players_points || {};
+    const opponentProjection = data.opponentRoster ? rosterProjectionTotal(data.opponentRoster, players) : null;
+    const ownProjection = rosterProjectionTotal(roster, players);
+    const projectionMode = !rosterStarted;
+    const displayTotal = projectionMode ? ownProjection : total;
+    const displayStarters = projectionMode ? ownProjection : starterPoints;
     const injured = [...starters, ...bench].filter((id) => players[id] && players[id].injury_status).length;
     const liveCount = [...starters, ...bench].filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
-    setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : "PREVIEW"}`);
-    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", starterPoints, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
-    const opponentPointsMap = data.opponentMatchup && data.opponentMatchup.players_points || {};
+    setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : projectionMode ? "PROJECTIONS" : "PREVIEW"}`);
+    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">${projectionMode ? "TEAM PROJECTION" : "LIVE TOTAL"}</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", displayTotal, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${projectionMode ? "STARTER PROJECTION" : "LIVE STARTERS"}</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", displayStarters, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${data.opponentRoster ? (projectionMode ? "OPPONENT PROJ" : "OPPONENT LIVE") : "STATUS"}</div><div class="league-summary-value ${data.opponentRoster ? "" : injured ? "" : "green"}">${data.opponentRoster ? scoreSpan("fantasy:summary:opponent", projectionMode ? opponentProjection : Number(data.opponentMatchup && data.opponentMatchup.points || 0), 1) : injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
     const opponentColumn = opponentRoster ? rosterColumnMarkup("MATCHUP OPPONENT", opponentRoster, players, opponentPointsMap, "opponent") : `<section class="roster-side opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
-    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice plus ESPN and NFL news signals—not an official designation.</div>`);
+    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName, { projectionMode, ownProjection, opponentProjection })}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. ${projectionMode ? "Pregame projection values are imported from the ESPN feed when available." : "Live totals replace pregame projections as games start."}</div>`);
   }
 
   function publicESPNPlayer(entry, index) {
@@ -664,6 +741,7 @@
       id: team.id != null ? String(team.id) : "",
       name: publicESPNTeamLabel(team),
       total: Number(team.totalPoints || team.points || team.score || 0) || 0,
+      projected: Number.isFinite(Number(team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected)) ? Number(team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected) : null,
       starters,
       bench
     };
@@ -695,8 +773,14 @@
       if (opponentRaw) {
         opponent = normalizePublicESPNTeam(opponentRaw);
         if (opponent) opponent.total = Number(opponentSide && (opponentSide.totalPoints || opponentSide.points || opponentSide.score || 0)) || opponent.total;
+        if (opponent && opponentSide) {
+          const projected = Number(opponentSide.projectedTotal || opponentSide.projectedPoints || opponentSide.projectedScore || opponentSide.projected);
+          if (Number.isFinite(projected)) opponent.projected = projected;
+        }
       }
       own.total = Number(ownSide && (ownSide.totalPoints || ownSide.points || ownSide.score || 0)) || own.total;
+      const ownProjected = Number(ownSide && (ownSide.projectedTotal || ownSide.projectedPoints || ownSide.projectedScore || ownSide.projected));
+      if (Number.isFinite(ownProjected)) own.projected = ownProjected;
     }
     return {
       ready: true,
@@ -742,7 +826,7 @@
     };
     (team.starters || []).forEach((player, index) => add(player, true, index));
     (team.bench || []).forEach((player, index) => add(player, false, index + (team.starters || []).length));
-    return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, roster, players, pointsMap };
+    return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, projected: Number.isFinite(Number(team.projected)) ? Number(team.projected) : null, roster, players, pointsMap };
   }
 
   function espnActualTotal(team) {
@@ -752,10 +836,12 @@
   }
 
   function espnProjectionTotal(team) {
-    if (!team) return 0;
+    if (!team) return null;
     const starters = (team.roster && team.roster.starters || []).map(String);
     const projected = starters.map((id) => team.players[id] && Number(team.players[id].projected)).filter(Number.isFinite);
-    return projected.length ? projected.reduce((sum, value) => sum + value, 0) : espnActualTotal(team);
+    if (projected.length) return projected.reduce((sum, value) => sum + value, 0);
+    const teamProjection = Number(team.projected);
+    return Number.isFinite(teamProjection) ? teamProjection : null;
   }
 
   function espnTeamHasStarted(team) {
@@ -893,7 +979,16 @@
     ]);
     state.week = Number(nflState && nflState.week || 1);
     const matchupList = await getJSON(`${API.sleeper}/league/${CONFIG.sleeperLeagueId}/matchups/${state.week}`);
-    state.players = players || {};
+    let projectionData = state.projection.week === state.week && state.projection.data && Date.now() - state.projection.saved < 10 * 60 * 1000 ? state.projection.data : null;
+    if (!projectionData) {
+      try {
+        projectionData = await getJSON(API.sleeperProjections(state.week));
+        state.projection = { saved: Date.now(), week: state.week, data: projectionData };
+      } catch (_) {
+        projectionData = null;
+      }
+    }
+    state.players = mergeSleeperProjections(players || {}, projectionData, league);
     const matchup = (matchupList || []).find((candidate) => Number(candidate.roster_id) === 11) || {};
     const opponentMatchup = (matchupList || []).find((candidate) => candidate.matchup_id != null && String(candidate.matchup_id) === String(matchup.matchup_id) && Number(candidate.roster_id) !== 11) || {};
     const opponentRoster = (rosters || []).find((candidate) => Number(candidate.roster_id) === Number(opponentMatchup.roster_id)) || null;
