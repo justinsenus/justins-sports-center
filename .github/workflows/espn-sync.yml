@@ -29,6 +29,7 @@ jobs:
 
       - name: Sync private ESPN roster
         if: ${{ env.ESPN_S2 != '' && env.ESPN_SWID != '' }}
+        continue-on-error: true
         env:
           ESPN_LEAGUE_ID: "919590140"
           ESPN_SEASON: "2026"
