@@ -27,6 +27,7 @@
     summary: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=${encodeURIComponent(id)}`,
     teamRoster: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${encodeURIComponent(id)}?enable=roster`,
     news: () => "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=300",
+    nflNews: () => "https://www.nfl.com/news/",
     espnLeague: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`
   };
 
@@ -43,7 +44,7 @@
     patriotsEvent: null,
     patriotsSummary: null,
     liveStats: new Map(),
-    injury: { saved: 0, byPlayer: new Map(), news: [], teams: [] },
+    injury: { saved: 0, byPlayer: new Map(), news: [], nflNews: [], teams: [] },
     espn: { checked: false, data: null, error: null },
     scoreValues: { patriots: null }
   };
@@ -74,6 +75,12 @@
     const response = await fetch(url, { cache: "no-store", credentials: "omit", ...options });
     if (!response.ok) throw new Error(`${response.status} ${url}`);
     return response.json();
+  }
+
+  async function getText(url, options = {}) {
+    const response = await fetch(url, { cache: "no-store", credentials: "omit", ...options });
+    if (!response.ok) throw new Error(`${response.status} ${url}`);
+    return response.text();
   }
 
   async function cachedPlayers() {
@@ -330,7 +337,11 @@
   function newsMatchesFor(player) {
     const name = normalizeName(player && (player.full_name || player.display_name));
     if (!name || name.length < 5) return [];
-    return (state.injury && state.injury.news || []).filter((article) => {
+    const feeds = [
+      ...(state.injury && state.injury.news || []).map((article) => ({ ...article, source: article.source || "ESPN NEWS" })),
+      ...(state.injury && state.injury.nflNews || []).map((article) => ({ ...article, source: article.source || "NFL NEWS" }))
+    ];
+    return feeds.filter((article) => {
       const published = article && article.published ? new Date(article.published).getTime() : 0;
       if (published && Date.now() - published > 21 * 24 * 60 * 60 * 1000) return false;
       return normalizeName(`${article && article.headline || ""} ${article && article.description || ""}`).includes(name);
@@ -341,7 +352,7 @@
     const text = `${article && article.headline || ""} ${article && article.description || ""}`.toUpperCase();
     if (/RULED OUT|WON'T PLAY|WILL NOT PLAY|INACTIVE|OUT FOR|PLACED ON IR|INJURED RESERVE/.test(text)) return 5;
     if (/DOUBTFUL|NOT EXPECTED TO PLAY/.test(text)) return 20;
-    if (/QUESTIONABLE|GAME[- ]TIME DECISION|LIMITED|DID NOT PRACTICE|NOT CLEARED/.test(text)) return 55;
+    if (/QUESTIONABLE|GAME[- ]TIME DECISION|LIMITED|DID NOT PRACTICE|SITS OUT|MISSES PRACTICE|NOT CLEARED/.test(text)) return 55;
     if (/WILL PLAY|EXPECTED TO PLAY|CLEARED|FULL PARTICIPANT|ACTIVE TODAY|AVAILABLE/.test(text)) return 90;
     return null;
   }
@@ -379,7 +390,7 @@
     }
 
     const articles = newsMatchesFor(player);
-    articles.forEach((article) => addSignal(newsSignal(article), "ESPN NEWS"));
+    articles.forEach((article) => addSignal(newsSignal(article), article.source || "ESPN NEWS"));
     const probability = Math.max(0, Math.min(100, median(signals.map((signal) => signal.value))));
     const rawStatus = [sleeperStatus, injuryStatus].find((value) => /IR|OUT|PUP|NFI|DOUBTFUL|QUESTIONABLE|ACTIVE|PROBABLE|INJUR|LIMITED/.test(String(value || "").toUpperCase()));
     const flagged = Boolean(sleeperStatus || player && player.injury_body_part || injury || practice || articles.length);
@@ -504,7 +515,7 @@
     const flagged = reports.filter((report) => report.flagged).sort((a, b) => a.probability - b.probability).slice(0, 4);
     const reportRows = flagged.length ? flagged.map(injuryReportRow).join("") : `<div class="injury-clear"><span>NO CURRENT FLAGS</span><strong>95%+ PLAY PROBABILITY</strong></div>`;
     const extra = reports.filter((report) => report.flagged).length > flagged.length ? `<div class="injury-more">+${reports.filter((report) => report.flagged).length - flagged.length} MORE ROSTER FLAG${reports.filter((report) => report.flagged).length - flagged.length === 1 ? "" : "S"}</div>` : "";
-    return `<section class="injury-report"><div class="injury-report-heading"><span>LIVE INJURY REPORT • ${esc(sideLabel)}</span><span>${flagged.length ? `${flagged.length} FLAG${flagged.length === 1 ? "" : "S"}` : "CLEAR"}</span></div>${reportRows}${extra}<div class="injury-footnote">MEDIAN OF AVAILABLE SIGNALS • SLEEPER PRACTICE + ESPN INJURY/NEWS</div></section>`;
+    return `<section class="injury-report"><div class="injury-report-heading"><span>LIVE INJURY REPORT • ${esc(sideLabel)}</span><span>${flagged.length ? `${flagged.length} FLAG${flagged.length === 1 ? "" : "S"}` : "CLEAR"}</span></div>${reportRows}${extra}<div class="injury-footnote">MEDIAN OF AVAILABLE SIGNALS • SLEEPER PRACTICE + ESPN/NFL NEWS</div></section>`;
   }
 
   function wireAvatarFallbacks() {
@@ -569,7 +580,7 @@
     const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", starterPoints, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
     const opponentPointsMap = data.opponentMatchup && data.opponentMatchup.players_points || {};
     const opponentColumn = opponentRoster ? rosterColumnMarkup("MATCHUP OPPONENT", opponentRoster, players, opponentPointsMap, "opponent") : `<section class="roster-side opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
-    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice, ESPN injury, and ESPN news signals—not an official designation.</div>`);
+    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice plus ESPN and NFL news signals—not an official designation.</div>`);
   }
 
   function renderESPNLeague() {
@@ -712,7 +723,18 @@
       const newsPayload = await getJSON(API.news());
       news = newsPayload && newsPayload.articles || [];
     } catch (_) { /* News is an enhancement; injury status still renders. */ }
-    state.injury = { saved: Date.now(), byPlayer, news, teams };
+    let nflNews = [];
+    try {
+      const html = await getText(API.nflNews());
+      const parsed = new DOMParser().parseFromString(html, "text/html");
+      const seen = new Set();
+      nflNews = [...parsed.querySelectorAll('a[data-link_type="NEWS"]')].map((link) => {
+        const headline = (link.getAttribute("title") || link.getAttribute("data-link_name") || link.textContent || "").replace(/\s+/g, " ").trim();
+        const href = link.getAttribute("href") || "";
+        return { headline, description: "", published: "", source: "NFL NEWS", href };
+      }).filter((article) => article.headline && !seen.has(article.headline) && seen.add(article.headline)).slice(0, 120);
+    } catch (_) { /* NFL's HTML feed is optional when a browser blocks it. */ }
+    state.injury = { saved: Date.now(), byPlayer, news, nflNews, teams };
   }
 
   async function loadFootball() {
