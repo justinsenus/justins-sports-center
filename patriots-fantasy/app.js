@@ -56,6 +56,11 @@
   const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c]);
   const safeText = (value, fallback = "—") => value == null || value === "" ? fallback : String(value);
   const num = (value, fallback = "—") => `<span class="num">${esc(value == null || value === "" ? fallback : value)}</span>`;
+  const finiteNumber = (value) => {
+    if (value == null || value === "") return null;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  };
   const pad = (value) => String(value).padStart(2, "0");
   const dateStamp = (date = new Date()) => `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`;
   const dateKey = (value) => {
@@ -216,9 +221,8 @@
   }
 
   function scoreSpan(key, value, decimals = 1) {
-    if (value == null || value === "") return num("—");
-    const numeric = Number(value);
-    if (!Number.isFinite(numeric)) return num("—");
+    const numeric = finiteNumber(value);
+    if (numeric == null) return num("—");
     const display = numeric.toFixed(decimals);
     return `<span class="num fantasy-score-number" data-score-key="${esc(key)}" data-score-value="${display}">${display}</span>`;
   }
@@ -502,8 +506,8 @@
     for (const team of teams) {
       for (const player of [...(team.starters || []), ...(team.bench || [])]) {
         if (normalizeName(player && (player.name || player.fullName)) !== wanted) continue;
-        const value = Number(player && player.projected);
-        if (Number.isFinite(value)) return value;
+        const value = finiteNumber(player && player.projected);
+        if (value != null) return value;
       }
     }
     return null;
@@ -520,8 +524,8 @@
         : ["pts_std", "fantasy_points_std", "projected_points_std", "standard"];
     const keys = [...preferred, "fantasy_points", "projected_points", "projection", "points"];
     for (const key of keys) {
-      const value = Number(row[key]);
-      if (Number.isFinite(value)) return value;
+      const value = finiteNumber(row[key]);
+      if (value != null) return value;
     }
     return null;
   }
@@ -546,8 +550,8 @@
     const ids = (roster && roster.starters || []).map(String);
     const values = ids.map((id) => {
       const player = players && players[id];
-      const direct = Number(player && player.projected);
-      if (Number.isFinite(direct)) return direct;
+      const direct = finiteNumber(player && player.projected);
+      if (direct != null) return direct;
       const fallback = projectionForName(player && player.full_name);
       return Number.isFinite(fallback) ? fallback : null;
     }).filter((value) => Number.isFinite(value));
@@ -568,10 +572,11 @@
       const report = injuryReportFor(enriched);
       const points = Number(pointsMap[id] || 0);
       const event = playerEvent(enriched);
-      const projection = Number.isFinite(Number(player.projected)) ? Number(player.projected) : projectionForName(player.full_name);
+      const directProjection = finiteNumber(player.projected);
+      const projection = directProjection != null ? directProjection : projectionForName(player.full_name);
       const pregame = !event || eventState(event).upcoming;
-      const showProjection = pregame && Number.isFinite(Number(projection));
-      const displayPoints = showProjection ? Number(projection) : (pregame ? null : points);
+      const showProjection = pregame && projection != null;
+      const displayPoints = showProjection ? projection : (pregame ? null : points);
       const pointLabel = pregame ? "PROJ" : "PTS";
       const injury = report.flagged ? " injury" : "";
       const statusText = report.flagged ? `${report.status}${report.bodyPart ? ` • ${report.bodyPart}` : ""}` : status;
@@ -687,15 +692,15 @@
     const actualRow = [...statRows].reverse().find((row) => Number(row && row.statSourceId) === 0 || row && row.appliedTotal != null || row && row.appliedStatTotal != null);
     const firstNumber = (...values) => {
       for (const value of values) {
-        const number = Number(value);
-        if (Number.isFinite(number)) return number;
+      const number = finiteNumber(value);
+      if (number != null) return number;
       }
       return 0;
     };
     const firstNullable = (...values) => {
       for (const value of values) {
-        const number = Number(value);
-        if (Number.isFinite(number)) return number;
+        const number = finiteNumber(value);
+        if (number != null) return number;
       }
       return null;
     };
@@ -741,7 +746,7 @@
       id: team.id != null ? String(team.id) : "",
       name: publicESPNTeamLabel(team),
       total: Number(team.totalPoints || team.points || team.score || 0) || 0,
-      projected: Number.isFinite(Number(team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected)) ? Number(team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected) : null,
+      projected: finiteNumber(team.projectedTotal != null ? team.projectedTotal : team.projectedPoints != null ? team.projectedPoints : team.projectedScore != null ? team.projectedScore : team.projected),
       starters,
       bench
     };
@@ -774,13 +779,13 @@
         opponent = normalizePublicESPNTeam(opponentRaw);
         if (opponent) opponent.total = Number(opponentSide && (opponentSide.totalPoints || opponentSide.points || opponentSide.score || 0)) || opponent.total;
         if (opponent && opponentSide) {
-          const projected = Number(opponentSide.projectedTotal || opponentSide.projectedPoints || opponentSide.projectedScore || opponentSide.projected);
-          if (Number.isFinite(projected)) opponent.projected = projected;
+          const projected = finiteNumber(opponentSide.projectedTotal != null ? opponentSide.projectedTotal : opponentSide.projectedPoints != null ? opponentSide.projectedPoints : opponentSide.projectedScore != null ? opponentSide.projectedScore : opponentSide.projected);
+          if (projected != null) opponent.projected = projected;
         }
       }
       own.total = Number(ownSide && (ownSide.totalPoints || ownSide.points || ownSide.score || 0)) || own.total;
-      const ownProjected = Number(ownSide && (ownSide.projectedTotal || ownSide.projectedPoints || ownSide.projectedScore || ownSide.projected));
-      if (Number.isFinite(ownProjected)) own.projected = ownProjected;
+      const ownProjected = finiteNumber(ownSide && (ownSide.projectedTotal != null ? ownSide.projectedTotal : ownSide.projectedPoints != null ? ownSide.projectedPoints : ownSide.projectedScore != null ? ownSide.projectedScore : ownSide.projected));
+      if (ownProjected != null) own.projected = ownProjected;
     }
     return {
       ready: true,
@@ -817,7 +822,7 @@
         injury_status: raw.injuryStatus || "",
         injury_body_part: raw.injuryBodyPart || "",
         practice_description: raw.practice || "",
-        projected: Number.isFinite(Number(raw.projected)) ? Number(raw.projected) : null,
+        projected: finiteNumber(raw.projected),
         headshot: raw.headshot || ""
       };
       pointsMap[id] = Number.isFinite(Number(raw.points)) ? Number(raw.points) : 0;
@@ -826,7 +831,7 @@
     };
     (team.starters || []).forEach((player, index) => add(player, true, index));
     (team.bench || []).forEach((player, index) => add(player, false, index + (team.starters || []).length));
-    return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, projected: Number.isFinite(Number(team.projected)) ? Number(team.projected) : null, roster, players, pointsMap };
+    return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, projected: finiteNumber(team.projected), roster, players, pointsMap };
   }
 
   function espnActualTotal(team) {
@@ -838,10 +843,9 @@
   function espnProjectionTotal(team) {
     if (!team) return null;
     const starters = (team.roster && team.roster.starters || []).map(String);
-    const projected = starters.map((id) => team.players[id] && Number(team.players[id].projected)).filter(Number.isFinite);
+    const projected = starters.map((id) => finiteNumber(team.players[id] && team.players[id].projected)).filter((value) => value != null);
     if (projected.length) return projected.reduce((sum, value) => sum + value, 0);
-    const teamProjection = Number(team.projected);
-    return Number.isFinite(teamProjection) ? teamProjection : null;
+    return finiteNumber(team.projected);
   }
 
   function espnTeamHasStarted(team) {
