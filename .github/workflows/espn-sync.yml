@@ -15,6 +15,9 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      ESPN_S2: ${{ secrets.ESPN_S2 }}
+      ESPN_SWID: ${{ secrets.ESPN_SWID }}
     steps:
       - name: Check out dashboard
         uses: actions/checkout@v4
@@ -25,15 +28,19 @@ jobs:
           node-version: 20
 
       - name: Sync private ESPN roster
+        if: ${{ env.ESPN_S2 != '' && env.ESPN_SWID != '' }}
         env:
-          ESPN_S2: ${{ secrets.ESPN_S2 }}
-          ESPN_SWID: ${{ secrets.ESPN_SWID }}
           ESPN_LEAGUE_ID: "919590140"
           ESPN_SEASON: "2026"
           ESPN_TEAM_NAME: "Gumby's Big D"
         run: node scripts/espn-sync.mjs
 
+      - name: Explain missing setup
+        if: ${{ env.ESPN_S2 == '' || env.ESPN_SWID == '' }}
+        run: echo "Add ESPN_S2 and ESPN_SWID in repository Actions secrets before running the sync."
+
       - name: Commit refreshed dashboard data
+        if: ${{ env.ESPN_S2 != '' && env.ESPN_SWID != '' }}
         run: |
           if git diff --quiet -- patriots-fantasy/espn-data.json; then
             echo "No ESPN changes"
