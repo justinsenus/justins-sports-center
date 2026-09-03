@@ -28,7 +28,8 @@
     teamRoster: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${encodeURIComponent(id)}?enable=roster`,
     news: () => "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=300",
     nflNews: () => "https://www.nfl.com/news/",
-    espnSync: () => `espn-data.json?ts=${Date.now()}`
+    espnSync: () => new URL(`../patriots-fantasy/espn-data.json?ts=${Date.now()}`, location.href).toString(),
+    espnPublic: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`
   };
 
   const state = {
@@ -303,6 +304,16 @@
     NYJ: 20, PHI: 21, PIT: 23, SF: 25, SEA: 26, TB: 27, TEN: 10, WAS: 28
   };
 
+  const ESPN_PRO_TEAM_ABBRS = {
+    1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN",
+    8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR",
+    15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI",
+    22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS",
+    29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU"
+  };
+  const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
+  const ESPN_BENCH_SLOTS = new Set([20, 21, 22, 23]);
+
   function espnTeamId(abbr) { return ESPN_TEAM_IDS[String(abbr || "").toUpperCase()] || null; }
 
   function median(values) {
@@ -493,10 +504,13 @@
       const status = playerStatus(enriched);
       const report = injuryReportFor(enriched);
       const points = Number(pointsMap[id] || 0);
+      const showProjection = String(side).startsWith("espn") && Number.isFinite(Number(player.projected)) && (!playerEvent(enriched) || eventState(playerEvent(enriched)).upcoming);
+      const displayPoints = showProjection ? Number(player.projected) : points;
+      const pointLabel = showProjection ? "PROJ" : "PTS";
       const injury = report.flagged ? " injury" : "";
       const statusText = report.flagged ? `${report.status}${report.bodyPart ? ` • ${report.bodyPart}` : ""}` : status;
       const statusClass = report.flagged ? " injury" : "";
-      return `<article class="player-row${injury}">${playerFace(enriched)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:${side}:player:${id}`, points, 1)}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
+      return `<article class="player-row${injury}">${playerFace(enriched)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:${side}:player:${id}`, displayPoints, 1)}<small>${pointLabel}</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
     }).join("");
   }
 
@@ -587,6 +601,116 @@
     setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice plus ESPN and NFL news signals—not an official designation.</div>`);
   }
 
+  function publicESPNPlayer(entry, index) {
+    const player = entry && entry.playerPoolEntry && entry.playerPoolEntry.player || entry && entry.player || {};
+    const id = player && player.id != null ? String(player.id) : entry && entry.playerId != null ? String(entry.playerId) : `public-espn-${index}`;
+    const name = player && (player.fullName || player.displayName || [player.firstName, player.lastName].filter(Boolean).join(" ")) || `PLAYER ${index + 1}`;
+    const statRows = Array.isArray(player.stats) ? player.stats : [];
+    const projectedRow = statRows.find((row) => Number(row && row.statSourceId) === 1 || row && row.projectedTotal != null || row && row.projectedPoints != null);
+    const actualRow = [...statRows].reverse().find((row) => Number(row && row.statSourceId) === 0 || row && row.appliedTotal != null || row && row.appliedStatTotal != null);
+    const firstNumber = (...values) => {
+      for (const value of values) {
+        const number = Number(value);
+        if (Number.isFinite(number)) return number;
+      }
+      return 0;
+    };
+    const firstNullable = (...values) => {
+      for (const value of values) {
+        const number = Number(value);
+        if (Number.isFinite(number)) return number;
+      }
+      return null;
+    };
+    const image = player && player.headshot || player && player.imageUrl || player && player.image || "";
+    const headshot = typeof image === "string" ? image : image && (image.href || image.original || image.url) || "";
+    const proTeam = Number(player && (player.proTeamId || player.proTeam && player.proTeam.id));
+    const position = ESPN_POSITION_BY_ID[Number(player && player.defaultPositionId)] || player && (player.defaultPosition || player.position) || "—";
+    const status = player && (player.injuryStatus || player.injury_status || player.status) || "";
+    const projected = firstNullable(entry && (entry.projectedTotal || entry.projectedPoints), entry && entry.playerPoolEntry && (entry.playerPoolEntry.projectedTotal || entry.playerPoolEntry.projectedPoints), player && (player.projectedTotal || player.projectedPoints), projectedRow && (projectedRow.projectedTotal || projectedRow.projectedPoints || projectedRow.appliedTotal));
+    return {
+      id,
+      name,
+      team: ESPN_PRO_TEAM_ABBRS[proTeam] || player && (player.proTeamAbbrev || player.proTeam && (player.proTeam.abbrev || player.proTeam.abbreviation)) || "FA",
+      position,
+      points: firstNumber(entry && (entry.appliedStatTotal || entry.points), entry && entry.playerPoolEntry && entry.playerPoolEntry.appliedStatTotal, actualRow && (actualRow.appliedTotal || actualRow.appliedStatTotal || actualRow.total)),
+      projected,
+      injuryStatus: String(status || ""),
+      headshot
+    };
+  }
+
+  function publicESPNTeamLabel(team) {
+    const joined = [team && team.location, team && team.nickname].filter(Boolean).join(" ");
+    return team && (team.name || team.teamName) || joined || team && (team.abbrev || team.abbreviation) || "ESPN TEAM";
+  }
+
+  function publicESPNTeamCandidates(team) {
+    return [team && team.name, team && team.teamName, [team && team.location, team && team.nickname].filter(Boolean).join(" "), team && (team.abbrev || team.abbreviation)].map(normalizeName).filter(Boolean);
+  }
+
+  function normalizePublicESPNTeam(team) {
+    if (!team) return null;
+    const entries = team.roster && Array.isArray(team.roster.entries) ? team.roster.entries : [];
+    const players = entries.map(publicESPNPlayer);
+    const starters = [];
+    const bench = [];
+    entries.forEach((entry, index) => {
+      const player = players[index];
+      const slot = Number(entry && entry.lineupSlotId);
+      (Number.isFinite(slot) && ESPN_BENCH_SLOTS.has(slot) ? bench : starters).push(player);
+    });
+    return {
+      id: team.id != null ? String(team.id) : "",
+      name: publicESPNTeamLabel(team),
+      total: Number(team.totalPoints || team.points || team.score || 0) || 0,
+      starters,
+      bench
+    };
+  }
+
+  function publicESPNMatchup(data, ownId) {
+    const rows = Array.isArray(data && data.schedule) ? data.schedule : Array.isArray(data && data.matchups) ? data.matchups : [];
+    const current = Number(data && data.status && (data.status.currentMatchupPeriod || data.status.currentMatchupPeriodId)) || Number(data && data.currentMatchupPeriod) || Number(data && data.scoringPeriodId);
+    const containing = rows.filter((row) => String(row && row.home && row.home.teamId) === ownId || String(row && row.away && row.away.teamId) === ownId);
+    return containing.find((row) => current && Number(row.matchupPeriodId) === current) || containing.slice().sort((a, b) => Number(b.matchupPeriodId || 0) - Number(a.matchupPeriodId || 0))[0] || null;
+  }
+
+  function publicESPNData(data) {
+    const teams = Array.isArray(data && data.teams) ? data.teams : [];
+    if (!teams.length) return null;
+    const wanted = normalizeName(CONFIG.espnTeamName);
+    const exact = teams.find((team) => publicESPNTeamCandidates(team).some((candidate) => candidate === wanted));
+    const tokens = wanted.match(/[a-z0-9]{3,}/g) || [];
+    const ranked = teams.map((team) => ({ team, score: tokens.reduce((total, token) => total + (publicESPNTeamCandidates(team).some((candidate) => candidate.includes(token)) ? 1 : 0), 0) })).sort((a, b) => b.score - a.score);
+    const ownRaw = exact || (ranked[0] && ranked[0].score ? ranked[0].team : null);
+    if (!ownRaw || !(ownRaw.roster && Array.isArray(ownRaw.roster.entries) && ownRaw.roster.entries.length)) return null;
+    const own = normalizePublicESPNTeam(ownRaw);
+    const row = publicESPNMatchup(data, own.id);
+    let opponent = null;
+    if (row) {
+      const ownSide = String(row.home && row.home.teamId) === own.id ? row.home : row.away;
+      const opponentSide = ownSide === row.home ? row.away : row.home;
+      const opponentRaw = teams.find((team) => String(team.id) === String(opponentSide && opponentSide.teamId));
+      if (opponentRaw) {
+        opponent = normalizePublicESPNTeam(opponentRaw);
+        if (opponent) opponent.total = Number(opponentSide && (opponentSide.totalPoints || opponentSide.points || opponentSide.score || 0)) || opponent.total;
+      }
+      own.total = Number(ownSide && (ownSide.totalPoints || ownSide.points || ownSide.score || 0)) || own.total;
+    }
+    return {
+      ready: true,
+      source: "PUBLIC ESPN",
+      savedAt: new Date().toISOString(),
+      season: CONFIG.season,
+      leagueId: CONFIG.espnLeagueId,
+      scoringPeriodId: Number(data.scoringPeriodId) || null,
+      matchupPeriodId: Number(row && row.matchupPeriodId) || null,
+      myTeam: own,
+      opponent
+    };
+  }
+
   function normalizeImportedESPNTeam(team, side) {
     if (!team) return null;
     const players = {};
@@ -609,6 +733,7 @@
         injury_status: raw.injuryStatus || "",
         injury_body_part: raw.injuryBodyPart || "",
         practice_description: raw.practice || "",
+        projected: Number.isFinite(Number(raw.projected)) ? Number(raw.projected) : null,
         headshot: raw.headshot || ""
       };
       pointsMap[id] = Number.isFinite(Number(raw.points)) ? Number(raw.points) : 0;
@@ -620,6 +745,29 @@
     return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, roster, players, pointsMap };
   }
 
+  function espnActualTotal(team) {
+    if (!team) return 0;
+    const playerTotal = Object.values(team.pointsMap || {}).reduce((sum, value) => sum + (Number.isFinite(Number(value)) ? Number(value) : 0), 0);
+    return Number.isFinite(Number(team.total)) && (Number(team.total) !== 0 || playerTotal === 0) ? Number(team.total) : playerTotal;
+  }
+
+  function espnProjectionTotal(team) {
+    if (!team) return 0;
+    const starters = (team.roster && team.roster.starters || []).map(String);
+    const projected = starters.map((id) => team.players[id] && Number(team.players[id].projected)).filter(Number.isFinite);
+    return projected.length ? projected.reduce((sum, value) => sum + value, 0) : espnActualTotal(team);
+  }
+
+  function espnTeamHasStarted(team) {
+    if (!team) return false;
+    const ids = (team.roster && team.roster.players || []).map(String);
+    return ids.some((id) => {
+      const player = team.players && team.players[id];
+      const event = playerEvent(player);
+      return event && (eventState(event).live || eventState(event).final);
+    });
+  }
+
   function renderESPNLeague() {
     const data = state.espn.data;
     const ready = Boolean(data && data.ready && data.myTeam);
@@ -627,18 +775,29 @@
     if (ready) {
       const own = normalizeImportedESPNTeam(data.myTeam, "own");
       const opponent = normalizeImportedESPNTeam(data.opponent, "opponent");
-      const ownScore = scoreSpan("espn:matchup:own", own.total, 1);
-      const opponentScore = opponent ? scoreSpan("espn:matchup:opponent", opponent.total, 1) : num("—");
+      const started = espnTeamHasStarted(own) || espnTeamHasStarted(opponent);
+      const ownActual = espnActualTotal(own);
+      const opponentActual = opponent ? espnActualTotal(opponent) : null;
+      const ownProjection = espnProjectionTotal(own);
+      const opponentProjection = opponent ? espnProjectionTotal(opponent) : null;
+      const ownDisplay = started ? ownActual : ownProjection;
+      const opponentDisplay = opponent ? (started ? opponentActual : opponentProjection) : null;
+      const ownScore = scoreSpan("espn:matchup:own", ownDisplay, 1);
+      const opponentScore = opponent ? scoreSpan("espn:matchup:opponent", opponentDisplay, 1) : num("—");
       const period = data.matchupPeriodId || data.scoringPeriodId || state.week;
       const saved = data.savedAt ? `SYNCED ${formatClock(new Date(data.savedAt))}` : "SYNCED";
-      const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(period)} TOTAL</div><div class="league-summary-value red">${scoreSpan("espn:summary:total", own.total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("espn:summary:starters", own.roster.starters.reduce((sum, id) => sum + Number(own.pointsMap[id] || 0), 0), 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">SYNC</div><div class="league-summary-value green">${esc(saved)}</div></div></div>`;
-      const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(own.name)}</div><div class="matchup-team-score">${ownScore}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponent ? opponent.name : "MATCHUP PENDING")}</div><div class="matchup-team-score">${opponentScore}</div></div><div class="matchup-meta">WEEK ${esc(period)} • PRIVATE SYNC ACTIVE</div></div>`;
+      const ownStarterValue = started ? ownActual : ownProjection;
+      const opponentStarterValue = opponent ? (started ? opponentActual : opponentProjection) : null;
+      const phase = started ? "LIVE TOTALS" : "PREGAME PROJECTIONS";
+      const sourceLabel = data.source === "PUBLIC ESPN" ? "PUBLIC ESPN" : "PRIVATE SYNC";
+      const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">${started ? "LIVE TOTAL" : "TEAM PROJECTION"}</div><div class="league-summary-value red">${scoreSpan("espn:summary:total", ownDisplay, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${started ? "LIVE STARTERS" : "STARTER PROJECTION"}</div><div class="league-summary-value">${scoreSpan("espn:summary:starters", ownStarterValue, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${opponent ? (started ? "OPPONENT LIVE" : "OPPONENT PROJ") : "SYNC"}</div><div class="league-summary-value ${opponent ? "" : "green"}">${opponent ? scoreSpan("espn:summary:opponent", opponentStarterValue, 1) : esc(saved)}</div></div></div>`;
+      const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(own.name)}</div><div class="matchup-team-score">${ownScore}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponent ? opponent.name : "MATCHUP PENDING")}</div><div class="matchup-team-score">${opponentScore}</div></div><div class="matchup-meta">WEEK ${esc(period)} • ${esc(phase)} • ${esc(sourceLabel)}</div></div>`;
       const opponentColumn = opponent ? rosterColumnMarkup("MATCHUP OPPONENT", opponent.roster, opponent.players, opponent.pointsMap, "espn-opponent", opponent.name) : `<section class="roster-side espn-opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
-      setHTML("espnContent", `${summary}${matchup}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", own.roster, own.players, own.pointsMap, "espn-own", own.name)}${opponentColumn}</div><div class="league-note">ESPN roster and matchup data is synced by GitHub Actions. Only this read-only dashboard output is public; ESPN credentials remain in GitHub Secrets.</div>`);
+      setHTML("espnContent", `${summary}${matchup}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", own.roster, own.players, own.pointsMap, "espn-own", own.name)}${opponentColumn}</div><div class="league-note">${esc(sourceLabel)} data is shown read-only. ${data.source === "PUBLIC ESPN" ? "The league is public, so this panel reads ESPN directly." : "The scheduled connector publishes only the roster/matchup snapshot; credentials remain in GitHub Secrets."}</div>`);
       return;
     }
     const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(CONFIG.espnTeamName)}</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">ESPN MATCHUP</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • SECURE SYNC NEEDED</div></div>`;
-    setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A SECURE SYNC</h3><p>This public GitHub page cannot read a private ESPN league cookie. To make it load, use a trusted connector or import the roster/scoring response. A public ESPN league may load after you verify the league ID and season, but never paste a password into this page.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
+    setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A PUBLIC OR SECURE FEED</h3><p>If the league owner makes this league public, the dashboard will try ESPN's public read-only feed automatically. Otherwise add the two repository Actions secrets for the private sync. Never paste an ESPN password into this page.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER A PUBLIC OR SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
   }
 
   function renderFantasy() {
@@ -813,8 +972,18 @@
     state.espn.checked = true;
     try {
       const data = await getJSON(API.espnSync());
-      if (!data || data.ready !== true || !data.myTeam) throw new Error("ESPN sync is not ready");
-      state.espn.data = data;
+      if (data && data.ready === true && data.myTeam) {
+        state.espn.data = data;
+        state.espn.error = null;
+        return;
+      }
+    } catch (error) {
+      state.espn.error = error;
+    }
+    try {
+      const publicData = publicESPNData(await getJSON(API.espnPublic()));
+      if (!publicData) throw new Error("ESPN public league data is unavailable");
+      state.espn.data = publicData;
       state.espn.error = null;
     } catch (error) {
       state.espn.error = error;
