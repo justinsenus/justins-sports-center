@@ -16,7 +16,8 @@
     espnTeamName: "Gumby's Big D",
     refreshMs: 20000,
     playersCacheMs: 12 * 60 * 60 * 1000,
-    summaryCacheMs: 15000
+    summaryCacheMs: 15000,
+    injuryCacheMs: 2 * 60 * 1000
   };
 
   const API = {
@@ -24,6 +25,8 @@
     scoreboard: () => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${dateStamp()}`,
     patriotsSchedule: () => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/ne/schedule?season=${CONFIG.season}`,
     summary: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=${encodeURIComponent(id)}`,
+    teamRoster: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${encodeURIComponent(id)}?enable=roster`,
+    news: () => "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=300",
     espnLeague: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`
   };
 
@@ -40,6 +43,7 @@
     patriotsEvent: null,
     patriotsSummary: null,
     liveStats: new Map(),
+    injury: { saved: 0, byPlayer: new Map(), news: [], teams: [] },
     espn: { checked: false, data: null, error: null },
     scoreValues: { patriots: null }
   };
@@ -282,6 +286,124 @@
     return status.live ? "LIVE" : status.final ? "FINAL" : "NEXT";
   }
 
+  // ESPN's public team roster feed gives us headshots and the current injury
+  // note. The IDs are stable, so the page can request only the teams represented
+  // in the two rosters instead of loading an entire league injury database.
+  const ESPN_TEAM_IDS = {
+    ARI: 22, ATL: 1, BAL: 33, BUF: 2, CAR: 29, CHI: 3, CIN: 4, CLE: 5,
+    DAL: 6, DEN: 7, DET: 8, GB: 9, HOU: 34, IND: 11, JAX: 30, KC: 12,
+    LAC: 24, LAR: 14, LV: 13, MIA: 15, MIN: 16, NE: 17, NO: 18, NYG: 19,
+    NYJ: 20, PHI: 21, PIT: 23, SF: 25, SEA: 26, TB: 27, TEN: 10, WAS: 28
+  };
+
+  function espnTeamId(abbr) { return ESPN_TEAM_IDS[String(abbr || "").toUpperCase()] || null; }
+
+  function median(values) {
+    const sorted = values.filter((value) => Number.isFinite(Number(value))).map(Number).sort((a, b) => a - b);
+    if (!sorted.length) return 95;
+    const middle = Math.floor(sorted.length / 2);
+    return Math.round(sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2);
+  }
+
+  function probabilityForStatus(value) {
+    const status = String(value || "").toUpperCase();
+    if (!status) return null;
+    if (/IR|INJURED RESERVE|OUT|PUP|NFI|SUSPENDED|DID NOT PLAY/.test(status)) return 0;
+    if (/DOUBTFUL/.test(status)) return 20;
+    if (/QUESTIONABLE|GAME[- ]TIME/.test(status)) return 55;
+    if (/LIMITED|PARTIAL/.test(status)) return 65;
+    if (/ACTIVE|FULL|CLEARED|PROBABLE|AVAILABLE|EXPECTED/.test(status)) return 95;
+    return null;
+  }
+
+  function practiceSignal(player) {
+    const participation = String(player && player.practice_participation || "").toUpperCase();
+    const description = String(player && player.practice_description || "");
+    const text = `${participation} ${description}`.toUpperCase();
+    if (!text.trim()) return null;
+    if (/DID NOT|DNP|NO PRACTICE|ABSENT|NOT PARTICIPAT|NOT CLEARED/.test(text)) return { value: 35, source: "SLEEPER PRACTICE" };
+    if (/LIMITED|PARTIAL/.test(text)) return { value: 65, source: "SLEEPER PRACTICE" };
+    if (/FULL|COMPLETE/.test(text)) return { value: 95, source: "SLEEPER PRACTICE" };
+    return { value: 55, source: "SLEEPER PRACTICE" };
+  }
+
+  function newsMatchesFor(player) {
+    const name = normalizeName(player && (player.full_name || player.display_name));
+    if (!name || name.length < 5) return [];
+    return (state.injury && state.injury.news || []).filter((article) => {
+      const published = article && article.published ? new Date(article.published).getTime() : 0;
+      if (published && Date.now() - published > 21 * 24 * 60 * 60 * 1000) return false;
+      return normalizeName(`${article && article.headline || ""} ${article && article.description || ""}`).includes(name);
+    }).slice(0, 3);
+  }
+
+  function newsSignal(article) {
+    const text = `${article && article.headline || ""} ${article && article.description || ""}`.toUpperCase();
+    if (/RULED OUT|WON'T PLAY|WILL NOT PLAY|INACTIVE|OUT FOR|PLACED ON IR|INJURED RESERVE/.test(text)) return 5;
+    if (/DOUBTFUL|NOT EXPECTED TO PLAY/.test(text)) return 20;
+    if (/QUESTIONABLE|GAME[- ]TIME DECISION|LIMITED|DID NOT PRACTICE|NOT CLEARED/.test(text)) return 55;
+    if (/WILL PLAY|EXPECTED TO PLAY|CLEARED|FULL PARTICIPANT|ACTIVE TODAY|AVAILABLE/.test(text)) return 90;
+    return null;
+  }
+
+  function injuryReportFor(player) {
+    const name = player && (player.full_name || player.display_name) || "Player";
+    const entry = state.injury && state.injury.byPlayer && state.injury.byPlayer.get(normalizeName(name));
+    const signals = [];
+    const sources = [];
+    const addSignal = (value, source) => {
+      if (!Number.isFinite(Number(value))) return;
+      signals.push({ value: Number(value), source });
+      if (source && !sources.includes(source)) sources.push(source);
+    };
+    const sleeperStatus = String(player && player.injury_status || "").toUpperCase();
+    if (sleeperStatus) addSignal(probabilityForStatus(sleeperStatus), "SLEEPER STATUS");
+    else if (player && player.injury_body_part) addSignal(55, "SLEEPER STATUS");
+    const practice = practiceSignal(player);
+    if (practice) addSignal(practice.value, practice.source);
+
+    const injury = entry && entry.injury;
+    let injuryStatus = "";
+    if (injury) {
+      const statusValue = injury.status;
+      const typeValue = injury.type;
+      injuryStatus = typeof statusValue === "string" ? statusValue : statusValue && (statusValue.name || statusValue.text) || "";
+      if (!injuryStatus) injuryStatus = typeof typeValue === "string" ? typeValue : typeValue && (typeValue.text || typeValue.name) || "";
+    }
+    if (injury) {
+      const comment = [injuryStatus, injury.shortComment, injury.longComment, injury.details && injury.details.description].filter(Boolean).join(" ");
+      const statusValue = probabilityForStatus(injuryStatus);
+      const commentUpper = comment.toUpperCase();
+      const commentValue = /FULL PARTICIPATION|CLEARED|WILL PLAY|EXPECTED TO PLAY/.test(commentUpper) ? 90 : /DID NOT PARTICIPATE|NOT CLEARED|HAS[N']?T PRACTICED|NO PRACTICE/.test(commentUpper) ? 35 : /LIMITED/.test(commentUpper) ? 65 : null;
+      addSignal(statusValue != null ? statusValue : commentValue != null ? commentValue : 55, "ESPN INJURY");
+    }
+
+    const articles = newsMatchesFor(player);
+    articles.forEach((article) => addSignal(newsSignal(article), "ESPN NEWS"));
+    const probability = Math.max(0, Math.min(100, median(signals.map((signal) => signal.value))));
+    const rawStatus = [sleeperStatus, injuryStatus].find((value) => /IR|OUT|PUP|NFI|DOUBTFUL|QUESTIONABLE|ACTIVE|PROBABLE|INJUR|LIMITED/.test(String(value || "").toUpperCase()));
+    const flagged = Boolean(sleeperStatus || player && player.injury_body_part || injury || practice || articles.length);
+    const status = rawStatus ? String(rawStatus).toUpperCase() : !flagged ? "READY" : probability < 25 ? "OUT / DOUBTFUL" : probability < 70 ? "QUESTIONABLE" : "LIMITED";
+    const comments = [
+      player && player.practice_description,
+      injury && (injury.shortComment || injury.longComment),
+      articles[0] && articles[0].headline
+    ].filter(Boolean);
+    const practiceNote = comments[0] || "No practice note posted";
+    return {
+      player,
+      entry,
+      probability,
+      status,
+      flagged,
+      sources: sources.length ? sources : ["BASELINE"],
+      signalCount: signals.length || 1,
+      bodyPart: player && player.injury_body_part || injury && injury.type && (injury.type.text || injury.type.description) || "",
+      practice: practiceNote,
+      articles
+    };
+  }
+
   function findLiveStat(player) {
     if (!player) return null;
     const direct = state.liveStats.get(String(player.player_id || player.id));
@@ -332,16 +454,16 @@
     return parts.length ? parts.slice(0, 5).join(" • ") : "LIVE • STAT LINE PENDING";
   }
 
-  function playerInitials(player) {
-    const first = player && (player.first_name || String(player.full_name || "").split(" ")[0]) || "?";
-    const last = player && (player.last_name || String(player.full_name || "").split(" ").slice(-1)[0]) || "";
-    return `${first[0] || ""}${last[0] || ""}`.toUpperCase().slice(0, 2);
-  }
-
   function playerFace(player) {
-    const id = player && player.espn_id;
-    const photo = id ? `<img src="https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png" alt="" loading="lazy" onerror="this.style.display='none'">` : "";
-    return `<span class="player-avatar">${photo}<span class="avatar-initials">${esc(playerInitials(player))}</span></span>`;
+    const id = player && (player.player_id || player.id);
+    const name = player && (player.full_name || player.display_name) || "Player";
+    const entry = state.injury && state.injury.byPlayer && state.injury.byPlayer.get(normalizeName(name));
+    const sleeperPhoto = id && /^\d+$/.test(String(id)) ? `https://sleepercdn.com/content/nfl/players/thumb/${encodeURIComponent(id)}.jpg` : "";
+    const espnPhoto = entry && entry.headshot || (player && player.espn_id ? `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(player.espn_id)}.png` : "");
+    const fallback = espnPhoto || "https://sleepercdn.com/images/v2/icons/player_default.webp";
+    const source = sleeperPhoto || fallback;
+    const fallbackMarkup = source !== fallback ? ` data-fallback="${esc(fallback)}"` : "";
+    return `<span class="player-avatar"><img src="${esc(source)}" alt="${esc(name)}" loading="lazy"${fallbackMarkup}></span>`;
   }
 
   function rosterTeamName(rosterId, users) {
@@ -349,18 +471,56 @@
     return user && user.metadata && user.metadata.team_name || user && user.display_name || `TEAM ${rosterId}`;
   }
 
-  function renderPlayerRows(ids, players, pointsMap, starters, section) {
+  function renderPlayerRows(ids, players, pointsMap, starters, section, side = "own") {
     return ids.map((id) => {
       const player = players[id] || { full_name: id, position: "—", team: "FA", player_id: id };
       const enriched = { ...player, player_id: id };
       const live = findLiveStat(enriched);
       const status = playerStatus(enriched);
+      const report = injuryReportFor(enriched);
       const points = Number(pointsMap[id] || 0);
-      const injury = player.injury_status ? " injury" : "";
-      const statusText = player.injury_status ? `${String(player.injury_status).toUpperCase()}${player.injury_body_part ? ` • ${player.injury_body_part}` : ""}` : status;
-      const statusClass = player.injury_status ? " injury" : "";
-      return `<article class="player-row${injury}">${playerFace(player)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:player:${id}`, points, 1)}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
+      const injury = report.flagged ? " injury" : "";
+      const statusText = report.flagged ? `${report.status}${report.bodyPart ? ` • ${report.bodyPart}` : ""}` : status;
+      const statusClass = report.flagged ? " injury" : "";
+      return `<article class="player-row${injury}">${playerFace(enriched)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:${side}:player:${id}`, points, 1)}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
     }).join("");
+  }
+
+  function truncate(value, length = 92) {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    return text.length > length ? `${text.slice(0, length - 1)}…` : text;
+  }
+
+  function injuryReportRow(report) {
+    const player = report.player || {};
+    const statusClass = /OUT|IR|PUP|NFI|DOUBTFUL/.test(report.status) ? "out" : report.probability < 70 ? "questionable" : "limited";
+    const detail = [report.bodyPart, report.practice && `PRACTICE • ${truncate(report.practice, 76)}`].filter(Boolean).join(" • ") || "Practice note not posted";
+    const chips = report.sources.map((source) => `<span class="source-chip">${esc(source)}</span>`).join("");
+    return `<div class="injury-row"><div class="injury-avatar">${playerFace(player)}</div><div class="injury-copy"><div class="injury-name-line"><span class="injury-name">${esc(player.full_name || "Player")}</span><span class="injury-status ${statusClass}">${esc(report.status)}</span></div><div class="injury-detail">${esc(detail)}</div><div class="probability-track" aria-label="${esc(report.probability)} percent probability of playing"><span class="probability-fill" style="width:${report.probability}%"></span></div><div class="injury-source-row">${chips}<span class="signal-count">MEDIAN ${report.signalCount}</span></div></div><div class="probability-label"><strong>${num(report.probability, "0")}%</strong><small>PLAY</small></div></div>`;
+  }
+
+  function injuryReportMarkup(ids, players, sideLabel) {
+    const reports = ids.map((id) => injuryReportFor({ ...(players[id] || { full_name: id, player_id: id }), player_id: id }));
+    const flagged = reports.filter((report) => report.flagged).sort((a, b) => a.probability - b.probability).slice(0, 4);
+    const reportRows = flagged.length ? flagged.map(injuryReportRow).join("") : `<div class="injury-clear"><span>NO CURRENT FLAGS</span><strong>95%+ PLAY PROBABILITY</strong></div>`;
+    const extra = reports.filter((report) => report.flagged).length > flagged.length ? `<div class="injury-more">+${reports.filter((report) => report.flagged).length - flagged.length} MORE ROSTER FLAG${reports.filter((report) => report.flagged).length - flagged.length === 1 ? "" : "S"}</div>` : "";
+    return `<section class="injury-report"><div class="injury-report-heading"><span>LIVE INJURY REPORT • ${esc(sideLabel)}</span><span>${flagged.length ? `${flagged.length} FLAG${flagged.length === 1 ? "" : "S"}` : "CLEAR"}</span></div>${reportRows}${extra}<div class="injury-footnote">MEDIAN OF AVAILABLE SIGNALS • SLEEPER PRACTICE + ESPN INJURY/NEWS</div></section>`;
+  }
+
+  function wireAvatarFallbacks() {
+    document.querySelectorAll(".player-avatar img[data-fallback]").forEach((image) => {
+      if (image.dataset.fallbackBound) return;
+      image.dataset.fallbackBound = "1";
+      image.addEventListener("error", () => {
+        const fallback = image.dataset.fallback;
+        if (!fallback) {
+          image.style.opacity = "0.24";
+          return;
+        }
+        image.dataset.fallback = "";
+        image.src = fallback;
+      });
+    });
   }
 
   function matchupMarkup(data, ownRoster, users, leagueName) {
@@ -375,6 +535,17 @@
     return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
   }
 
+  function rosterColumnMarkup(label, roster, players, pointsMap, side) {
+    const ids = rosterPlayerIds(roster);
+    const starters = (roster && roster.starters || []).map(String);
+    const starterSet = new Set(starters);
+    const bench = ids.filter((id) => !starterSet.has(id));
+    const name = side === "own" ? CONFIG.sleeperTeamName : rosterTeamName(roster && roster.roster_id, state.sleeper && state.sleeper.users);
+    const starterRows = renderPlayerRows(starters, players, pointsMap, starterSet, "STARTERS", side);
+    const benchRows = renderPlayerRows(bench, players, pointsMap, starterSet, "BENCH", side);
+    return `<section class="roster-side ${side}"><div class="roster-side-heading"><span class="roster-side-name">${esc(name)}</span><span class="roster-side-role">${esc(label)}</span></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div>${injuryReportMarkup(ids, players, side === "own" ? "YOUR TEAM" : "OPPONENT")}</section>`;
+  }
+
   function renderSleeperLeague() {
     const data = state.sleeper;
     const roster = sleeperRoster();
@@ -385,6 +556,7 @@
     }
     const players = data.players || state.players || {};
     const matchup = data.matchup || {};
+    const opponentRoster = data.opponentRoster || (data.rosters || []).find((candidate) => Number(candidate.roster_id) === Number(data.opponentMatchup && data.opponentMatchup.roster_id)) || null;
     const pointsMap = matchup.players_points || {};
     const starters = (roster.starters || []).map(String);
     const starterSet = new Set(starters);
@@ -395,9 +567,9 @@
     const liveCount = [...starters, ...bench].filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
     setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : "PREVIEW"}`);
     const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", starterPoints, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
-    const starterRows = renderPlayerRows(starters, players, pointsMap, starterSet, "STARTERS");
-    const benchRows = renderPlayerRows(bench, players, pointsMap, starterSet, "BENCH");
-    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} ACTIVE SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div><div class="league-note">Sleeper roster and matchup points update from the league feed. Player faces use available ESPN headshots with initials as a fallback.</div>`);
+    const opponentPointsMap = data.opponentMatchup && data.opponentMatchup.players_points || {};
+    const opponentColumn = opponentRoster ? rosterColumnMarkup("MATCHUP OPPONENT", opponentRoster, players, opponentPointsMap, "opponent") : `<section class="roster-side opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
+    setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice, ESPN injury, and ESPN news signals—not an official designation.</div>`);
   }
 
   function renderESPNLeague() {
@@ -407,12 +579,13 @@
       setHTML("espnContent", `${matchup}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>ESPN SYNC</span></div><div class="secure-note"><h3>ESPN DATA CONNECTION READY</h3><p>Your ESPN roster and scoring settings can populate this same starters/bench layout once the secure connector returns the league response.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)}</div></div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
       return;
     }
-    setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A SECURE SYNC</h3><p>ESPN league data is protected here because this is a public GitHub page. I will not place your login or password in the site. A secure connector or a roster/scoring import is required to populate your ESPN starters, bench, and matchup.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
+    setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A SECURE SYNC</h3><p>This public GitHub page cannot read a private ESPN league cookie. To make it load, use a trusted connector or import the roster/scoring response. A public ESPN league may load after you verify the league ID and season, but never paste a password into this page.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
   }
 
   function renderFantasy() {
     renderSleeperLeague();
     renderESPNLeague();
+    wireAvatarFallbacks();
     animateFantasyScores();
   }
 
@@ -505,7 +678,41 @@
     state.players = players || {};
     const matchup = (matchupList || []).find((candidate) => Number(candidate.roster_id) === 11) || {};
     const opponentMatchup = (matchupList || []).find((candidate) => candidate.matchup_id != null && String(candidate.matchup_id) === String(matchup.matchup_id) && Number(candidate.roster_id) !== 11) || {};
-    state.sleeper = { league, users, rosters, matchup, opponentMatchup, matchups: matchupList || [], players: state.players };
+    const opponentRoster = (rosters || []).find((candidate) => Number(candidate.roster_id) === Number(opponentMatchup.roster_id)) || null;
+    state.sleeper = { league, users, rosters, matchup, opponentMatchup, opponentRoster, matchups: matchupList || [], players: state.players };
+  }
+
+  async function loadInjuries() {
+    if (state.injury.saved && Date.now() - state.injury.saved < CONFIG.injuryCacheMs) return;
+    const roster = sleeperRoster();
+    const opponent = state.sleeper && state.sleeper.opponentRoster;
+    const ids = [...new Set([...rosterPlayerIds(roster), ...rosterPlayerIds(opponent)])];
+    const teams = [...new Set(ids.map((id) => state.players[id] && String(state.players[id].team || "").toUpperCase()).filter((team) => espnTeamId(team)))];
+    const byPlayer = new Map();
+    const rosterResponses = await Promise.allSettled(teams.map(async (team) => ({ team, data: await getJSON(API.teamRoster(espnTeamId(team))) })));
+    rosterResponses.forEach((result) => {
+      if (result.status !== "fulfilled") return;
+      const { team, data } = result.value;
+      const athletes = data && data.team && (data.team.athletes || data.team.roster && data.team.roster.athletes) || data && data.athletes || [];
+      athletes.forEach((athlete) => {
+        const name = athlete && (athlete.fullName || athlete.displayName || athlete.shortName);
+        const key = normalizeName(name);
+        if (!key) return;
+        const injuries = Array.isArray(athlete.injuries) ? athlete.injuries : [];
+        byPlayer.set(key, {
+          team,
+          athlete,
+          injury: injuries[0] || null,
+          headshot: athlete.headshot && (athlete.headshot.href || athlete.headshot.original) || ""
+        });
+      });
+    });
+    let news = [];
+    try {
+      const newsPayload = await getJSON(API.news());
+      news = newsPayload && newsPayload.articles || [];
+    } catch (_) { /* News is an enhancement; injury status still renders. */ }
+    state.injury = { saved: Date.now(), byPlayer, news, teams };
   }
 
   async function loadFootball() {
@@ -535,7 +742,7 @@
       // Load the roster first so the football summary pass knows which player
       // games are relevant to this team.
       await loadSleeper();
-      await Promise.all([loadFootball(), checkESPN()]);
+      await Promise.all([loadFootball(), loadInjuries(), checkESPN()]);
       state.connected = true;
       state.lastSync = new Date();
       $("connectionDot").className = "status-dot live";
