@@ -166,10 +166,11 @@
     };
   }
 
-  function animateScore(node, key, rawValue, upcoming = false) {
+  function animateScore(node, key, rawValue, upcoming = false, decimals = 0) {
     if (!node) return;
     const next = upcoming ? null : Number(rawValue);
     const previous = state.scoreValues[key];
+    const formatValue = (value) => decimals > 0 ? Number(value).toFixed(decimals) : String(Math.round(value));
     node.classList.remove("score-counting", "up", "down");
     if (!Number.isFinite(next)) {
       node.textContent = "—";
@@ -177,7 +178,7 @@
       return;
     }
     if (previous == null || previous === next || typeof requestAnimationFrame !== "function") {
-      node.textContent = String(next);
+      node.textContent = formatValue(next);
       state.scoreValues[key] = next;
       return;
     }
@@ -189,15 +190,28 @@
     const draw = (now) => {
       const progress = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - progress, 3);
-      node.textContent = String(Math.round(from + (next - from) * eased));
+      node.textContent = formatValue(from + (next - from) * eased);
       if (progress < 1) requestAnimationFrame(draw);
       else {
-        node.textContent = String(next);
+        node.textContent = formatValue(next);
         node.classList.remove("score-counting", direction);
       }
     };
     state.scoreValues[key] = next;
     requestAnimationFrame(draw);
+  }
+
+  function scoreSpan(key, value, decimals = 1) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return num("—");
+    const display = numeric.toFixed(decimals);
+    return `<span class="num fantasy-score-number" data-score-key="${esc(key)}" data-score-value="${display}">${display}</span>`;
+  }
+
+  function animateFantasyScores() {
+    document.querySelectorAll(".fantasy-score-number").forEach((node) => {
+      animateScore(node, node.getAttribute("data-score-key"), node.getAttribute("data-score-value"), false, 1);
+    });
   }
 
   function scheduleCard(event) {
@@ -345,7 +359,7 @@
       const injury = player.injury_status ? " injury" : "";
       const statusText = player.injury_status ? `${String(player.injury_status).toUpperCase()}${player.injury_body_part ? ` • ${player.injury_body_part}` : ""}` : status;
       const statusClass = player.injury_status ? " injury" : "";
-      return `<article class="player-row${injury}">${playerFace(player)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${num(points.toFixed(1))}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
+      return `<article class="player-row${injury}">${playerFace(player)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:player:${id}`, points, 1)}<small>PTS</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
     }).join("");
   }
 
@@ -356,7 +370,9 @@
     const opponentName = opponent && opponent.roster_id ? rosterTeamName(opponent.roster_id, users) : "OPPONENT";
     const ownScore = Number(own.points || 0).toFixed(1);
     const opponentScore = opponent && opponent.points != null ? Number(opponent.points || 0).toFixed(1) : "—";
-    return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${num(ownScore)}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${num(opponentScore)}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
+    const ownScoreMarkup = scoreSpan(`fantasy:matchup:${leagueName}:own`, ownScore, 1);
+    const opponentScoreMarkup = opponentScore === "—" ? num("—") : scoreSpan(`fantasy:matchup:${leagueName}:opponent`, opponentScore, 1);
+    return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
   }
 
   function renderSleeperLeague() {
@@ -378,7 +394,7 @@
     const injured = [...starters, ...bench].filter((id) => players[id] && players[id].injury_status).length;
     const liveCount = [...starters, ...bench].filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
     setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : "PREVIEW"}`);
-    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${num(total.toFixed(1))}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${num(starterPoints.toFixed(1))}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
+    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(state.week)} TOTAL</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", starterPoints, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STATUS</div><div class="league-summary-value ${injured ? "" : "green"}">${injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
     const starterRows = renderPlayerRows(starters, players, pointsMap, starterSet, "STARTERS");
     const benchRows = renderPlayerRows(bench, players, pointsMap, starterSet, "BENCH");
     setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} ACTIVE SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div><div class="league-note">Sleeper roster and matchup points update from the league feed. Player faces use available ESPN headshots with initials as a fallback.</div>`);
@@ -397,6 +413,7 @@
   function renderFantasy() {
     renderSleeperLeague();
     renderESPNLeague();
+    animateFantasyScores();
   }
 
   function renderPatriotsPulse(event, summary) {
