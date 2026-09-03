@@ -129,6 +129,7 @@ function normalizeTeam(team) {
     id: team && team.id != null ? String(team.id) : "",
     name: teamLabel(team),
     total: firstNumber(team && (team.totalPoints || team.points || team.score || team.total)),
+    projected: firstNumberOrNull(team && (team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected)),
     starters,
     bench
   };
@@ -175,11 +176,13 @@ function applyMatchupTotal(team, side) {
   if (!team || !side) return team;
   const total = firstNumber(side.totalPoints, side.points, side.score, side.total);
   if (total || side.totalPoints === 0 || side.points === 0 || side.score === 0) team.total = Number(total.toFixed(1));
+  const projected = firstNumberOrNull(side.projectedTotal, side.projectedPoints, side.projectedScore, side.projected);
+  if (projected != null) team.projected = Number(projected.toFixed(1));
   return team;
 }
 
 async function fetchLeague() {
-  const endpoint = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${encodeURIComponent(season)}/segments/0/leagues/${encodeURIComponent(leagueId)}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`;
+  const endpoint = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${encodeURIComponent(season)}/segments/0/leagues/${encodeURIComponent(leagueId)}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring`;
   const response = await fetch(endpoint, {
     headers: {
       Accept: "application/json",
