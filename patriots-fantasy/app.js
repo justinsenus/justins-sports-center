@@ -28,7 +28,7 @@
     teamRoster: (id) => `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${encodeURIComponent(id)}?enable=roster`,
     news: () => "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=300",
     nflNews: () => "https://www.nfl.com/news/",
-    espnLeague: () => `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup`
+    espnSync: () => `espn-data.json?ts=${Date.now()}`
   };
 
   const state = {
@@ -466,13 +466,16 @@
   }
 
   function playerFace(player) {
+    const isESPN = Boolean(player && player.source === "espn");
     const id = player && (player.player_id || player.id);
     const name = player && (player.full_name || player.display_name) || "Player";
     const entry = state.injury && state.injury.byPlayer && state.injury.byPlayer.get(normalizeName(name));
-    const sleeperPhoto = id && /^\d+$/.test(String(id)) ? `https://sleepercdn.com/content/nfl/players/thumb/${encodeURIComponent(id)}.jpg` : "";
-    const espnPhoto = entry && entry.headshot || (player && player.espn_id ? `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(player.espn_id)}.png` : "");
+    const sleeperId = !isESPN && id && /^\d+$/.test(String(id)) ? id : "";
+    const espnId = player && (player.espn_id || (isESPN ? id : ""));
+    const sleeperPhoto = sleeperId ? `https://sleepercdn.com/content/nfl/players/thumb/${encodeURIComponent(sleeperId)}.jpg` : "";
+    const espnPhoto = entry && entry.headshot || (espnId ? `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(espnId)}.png` : "");
     const fallback = espnPhoto || "https://sleepercdn.com/images/v2/icons/player_default.webp";
-    const source = sleeperPhoto || fallback;
+    const source = isESPN ? (espnPhoto || fallback) : (sleeperPhoto || espnPhoto || fallback);
     const fallbackMarkup = source !== fallback ? ` data-fallback="${esc(fallback)}"` : "";
     return `<span class="player-avatar"><img src="${esc(source)}" alt="${esc(name)}" loading="lazy"${fallbackMarkup}></span>`;
   }
@@ -546,15 +549,16 @@
     return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING"}</div></div>`;
   }
 
-  function rosterColumnMarkup(label, roster, players, pointsMap, side) {
+  function rosterColumnMarkup(label, roster, players, pointsMap, side, nameOverride = "") {
     const ids = rosterPlayerIds(roster);
     const starters = (roster && roster.starters || []).map(String);
     const starterSet = new Set(starters);
     const bench = ids.filter((id) => !starterSet.has(id));
-    const name = side === "own" ? CONFIG.sleeperTeamName : rosterTeamName(roster && roster.roster_id, state.sleeper && state.sleeper.users);
+    const name = nameOverride || (side === "own" ? CONFIG.sleeperTeamName : rosterTeamName(roster && roster.roster_id, state.sleeper && state.sleeper.users));
     const starterRows = renderPlayerRows(starters, players, pointsMap, starterSet, "STARTERS", side);
     const benchRows = renderPlayerRows(bench, players, pointsMap, starterSet, "BENCH", side);
-    return `<section class="roster-side ${side}"><div class="roster-side-heading"><span class="roster-side-name">${esc(name)}</span><span class="roster-side-role">${esc(label)}</span></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div>${injuryReportMarkup(ids, players, side === "own" ? "YOUR TEAM" : "OPPONENT")}</section>`;
+    const isOwn = side === "own" || side === "espn-own";
+    return `<section class="roster-side ${side}"><div class="roster-side-heading"><span class="roster-side-name">${esc(name)}</span><span class="roster-side-role">${esc(label)}</span></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>${starters.length} SLOTS</span></div><div class="player-list">${starterRows || `<div class="empty-state">NO STARTERS FOUND</div>`}</div></div><div class="roster-section bench-section"><div class="roster-section-heading"><span>BENCH</span><span>${bench.length} PLAYERS</span></div><div class="player-list">${benchRows || `<div class="empty-state">BENCH EMPTY</div>`}</div></div>${injuryReportMarkup(ids, players, isOwn ? "YOUR TEAM" : "OPPONENT")}</section>`;
   }
 
   function renderSleeperLeague() {
@@ -583,13 +587,57 @@
     setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName)}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. Injury probability is a median estimate from available public practice plus ESPN and NFL news signals—not an official designation.</div>`);
   }
 
+  function normalizeImportedESPNTeam(team, side) {
+    if (!team) return null;
+    const players = {};
+    const pointsMap = {};
+    const roster = { roster_id: `espn-${side}`, starters: [], players: [] };
+    const seen = new Set();
+    const add = (raw, starter, index) => {
+      if (!raw) return;
+      const id = String(raw.id || `espn-${side}-${index}`);
+      if (seen.has(id)) return;
+      seen.add(id);
+      players[id] = {
+        source: "espn",
+        player_id: id,
+        espn_id: raw.id || id,
+        full_name: raw.name || raw.fullName || `PLAYER ${index + 1}`,
+        display_name: raw.name || raw.fullName || `PLAYER ${index + 1}`,
+        team: raw.team || "FA",
+        position: raw.position || "—",
+        injury_status: raw.injuryStatus || "",
+        injury_body_part: raw.injuryBodyPart || "",
+        practice_description: raw.practice || "",
+        headshot: raw.headshot || ""
+      };
+      pointsMap[id] = Number.isFinite(Number(raw.points)) ? Number(raw.points) : 0;
+      roster.players.push(id);
+      if (starter) roster.starters.push(id);
+    };
+    (team.starters || []).forEach((player, index) => add(player, true, index));
+    (team.bench || []).forEach((player, index) => add(player, false, index + (team.starters || []).length));
+    return { name: team.name || "ESPN TEAM", total: Number.isFinite(Number(team.total)) ? Number(team.total) : 0, roster, players, pointsMap };
+  }
+
   function renderESPNLeague() {
-    setText("espnMeta", state.espn.data ? "CONNECTED" : "AUTH NEEDED");
-    const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(CONFIG.espnTeamName)}</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">ESPN MATCHUP</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${state.espn.data ? "SECURE DATA READY" : "SECURE SYNC NEEDED"}</div></div>`;
-    if (state.espn.data) {
-      setHTML("espnContent", `${matchup}<div class="roster-section"><div class="roster-section-heading"><span>STARTERS</span><span>ESPN SYNC</span></div><div class="secure-note"><h3>ESPN DATA CONNECTION READY</h3><p>Your ESPN roster and scoring settings can populate this same starters/bench layout once the secure connector returns the league response.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)}</div></div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
+    const data = state.espn.data;
+    const ready = Boolean(data && data.ready && data.myTeam);
+    setText("espnMeta", ready ? "CONNECTED" : "AUTH NEEDED");
+    if (ready) {
+      const own = normalizeImportedESPNTeam(data.myTeam, "own");
+      const opponent = normalizeImportedESPNTeam(data.opponent, "opponent");
+      const ownScore = scoreSpan("espn:matchup:own", own.total, 1);
+      const opponentScore = opponent ? scoreSpan("espn:matchup:opponent", opponent.total, 1) : num("—");
+      const period = data.matchupPeriodId || data.scoringPeriodId || state.week;
+      const saved = data.savedAt ? `SYNCED ${formatClock(new Date(data.savedAt))}` : "SYNCED";
+      const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">WEEK ${esc(period)} TOTAL</div><div class="league-summary-value red">${scoreSpan("espn:summary:total", own.total, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">STARTERS</div><div class="league-summary-value">${scoreSpan("espn:summary:starters", own.roster.starters.reduce((sum, id) => sum + Number(own.pointsMap[id] || 0), 0), 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">SYNC</div><div class="league-summary-value green">${esc(saved)}</div></div></div>`;
+      const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(own.name)}</div><div class="matchup-team-score">${ownScore}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponent ? opponent.name : "MATCHUP PENDING")}</div><div class="matchup-team-score">${opponentScore}</div></div><div class="matchup-meta">WEEK ${esc(period)} • PRIVATE SYNC ACTIVE</div></div>`;
+      const opponentColumn = opponent ? rosterColumnMarkup("MATCHUP OPPONENT", opponent.roster, opponent.players, opponent.pointsMap, "espn-opponent", opponent.name) : `<section class="roster-side espn-opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
+      setHTML("espnContent", `${summary}${matchup}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", own.roster, own.players, own.pointsMap, "espn-own", own.name)}${opponentColumn}</div><div class="league-note">ESPN roster and matchup data is synced by GitHub Actions. Only this read-only dashboard output is public; ESPN credentials remain in GitHub Secrets.</div>`);
       return;
     }
+    const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(CONFIG.espnTeamName)}</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">ESPN MATCHUP</div><div class="matchup-team-score">${num("—")}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • SECURE SYNC NEEDED</div></div>`;
     setHTML("espnContent", `${matchup}<div class="secure-note"><h3>ESPN STARTERS + BENCH NEED A SECURE SYNC</h3><p>This public GitHub page cannot read a private ESPN league cookie. To make it load, use a trusted connector or import the roster/scoring response. A public ESPN league may load after you verify the league ID and season, but never paste a password into this page.</p><div class="league-id">LEAGUE <span class="num">${esc(CONFIG.espnLeagueId)}</span> • ${esc(CONFIG.season)} • ${esc(CONFIG.espnTeamName)}</div></div><div class="roster-section"><div class="roster-section-heading"><span>STARTERS + BENCH</span><span>WAITING</span></div><div class="empty-state">ESPN ROSTER WILL APPEAR AFTER SECURE SYNC</div></div><div class="league-note">No ESPN password, login cookie, or token is stored in this dashboard.</div>`);
   }
 
@@ -762,9 +810,16 @@
   }
 
   async function checkESPN() {
-    if (state.espn.checked) return;
     state.espn.checked = true;
-    try { state.espn.data = await getJSON(API.espnLeague()); } catch (error) { state.espn.error = error; }
+    try {
+      const data = await getJSON(API.espnSync());
+      if (!data || data.ready !== true || !data.myTeam) throw new Error("ESPN sync is not ready");
+      state.espn.data = data;
+      state.espn.error = null;
+    } catch (error) {
+      state.espn.error = error;
+      // Keep the last good snapshot if a scheduled commit is between refreshes.
+    }
   }
 
   async function refresh() {
