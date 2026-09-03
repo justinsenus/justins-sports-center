@@ -229,7 +229,7 @@ button { font: inherit; }
 .score-number.score-counting { transition: color .14s ease; }
 .score-number.score-counting.up { color: var(--green); }
 .score-number.score-counting.down { color: var(--red-soft); }
-.fantasy-score-number { color: inherit; transition: color .14s ease; }
+.fantasy-score-number { color: var(--text); transition: color .14s ease; }
 .fantasy-score-number.score-counting.up { color: var(--green); }
 .fantasy-score-number.score-counting.down { color: var(--red-soft); }
 .live-schedule { min-width: 0; height: 100%; padding: 3px 0 0; }
