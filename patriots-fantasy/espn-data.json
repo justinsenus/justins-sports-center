@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-09-05T16:57:39.147Z",
+  "savedAt": "2026-09-05T17:14:41.015Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 1,
@@ -254,17 +254,6 @@
         "starter": true
       },
       {
-        "id": "4572680",
-        "name": "Tucker Kraft",
-        "team": "GB",
-        "position": "TE",
-        "points": 0,
-        "projected": 9.1,
-        "injuryStatus": "QUESTIONABLE",
-        "headshot": "",
-        "starter": true
-      },
-      {
         "id": "-16017",
         "name": "Patriots D/ST",
         "team": "NE",
@@ -272,6 +261,17 @@
         "points": 0,
         "projected": 4.7,
         "injuryStatus": "",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "3116365",
+        "name": "Mark Andrews",
+        "team": "BAL",
+        "position": "TE",
+        "points": 0,
+        "projected": 10.1,
+        "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
       },
@@ -288,6 +288,17 @@
       }
     ],
     "bench": [
+      {
+        "id": "4572680",
+        "name": "Tucker Kraft",
+        "team": "GB",
+        "position": "TE",
+        "points": 0,
+        "projected": 9.1,
+        "injuryStatus": "QUESTIONABLE",
+        "headshot": "",
+        "starter": false
+      },
       {
         "id": "4360078",
         "name": "Alec Pierce",
@@ -317,17 +328,6 @@
         "position": "WR",
         "points": 0,
         "projected": 9.7,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
-        "id": "3116365",
-        "name": "Mark Andrews",
-        "team": "BAL",
-        "position": "TE",
-        "points": 0,
-        "projected": 10.1,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
