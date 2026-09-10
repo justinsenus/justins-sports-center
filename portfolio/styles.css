@@ -9,7 +9,7 @@
   --line-light: rgba(20, 27, 27, 0.23);
   --display: "Barlow Condensed", "Arial Narrow", sans-serif;
   --body: "Barlow", Arial, sans-serif;
-  --shell: min(1280px, calc(100vw - 8rem));
+  --shell: min(1392px, calc(100vw - 9rem));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -50,7 +50,7 @@ button { font: inherit; }
   background: rgba(20, 27, 27, .94); border-bottom: 1px solid var(--line-dark); backdrop-filter: blur(14px);
 }
 .brand { display: inline-flex; align-items: center; gap: .75rem; min-width: 245px; }
-.brand-mark { width: 48px; height: 48px; display: grid; place-items: center; }
+.brand-mark { width: 62px; height: 62px; display: grid; place-items: center; }
 .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
 .brand-rule { width: 1px; height: 30px; background: var(--teal); }
 .brand-copy { display: flex; flex-direction: column; line-height: 1; gap: .35rem; }
@@ -65,15 +65,15 @@ button { font: inherit; }
 .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,27,27,.98) 0%, rgba(20,27,27,.87) 40%, rgba(20,27,27,.38) 75%, rgba(20,27,27,.8) 100%); z-index: 1; }
 .hero-process { position: absolute; inset: 0; background: url("assets/design-process-still.jpg") center/cover no-repeat; opacity: .23; filter: grayscale(1) contrast(1.2) brightness(.48); transform: scale(1.08); }
 .hero-mark { position: absolute; z-index: 1; width: min(55vw, 780px); right: 5%; top: 11%; opacity: .3; filter: saturate(1.6) hue-rotate(22deg) brightness(.78); transform: rotate(-3deg); }
-.hero-grid { position: relative; z-index: 2; min-height: calc(100svh - 12rem); display: grid; grid-template-columns: minmax(0, .93fr) minmax(420px, 1.07fr); gap: 2rem; align-items: end; }
-.hero-copy { align-self: center; padding: 3rem 0 5rem; }
+.hero-grid { position: relative; z-index: 2; min-height: calc(100svh - 12rem); display: grid; grid-template-columns: minmax(0, .9fr) minmax(560px, 1.1fr); gap: 0; align-items: end; }
+.hero-copy { align-self: center; padding: 3rem 0 4.5rem; }
 .kicker { margin: 0 0 1.4rem; color: var(--teal); font-size: .72rem; text-transform: uppercase; letter-spacing: .2em; }
 .kicker span { color: var(--paper); margin-right: .9rem; }
 .hero h1, h2, h3, p { margin-top: 0; }
-.hero h1 { display: flex; flex-direction: column; margin: 0; max-width: 760px; color: var(--paper); font: 800 clamp(3.9rem, 7vw, 7rem)/.84 var(--display); text-transform: uppercase; letter-spacing: -.025em; }
+.hero h1 { display: flex; flex-direction: column; margin: 0; max-width: 760px; color: var(--paper); font: 800 clamp(4rem, 5.2vw, 6rem)/.84 var(--display); text-transform: uppercase; letter-spacing: -.025em; }
 .hero h1 span:nth-child(2) { margin-left: -.02em; }
-.hero-signal { display: flex; align-items: center; gap: 1rem; min-height: 8rem; margin: 1.1rem 0 .3rem; }
-.hero-graffiti { width: 10.5rem; height: 7rem; object-fit: contain; object-position: left center; transform: scaleX(1.42); transform-origin: left center; filter: saturate(1.42) hue-rotate(10deg) brightness(1.03); }
+.hero-signal { display: flex; align-items: center; gap: .8rem; min-height: 8rem; margin: 1.1rem 0 .3rem; }
+.hero-graffiti { width: 7.2rem; height: 6.4rem; object-fit: contain; object-position: left center; transform: scaleX(1.38); transform-origin: left center; filter: saturate(1.42) hue-rotate(10deg) brightness(1.03); }
 .scribble { position: relative; display: block; width: 14rem; height: 4.6rem; transform: rotate(-5deg); }
 .scribble::before, .scribble::after { content: ""; position: absolute; left: 0; right: 0; height: .55rem; background: var(--teal); clip-path: polygon(0 42%, 10% 0, 66% 23%, 100% 8%, 81% 60%, 31% 42%, 5% 100%); }
 .scribble::before { top: 1.2rem; }
@@ -82,12 +82,9 @@ button { font: inherit; }
 .text-link { display: inline-flex; align-items: center; gap: 1rem; color: var(--paper); font-size: .77rem; text-transform: uppercase; letter-spacing: .2em; font-weight: 600; }
 .text-link span { color: var(--teal); font-size: 1.5rem; transition: transform .25s var(--ease); }
 .text-link:hover span, .text-link:focus-visible span { transform: translateX(.35rem); }
-.hero-portrait-column { position: relative; align-self: stretch; display: flex; flex-direction: column; justify-content: end; min-width: 0; }
-.hero-portrait { position: relative; height: min(78vh, 720px); margin: 0; overflow: visible; background: transparent; isolation: isolate; }
-.hero-portrait::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent 70%, rgba(20,27,27,.2) 100%); pointer-events: none; }
-.hero-portrait img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: saturate(.93) contrast(1.03); }
-.hero-portrait figcaption { position: absolute; z-index: 2; inset: auto 1.5rem 1.1rem; display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(243,239,224,.5); padding-top: .7rem; color: var(--paper); font-size: .67rem; text-transform: uppercase; letter-spacing: .18em; }
-.portrait-note { position: absolute; z-index: 3; right: 0; top: 42%; writing-mode: vertical-rl; transform: rotate(180deg); color: var(--teal); font-size: .63rem; text-transform: uppercase; letter-spacing: .19em; }
+.hero-portrait-column { position: relative; align-self: stretch; display: flex; justify-content: end; min-width: 0; }
+.hero-portrait { position: relative; width: min(58vw, 820px); height: min(91vh, 790px); margin: 0 -2rem 0 auto; overflow: visible; background: transparent; isolation: isolate; }
+.hero-portrait img { position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: saturate(.93) contrast(1.03); transform: scale(1.04); transform-origin: center bottom; }
 .hero-footer { position: relative; z-index: 3; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin-top: -1px; padding-top: 1rem; border-top: 1px solid var(--line-dark); color: rgba(243,239,224,.72); font-size: .68rem; text-transform: uppercase; letter-spacing: .22em; }
 .hero-footer__line { height: 1px; background: var(--line-dark); }
 .hero-footer a { color: var(--teal); font-size: 1.4rem; }
@@ -190,8 +187,7 @@ button { font: inherit; }
   .hero-copy { padding: 2rem 0 1.5rem; }
   .hero h1 { font-size: clamp(4.2rem, 10vw, 6.9rem); max-width: 700px; }
   .hero-portrait-column { display: block; }
-  .hero-portrait { height: min(84vw, 720px); }
-  .portrait-note { top: 16%; }
+  .hero-portrait { width: min(100%, 720px); height: min(84vw, 720px); margin: 0 auto; }
   .hero-mark { width: 72vw; right: -9%; top: 36%; opacity: .24; }
   .section-heading { grid-template-columns: 1fr; gap: 1.5rem; }
   .section-intro { max-width: 38rem; }
@@ -229,9 +225,7 @@ button { font: inherit; }
   .hero-graffiti { width: 7.4rem; height: 6.3rem; transform: scaleX(1.22); }
   .scribble { width: 8rem; height: 3.5rem; transform: rotate(-4deg) scale(.83); transform-origin: left center; }
   .hero-tagline { max-width: 20rem; font-size: .66rem; letter-spacing: .17em; }
-  .hero-portrait { height: 108vw; min-height: 22rem; max-height: 32rem; }
-  .hero-portrait figcaption { inset-inline: .8rem; font-size: .56rem; letter-spacing: .11em; }
-  .portrait-note { display: none; }
+  .hero-portrait { width: min(108vw, 650px); height: 108vw; min-height: 22rem; max-height: 32rem; margin: 0 -4vw 0 auto; }
   .hero-footer { font-size: .59rem; letter-spacing: .14em; }
   .process-strip { padding-bottom: 1.25rem; }
   .strip-label { top: 1.4rem; left: .7rem; font-size: .68rem; }
