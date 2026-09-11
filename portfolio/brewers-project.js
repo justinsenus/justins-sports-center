@@ -81,4 +81,10 @@
 
   renderPortfolio();
   observeRevealElements();
+
+  const contactEmail = document.querySelector('.contact-email');
+  if (contactEmail) {
+    contactEmail.href = 'mailto:justinsenus@gmail.com';
+    contactEmail.innerHTML = 'justinsenus@gmail.com <span aria-hidden="true">↗</span>';
+  }
 })();
