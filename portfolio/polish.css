@@ -192,15 +192,6 @@
     height: 2.4rem;
   }
 
-  /* Small phone-only adjustment: keep the existing composition but visually ground the portrait. */
-  .hero-portrait-column {
-    margin-top: -1.75rem;
-  }
-
-  .hero-portrait {
-    margin: 0 auto -1.1rem;
-  }
-
   .process-strip__visual::after {
     background: linear-gradient(
       90deg,
