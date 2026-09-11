@@ -1,0 +1,24 @@
+.project-modal__video--portrait {
+  width: auto;
+  height: min(82vh, 860px);
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+  background: #080c0c;
+}
+
+.project-card[data-project-id="brewers-trading-cards"] .project-card__media {
+  background: #111516;
+}
+
+.project-card[data-project-id="brewers-trading-cards"] .project-card__media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 700px) {
+  .project-modal__video--portrait {
+    height: min(70vh, 720px);
+  }
+}
