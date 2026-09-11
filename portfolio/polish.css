@@ -1,0 +1,219 @@
+/* Final visual polish based on annotated review */
+
+/* HERO: make the monogram feel intentional and keep the street accent restrained. */
+.hero-mark-layer {
+  width: min(64vw, 980px);
+  right: -2.5%;
+  top: 8.5%;
+  opacity: .5;
+  transform: rotate(-2deg);
+}
+
+.hero-mark {
+  width: 100%;
+  opacity: 1;
+  filter: saturate(1.08) contrast(1.03);
+}
+
+.hero-drips {
+  right: -1%;
+  bottom: -5%;
+  width: 20%;
+  height: 29%;
+  opacity: .42;
+}
+
+.hero-portrait-column {
+  inset: -7rem -2rem .2rem 34%;
+}
+
+.hero-graffiti {
+  width: 8.4rem;
+  height: 5.9rem;
+  object-fit: contain;
+  object-position: left center;
+  transform: scaleX(1.16);
+  transform-origin: left center;
+  filter: saturate(1.18) brightness(1.02);
+}
+
+.hero-signal {
+  gap: 1rem;
+  min-height: 6.6rem;
+  margin-top: 1rem;
+}
+
+/* Replace the chunky zig-zag with a quiet hand-drawn double stroke. */
+.scribble {
+  position: relative;
+  width: 13.5rem;
+  height: 2.9rem;
+  transform: rotate(-4deg);
+}
+
+.scribble i {
+  position: absolute;
+  left: 0;
+  display: block;
+  height: 1rem;
+  background: transparent;
+  clip-path: none;
+  border-top: 2px solid rgba(65,188,183,.78);
+  border-radius: 50%;
+  transform-origin: left center;
+}
+
+.scribble i:nth-child(1) {
+  top: .75rem;
+  width: 100%;
+  transform: rotate(-2deg) skewX(-10deg);
+}
+
+.scribble i:nth-child(2) {
+  top: 1.5rem;
+  left: 7%;
+  width: 78%;
+  border-top-width: 1px;
+  opacity: .62;
+  transform: rotate(2deg);
+}
+
+.scribble i:nth-child(3) { display: none; }
+
+/* PROCESS STRIP: fully hide the source-image words and enlarge the real right-side message. */
+.process-strip__visual::after {
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(20,27,27,0) 0%,
+    rgba(20,27,27,.08) 18%,
+    rgba(20,27,27,.72) 30%,
+    rgba(20,27,27,.96) 39%,
+    var(--ink) 48%,
+    var(--ink) 100%
+  );
+}
+
+.process-strip__copy {
+  right: 5.5%;
+  width: 8.8rem;
+  font-size: 1rem;
+  line-height: 1.03;
+  letter-spacing: .18em;
+}
+
+/* PORTFOLIO: every artwork sits optically centered inside the same clean frame. */
+.project-card__media,
+.project-card--feature .project-card__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  padding: clamp(1rem, 2vw, 1.7rem);
+  overflow: hidden;
+}
+
+.project-card__media img {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain !important;
+  object-position: 50% 50% !important;
+  transform-origin: center center;
+}
+
+.project-card:hover .project-card__media img {
+  transform: scale(1.012);
+}
+
+/* Keep video thumbs balanced without changing the underlying art treatment. */
+.project-card__media img[src*="ytimg.com"] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+.project-modal__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-modal__stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 8.5rem);
+  margin: auto;
+  object-fit: contain;
+  object-position: center center;
+}
+
+@media (max-width: 980px) {
+  .hero-mark-layer {
+    width: 78vw;
+    right: -10%;
+    top: 34%;
+    opacity: .4;
+  }
+
+  .hero-graffiti {
+    width: 8rem;
+    transform: scaleX(1.12);
+  }
+
+  .process-strip__copy {
+    right: 4%;
+    font-size: .9rem;
+    width: 7.8rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-mark-layer {
+    width: 94vw;
+    right: -24%;
+    top: 42%;
+    opacity: .3;
+  }
+
+  .hero-graffiti {
+    width: 7.8rem;
+    height: 5.5rem;
+    transform: scaleX(1.08);
+  }
+
+  .scribble {
+    width: 7.4rem;
+    height: 2.4rem;
+  }
+
+  .process-strip__visual::after {
+    background: linear-gradient(
+      90deg,
+      rgba(20,27,27,0) 0%,
+      rgba(20,27,27,.25) 24%,
+      rgba(20,27,27,.94) 42%,
+      var(--ink) 55%,
+      var(--ink) 100%
+    );
+  }
+
+  .process-strip__copy {
+    right: 3.5%;
+    width: 6.5rem;
+    font-size: .74rem;
+    line-height: 1.04;
+    letter-spacing: .13em;
+  }
+
+  .project-card__media,
+  .project-card--feature .project-card__media {
+    aspect-ratio: 1.3 / 1;
+    padding: 1rem;
+  }
+}
