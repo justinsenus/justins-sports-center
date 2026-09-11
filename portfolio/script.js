@@ -42,7 +42,9 @@ function activateTab(targetId, updateHash = false) {
     panel.hidden = !active;
   });
 
-  if (updateHash) history.replaceState(null, '', targetId === 'past-jobs' ? '#past-jobs' : '#work');
+  if (updateHash) {
+    history.replaceState(null, '', targetId === 'past-jobs' ? '#past-jobs' : '#work');
+  }
 }
 
 workTabs.forEach((tab) => {
@@ -77,7 +79,7 @@ const portfolioProjects = {
       id: 'balls-of-fury',
       type: 'Brand Identity / Logo',
       title: 'Balls of Fury — Ball Pythons',
-      description: 'Identity work for an exotic ball python breeder. I also helped market the Instagram account to 11.4K followers in less than six months.',
+      description: 'Logo and social-first brand identity for an exotic ball python breeder. Supporting content helped grow the Instagram audience to 11.4K followers in under six months.',
       images: [
         wixImage('69fcba_01e90945ef594ddaa7f348c626b55773~mv2.jpg'),
         wixImage('69fcba_e019b30718bc491897c40d1dbe0207fd~mv2.jpg'),
@@ -88,7 +90,7 @@ const portfolioProjects = {
       id: 'celebrity-kennels',
       type: 'Brand Identity / Logo',
       title: 'Celebrity Kennels — New England',
-      description: 'Identity work for an American Bulldog / Pit Bull exotic breeder in New England.',
+      description: 'Custom breeder identity for a New England American Bulldog and pit bull program, built around a bold illustrative mark.',
       images: [
         wixImage('69fcba_a37dc6448cf54c768102b64948210329~mv2.png'),
         wixImage('69fcba_2f1507d29ef5492fa5153280ef7657ee~mv2.png'),
@@ -99,7 +101,7 @@ const portfolioProjects = {
       id: 'troy-baseball-expos',
       type: 'Brand Identity / Sports',
       title: 'Troy Baseball Expos',
-      description: 'A team rebrand for a baseball program coached by former pro player Eric Beaulac out of Troy, New York.',
+      description: 'Team identity refresh for a Troy, New York baseball program coached by former professional pitcher Eric Beaulac.',
       images: [
         wixImage('69fcba_b9b8b932e6c5467a84a6963b1308add6~mv2.jpg'),
         wixImage('69fcba_8e999a80ba0047f9a95b4dd5478f8367~mv2.jpg'),
@@ -110,7 +112,7 @@ const portfolioProjects = {
       id: 'main-st-barbershop',
       type: 'Brand Identity / Logo',
       title: 'Main St. Barbershop',
-      description: 'A fresh new identity for a barbershop in Coventry, Rhode Island.',
+      description: 'Logo refresh for a Coventry, Rhode Island barbershop, designed to feel sharper, more current, and usable across signage and apparel.',
       images: [
         wixImage('69fcba_0abd10c7cfce477995e0e5ecb5567343~mv2.png'),
         wixImage('69fcba_99b574f93b514405bbbda2d632ee0fd1~mv2.jpg'),
@@ -121,7 +123,7 @@ const portfolioProjects = {
       id: 'cdg-dave',
       type: 'Brand Identity / Digital',
       title: 'Twitch Rebrand — CDG Dave',
-      description: 'A modern rebrand for a Twitch video-game streamer, developed from sketch through final identity.',
+      description: 'A modern gaming identity for Twitch streamer CDG Dave, developed from sketch exploration through the final mark.',
       images: [
         wixImage('69fcba_91d4f86b0d404ea09edd221fa2a52143~mv2_d_12455_12455_s_6_4_3.jpg'),
         wixImage('69fcba_e341b5a402e04ea4a2f103a5300d2626~mv2_d_12455_12455_s_6_4_3.jpg'),
@@ -132,7 +134,7 @@ const portfolioProjects = {
       id: 'we-motivate',
       type: 'Brand Identity / Logo',
       title: 'We Motivate',
-      description: 'Identity work for a platform built for highly motivated individuals.',
+      description: 'Identity concept for a motivation-focused platform built around momentum, ambition, and community.',
       images: [
         wixImage('69fcba_e59f8d81ed27406f820bf8027f6d6742~mv2_d_3300_3300_s_4_2.jpg'),
         wixImage('69fcba_da30f0786f644d6cb97544fa87419c6f~mv2_d_3300_3300_s_4_2.jpg'),
@@ -143,7 +145,7 @@ const portfolioProjects = {
       id: 'variance-health',
       type: 'Brand Identity / Health',
       title: 'Variance Health',
-      description: 'Brand concept for a startup focused on making prescription medications easier for people to receive.',
+      description: 'Healthcare startup identity concept focused on making prescription access feel simpler and more approachable.',
       images: [
         wixImage('69fcba_6a6d7d758c5b4a7789e1643b9284af76~mv2.jpg'),
         wixImage('69fcba_5fbfd1ac2e224e3d806229577f29c284~mv2.jpg'),
@@ -154,7 +156,7 @@ const portfolioProjects = {
       id: 'onehub',
       type: 'Brand Identity / Concepts',
       title: 'OneHub Logo Concepts',
-      description: 'Logo concepts for OneHub, an intranet application for people working at PharMerica.',
+      description: 'Logo exploration for OneHub, an internal intranet application created for PharMerica employees.',
       images: [
         wixImage('69fcba_a177d159f94f45a881e876d5e021b73b~mv2.jpg'),
         wixImage('69fcba_5bfcb2ba1cef4cdc9c9db9e2c7bdabca~mv2.png'),
@@ -165,7 +167,7 @@ const portfolioProjects = {
       id: 'fast-athletics',
       type: 'Brand Identity / Sports',
       title: 'F.A.S.T Athletics',
-      description: 'Identity work for a company running after-school sports programs for children from Pre-K through middle school.',
+      description: 'Youth sports identity for an after-school athletics program serving children from Pre-K through middle school.',
       images: [
         wixImage('69fcba_59585e63dc584a4dbb8c212aac67eccc~mv2_d_8356_8357_s_4_2.png'),
         wixImage('69fcba_43d01e4c9d3945b48b75e22dba79caea~mv2_d_6000_5600_s_4_2.jpg'),
@@ -176,7 +178,7 @@ const portfolioProjects = {
       id: 'acorn-financial',
       type: 'Brand Identity / Financial',
       title: 'Acorn Financial',
-      description: 'Rebrand for a financial planning firm based in Washington, D.C.',
+      description: 'Brand refresh for a Washington, D.C. financial planning firm, balancing trust with a more contemporary visual direction.',
       images: [
         wixImage('69fcba_4d02015976854743bbc531a98b84941d~mv2.jpg'),
         wixImage('69fcba_882847fcf31942cd829cfd6932b2638e~mv2.jpg'),
@@ -187,7 +189,7 @@ const portfolioProjects = {
       id: 'worcester-sga',
       type: 'Brand Identity / Institutional',
       title: 'Worcester Student Government Association',
-      description: 'Logo update for the Worcester Student Government Association.',
+      description: 'Identity update designed for clearer recognition across Worcester Student Government Association communications.',
       images: [
         wixImage('69fcba_627746b02c85482cae43aae79bd2f7fc~mv2_d_1920_1920_s_2.jpg'),
         wixImage('69fcba_1e18f7f081bc43e280ba985b35443eb5~mv2_d_2530_1345_s_2.png')
@@ -197,7 +199,7 @@ const portfolioProjects = {
       id: 'lupos',
       type: 'Brand Identity / Entertainment',
       title: 'Lupo’s Heartbreak Hotel',
-      description: 'New logo design for a small concert hall located in Providence, Rhode Island.',
+      description: 'Logo redesign concept for Lupo’s Heartbreak Hotel, a music venue in Providence, Rhode Island.',
       images: [
         wixImage('69fcba_be49e76507ca42babf4b9d88ea5c1ea7~mv2.jpg'),
         wixImage('69fcba_e781f0aa35664546b548a932ae4be31f~mv2.jpg'),
@@ -207,8 +209,8 @@ const portfolioProjects = {
     {
       id: 'event-postcard',
       type: 'Graphic Design / Social',
-      title: 'Event Postcard',
-      description: 'Infographics and holiday posts created for social media.',
+      title: 'Event & Social Graphics',
+      description: 'A collection of social graphics, infographics, and seasonal posts designed for fast, clear digital communication.',
       images: [
         wixImage('69fcba_ff12cbf013184ba9967336595813c69c~mv2.jpg'),
         wixImage('69fcba_d0667739e936432c9dfdfcfe0bce727c~mv2.jpg'),
@@ -219,7 +221,7 @@ const portfolioProjects = {
       id: 'california-taco',
       type: 'Graphic Design / Environmental',
       title: 'California Taco Food Truck',
-      description: 'Food-truck wrap design for a taco chain in Rhode Island.',
+      description: 'Full vehicle-wrap concept for a Rhode Island taco chain, turning the truck into a moving brand touchpoint.',
       images: [
         wixImage('69fcba_99308d51e73b4e93a00087eade697830~mv2.jpg'),
         wixImage('69fcba_35120c9da2b14fb8a634ed532230719e~mv2.jpg'),
@@ -228,9 +230,9 @@ const portfolioProjects = {
     },
     {
       id: 'quest-magazine',
-      type: 'Graphic Design / Editorial',
+      type: 'Editorial Design / Study',
       title: 'Quest Magazine',
-      description: 'A travel magazine created for an editorial design class.',
+      description: 'Editorial design study for a travel magazine, focused on hierarchy, pacing, photography, and spread composition.',
       images: [
         wixImage('69fcba_abf6b4067ff64901acc5d377ebb3c950~mv2_d_3304_3304_s_4_2.jpg'),
         wixImage('69fcba_d4d1fa59c7114a039bf0b45e3ec0c44e~mv2.png'),
@@ -241,7 +243,7 @@ const portfolioProjects = {
       id: '50words-camden-yards',
       type: 'Graphic Design / Promotion',
       title: '50Words Giveaway — Camden Yards',
-      description: 'Giveaway postcard for marketing agency 50 Words and Marketing At The Yards.',
+      description: 'Promotional giveaway postcard for 50 Words and Marketing At The Yards at Camden Yards.',
       images: [
         wixImage('69fcba_abb998b3f75348be98015453db858308~mv2.jpg'),
         wixImage('69fcba_d1fbbda33e71487a9e288b49cbe716f5~mv2.jpg'),
@@ -252,14 +254,14 @@ const portfolioProjects = {
       id: 'worcester-art-festival',
       type: 'Graphic Design / Print',
       title: 'Worcester Art Festival',
-      description: 'Postcard design for an art show in Worcester, Massachusetts.',
+      description: 'Event postcard created for a student art show in Worcester, Massachusetts.',
       images: [wixImage('69fcba_34d7acccbf084a23ab0bb76d37b45d68~mv2.png')]
     },
     {
       id: 'calendar-design',
-      type: 'Graphic Design / Print',
+      type: 'Graphic Design / Study',
       title: 'Calendar Design',
-      description: 'A creative and playful calendar design.',
+      description: 'Calendar design study exploring typography, layout, and a more playful visual system.',
       images: [wixImage('69fcba_04e88ca85cfa47b493ea0277b49e09e5~mv2_d_2500_3547_s_4_2.jpg')]
     },
     {
@@ -273,7 +275,7 @@ const portfolioProjects = {
       id: 'website-redesign',
       type: 'Digital Design / Web',
       title: 'Website Redesign',
-      description: 'A modern website redesign for Justin’s Lawn & Landscape.',
+      description: 'Website redesign concept for Justin’s Lawn & Landscape, focused on a cleaner, more contemporary customer experience.',
       images: [wixImage('69fcba_cbf21a7465b440f6a1e502e57fdc413c~mv2.jpg')]
     }
   ],
@@ -282,7 +284,7 @@ const portfolioProjects = {
       id: 'cartoon-boneheads',
       type: 'Illustration / Character',
       title: 'Cartoon Boneheads',
-      description: 'A fun way of displaying yourself and friends through illustrated characters.',
+      description: 'Character illustration series translating friends and personalities into a consistent stylized visual language.',
       images: [
         wixImage('69fcba_3d22f714d2804026a79f80cc33a6ab6d~mv2_d_11820_5018_s_4_2.png'),
         wixImage('69fcba_c604aae510e74e1fbd27e0b2a6e456f6~mv2_d_3300_3300_s_4_2.png'),
@@ -293,7 +295,7 @@ const portfolioProjects = {
       id: 'amc-mascot',
       type: 'Illustration / Mascot',
       title: 'Anna Maria College Mascot',
-      description: 'A new concept for the Anna Maria College mascot with a different spin.',
+      description: 'Mascot concept for Anna Maria College, exploring a more distinctive and energetic interpretation of the school character.',
       images: [
         wixImage('69fcba_96ac0841dc87488d83d7cb465f6f9749~mv2_d_24721_13465_s_5_4.png'),
         wixImage('69fcba_f48493ad60d14e35b8724744fb02c01e~mv2.jpg'),
@@ -302,9 +304,9 @@ const portfolioProjects = {
     },
     {
       id: 'genie',
-      type: 'Illustration / Personal',
+      type: 'Illustration / Archive',
       title: 'Genie Illustration',
-      description: 'One of my earliest illustration projects, created when I was a sophomore in high school.',
+      description: 'An early illustration from high school that shows the hand-drawn foundation behind the later digital work.',
       images: [
         wixImage('69fcba_62b5fc22b3b141b4ae3ad70391aac334~mv2.png'),
         wixImage('69fcba_1227d56f5292471d88e01b8f9b44a4fb~mv2_d_2448_3264_s_4_2.jpg')
@@ -316,7 +318,7 @@ const portfolioProjects = {
       id: 'imagine-type',
       type: 'Typography / Process',
       title: '“Imagine” Type Speed Art',
-      description: 'I love type and wanted to show people my process and way of working.',
+      description: 'A process-focused lettering piece showing how the composition develops from initial type exploration to the finished artwork.',
       images: ['https://i.ytimg.com/vi/u7CvF-PK0HQ/hqdefault.jpg'],
       video: 'https://www.youtube.com/embed/u7CvF-PK0HQ?rel=0'
     },
@@ -324,14 +326,14 @@ const portfolioProjects = {
       id: 'amc-geotag',
       type: 'Typography / Lettering',
       title: 'Anna Maria College Geotag',
-      description: 'A custom geotag designed for people visiting Anna Maria College.',
+      description: 'Custom geotag lettering created for visitors and social content at Anna Maria College.',
       images: [wixImage('69fcba_a9603ba6c68246159aae3fc7f2c44750~mv2.png')]
     },
     {
       id: 'good-vibes',
       type: 'Typography / Type Study',
       title: '“Good Vibes” Type Project',
-      description: 'A class typography project created to strengthen my lettering and type skills.',
+      description: 'Expressive typography study focused on lettering form, composition, rhythm, and visual personality.',
       images: [
         wixImage('69fcba_768cd0f87b844ceabbd9effdd23918ef~mv2.jpg'),
         wixImage('69fcba_972fde3eff7c447c967a51bf0e83dbb7~mv2_d_5351_3056_s_4_2.jpg')
@@ -341,7 +343,7 @@ const portfolioProjects = {
       id: 'rule-of-thumb',
       type: 'Typography / Hand Lettering',
       title: 'Rule of Thumb',
-      description: 'Pencil typography exploration of the phrase “Rule of Thumb.”',
+      description: 'Pencil lettering study exploring the phrase “Rule of Thumb” through hand-built letterforms.',
       images: [wixImage('69fcba_a0c76c159bc64bd8aa1e1fa3ddff43a0~mv2.jpg')]
     }
   ]
@@ -350,15 +352,15 @@ const portfolioProjects = {
 const categoryCopy = {
   designs: {
     title: 'Designs',
-    text: 'Brand identities, logos, campaigns, editorial pieces, environmental graphics, print work, and digital design — collected from the original portfolio archive.'
+    text: 'Identity systems, logos, campaigns, editorial work, environmental graphics, print, and digital design spanning client work and selected studies.'
   },
   illustrations: {
     title: 'Illustrations',
-    text: 'Character work, mascot concepts, and personal illustration projects showing the drawing side of the practice.'
+    text: 'Character work and mascot concepts that show the drawing, shape-building, and visual storytelling behind the broader design practice.'
   },
   typography: {
     title: 'Typography',
-    text: 'Lettering, type studies, geotags, and process work built around hand-drawn and expressive typography.'
+    text: 'Lettering, type studies, geotags, and process work built around expressive typography and hand-drawn form.'
   }
 };
 
@@ -368,10 +370,10 @@ const workIntro = document.querySelector('#work .section-intro');
 function projectCard(project, index) {
   const imageCount = project.video ? 'Watch process' : `${project.images.length} image${project.images.length === 1 ? '' : 's'}`;
   return `
-    <article class="project-card${index === 0 ? ' project-card--feature' : ''}" data-project-id="${project.id}">
+    <article class="project-card" data-project-id="${project.id}">
       <button class="project-card__media-button" type="button" data-project-open="${project.id}" aria-label="View ${project.title}">
         <span class="project-card__media">
-          <img src="${project.images[0]}" alt="${project.title}" loading="lazy" />
+          <img src="${project.images[0]}" alt="${project.title}" loading="lazy" decoding="async" />
           <span class="project-card__count">${imageCount}</span>
         </span>
       </button>
@@ -388,7 +390,7 @@ function renderPortfolio() {
   if (!selectedWork) return;
 
   if (workIntro) {
-    workIntro.textContent = 'The real work archive — identity, graphic design, illustration, and typography — rebuilt here from my original portfolio.';
+    workIntro.textContent = 'Selected identity, graphic design, illustration, and typography work spanning client projects, campaigns, and independent studies.';
   }
 
   selectedWork.innerHTML = `
@@ -537,7 +539,7 @@ if (!prefersReducedMotion) {
   window.addEventListener('scroll', () => {
     const shift = Math.min(window.scrollY * 0.08, 42);
     if (processLayer) processLayer.style.transform = `scale(1.08) translateY(${shift}px)`;
-    if (markLayer) markLayer.style.transform = `rotate(-3deg) translateY(${shift * .35}px)`;
+    if (markLayer) markLayer.style.transform = `rotate(-2deg) translateY(${shift * .28}px)`;
   }, { passive: true });
 }
 
@@ -547,10 +549,15 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: .12 });
 
-document.querySelectorAll('.section-heading, .work-card, .project-card, .portfolio-category-head, .experience-row, .service, .about-image-wrap, .about-copy, .contact-copy').forEach((element) => {
-  element.setAttribute('data-reveal', '');
-  observer.observe(element);
-});
+function observeRevealElements() {
+  document.querySelectorAll('.section-heading, .project-card, .portfolio-category-head, .experience-row, .service, .about-image-wrap, .about-copy, .contact-copy').forEach((element) => {
+    if (element.hasAttribute('data-reveal')) return;
+    element.setAttribute('data-reveal', '');
+    observer.observe(element);
+  });
+}
+
+observeRevealElements();
 
 const year = document.querySelector('[data-year]');
 if (year) year.textContent = new Date().getFullYear();
