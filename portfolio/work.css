@@ -1,51 +1,61 @@
+/* Portfolio polish: cleaner work presentation + restrained hero street-art accents */
+
 .portfolio-browser {
-  margin-top: -.35rem;
+  margin-top: -.25rem;
 }
 
 .portfolio-category-nav {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  margin: 0 0 3rem;
-  border-top: 1px solid var(--line-light);
-  border-bottom: 1px solid var(--line-light);
+  margin: 0 0 3.25rem;
+  border: 1px solid var(--line-light);
+  background: rgba(255,255,255,.18);
 }
 
 .portfolio-category-button {
   appearance: none;
-  flex: 1 1 0;
   min-width: 0;
   border: 0;
   border-right: 1px solid var(--line-light);
   background: transparent;
-  color: rgba(20, 27, 27, .48);
-  padding: 1.15rem 1.35rem;
+  color: rgba(20, 27, 27, .56);
+  padding: 1.05rem 1.2rem;
   cursor: pointer;
   text-align: left;
-  font: 700 clamp(1.15rem, 1.8vw, 1.65rem)/1 var(--display);
+  font: 700 clamp(1.05rem, 1.55vw, 1.4rem)/1 var(--display);
   text-transform: uppercase;
-  letter-spacing: .045em;
+  letter-spacing: .055em;
   transition: background .25s ease, color .25s ease;
 }
 
 .portfolio-category-button:last-child { border-right: 0; }
 .portfolio-category-button span {
   float: right;
+  margin-top: .12rem;
   color: var(--teal);
-  font: 600 .68rem/1 var(--body);
+  font: 600 .62rem/1 var(--body);
   letter-spacing: .14em;
 }
 .portfolio-category-button:hover,
-.portfolio-category-button:focus-visible { color: var(--ink); background: rgba(65, 188, 183, .07); }
-.portfolio-category-button.is-active { color: var(--paper); background: var(--ink); }
+.portfolio-category-button:focus-visible {
+  color: var(--ink);
+  background: rgba(65, 188, 183, .07);
+}
+.portfolio-category-button.is-active {
+  color: var(--paper);
+  background: var(--ink);
+}
 
 .portfolio-category-panel[hidden] { display: none; }
 .portfolio-category-head {
   display: grid;
-  grid-template-columns: minmax(220px, .7fr) minmax(320px, 1.3fr);
-  gap: 2rem;
+  grid-template-columns: minmax(220px, .72fr) minmax(320px, 1.28fr);
+  gap: 3rem;
   align-items: end;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line-light);
 }
 .portfolio-category-head h3 {
   margin: 0;
@@ -54,127 +64,170 @@
   letter-spacing: -.025em;
 }
 .portfolio-category-head p {
-  max-width: 38rem;
+  max-width: 40rem;
   margin: 0;
-  color: rgba(20, 27, 27, .66);
+  color: rgba(20, 27, 27, .67);
   font-size: .98rem;
+  line-height: 1.55;
 }
 
+/* Two-column editorial grid gives the actual art enough room to read. */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.6rem 1.4rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4.2rem 2rem;
+  align-items: start;
 }
 
-.project-card {
+.project-card,
+.project-card--feature {
   min-width: 0;
+  grid-column: auto;
   border-top: 1px solid var(--line-light);
-  padding-top: .7rem;
+  padding-top: .72rem;
 }
-.project-card--feature { grid-column: span 2; }
+
 .project-card__media-button {
   appearance: none;
   display: block;
   width: 100%;
   border: 0;
-  background: var(--paper-deep);
+  background: transparent;
   padding: 0;
   cursor: zoom-in;
   text-align: left;
 }
-.project-card__media {
+
+/* Matte-style artwork frame: never chops a logo, poster, illustration or spread. */
+.project-card__media,
+.project-card--feature .project-card__media {
   position: relative;
+  display: grid;
+  place-items: center;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #d9d3c5;
+  padding: clamp(.75rem, 1.7vw, 1.5rem);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.48), rgba(255,255,255,.08)),
+    #ded8ca;
+  border: 1px solid rgba(20,27,27,.08);
 }
-.project-card--feature .project-card__media { aspect-ratio: 16 / 9; }
+
 .project-card__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform .65s var(--ease), filter .35s ease;
+  object-fit: contain;
+  object-position: center;
+  transition: transform .55s var(--ease), filter .35s ease;
+  filter: saturate(.98) contrast(1.01);
 }
-.project-card:hover .project-card__media img { transform: scale(1.025); }
-.project-card__media::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  background: linear-gradient(transparent, rgba(20,27,27,.58));
-  pointer-events: none;
-}
+.project-card:hover .project-card__media img { transform: scale(1.012); }
+
+/* No fake dark crop overlay over the artwork. */
+.project-card__media::after { display: none; }
+
 .project-card__count {
   position: absolute;
   z-index: 2;
-  right: .7rem;
+  right: .65rem;
   bottom: .65rem;
-  color: white;
-  font: 600 .62rem var(--body);
+  padding: .38rem .48rem;
+  background: rgba(20,27,27,.88);
+  color: var(--paper);
+  font: 600 .58rem/1 var(--body);
   text-transform: uppercase;
-  letter-spacing: .16em;
+  letter-spacing: .14em;
+  backdrop-filter: blur(6px);
 }
-.project-card__body { padding: .95rem .05rem 0; }
+
+.project-card__body {
+  padding: 1.05rem .02rem 0;
+}
 .project-card__type {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin: 0 0 .58rem;
-  color: rgba(20,27,27,.52);
-  font-size: .62rem;
+  margin: 0 0 .68rem;
+  color: rgba(20,27,27,.5);
+  font-size: .6rem;
   text-transform: uppercase;
   letter-spacing: .17em;
 }
 .project-card__type span:last-child { color: var(--teal); }
 .project-card h4 {
-  margin: 0 0 .5rem;
-  font: 700 clamp(1.7rem, 2.45vw, 2.65rem)/.91 var(--display);
+  max-width: 92%;
+  margin: 0 0 .55rem;
+  font: 700 clamp(1.9rem, 2.55vw, 2.8rem)/.9 var(--display);
   text-transform: uppercase;
-  letter-spacing: -.015em;
+  letter-spacing: -.012em;
 }
 .project-card__body > p:last-of-type {
-  max-width: 33rem;
+  max-width: 37rem;
   margin: 0;
-  color: rgba(20,27,27,.72);
-  font-size: .89rem;
-  line-height: 1.45;
+  color: rgba(20,27,27,.7);
+  font-size: .9rem;
+  line-height: 1.55;
 }
 .project-card__action {
   display: inline-flex;
   align-items: center;
-  gap: .6rem;
-  margin-top: .9rem;
+  gap: .55rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid rgba(20,27,27,.24);
+  padding-bottom: .25rem;
   color: var(--ink);
-  font-size: .64rem;
+  font-size: .61rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .16em;
+  transition: border-color .2s ease, color .2s ease;
 }
-.project-card__action::after { content: "↗"; color: var(--teal); font-size: .9rem; }
+.project-card__action::after {
+  content: "↗";
+  color: var(--teal);
+  font-size: .88rem;
+}
+.project-card__action:hover,
+.project-card__action:focus-visible {
+  color: #0f6664;
+  border-bottom-color: var(--teal);
+}
 .project-card__video-link { cursor: pointer; }
 
+/* Fullscreen project viewer */
 .project-modal {
   position: fixed;
   z-index: 80;
   inset: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
-  background: rgba(12, 17, 17, .97);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 410px);
+  background: rgba(12, 17, 17, .985);
   color: var(--paper);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity .25s ease, visibility .25s ease;
 }
-.project-modal.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+.project-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 .project-modal__stage {
   position: relative;
   min-height: 0;
   display: grid;
   place-items: center;
-  padding: 4.5rem 5rem 4rem;
+  padding: 4.5rem 5.5rem 4rem;
   border-right: 1px solid var(--line-dark);
+  background: #101717;
+}
+.project-modal__visual {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
 }
 .project-modal__stage img {
   width: 100%;
@@ -192,7 +245,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 4.5rem 2rem 2rem;
+  padding: 4.5rem 2.2rem 2.2rem;
+  background: #141b1b;
 }
 .project-modal__eyebrow {
   margin-bottom: .75rem;
@@ -203,21 +257,38 @@
 }
 .project-modal__info h3 {
   margin: 0 0 1rem;
-  font: 800 clamp(2.4rem, 4vw, 4.5rem)/.85 var(--display);
+  font: 800 clamp(2.5rem, 4vw, 4.5rem)/.85 var(--display);
   text-transform: uppercase;
   letter-spacing: -.02em;
 }
-.project-modal__description { color: rgba(243,239,224,.68); font-size: .93rem; line-height: 1.5; }
-.project-modal__counter { margin-top: 1.5rem; color: rgba(243,239,224,.48); font-size: .65rem; text-transform: uppercase; letter-spacing: .16em; }
+.project-modal__description {
+  color: rgba(243,239,224,.7);
+  font-size: .93rem;
+  line-height: 1.55;
+}
+.project-modal__counter {
+  margin-top: 1.5rem;
+  color: rgba(243,239,224,.46);
+  font-size: .64rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+}
 .project-modal__close,
 .project-modal__nav {
   appearance: none;
   position: absolute;
   z-index: 4;
   border: 1px solid var(--line-dark);
-  background: rgba(20,27,27,.72);
+  background: rgba(20,27,27,.82);
   color: var(--paper);
   cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: border-color .2s ease, background .2s ease;
+}
+.project-modal__close:hover,
+.project-modal__nav:hover {
+  border-color: rgba(65,188,183,.7);
+  background: rgba(20,27,27,.96);
 }
 .project-modal__close {
   top: 1rem;
@@ -238,28 +309,215 @@
 .project-modal__nav[hidden] { display: none; }
 body.modal-open { overflow: hidden; }
 
+/* ---------------- Homepage polish ---------------- */
+
+/* Calm the background so the portrait, headline and personal mark lead. */
+.hero-process {
+  opacity: .14;
+  filter: grayscale(1) contrast(1.08) brightness(.42);
+}
+.hero::before {
+  background: linear-gradient(90deg, rgba(20,27,27,.99) 0%, rgba(20,27,27,.93) 42%, rgba(20,27,27,.48) 72%, rgba(20,27,27,.82) 100%);
+}
+
+/* Keep the JS mark behind Justin, but make it a controlled brand layer. */
+.hero-mark-layer {
+  width: min(49vw, 700px);
+  right: 1.5%;
+  top: 14%;
+  opacity: .34;
+  transform: rotate(-2deg);
+}
+.hero-mark {
+  filter: saturate(1.08) contrast(1.02);
+}
+
+/* Smaller, cleaner paint detail on the far right. */
+.hero-drips {
+  right: -1%;
+  bottom: -2%;
+  width: 19%;
+  height: 24%;
+  opacity: .6;
+}
+.hero-drips::before {
+  left: -20%;
+  top: 10%;
+  width: 65%;
+  height: .6rem;
+  opacity: .72;
+}
+.hero-drips i { width: .18rem; opacity: .75; }
+.hero-drips i:nth-child(1) { right: 8%; height: 2.4rem; top: 18%; }
+.hero-drips i:nth-child(2) { right: 33%; height: 1.45rem; top: 28%; }
+.hero-drips i:nth-child(3) { right: 58%; height: 2.8rem; top: 10%; }
+.hero-drips i:nth-child(4) { display: none; }
+
+.hero-copy {
+  width: min(51%, 700px);
+}
+.hero-signal {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 5.9rem;
+  margin: 1.25rem 0 .55rem;
+}
+.hero-graffiti {
+  width: 8.5rem;
+  height: 5.5rem;
+  object-fit: contain;
+  object-position: left center;
+  transform: none;
+  filter: saturate(1.14) brightness(1.02);
+}
+
+/* Replace the chunky polygon zig-zag with two light hand-drawn swooshes. */
+.scribble {
+  position: relative;
+  display: block;
+  flex: 0 0 9.2rem;
+  width: 9.2rem;
+  height: 2.7rem;
+  transform: rotate(-6deg);
+  opacity: .86;
+}
+.scribble i { display: none !important; }
+.scribble::before,
+.scribble::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  border-top: 2px solid var(--teal);
+  border-radius: 50%;
+  transform-origin: left center;
+}
+.scribble::before {
+  top: .55rem;
+  width: 100%;
+  height: 1.5rem;
+  transform: rotate(-2deg) skewX(-18deg);
+}
+.scribble::after {
+  top: 1.35rem;
+  left: .85rem;
+  width: 76%;
+  height: .95rem;
+  border-top-width: 1px;
+  opacity: .55;
+  transform: rotate(5deg) skewX(12deg);
+}
+
+/* Keep Justin comfortably above the Selected Work divider. */
+.hero-portrait-column {
+  inset: -6.2rem -1rem 2.6rem 35%;
+}
+.hero-portrait {
+  width: min(63vw, 850px);
+  height: min(86vh, 740px);
+  margin-right: -1rem;
+}
+.hero-footer {
+  z-index: 5;
+  padding-top: 1rem;
+}
+
+/* More measured typography/spacing through the work section. */
+.work { padding-top: 7rem; }
+.work .section-heading { margin-bottom: 3.5rem; }
+.work .section-intro {
+  max-width: 33rem;
+  color: rgba(20,27,27,.72);
+  line-height: 1.55;
+}
+
 @media (max-width: 980px) {
   .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .project-card--feature { grid-column: span 2; }
-  .portfolio-category-head { grid-template-columns: 1fr; gap: .8rem; }
-  .project-modal { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; overflow-y: auto; }
-  .project-modal__stage { min-height: 68vh; border-right: 0; border-bottom: 1px solid var(--line-dark); padding: 4rem 3.5rem 3rem; }
+  .portfolio-category-head { grid-template-columns: 1fr; gap: .85rem; }
+  .project-modal {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    overflow-y: auto;
+  }
+  .project-modal__stage {
+    min-height: 68vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-dark);
+    padding: 4rem 3.5rem 3rem;
+  }
   .project-modal__info { padding: 1.5rem 1.5rem 2rem; }
+
+  .hero-mark-layer {
+    width: 65vw;
+    right: -7%;
+    top: 37%;
+    opacity: .25;
+  }
+  .hero-copy { width: auto; }
+  .hero-portrait-column { inset: auto; }
+  .hero-portrait {
+    width: min(100%, 700px);
+    height: min(82vw, 700px);
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 700px) {
-  .portfolio-category-nav { margin-bottom: 2rem; overflow-x: auto; }
-  .portfolio-category-button { flex: 0 0 auto; min-width: 9.5rem; padding: 1rem .85rem; font-size: 1rem; }
-  .portfolio-category-button span { margin-left: .7rem; }
+  .portfolio-category-nav {
+    grid-template-columns: 1fr;
+    margin-bottom: 2.25rem;
+  }
+  .portfolio-category-button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-light);
+    padding: .95rem 1rem;
+    font-size: 1rem;
+  }
+  .portfolio-category-button:last-child { border-bottom: 0; }
+  .portfolio-category-head {
+    gap: .65rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.1rem;
+  }
   .portfolio-category-head h3 { font-size: clamp(2.7rem, 14vw, 4rem); }
-  .project-grid { grid-template-columns: 1fr; gap: 2.1rem; }
-  .project-card--feature { grid-column: auto; }
-  .project-card--feature .project-card__media,
-  .project-card__media { aspect-ratio: 1.3 / 1; }
-  .project-card h4 { font-size: 2rem; }
-  .project-modal__stage { min-height: 58vh; padding: 4rem 2.2rem 2.5rem; }
+  .project-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .project-card__media,
+  .project-card--feature .project-card__media {
+    aspect-ratio: 4 / 3;
+    padding: .8rem;
+  }
+  .project-card h4 { max-width: 100%; font-size: 2rem; }
+  .project-modal__stage {
+    min-height: 58vh;
+    padding: 4rem 2.2rem 2.5rem;
+  }
   .project-modal__nav { top: auto; bottom: .75rem; transform: none; }
   .project-modal__nav--prev { left: .75rem; }
   .project-modal__nav--next { right: .75rem; }
   .project-modal__info h3 { font-size: 2.8rem; }
+
+  .hero-process { opacity: .1; }
+  .hero-mark-layer {
+    width: 76vw;
+    right: -18%;
+    top: 43%;
+    opacity: .2;
+  }
+  .hero-signal {
+    min-height: 4.8rem;
+    gap: .7rem;
+    margin-top: .9rem;
+  }
+  .hero-graffiti {
+    width: 7rem;
+    height: 4.8rem;
+  }
+  .scribble {
+    flex-basis: 5.5rem;
+    width: 5.5rem;
+    height: 2.1rem;
+  }
+  .scribble::before { height: 1.15rem; }
+  .scribble::after { left: .35rem; }
+  .hero-drips { opacity: .42; }
 }
