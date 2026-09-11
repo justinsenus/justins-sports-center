@@ -3,12 +3,13 @@ const siteNav = document.querySelector('#site-nav');
 const siteHeader = document.querySelector('[data-header]');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (!document.querySelector('link[href="work.css"]')) {
-  const workStyles = document.createElement('link');
-  workStyles.rel = 'stylesheet';
-  workStyles.href = 'work.css';
-  document.head.appendChild(workStyles);
-}
+['work.css', 'polish.css'].forEach((href) => {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  const stylesheet = document.createElement('link');
+  stylesheet.rel = 'stylesheet';
+  stylesheet.href = href;
+  document.head.appendChild(stylesheet);
+});
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -76,10 +77,10 @@ const wixImage = (file) => `https://static.wixstatic.com/media/${file}`;
 const portfolioProjects = {
   designs: [
     {
-      id: 'balls-of-fury',
+      id: 'celebrity-kennels',
       type: 'Brand Identity / Logo',
-      title: 'Balls of Fury — Ball Pythons',
-      description: 'Logo and social-first brand identity for an exotic ball python breeder. Supporting content helped grow the Instagram audience to 11.4K followers in under six months.',
+      title: 'Celebrity Kennels — New England',
+      description: 'Custom breeder identity for a New England American Bulldog and pit bull program, built around a bold illustrative mark.',
       images: [
         wixImage('69fcba_01e90945ef594ddaa7f348c626b55773~mv2.jpg'),
         wixImage('69fcba_e019b30718bc491897c40d1dbe0207fd~mv2.jpg'),
@@ -87,36 +88,14 @@ const portfolioProjects = {
       ]
     },
     {
-      id: 'celebrity-kennels',
+      id: 'balls-of-fury',
       type: 'Brand Identity / Logo',
-      title: 'Celebrity Kennels — New England',
-      description: 'Custom breeder identity for a New England American Bulldog and pit bull program, built around a bold illustrative mark.',
+      title: 'Balls of Fury — Ball Pythons',
+      description: 'Logo and social-first brand identity for an exotic ball python breeder. Supporting content helped grow the Instagram audience to 11.4K followers in under six months.',
       images: [
         wixImage('69fcba_a37dc6448cf54c768102b64948210329~mv2.png'),
         wixImage('69fcba_2f1507d29ef5492fa5153280ef7657ee~mv2.png'),
         wixImage('69fcba_6ef7944e802c4e54a046b92696dcccc7~mv2.jpg')
-      ]
-    },
-    {
-      id: 'troy-baseball-expos',
-      type: 'Brand Identity / Sports',
-      title: 'Troy Baseball Expos',
-      description: 'Team identity refresh for a Troy, New York baseball program coached by former professional pitcher Eric Beaulac.',
-      images: [
-        wixImage('69fcba_b9b8b932e6c5467a84a6963b1308add6~mv2.jpg'),
-        wixImage('69fcba_8e999a80ba0047f9a95b4dd5478f8367~mv2.jpg'),
-        wixImage('69fcba_366204dbad914568b9145b27a54ead18~mv2.jpg')
-      ]
-    },
-    {
-      id: 'main-st-barbershop',
-      type: 'Brand Identity / Logo',
-      title: 'Main St. Barbershop',
-      description: 'Logo refresh for a Coventry, Rhode Island barbershop, designed to feel sharper, more current, and usable across signage and apparel.',
-      images: [
-        wixImage('69fcba_0abd10c7cfce477995e0e5ecb5567343~mv2.png'),
-        wixImage('69fcba_99b574f93b514405bbbda2d632ee0fd1~mv2.jpg'),
-        wixImage('69fcba_5b016d2fead4463ea206b9a083585a9f~mv2.jpg')
       ]
     },
     {
@@ -125,9 +104,9 @@ const portfolioProjects = {
       title: 'Twitch Rebrand — CDG Dave',
       description: 'A modern gaming identity for Twitch streamer CDG Dave, developed from sketch exploration through the final mark.',
       images: [
-        wixImage('69fcba_91d4f86b0d404ea09edd221fa2a52143~mv2_d_12455_12455_s_6_4_3.jpg'),
-        wixImage('69fcba_e341b5a402e04ea4a2f103a5300d2626~mv2_d_12455_12455_s_6_4_3.jpg'),
-        wixImage('69fcba_339287b598a14ba4bd2fbc0d08cc97c3~mv2_d_7386_7022_s_4_2.jpg')
+        wixImage('69fcba_b9b8b932e6c5467a84a6963b1308add6~mv2.jpg'),
+        wixImage('69fcba_8e999a80ba0047f9a95b4dd5478f8367~mv2.jpg'),
+        wixImage('69fcba_366204dbad914568b9145b27a54ead18~mv2.jpg')
       ]
     },
     {
@@ -135,6 +114,28 @@ const portfolioProjects = {
       type: 'Brand Identity / Logo',
       title: 'We Motivate',
       description: 'Identity concept for a motivation-focused platform built around momentum, ambition, and community.',
+      images: [
+        wixImage('69fcba_0abd10c7cfce477995e0e5ecb5567343~mv2.png'),
+        wixImage('69fcba_99b574f93b514405bbbda2d632ee0fd1~mv2.jpg'),
+        wixImage('69fcba_5b016d2fead4463ea206b9a083585a9f~mv2.jpg')
+      ]
+    },
+    {
+      id: 'main-st-barbershop',
+      type: 'Brand Identity / Logo',
+      title: 'Main St. Barbershop',
+      description: 'Logo refresh for a Coventry, Rhode Island barbershop, designed to feel sharper, more current, and usable across signage and apparel.',
+      images: [
+        wixImage('69fcba_91d4f86b0d404ea09edd221fa2a52143~mv2_d_12455_12455_s_6_4_3.jpg'),
+        wixImage('69fcba_e341b5a402e04ea4a2f103a5300d2626~mv2_d_12455_12455_s_6_4_3.jpg'),
+        wixImage('69fcba_339287b598a14ba4bd2fbc0d08cc97c3~mv2_d_7386_7022_s_4_2.jpg')
+      ]
+    },
+    {
+      id: 'troy-baseball-expos',
+      type: 'Brand Identity / Sports',
+      title: 'Troy Baseball Expos',
+      description: 'Team identity refresh for a Troy, New York baseball program coached by former professional pitcher Eric Beaulac.',
       images: [
         wixImage('69fcba_e59f8d81ed27406f820bf8027f6d6742~mv2_d_3300_3300_s_4_2.jpg'),
         wixImage('69fcba_da30f0786f644d6cb97544fa87419c6f~mv2_d_3300_3300_s_4_2.jpg'),
