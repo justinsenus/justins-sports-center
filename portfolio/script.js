@@ -68,7 +68,7 @@ window.addEventListener('scroll', onScroll, { passive: true });
 
 if (!prefersReducedMotion) {
   const processLayer = document.querySelector('.hero-process');
-  const markLayer = document.querySelector('.hero-mark');
+  const markLayer = document.querySelector('.hero-mark-layer');
   window.addEventListener('scroll', () => {
     const shift = Math.min(window.scrollY * 0.08, 42);
     if (processLayer) processLayer.style.transform = `scale(1.08) translateY(${shift}px)`;

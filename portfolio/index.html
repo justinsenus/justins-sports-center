@@ -54,7 +54,10 @@
     <main id="main-content">
       <section id="top" class="hero section-dark" aria-labelledby="hero-title">
         <div class="hero-process" aria-hidden="true"></div>
-        <img class="hero-mark" src="assets/js-monogram-teal.png" alt="" aria-hidden="true" />
+        <div class="hero-mark-layer" aria-hidden="true">
+          <img class="hero-mark" src="assets/js-monogram-teal.png" alt="" />
+          <span class="hero-drips"><i></i><i></i><i></i><i></i></span>
+        </div>
         <div class="hero-grid shell">
           <div class="hero-copy">
             <h1 id="hero-title">
@@ -67,7 +70,7 @@
 
             <div class="hero-signal" aria-label="Justin Senus graffiti signature and accent">
               <img class="hero-graffiti" src="assets/justin-graffiti-teal.png" alt="Justin Senus graffiti signature" />
-              <span class="scribble" aria-hidden="true"></span>
+              <span class="scribble" aria-hidden="true"><i></i><i></i><i></i></span>
             </div>
 
             <p class="hero-tagline">Street instinct. Boardroom clarity.</p>
@@ -91,10 +94,15 @@
       <section class="process-strip section-dark" aria-labelledby="process-title">
         <div class="shell process-strip__inner">
           <p id="process-title" class="strip-label">Design process</p>
-          <img
-            src="assets/design-process-strip.jpeg"
-            alt="Justin working at a design desk with the words Ideas sketched. Brands. Built."
-          />
+          <div class="process-strip__visual">
+            <img src="assets/design-process-strip.jpeg" alt="Justin working at a design desk while developing a visual identity" />
+            <div class="process-strip__copy" aria-label="Ideas sketched. Brands built.">
+              <span>Ideas</span>
+              <span>Sketched.</span>
+              <span>Brands.</span>
+              <span>Built.</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -162,48 +170,76 @@
 
           <div id="past-jobs" class="tab-panel" role="tabpanel" aria-labelledby="past-jobs-tab" tabindex="0" hidden>
             <div class="experience-intro">
-              <p class="eyebrow">Experience / The through-line</p>
+              <p class="eyebrow">Experience / 10+ years</p>
               <p>Design, marketing, and creative direction have never lived in separate rooms. This is the working history behind the practice.</p>
             </div>
             <div class="experience-list">
               <article class="experience-row">
                 <span class="experience-number">01</span>
                 <div class="experience-main">
-                  <p class="experience-meta">2023 — 2026 / Marketing + design</p>
+                  <p class="experience-meta">2023 - 2026 / Marketing + design</p>
                   <h3>ENE Security</h3>
                   <p>Marketing Lead / Sales Support</p>
                 </div>
-                <p class="experience-detail">Led in-house brand, marketing, proposals, case studies, sales presentations, events, digital content, and partner campaigns across a technical security organization.</p>
+                <p class="experience-detail">Led marketing and sales support for a commercial security integrator. Built proposals, brochures, spec sheets, case studies, presentations, events, digital content, website updates, SEO, and partner campaigns.</p>
               </article>
               <article class="experience-row">
                 <span class="experience-number">02</span>
                 <div class="experience-main">
-                  <p class="experience-meta">Earlier / Dates to add</p>
+                  <p class="experience-meta">2021 - 2023 / Automotive</p>
                   <h3>Albrecht Auto Group</h3>
-                  <p>Graphic Designer / Marketing</p>
+                  <p>Lead Graphic Designer</p>
                 </div>
-                <p class="experience-detail">Owned design and marketing across multiple dealerships, building campaigns and day-to-day communications for a distributed business.</p>
+                <p class="experience-detail">Led digital advertising and creative production across 9 automotive dealerships, including website banners, homepage ads, social campaigns, seasonal sales, vehicle launches, service specials, and dealership events.</p>
               </article>
               <article class="experience-row">
                 <span class="experience-number">03</span>
                 <div class="experience-main">
-                  <p class="experience-meta">Earlier / Dates to add</p>
+                  <p class="experience-meta">2019 - 2020 / Production design</p>
+                  <h3>Brine Team Sales</h3>
+                  <p>Film Designer</p>
+                </div>
+                <p class="experience-detail">Designed and produced films for screen printing and vinyl cutting using Adobe Creative Cloud and Cut Plot Pro. Worked with laser-cut tackle twill, sublimated patches, embroidery, sales, and inventory.</p>
+              </article>
+              <article class="experience-row">
+                <span class="experience-number">04</span>
+                <div class="experience-main">
+                  <p class="experience-meta">2018 - 2019 / Brand design</p>
+                  <h3>Communication Arts Group</h3>
+                  <p>Graphic Designer</p>
+                </div>
+                <p class="experience-detail">Created logos, bill inserts, posters, social ads, and other business communications for New England clients. Collaborated with clients and the creative team and supported a TV commercial for Orthopedic Rhode Island.</p>
+              </article>
+              <article class="experience-row">
+                <span class="experience-number">05</span>
+                <div class="experience-main">
+                  <p class="experience-meta">2017 - 2018 / Advertising</p>
                   <h3>Adlife Marketing</h3>
                   <p>Graphic Designer</p>
                 </div>
-                <p class="experience-detail">Built the practical foundation: moving between visual design, production, and the realities of marketing work.</p>
+                <p class="experience-detail">Created weekly grocery-store advertising for New England retailers using InDesign, working within fast release schedules and directly with store owners on promotions, changes, and proofs.</p>
               </article>
-              <article class="experience-row experience-row--current">
-                <span class="experience-number">04</span>
+              <article class="experience-row">
+                <span class="experience-number">06</span>
                 <div class="experience-main">
-                  <p class="experience-meta">Current / Independent practice</p>
-                  <h3>Justin Senus Designs</h3>
-                  <p>Design Consultant</p>
+                  <p class="experience-meta">2016 / Agency design</p>
+                  <h3>Duffy &amp; Shanley</h3>
+                  <p>Graphic Designer</p>
                 </div>
-                <p class="experience-detail">A focused practice for brand direction, identity systems, creative leadership, and the work that connects them.</p>
+                <p class="experience-detail">Worked with design and writing teams on client work, including a full-spread advertisement for Navigant Credit Union in the Providence Performing Arts Center show booklet.</p>
               </article>
             </div>
-            <p class="section-note">Dates, project outcomes, and supporting work samples can be added as the portfolio is finalized.</p>
+            <div class="experience-credentials">
+              <div>
+                <p class="eyebrow">Education</p>
+                <h3>BA - Graphic Design</h3>
+                <p>Anna Maria College / 2014 - 2018</p>
+              </div>
+              <div>
+                <p class="eyebrow">Applications</p>
+                <p>Adobe Creative Cloud / WordPress / Wix / Squarespace / Mailchimp / Constant Contact / WeSuite / Microsoft Office / Cinema 4D / Blender / CorelDRAW / HTML / CSS</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
