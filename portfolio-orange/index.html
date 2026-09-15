@@ -35,6 +35,7 @@
     (() => {
       const frame = document.getElementById('orangePreview');
       const ORANGE = '#ff6a00';
+      const ENE_ARCHIVE = 'https://jsenus4196.wixsite.com/justin-senus-desig-3/about-1';
 
       const orangeCSS = `
         :root {
@@ -47,6 +48,18 @@
         .about-mark,
         .footer-brand img {
           filter: brightness(0) saturate(100%) invert(47%) sepia(99%) saturate(3668%) hue-rotate(4deg) brightness(105%) contrast(102%) !important;
+        }
+
+        .hero-graffiti {
+          width: 10.8rem !important;
+          height: 5.4rem !important;
+          transform: scaleX(1.38) rotate(-2deg) !important;
+          transform-origin: left center !important;
+          object-position: left center !important;
+        }
+
+        .hero-signal {
+          gap: 1.35rem !important;
         }
 
         .scribble i {
@@ -62,29 +75,392 @@
         ::selection {
           background: ${ORANGE} !important;
         }
+
+        /* Uniform portfolio thumbnail system. The modal still shows the original artwork untouched. */
+        .project-card__media,
+        .project-card--feature .project-card__media {
+          position: relative !important;
+          display: grid !important;
+          place-items: center !important;
+          aspect-ratio: 4 / 3 !important;
+          overflow: hidden !important;
+          padding: clamp(1.1rem, 2.2vw, 1.8rem) !important;
+          background: #d9d1c3 !important;
+          border: 1px solid rgba(20,27,27,.12) !important;
+          isolation: isolate !important;
+        }
+
+        .project-card__media::before {
+          content: "";
+          position: absolute;
+          z-index: 0;
+          inset: -7%;
+          background-image: var(--thumb-bg);
+          background-size: cover;
+          background-position: center;
+          filter: blur(24px) saturate(.82) brightness(.78);
+          opacity: .32;
+          transform: scale(1.08);
+        }
+
+        .project-card__media::after {
+          content: "" !important;
+          display: block !important;
+          position: absolute;
+          z-index: 1;
+          inset: 0;
+          background:
+            linear-gradient(145deg, rgba(243,239,224,.58), rgba(243,239,224,.18) 52%, rgba(20,27,27,.08)),
+            linear-gradient(180deg, rgba(255,255,255,.08), rgba(20,27,27,.08));
+          pointer-events: none;
+        }
+
+        .project-card__media img {
+          position: relative !important;
+          z-index: 2 !important;
+          display: block !important;
+          width: auto !important;
+          height: auto !important;
+          max-width: 88% !important;
+          max-height: 88% !important;
+          object-fit: contain !important;
+          object-position: center !important;
+          margin: auto !important;
+          box-shadow: 0 18px 42px rgba(20,27,27,.18);
+          filter: saturate(.98) contrast(1.01) !important;
+          transform-origin: center !important;
+        }
+
+        .project-card:hover .project-card__media img {
+          transform: scale(1.02) !important;
+        }
+
+        .project-card__count {
+          z-index: 4 !important;
+          background: rgba(20,27,27,.92) !important;
+          color: #f3efe0 !important;
+          border-top: 2px solid ${ORANGE};
+        }
+
+        /* Featured ENE Security case study inside the Work chapter. */
+        .ene-case-study {
+          margin-top: 7rem;
+          padding: clamp(2rem, 4.5vw, 4.5rem);
+          background: #101616;
+          color: #f3efe0;
+          border-top: 3px solid ${ORANGE};
+          overflow: hidden;
+          position: relative;
+        }
+
+        .ene-case-study::after {
+          content: "ENE";
+          position: absolute;
+          right: -1.5rem;
+          top: -2.2rem;
+          color: rgba(255,106,0,.065);
+          font: 900 clamp(8rem, 18vw, 16rem)/.8 var(--display);
+          letter-spacing: -.08em;
+          pointer-events: none;
+        }
+
+        .ene-case-study__head {
+          position: relative;
+          z-index: 2;
+          display: grid;
+          grid-template-columns: minmax(0,.9fr) minmax(320px,1.1fr);
+          gap: 3rem;
+          align-items: end;
+          padding-bottom: 2rem;
+          border-bottom: 1px solid rgba(243,239,224,.22);
+        }
+
+        .ene-kicker {
+          margin: 0 0 1rem;
+          color: ${ORANGE};
+          font-size: .68rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .2em;
+        }
+
+        .ene-case-study h3 {
+          margin: 0;
+          font: 800 clamp(3.5rem, 7vw, 7rem)/.82 var(--display);
+          text-transform: uppercase;
+          letter-spacing: -.035em;
+        }
+
+        .ene-case-study h3 em {
+          color: ${ORANGE};
+          font-style: normal;
+        }
+
+        .ene-summary {
+          max-width: 40rem;
+          margin: 0;
+          color: rgba(243,239,224,.77);
+          font-size: clamp(1rem, 1.5vw, 1.2rem);
+          line-height: 1.55;
+        }
+
+        .ene-meta {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-wrap: wrap;
+          gap: .6rem 1.8rem;
+          padding: 1.15rem 0 2rem;
+          color: rgba(243,239,224,.48);
+          font-size: .62rem;
+          text-transform: uppercase;
+          letter-spacing: .16em;
+        }
+
+        .ene-meta strong {
+          color: #f3efe0;
+          font-weight: 600;
+        }
+
+        .ene-capabilities {
+          position: relative;
+          z-index: 2;
+          display: grid;
+          grid-template-columns: repeat(3,minmax(0,1fr));
+          border-top: 1px solid rgba(243,239,224,.18);
+          border-left: 1px solid rgba(243,239,224,.18);
+        }
+
+        .ene-capability {
+          min-height: 15rem;
+          padding: 1.4rem 1.35rem 1.7rem;
+          border-right: 1px solid rgba(243,239,224,.18);
+          border-bottom: 1px solid rgba(243,239,224,.18);
+          background: rgba(255,255,255,.018);
+        }
+
+        .ene-capability__number {
+          margin: 0 0 2.3rem;
+          color: ${ORANGE};
+          font: 700 .62rem var(--body);
+          letter-spacing: .18em;
+        }
+
+        .ene-capability h4 {
+          margin: 0 0 .7rem;
+          color: #f3efe0;
+          font: 700 clamp(1.65rem,2.5vw,2.45rem)/.9 var(--display);
+          text-transform: uppercase;
+        }
+
+        .ene-capability p {
+          margin: 0;
+          color: rgba(243,239,224,.65);
+          font-size: .87rem;
+          line-height: 1.55;
+        }
+
+        .ene-case-study__footer {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          justify-content: space-between;
+          gap: 2rem;
+          align-items: end;
+          padding-top: 2.2rem;
+        }
+
+        .ene-case-study__footer p {
+          max-width: 44rem;
+          margin: 0;
+          color: rgba(243,239,224,.65);
+          font-size: .92rem;
+          line-height: 1.55;
+        }
+
+        .ene-archive-link {
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          gap: .7rem;
+          border-bottom: 1px solid ${ORANGE};
+          padding-bottom: .35rem;
+          color: #f3efe0;
+          font-size: .66rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .16em;
+        }
+
+        .ene-archive-link span { color: ${ORANGE}; font-size: 1rem; }
+
+        @media (max-width: 900px) {
+          .ene-case-study__head { grid-template-columns: 1fr; gap: 1.35rem; }
+          .ene-capabilities { grid-template-columns: repeat(2,minmax(0,1fr)); }
+        }
+
+        @media (max-width: 700px) {
+          .hero-graffiti {
+            width: 7.8rem !important;
+            height: 4.4rem !important;
+            transform: scaleX(1.42) rotate(-2deg) !important;
+          }
+
+          .hero-signal { gap: .9rem !important; }
+
+          .project-card__media,
+          .project-card--feature .project-card__media {
+            aspect-ratio: 4 / 3 !important;
+            padding: 1rem !important;
+          }
+
+          .project-card__media img {
+            max-width: 91% !important;
+            max-height: 91% !important;
+          }
+
+          .ene-case-study {
+            margin-top: 4.5rem;
+            padding: 1.5rem 1.2rem 1.6rem;
+          }
+
+          .ene-case-study h3 {
+            font-size: clamp(3rem, 14vw, 4.6rem);
+          }
+
+          .ene-capabilities {
+            grid-template-columns: 1fr;
+          }
+
+          .ene-capability {
+            min-height: auto;
+            padding: 1.2rem 1rem 1.45rem;
+          }
+
+          .ene-capability__number { margin-bottom: 1.3rem; }
+          .ene-case-study__footer { display: grid; gap: 1.5rem; }
+          .ene-archive-link { justify-self: start; }
+        }
       `;
 
-      function applyOrangeTheme() {
+      function applyOrangeTheme(doc) {
+        if (!doc || !doc.head) return;
+        let style = doc.getElementById('orange-preview-theme');
+        if (!style) {
+          style = doc.createElement('style');
+          style.id = 'orange-preview-theme';
+          doc.head.appendChild(style);
+        }
+        style.textContent = orangeCSS;
+      }
+
+      function uniformizeThumbnails(doc) {
+        doc.querySelectorAll('.project-card__media').forEach((media) => {
+          const image = media.querySelector('img');
+          if (!image) return;
+          const src = image.currentSrc || image.src;
+          if (src) media.style.setProperty('--thumb-bg', `url("${src.replace(/"/g, '%22')}")`);
+          media.dataset.orangeThumb = 'true';
+        });
+      }
+
+      function addENECaseStudy(doc) {
+        if (doc.getElementById('ene-case-study')) return;
+        const workShell = doc.querySelector('#work .shell');
+        if (!workShell) return;
+
+        const section = doc.createElement('section');
+        section.id = 'ene-case-study';
+        section.className = 'ene-case-study';
+        section.setAttribute('aria-labelledby', 'ene-case-study-title');
+        section.innerHTML = `
+          <div class="ene-case-study__head">
+            <div>
+              <p class="ene-kicker">Featured Experience / 2023–2026</p>
+              <h3 id="ene-case-study-title">ENE Security<br><em>Marketing Lead.</em></h3>
+            </div>
+            <p class="ene-summary">Led the in-house marketing function for a New England commercial security integrator while also supporting the sales team—connecting brand, design, content, events, partner marketing, and sales enablement to the same business-development goals.</p>
+          </div>
+
+          <div class="ene-meta">
+            <span><strong>Role</strong> Marketing Lead + Sales Support</span>
+            <span><strong>Markets</strong> Salem, NH / Canton, MA</span>
+            <span><strong>Focus</strong> B2B Security + Technology</span>
+          </div>
+
+          <div class="ene-capabilities">
+            <article class="ene-capability">
+              <p class="ene-capability__number">01 / BRAND + CREATIVE</p>
+              <h4>Built the visual system.</h4>
+              <p>Created and managed brochures, spec sheets, presentations, sales graphics, signage, event materials, social creative, and branded collateral across digital and print.</p>
+            </article>
+
+            <article class="ene-capability">
+              <p class="ene-capability__number">02 / SALES ENABLEMENT</p>
+              <h4>Made sales easier.</h4>
+              <p>Supported the sales team with proposals, pitch decks, custom customer materials, product communication, co-branded pieces, and fast-turn creative for active opportunities.</p>
+            </article>
+
+            <article class="ene-capability">
+              <p class="ene-capability__number">03 / WEBSITE + SEO</p>
+              <h4>Owned the digital front door.</h4>
+              <p>Managed website content, SEO, product and campaign updates, new-product communication, monthly promotions, referral messaging, and email marketing.</p>
+            </article>
+
+            <article class="ene-capability">
+              <p class="ene-capability__number">04 / EVENTS + TRADE SHOWS</p>
+              <h4>Turned events into campaigns.</h4>
+              <p>Planned and produced trade-show booths, signage, giveaways, partner events, customer experiences, and supporting promotion for events including MHEC and regional partner activations.</p>
+            </article>
+
+            <article class="ene-capability">
+              <p class="ene-capability__number">05 / PARTNER MARKETING</p>
+              <h4>Connected brands together.</h4>
+              <p>Developed co-marketing campaigns and event creative with security technology partners including Axis, Genetec, Verkada, Hanwha Vision, Gallagher, i-PRO, and Bosch.</p>
+            </article>
+
+            <article class="ene-capability">
+              <p class="ene-capability__number">06 / STORIES + CONTENT</p>
+              <h4>Made the work sell itself.</h4>
+              <p>Built case-study and customer-story programs around real installations and outcomes, including work involving Cape Cod Community College, Franklin Park Zoo, YMCA North Shore, and Boston Public Works.</p>
+            </article>
+          </div>
+
+          <div class="ene-case-study__footer">
+            <p>My role sat between marketing, design, sales, vendors, and customers—so the work had to look strong, explain technical products clearly, support relationships, and help the sales team move opportunities forward.</p>
+            <a class="ene-archive-link" href="${ENE_ARCHIVE}" target="_blank" rel="noopener noreferrer">View archived ENE work <span aria-hidden="true">↗</span></a>
+          </div>
+        `;
+        workShell.appendChild(section);
+      }
+
+      function enhancePreview() {
         try {
           const doc = frame.contentDocument;
-          if (!doc || !doc.head) return;
-
-          let style = doc.getElementById('orange-preview-theme');
-          if (!style) {
-            style = doc.createElement('style');
-            style.id = 'orange-preview-theme';
-            doc.head.appendChild(style);
-          }
-          style.textContent = orangeCSS;
+          if (!doc || !doc.body) return;
+          applyOrangeTheme(doc);
+          uniformizeThumbnails(doc);
+          addENECaseStudy(doc);
         } catch (error) {
-          console.error('Orange preview theme could not be applied.', error);
+          console.error('Orange preview enhancement could not be applied.', error);
         }
       }
 
       frame.addEventListener('load', () => {
-        applyOrangeTheme();
-        setTimeout(applyOrangeTheme, 250);
-        setTimeout(applyOrangeTheme, 900);
+        enhancePreview();
+        [180, 450, 900, 1600, 2600].forEach((delay) => setTimeout(enhancePreview, delay));
+
+        try {
+          const doc = frame.contentDocument;
+          if (!doc || !doc.body) return;
+          const observer = new MutationObserver(() => {
+            uniformizeThumbnails(doc);
+            addENECaseStudy(doc);
+          });
+          observer.observe(doc.body, { childList: true, subtree: true });
+        } catch (error) {
+          console.error('Orange preview observer could not start.', error);
+        }
       });
     })();
   </script>
