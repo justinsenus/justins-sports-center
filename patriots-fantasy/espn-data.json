@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-09-15T15:18:21.909Z",
+  "savedAt": "2026-09-15T15:33:42.560Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 2,
@@ -265,17 +265,6 @@
         "starter": true
       },
       {
-        "id": "-16026",
-        "name": "Seahawks D/ST",
-        "team": "SEA",
-        "position": "DEF",
-        "points": 14,
-        "projected": 7.6,
-        "injuryStatus": "",
-        "headshot": "",
-        "starter": true
-      },
-      {
         "id": "4241416",
         "name": "Chuba Hubbard",
         "team": "CAR",
@@ -283,6 +272,17 @@
         "points": 23.7,
         "projected": 14.3,
         "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "-16012",
+        "name": "Chiefs D/ST",
+        "team": "KC",
+        "position": "DEF",
+        "points": 14,
+        "projected": 6.4,
+        "injuryStatus": "",
         "headshot": "",
         "starter": true
       },
@@ -299,6 +299,17 @@
       }
     ],
     "bench": [
+      {
+        "id": "-16026",
+        "name": "Seahawks D/ST",
+        "team": "SEA",
+        "position": "DEF",
+        "points": 14,
+        "projected": 7.6,
+        "injuryStatus": "",
+        "headshot": "",
+        "starter": false
+      },
       {
         "id": "4047365",
         "name": "Josh Jacobs",
@@ -362,17 +373,6 @@
         "points": 5.6,
         "projected": 9.5,
         "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
-        "id": "-16012",
-        "name": "Chiefs D/ST",
-        "team": "KC",
-        "position": "DEF",
-        "points": 14,
-        "projected": 6.4,
-        "injuryStatus": "",
         "headshot": "",
         "starter": false
       },
