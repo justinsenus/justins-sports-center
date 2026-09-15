@@ -7,49 +7,24 @@
   <meta name="theme-color" content="#141b1b" />
   <title>Justin Senus — Orange Portfolio Preview</title>
   <style>
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      background: #141b1b;
-      overflow: hidden;
-    }
-
-    #orangePreview {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #141b1b;
-    }
+    html, body { width: 100%; height: 100%; margin: 0; background: #141b1b; overflow: hidden; }
+    #orangePreview { display: block; width: 100%; height: 100%; border: 0; background: #141b1b; }
   </style>
 </head>
 <body>
-  <iframe
-    id="orangePreview"
-    src="../portfolio/?orange-preview=1"
-    title="Justin Senus orange portfolio preview"
-  ></iframe>
+  <iframe id="orangePreview" src="../portfolio/?orange-preview=1" title="Justin Senus orange portfolio preview"></iframe>
 
   <script>
     (() => {
       const frame = document.getElementById('orangePreview');
       const ORANGE = '#ff6a00';
-      const ENE_ARCHIVE = 'https://jsenus4196.wixsite.com/justin-senus-desig-3/about-1';
+      const ENE_LOGO = 'data:image/png;base64,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';
 
       const orangeCSS = `
-        :root {
-          --teal: ${ORANGE} !important;
-        }
-
-        .brand-mark img,
-        .hero-mark,
-        .hero-graffiti,
-        .about-mark,
-        .footer-brand img {
+        :root { --teal: ${ORANGE} !important; }
+        .brand-mark img, .hero-mark, .hero-graffiti, .about-mark, .footer-brand img {
           filter: brightness(0) saturate(100%) invert(47%) sepia(99%) saturate(3668%) hue-rotate(4deg) brightness(105%) contrast(102%) !important;
         }
-
         .hero-graffiti {
           width: 10.8rem !important;
           height: 5.4rem !important;
@@ -57,28 +32,13 @@
           transform-origin: left center !important;
           object-position: left center !important;
         }
+        .hero-signal { gap: 1.35rem !important; }
+        .hero-drips::before, .hero-drips i, .menu-toggle__icon i { background: ${ORANGE} !important; }
+        .scribble::before, .scribble::after, .scribble i { border-top-color: ${ORANGE} !important; }
+        ::selection { background: ${ORANGE} !important; }
 
-        .hero-signal {
-          gap: 1.35rem !important;
-        }
-
-        .scribble i {
-          border-top-color: rgba(255, 106, 0, .82) !important;
-        }
-
-        .hero-drips::before,
-        .hero-drips i,
-        .menu-toggle__icon i {
-          background: ${ORANGE} !important;
-        }
-
-        ::selection {
-          background: ${ORANGE} !important;
-        }
-
-        /* Uniform portfolio thumbnail system. The modal still shows the original artwork untouched. */
-        .project-card__media,
-        .project-card--feature .project-card__media {
+        /* Keep every project thumbnail uniform while preserving the original art in the modal. */
+        .project-card__media, .project-card--feature .project-card__media {
           position: relative !important;
           display: grid !important;
           place-items: center !important;
@@ -89,7 +49,6 @@
           border: 1px solid rgba(20,27,27,.12) !important;
           isolation: isolate !important;
         }
-
         .project-card__media::before {
           content: "";
           position: absolute;
@@ -102,19 +61,15 @@
           opacity: .32;
           transform: scale(1.08);
         }
-
         .project-card__media::after {
           content: "" !important;
           display: block !important;
           position: absolute;
           z-index: 1;
           inset: 0;
-          background:
-            linear-gradient(145deg, rgba(243,239,224,.58), rgba(243,239,224,.18) 52%, rgba(20,27,27,.08)),
-            linear-gradient(180deg, rgba(255,255,255,.08), rgba(20,27,27,.08));
+          background: linear-gradient(145deg, rgba(243,239,224,.58), rgba(243,239,224,.18) 52%, rgba(20,27,27,.08));
           pointer-events: none;
         }
-
         .project-card__media img {
           position: relative !important;
           z-index: 2 !important;
@@ -130,21 +85,16 @@
           filter: saturate(.98) contrast(1.01) !important;
           transform-origin: center !important;
         }
+        .project-card:hover .project-card__media img { transform: scale(1.02) !important; }
+        .project-card__count { z-index: 4 !important; border-top: 2px solid ${ORANGE}; }
 
-        .project-card:hover .project-card__media img {
-          transform: scale(1.02) !important;
-        }
+        /* Past Jobs is intentionally first in the orange preview. */
+        .work-tabs { align-items: stretch; }
+        .work-tab[data-tab-target="past-jobs"].is-active { color: var(--ink); }
 
-        .project-card__count {
-          z-index: 4 !important;
-          background: rgba(20,27,27,.92) !important;
-          color: #f3efe0 !important;
-          border-top: 2px solid ${ORANGE};
-        }
-
-        /* Featured ENE Security case study inside the Work chapter. */
+        /* ENE feature is the first experience visitors see. */
         .ene-case-study {
-          margin-top: 7rem;
+          margin: 1.35rem 0 3.2rem;
           padding: clamp(2rem, 4.5vw, 4.5rem);
           background: #101616;
           color: #f3efe0;
@@ -152,194 +102,69 @@
           overflow: hidden;
           position: relative;
         }
-
         .ene-case-study::after {
           content: "ENE";
           position: absolute;
           right: -1.5rem;
           top: -2.2rem;
-          color: rgba(255,106,0,.065);
+          color: rgba(255,106,0,.055);
           font: 900 clamp(8rem, 18vw, 16rem)/.8 var(--display);
           letter-spacing: -.08em;
           pointer-events: none;
         }
-
+        .ene-case-study__logo {
+          position: relative;
+          z-index: 2;
+          display: block;
+          width: min(27rem, 78%);
+          height: auto;
+          margin: 0 0 2.15rem;
+        }
         .ene-case-study__head {
           position: relative;
           z-index: 2;
           display: grid;
-          grid-template-columns: minmax(0,.9fr) minmax(320px,1.1fr);
+          grid-template-columns: minmax(0,.88fr) minmax(320px,1.12fr);
           gap: 3rem;
           align-items: end;
           padding-bottom: 2rem;
           border-bottom: 1px solid rgba(243,239,224,.22);
         }
-
-        .ene-kicker {
-          margin: 0 0 1rem;
-          color: ${ORANGE};
-          font-size: .68rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: .2em;
-        }
-
-        .ene-case-study h3 {
-          margin: 0;
-          font: 800 clamp(3.5rem, 7vw, 7rem)/.82 var(--display);
-          text-transform: uppercase;
-          letter-spacing: -.035em;
-        }
-
-        .ene-case-study h3 em {
-          color: ${ORANGE};
-          font-style: normal;
-        }
-
-        .ene-summary {
-          max-width: 40rem;
-          margin: 0;
-          color: rgba(243,239,224,.77);
-          font-size: clamp(1rem, 1.5vw, 1.2rem);
-          line-height: 1.55;
-        }
-
-        .ene-meta {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          flex-wrap: wrap;
-          gap: .6rem 1.8rem;
-          padding: 1.15rem 0 2rem;
-          color: rgba(243,239,224,.48);
-          font-size: .62rem;
-          text-transform: uppercase;
-          letter-spacing: .16em;
-        }
-
-        .ene-meta strong {
-          color: #f3efe0;
-          font-weight: 600;
-        }
-
-        .ene-capabilities {
-          position: relative;
-          z-index: 2;
-          display: grid;
-          grid-template-columns: repeat(3,minmax(0,1fr));
-          border-top: 1px solid rgba(243,239,224,.18);
-          border-left: 1px solid rgba(243,239,224,.18);
-        }
-
-        .ene-capability {
-          min-height: 15rem;
-          padding: 1.4rem 1.35rem 1.7rem;
-          border-right: 1px solid rgba(243,239,224,.18);
-          border-bottom: 1px solid rgba(243,239,224,.18);
-          background: rgba(255,255,255,.018);
-        }
-
-        .ene-capability__number {
-          margin: 0 0 2.3rem;
-          color: ${ORANGE};
-          font: 700 .62rem var(--body);
-          letter-spacing: .18em;
-        }
-
-        .ene-capability h4 {
-          margin: 0 0 .7rem;
-          color: #f3efe0;
-          font: 700 clamp(1.65rem,2.5vw,2.45rem)/.9 var(--display);
-          text-transform: uppercase;
-        }
-
-        .ene-capability p {
-          margin: 0;
-          color: rgba(243,239,224,.65);
-          font-size: .87rem;
-          line-height: 1.55;
-        }
-
-        .ene-case-study__footer {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          justify-content: space-between;
-          gap: 2rem;
-          align-items: end;
-          padding-top: 2.2rem;
-        }
-
-        .ene-case-study__footer p {
-          max-width: 44rem;
-          margin: 0;
-          color: rgba(243,239,224,.65);
-          font-size: .92rem;
-          line-height: 1.55;
-        }
-
-        .ene-archive-link {
-          flex: 0 0 auto;
-          display: inline-flex;
-          align-items: center;
-          gap: .7rem;
-          border-bottom: 1px solid ${ORANGE};
-          padding-bottom: .35rem;
-          color: #f3efe0;
-          font-size: .66rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: .16em;
-        }
-
-        .ene-archive-link span { color: ${ORANGE}; font-size: 1rem; }
+        .ene-kicker { margin: 0 0 .9rem; color: ${ORANGE}; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; }
+        .ene-case-study h3 { margin: 0; font: 800 clamp(3.5rem, 7vw, 7rem)/.82 var(--display); text-transform: uppercase; letter-spacing: -.035em; }
+        .ene-case-study h3 em { color: ${ORANGE}; font-style: normal; }
+        .ene-summary { max-width: 40rem; margin: 0; color: rgba(243,239,224,.78); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.55; }
+        .ene-meta { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; padding: 1.15rem 0 2rem; color: rgba(243,239,224,.48); font-size: .62rem; text-transform: uppercase; letter-spacing: .16em; }
+        .ene-meta strong { color: #f3efe0; font-weight: 600; }
+        .ene-capabilities { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid rgba(243,239,224,.18); border-left: 1px solid rgba(243,239,224,.18); }
+        .ene-capability { min-height: 14rem; padding: 1.35rem 1.3rem 1.6rem; border-right: 1px solid rgba(243,239,224,.18); border-bottom: 1px solid rgba(243,239,224,.18); background: rgba(255,255,255,.018); }
+        .ene-capability__number { margin: 0 0 2rem; color: ${ORANGE}; font: 700 .62rem var(--body); letter-spacing: .18em; }
+        .ene-capability h4 { margin: 0 0 .7rem; color: #f3efe0; font: 700 clamp(1.55rem,2.3vw,2.25rem)/.9 var(--display); text-transform: uppercase; }
+        .ene-capability p { margin: 0; color: rgba(243,239,224,.65); font-size: .86rem; line-height: 1.55; }
+        .ene-case-study__footer { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 2rem; align-items: end; padding-top: 2.1rem; }
+        .ene-case-study__footer p { max-width: 42rem; margin: 0; color: rgba(243,239,224,.66); font-size: .92rem; line-height: 1.55; }
+        .ene-case-link { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .8rem; padding: .82rem 1rem; border: 1px solid rgba(255,106,0,.75); color: #f3efe0; font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; transition: background .2s ease, color .2s ease; }
+        .ene-case-link span { color: ${ORANGE}; font-size: 1rem; }
+        .ene-case-link:hover { background: ${ORANGE}; color: #141b1b; }
+        .ene-case-link:hover span { color: #141b1b; }
 
         @media (max-width: 900px) {
           .ene-case-study__head { grid-template-columns: 1fr; gap: 1.35rem; }
           .ene-capabilities { grid-template-columns: repeat(2,minmax(0,1fr)); }
         }
-
         @media (max-width: 700px) {
-          .hero-graffiti {
-            width: 7.8rem !important;
-            height: 4.4rem !important;
-            transform: scaleX(1.42) rotate(-2deg) !important;
-          }
-
+          .hero-graffiti { width: 7.8rem !important; height: 4.4rem !important; transform: scaleX(1.42) rotate(-2deg) !important; }
           .hero-signal { gap: .9rem !important; }
-
-          .project-card__media,
-          .project-card--feature .project-card__media {
-            aspect-ratio: 4 / 3 !important;
-            padding: 1rem !important;
-          }
-
-          .project-card__media img {
-            max-width: 91% !important;
-            max-height: 91% !important;
-          }
-
-          .ene-case-study {
-            margin-top: 4.5rem;
-            padding: 1.5rem 1.2rem 1.6rem;
-          }
-
-          .ene-case-study h3 {
-            font-size: clamp(3rem, 14vw, 4.6rem);
-          }
-
-          .ene-capabilities {
-            grid-template-columns: 1fr;
-          }
-
-          .ene-capability {
-            min-height: auto;
-            padding: 1.2rem 1rem 1.45rem;
-          }
-
+          .project-card__media, .project-card--feature .project-card__media { aspect-ratio: 4 / 3 !important; padding: 1rem !important; }
+          .project-card__media img { max-width: 91% !important; max-height: 91% !important; }
+          .ene-case-study { margin: .8rem 0 2.3rem; padding: 1.5rem 1.2rem 1.6rem; }
+          .ene-case-study__logo { width: min(21rem, 94%); margin-bottom: 1.5rem; }
+          .ene-case-study h3 { font-size: clamp(3rem, 14vw, 4.6rem); }
+          .ene-capabilities { grid-template-columns: 1fr; }
+          .ene-capability { min-height: auto; padding: 1.2rem 1rem 1.45rem; }
           .ene-capability__number { margin-bottom: 1.3rem; }
           .ene-case-study__footer { display: grid; gap: 1.5rem; }
-          .ene-archive-link { justify-self: start; }
+          .ene-case-link { justify-self: start; }
         }
       `;
 
@@ -360,78 +185,76 @@
           if (!image) return;
           const src = image.currentSrc || image.src;
           if (src) media.style.setProperty('--thumb-bg', `url("${src.replace(/"/g, '%22')}")`);
-          media.dataset.orangeThumb = 'true';
         });
       }
 
+      function makePastJobsFirst(doc) {
+        const tabs = doc.querySelector('.work-tabs');
+        const pastButton = doc.querySelector('[data-tab-target="past-jobs"]');
+        const workButton = doc.querySelector('[data-tab-target="selected-work"]');
+        if (!tabs || !pastButton || !workButton) return;
+
+        if (pastButton.previousElementSibling !== null) {
+          tabs.insertBefore(pastButton, workButton);
+        }
+
+        if (!doc.body.dataset.orangePastDefaultApplied) {
+          doc.body.dataset.orangePastDefaultApplied = 'true';
+          setTimeout(() => pastButton.click(), 40);
+        }
+      }
+
       function addENECaseStudy(doc) {
+        const pastPanel = doc.getElementById('past-jobs');
+        if (!pastPanel) return;
+
+        const existingFeature = doc.getElementById('ene-case-study');
+        if (existingFeature && existingFeature.parentElement !== pastPanel) existingFeature.remove();
         if (doc.getElementById('ene-case-study')) return;
-        const workShell = doc.querySelector('#work .shell');
-        if (!workShell) return;
+
+        /* Remove the smaller duplicate ENE row so the feature card truly leads the experience list. */
+        pastPanel.querySelectorAll('.experience-row').forEach((row) => {
+          const title = row.querySelector('h3')?.textContent?.trim().toLowerCase();
+          if (title === 'ene security') row.remove();
+        });
 
         const section = doc.createElement('section');
         section.id = 'ene-case-study';
         section.className = 'ene-case-study';
         section.setAttribute('aria-labelledby', 'ene-case-study-title');
         section.innerHTML = `
+          <img class="ene-case-study__logo" src="${ENE_LOGO}" alt="ENE Security" />
           <div class="ene-case-study__head">
             <div>
               <p class="ene-kicker">Featured Experience / 2023–2026</p>
-              <h3 id="ene-case-study-title">ENE Security<br><em>Marketing Lead.</em></h3>
+              <h3 id="ene-case-study-title">Marketing<br><em>Lead.</em></h3>
             </div>
-            <p class="ene-summary">Led the in-house marketing function for a New England commercial security integrator while also supporting the sales team—connecting brand, design, content, events, partner marketing, and sales enablement to the same business-development goals.</p>
+            <p class="ene-summary">Led the in-house marketing function for a New England commercial security integrator while supporting sales—connecting brand, design, content, events, partner marketing, web, SEO, and sales enablement to the same growth goals.</p>
           </div>
-
           <div class="ene-meta">
             <span><strong>Role</strong> Marketing Lead + Sales Support</span>
-            <span><strong>Markets</strong> Salem, NH / Canton, MA</span>
-            <span><strong>Focus</strong> B2B Security + Technology</span>
+            <span><strong>Locations</strong> Salem, NH / Canton, MA</span>
+            <span><strong>Industry</strong> B2B Commercial Security</span>
           </div>
-
           <div class="ene-capabilities">
-            <article class="ene-capability">
-              <p class="ene-capability__number">01 / BRAND + CREATIVE</p>
-              <h4>Built the visual system.</h4>
-              <p>Created and managed brochures, spec sheets, presentations, sales graphics, signage, event materials, social creative, and branded collateral across digital and print.</p>
-            </article>
-
-            <article class="ene-capability">
-              <p class="ene-capability__number">02 / SALES ENABLEMENT</p>
-              <h4>Made sales easier.</h4>
-              <p>Supported the sales team with proposals, pitch decks, custom customer materials, product communication, co-branded pieces, and fast-turn creative for active opportunities.</p>
-            </article>
-
-            <article class="ene-capability">
-              <p class="ene-capability__number">03 / WEBSITE + SEO</p>
-              <h4>Owned the digital front door.</h4>
-              <p>Managed website content, SEO, product and campaign updates, new-product communication, monthly promotions, referral messaging, and email marketing.</p>
-            </article>
-
-            <article class="ene-capability">
-              <p class="ene-capability__number">04 / EVENTS + TRADE SHOWS</p>
-              <h4>Turned events into campaigns.</h4>
-              <p>Planned and produced trade-show booths, signage, giveaways, partner events, customer experiences, and supporting promotion for events including MHEC and regional partner activations.</p>
-            </article>
-
-            <article class="ene-capability">
-              <p class="ene-capability__number">05 / PARTNER MARKETING</p>
-              <h4>Connected brands together.</h4>
-              <p>Developed co-marketing campaigns and event creative with security technology partners including Axis, Genetec, Verkada, Hanwha Vision, Gallagher, i-PRO, and Bosch.</p>
-            </article>
-
-            <article class="ene-capability">
-              <p class="ene-capability__number">06 / STORIES + CONTENT</p>
-              <h4>Made the work sell itself.</h4>
-              <p>Built case-study and customer-story programs around real installations and outcomes, including work involving Cape Cod Community College, Franklin Park Zoo, YMCA North Shore, and Boston Public Works.</p>
-            </article>
+            <article class="ene-capability"><p class="ene-capability__number">01 / BRAND + CREATIVE</p><h4>Built the visual system.</h4><p>Brochures, spec sheets, presentations, sales graphics, signage, event materials, social creative, and branded collateral across digital and print.</p></article>
+            <article class="ene-capability"><p class="ene-capability__number">02 / SALES ENABLEMENT</p><h4>Made sales easier.</h4><p>Proposals, pitch decks, custom customer materials, product communication, co-branded pieces, and fast-turn creative for active opportunities.</p></article>
+            <article class="ene-capability"><p class="ene-capability__number">03 / WEBSITE + SEO</p><h4>Owned the digital front door.</h4><p>Website content, SEO, new-product communication, monthly specials, referral messaging, email campaigns, and ongoing digital updates.</p></article>
+            <article class="ene-capability"><p class="ene-capability__number">04 / EVENTS + TRADE SHOWS</p><h4>Turned events into campaigns.</h4><p>Trade-show booths, signage, giveaways, partner events, customer experiences, and promotion around MHEC, METAA, roundtables, and regional activations.</p></article>
+            <article class="ene-capability"><p class="ene-capability__number">05 / PARTNER MARKETING</p><h4>Connected brands together.</h4><p>Co-marketing campaigns and event creative with Axis, Genetec, Verkada, Hanwha Vision, Gallagher, i-PRO, Bosch, and other technology partners.</p></article>
+            <article class="ene-capability"><p class="ene-capability__number">06 / STORIES + CONTENT</p><h4>Made the work sell itself.</h4><p>Case studies and customer stories around real installations and outcomes, including Cape Cod Community College, Franklin Park Zoo, YMCA North Shore, and Boston Public Works.</p></article>
           </div>
-
           <div class="ene-case-study__footer">
-            <p>My role sat between marketing, design, sales, vendors, and customers—so the work had to look strong, explain technical products clearly, support relationships, and help the sales team move opportunities forward.</p>
-            <a class="ene-archive-link" href="${ENE_ARCHIVE}" target="_blank" rel="noopener noreferrer">View archived ENE work <span aria-hidden="true">↗</span></a>
+            <p>The role sat between marketing, design, sales, manufacturers, and customers—so the work had to look strong, explain technical products clearly, support relationships, and help the sales team move opportunities forward.</p>
+            <a class="ene-case-link" href="../portfolio-orange/ene-security.html" target="_top">View ENE case study <span aria-hidden="true">↗</span></a>
           </div>
         `;
-        workShell.appendChild(section);
+
+        const intro = pastPanel.querySelector('.experience-intro');
+        const list = pastPanel.querySelector('.experience-list');
+        if (intro && intro.nextSibling) intro.parentNode.insertBefore(section, intro.nextSibling);
+        else if (list) pastPanel.insertBefore(section, list);
+        else pastPanel.prepend(section);
       }
 
       function enhancePreview() {
@@ -439,8 +262,9 @@
           const doc = frame.contentDocument;
           if (!doc || !doc.body) return;
           applyOrangeTheme(doc);
-          uniformizeThumbnails(doc);
+          makePastJobsFirst(doc);
           addENECaseStudy(doc);
+          uniformizeThumbnails(doc);
         } catch (error) {
           console.error('Orange preview enhancement could not be applied.', error);
         }
@@ -449,13 +273,13 @@
       frame.addEventListener('load', () => {
         enhancePreview();
         [180, 450, 900, 1600, 2600].forEach((delay) => setTimeout(enhancePreview, delay));
-
         try {
           const doc = frame.contentDocument;
           if (!doc || !doc.body) return;
           const observer = new MutationObserver(() => {
-            uniformizeThumbnails(doc);
+            applyOrangeTheme(doc);
             addENECaseStudy(doc);
+            uniformizeThumbnails(doc);
           });
           observer.observe(doc.body, { childList: true, subtree: true });
         } catch (error) {
