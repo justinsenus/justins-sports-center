@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#141b1b" />
+  <title>Justin Senus — Orange Portfolio Preview</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #141b1b;
+      overflow: hidden;
+    }
+
+    #orangePreview {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #141b1b;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    id="orangePreview"
+    src="../portfolio/?orange-preview=1"
+    title="Justin Senus orange portfolio preview"
+  ></iframe>
+
+  <script>
+    (() => {
+      const frame = document.getElementById('orangePreview');
+      const ORANGE = '#ff6a00';
+
+      const orangeCSS = `
+        :root {
+          --teal: ${ORANGE} !important;
+        }
+
+        .brand-mark img,
+        .hero-mark,
+        .hero-graffiti,
+        .about-mark,
+        .footer-brand img {
+          filter: brightness(0) saturate(100%) invert(47%) sepia(99%) saturate(3668%) hue-rotate(4deg) brightness(105%) contrast(102%) !important;
+        }
+
+        .scribble i {
+          border-top-color: rgba(255, 106, 0, .82) !important;
+        }
+
+        .hero-drips::before,
+        .hero-drips i,
+        .menu-toggle__icon i {
+          background: ${ORANGE} !important;
+        }
+
+        ::selection {
+          background: ${ORANGE} !important;
+        }
+      `;
+
+      function applyOrangeTheme() {
+        try {
+          const doc = frame.contentDocument;
+          if (!doc || !doc.head) return;
+
+          let style = doc.getElementById('orange-preview-theme');
+          if (!style) {
+            style = doc.createElement('style');
+            style.id = 'orange-preview-theme';
+            doc.head.appendChild(style);
+          }
+          style.textContent = orangeCSS;
+        } catch (error) {
+          console.error('Orange preview theme could not be applied.', error);
+        }
+      }
+
+      frame.addEventListener('load', () => {
+        applyOrangeTheme();
+        setTimeout(applyOrangeTheme, 250);
+        setTimeout(applyOrangeTheme, 900);
+      });
+    })();
+  </script>
+</body>
+</html>
