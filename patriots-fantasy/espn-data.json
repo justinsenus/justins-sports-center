@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-09-18T01:01:32.428Z",
+  "savedAt": "2026-09-18T01:19:24.003Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 2,
@@ -35,6 +35,17 @@
         "starter": true
       },
       {
+        "id": "4595348",
+        "name": "Malik Nabers",
+        "team": "NYG",
+        "position": "WR",
+        "points": 12.9,
+        "projected": 14.9,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
         "id": "4035538",
         "name": "David Montgomery",
         "team": "HOU",
@@ -53,28 +64,6 @@
         "points": 26.6,
         "projected": 18.2,
         "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "4432708",
-        "name": "Marvin Harrison Jr.",
-        "team": "ARI",
-        "position": "WR",
-        "points": 4.3,
-        "projected": 9.3,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "4034949",
-        "name": "Eddy Pineiro",
-        "team": "SF",
-        "position": "K",
-        "points": 10,
-        "projected": 9.9,
-        "injuryStatus": "QUESTIONABLE",
         "headshot": "",
         "starter": true
       },
@@ -99,6 +88,17 @@
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
+      },
+      {
+        "id": "17427",
+        "name": "Cairo Santos",
+        "team": "CHI",
+        "position": "K",
+        "points": 12,
+        "projected": 9.1,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
       }
     ],
     "bench": [
@@ -114,23 +114,23 @@
         "starter": false
       },
       {
-        "id": "4595348",
-        "name": "Malik Nabers",
-        "team": "NYG",
-        "position": "WR",
-        "points": 12.9,
-        "projected": 14.9,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
         "id": "4239993",
         "name": "Tee Higgins",
         "team": "CIN",
         "position": "WR",
         "points": 8.9,
         "projected": 12.3,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4432708",
+        "name": "Marvin Harrison Jr.",
+        "team": "ARI",
+        "position": "WR",
+        "points": 4.3,
+        "projected": 9.3,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -214,7 +214,7 @@
         "name": "Jahmyr Gibbs",
         "team": "DET",
         "position": "RB",
-        "points": 36.1,
+        "points": 49.7,
         "projected": 24.1,
         "injuryStatus": "ACTIVE",
         "headshot": "",
