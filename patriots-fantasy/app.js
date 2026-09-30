@@ -227,6 +227,14 @@
     return `<span class="num fantasy-score-number" data-score-key="${esc(key)}" data-score-value="${display}">${display}</span>`;
   }
 
+  function dualScoreMarkup(baseKey, actual, projection, actualLabel = "LIVE") {
+    const actualValue = finiteNumber(actual) == null ? 0 : finiteNumber(actual);
+    const projectionValue = finiteNumber(projection);
+    const actualMarkup = scoreSpan(`${baseKey}:actual`, actualValue, 1);
+    const projectionMarkup = projectionValue == null ? num("—") : `<span class="num projection-number">${projectionValue.toFixed(1)}</span>`;
+    return `<div class="dual-score"><div class="dual-score-primary">${actualMarkup}<small>${esc(actualLabel)}</small></div><div class="dual-score-projection"><span class="projection-label">PROJ</span>${projectionMarkup}</div></div>`;
+  }
+
   function animateFantasyScores() {
     document.querySelectorAll(".fantasy-score-number").forEach((node) => {
       animateScore(node, node.getAttribute("data-score-key"), node.getAttribute("data-score-value"), false, 1);
@@ -575,13 +583,11 @@
       const directProjection = finiteNumber(player.projected);
       const projection = directProjection != null ? directProjection : projectionForName(player.full_name);
       const pregame = !event || eventState(event).upcoming;
-      const showProjection = pregame && projection != null;
-      const displayPoints = showProjection ? projection : (pregame ? null : points);
-      const pointLabel = pregame ? "PROJ" : "PTS";
+      const actualPoints = pregame ? 0 : points;
       const injury = report.flagged ? " injury" : "";
       const statusText = report.flagged ? `${report.status}${report.bodyPart ? ` • ${report.bodyPart}` : ""}` : status;
       const statusClass = report.flagged ? " injury" : "";
-      return `<article class="player-row${injury}">${playerFace(enriched)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${scoreSpan(`fantasy:${side}:player:${id}`, displayPoints, 1)}<small>${pointLabel}</small></div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
+      return `<article class="player-row${injury}">${playerFace(enriched)}<div class="player-copy"><div class="player-name">${esc(player.full_name || id)}</div><div class="player-meta">${esc(player.team || "FA")} • ${esc(player.position || "—")} • <span class="player-status${statusClass}">${esc(statusText)}</span></div></div><div class="player-points">${dualScoreMarkup(`fantasy:${side}:player:${id}`, actualPoints, projection, "PTS")}</div><div class="player-line">${esc(statLine(enriched, live))}</div></article>`;
     }).join("");
   }
 
@@ -628,10 +634,10 @@
     const ownName = leagueName || rosterTeamName(ownRoster && ownRoster.roster_id, users);
     const opponentName = opponent && opponent.roster_id ? rosterTeamName(opponent.roster_id, users) : "OPPONENT";
     const projectionMode = Boolean(options.projectionMode);
-    const ownScore = projectionMode ? options.ownProjection : Number(own.points || 0).toFixed(1);
-    const opponentScore = projectionMode ? options.opponentProjection : opponent && opponent.points != null ? Number(opponent.points || 0).toFixed(1) : "—";
-    const ownScoreMarkup = scoreSpan(`fantasy:matchup:${leagueName}:own`, ownScore, 1);
-    const opponentScoreMarkup = opponentScore == null || opponentScore === "—" ? num("—") : scoreSpan(`fantasy:matchup:${leagueName}:opponent`, opponentScore, 1);
+    const ownActual = finiteNumber(own.points) == null ? 0 : finiteNumber(own.points);
+    const opponentActual = opponent && opponent.roster_id ? (finiteNumber(opponent.points) == null ? 0 : finiteNumber(opponent.points)) : null;
+    const ownScoreMarkup = dualScoreMarkup(`fantasy:matchup:${leagueName}:own`, ownActual, options.ownProjection, "LIVE");
+    const opponentScoreMarkup = opponent && opponent.roster_id ? dualScoreMarkup(`fantasy:matchup:${leagueName}:opponent`, opponentActual, options.opponentProjection, "LIVE") : num("—");
     const phase = projectionMode ? "PREGAME PROJECTIONS" : (own.matchup_id ? "MATCHUP LIVE" : "MATCHUP WAITING");
     return `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(ownName)}</div><div class="matchup-team-score">${ownScoreMarkup}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponentName)}</div><div class="matchup-team-score">${opponentScoreMarkup}</div></div><div class="matchup-meta">WEEK ${esc(state.week)} • ${esc(phase)}</div></div>`;
   }
@@ -673,12 +679,11 @@
     const opponentProjection = data.opponentRoster ? rosterProjectionTotal(data.opponentRoster, players) : null;
     const ownProjection = rosterProjectionTotal(roster, players);
     const projectionMode = !rosterStarted;
-    const displayTotal = projectionMode ? ownProjection : total;
-    const displayStarters = projectionMode ? ownProjection : starterPoints;
     const injured = [...starters, ...bench].filter((id) => players[id] && players[id].injury_status).length;
     const liveCount = [...starters, ...bench].filter((id) => playerStatus({ ...(players[id] || {}), player_id: id }) === "LIVE").length;
     setText("sleeperMeta", `WEEK ${state.week} • ${liveCount ? `${liveCount} LIVE` : projectionMode ? "PROJECTIONS" : "PREVIEW"}`);
-    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">${projectionMode ? "TEAM PROJECTION" : "LIVE TOTAL"}</div><div class="league-summary-value red">${scoreSpan("fantasy:summary:total", displayTotal, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${projectionMode ? "STARTER PROJECTION" : "LIVE STARTERS"}</div><div class="league-summary-value">${scoreSpan("fantasy:summary:starters", displayStarters, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${data.opponentRoster ? (projectionMode ? "OPPONENT PROJ" : "OPPONENT LIVE") : "STATUS"}</div><div class="league-summary-value ${data.opponentRoster ? "" : injured ? "" : "green"}">${data.opponentRoster ? scoreSpan("fantasy:summary:opponent", projectionMode ? opponentProjection : Number(data.opponentMatchup && data.opponentMatchup.points || 0), 1) : injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
+    const opponentActual = data.opponentRoster ? (finiteNumber(data.opponentMatchup && data.opponentMatchup.points) == null ? 0 : finiteNumber(data.opponentMatchup && data.opponentMatchup.points)) : null;
+    const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">LIVE TOTAL</div><div class="league-summary-value red">${dualScoreMarkup("fantasy:summary:total", total, ownProjection, "LIVE")}</div></div><div class="league-summary-card"><div class="league-summary-label">LIVE STARTERS</div><div class="league-summary-value">${dualScoreMarkup("fantasy:summary:starters", starterPoints, ownProjection, "LIVE")}</div></div><div class="league-summary-card"><div class="league-summary-label">${data.opponentRoster ? "OPPONENT LIVE" : "STATUS"}</div><div class="league-summary-value ${data.opponentRoster ? "" : injured ? "" : "green"}">${data.opponentRoster ? dualScoreMarkup("fantasy:summary:opponent", opponentActual, opponentProjection, "LIVE") : injured ? `${num(injured)} INJ` : "READY"}</div></div></div>`;
     const opponentColumn = opponentRoster ? rosterColumnMarkup("MATCHUP OPPONENT", opponentRoster, players, opponentPointsMap, "opponent") : `<section class="roster-side opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
     setHTML("sleeperContent", `${summary}${matchupMarkup(data, roster, data.users, CONFIG.sleeperTeamName, { projectionMode, ownProjection, opponentProjection })}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", roster, players, pointsMap, "own")}${opponentColumn}</div><div class="league-note">Roster photos use the Sleeper player image CDN, with an official ESPN roster headshot fallback. ${projectionMode ? "Pregame projection values are imported from the ESPN feed when available." : "Live totals replace pregame projections as games start."}</div>`);
   }
@@ -870,17 +875,13 @@
       const opponentActual = opponent ? espnActualTotal(opponent) : null;
       const ownProjection = espnProjectionTotal(own);
       const opponentProjection = opponent ? espnProjectionTotal(opponent) : null;
-      const ownDisplay = started ? ownActual : ownProjection;
-      const opponentDisplay = opponent ? (started ? opponentActual : opponentProjection) : null;
-      const ownScore = scoreSpan("espn:matchup:own", ownDisplay, 1);
-      const opponentScore = opponent ? scoreSpan("espn:matchup:opponent", opponentDisplay, 1) : num("—");
+      const ownScore = dualScoreMarkup("espn:matchup:own", ownActual, ownProjection, "LIVE");
+      const opponentScore = opponent ? dualScoreMarkup("espn:matchup:opponent", opponentActual, opponentProjection, "LIVE") : num("—");
       const period = data.matchupPeriodId || data.scoringPeriodId || state.week;
       const saved = data.savedAt ? `SYNCED ${formatClock(new Date(data.savedAt))}` : "SYNCED";
-      const ownStarterValue = started ? ownActual : ownProjection;
-      const opponentStarterValue = opponent ? (started ? opponentActual : opponentProjection) : null;
       const phase = started ? "LIVE TOTALS" : "PREGAME PROJECTIONS";
       const sourceLabel = data.source === "PUBLIC ESPN" ? "PUBLIC ESPN" : "PRIVATE SYNC";
-      const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">${started ? "LIVE TOTAL" : "TEAM PROJECTION"}</div><div class="league-summary-value red">${scoreSpan("espn:summary:total", ownDisplay, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${started ? "LIVE STARTERS" : "STARTER PROJECTION"}</div><div class="league-summary-value">${scoreSpan("espn:summary:starters", ownStarterValue, 1)}</div></div><div class="league-summary-card"><div class="league-summary-label">${opponent ? (started ? "OPPONENT LIVE" : "OPPONENT PROJ") : "SYNC"}</div><div class="league-summary-value ${opponent ? "" : "green"}">${opponent ? scoreSpan("espn:summary:opponent", opponentStarterValue, 1) : esc(saved)}</div></div></div>`;
+      const summary = `<div class="league-summary"><div class="league-summary-card"><div class="league-summary-label">LIVE TOTAL</div><div class="league-summary-value red">${dualScoreMarkup("espn:summary:total", ownActual, ownProjection, "LIVE")}</div></div><div class="league-summary-card"><div class="league-summary-label">LIVE STARTERS</div><div class="league-summary-value">${dualScoreMarkup("espn:summary:starters", ownActual, ownProjection, "LIVE")}</div></div><div class="league-summary-card"><div class="league-summary-label">${opponent ? "OPPONENT LIVE" : "SYNC"}</div><div class="league-summary-value ${opponent ? "" : "green"}">${opponent ? dualScoreMarkup("espn:summary:opponent", opponentActual, opponentProjection, "LIVE") : esc(saved)}</div></div></div>`;
       const matchup = `<div class="matchup-card"><div class="matchup-team"><div class="matchup-team-label">YOUR TEAM</div><div class="matchup-team-name">${esc(own.name)}</div><div class="matchup-team-score">${ownScore}</div></div><div class="matchup-vs">VS</div><div class="matchup-team away"><div class="matchup-team-label">OPPONENT</div><div class="matchup-team-name">${esc(opponent ? opponent.name : "MATCHUP PENDING")}</div><div class="matchup-team-score">${opponentScore}</div></div><div class="matchup-meta">WEEK ${esc(period)} • ${esc(phase)} • ${esc(sourceLabel)}</div></div>`;
       const opponentColumn = opponent ? rosterColumnMarkup("MATCHUP OPPONENT", opponent.roster, opponent.players, opponent.pointsMap, "espn-opponent", opponent.name) : `<section class="roster-side espn-opponent"><div class="roster-side-heading"><span class="roster-side-name">MATCHUP OPPONENT</span><span class="roster-side-role">WAITING</span></div><div class="empty-state">OPPONENT ROSTER WILL APPEAR WHEN THE MATCHUP FEED RESPONDS</div></section>`;
       setHTML("espnContent", `${summary}${matchup}<div class="matchup-rosters">${rosterColumnMarkup("YOUR ROSTER", own.roster, own.players, own.pointsMap, "espn-own", own.name)}${opponentColumn}</div><div class="league-note">${esc(sourceLabel)} data is shown read-only. ${data.source === "PUBLIC ESPN" ? "The league is public, so this panel reads ESPN directly." : "The scheduled connector publishes only the roster/matchup snapshot; credentials remain in GitHub Secrets."}</div>`);
