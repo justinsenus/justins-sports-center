@@ -89,3 +89,28 @@ body { overflow-x:hidden; background:radial-gradient(circle at 10% 0,rgba(229,30
 .secure-note { padding:9px; border:1px solid #3e6583; border-radius:7px; background:#102338; }.secure-note h3{margin:0;color:var(--blue);font-size:10px;font-weight:900;}.secure-note p{margin:5px 0 0;color:var(--muted);font-size:7px;font-weight:800;line-height:1.4;}.secure-note .league-id{margin-top:6px;font-size:7px;font-weight:900;}.secure-note .league-id .num{color:var(--amber);}
 .mobile-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 4px;border-top:1px solid #21374c;color:var(--muted);font-size:7px;font-weight:900;letter-spacing:.05em;}.mobile-footer>div:first-child{display:flex;align-items:center;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.footer-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}.sync{font:900 7px/1 var(--num);white-space:nowrap;}
 @media (min-width: 620px) { .mobile-shell { padding:14px; gap:12px; } .mobile-title{font-size:18px}.mobile-status{font-size:10px}.score-box{padding:13px 15px}.score-title{font-size:14px}.score-main{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:12px}.live-schedule{margin-top:0;padding-top:0;border-top:0}.schedule-grid{max-height:150px}.mobile-panels{grid-template-columns:1fr 1fr}.mobile-panel-content{padding:10px}.matchup-rosters{grid-template-columns:1fr 1fr}.roster-side .player-name{font-size:10px}.roster-side .player-meta,.roster-side .player-line{font-size:7px}.roster-side .player-row{grid-template-columns:34px minmax(0,1fr) 48px}.player-avatar{width:30px;height:30px}.player-points{font-size:17px} }
+
+
+/* Actual/live scores stay primary; projections remain visible as a lighter secondary value. */
+.dual-score { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 0; }
+.dual-score-primary { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; color: var(--text); font-family: var(--num); font-weight: 900; line-height: .9; }
+.dual-score-primary .fantasy-score-number { display: block; color: inherit; font-size: inherit; font-weight: 900; }
+.dual-score-primary small { color: var(--muted); font: 900 6px/1 var(--body); letter-spacing: .05em; }
+.dual-score-projection { display: flex; align-items: baseline; justify-content: flex-end; gap: 3px; color: var(--muted); font: 500 8px/1 var(--num); opacity: .9; }
+.dual-score-projection .projection-label { color: var(--blue); font: 700 5px/1 var(--body); letter-spacing: .05em; }
+.dual-score-projection .projection-number,
+.dual-score-projection .num { color: var(--muted); font: 500 1em/1 var(--num); }
+.player-points .dual-score-primary { font-size: 15px; }
+.league-summary-value .dual-score-primary { font-size: 16px; }
+.matchup-team-score .dual-score-primary { font-size: 17px; }
+.player-points .dual-score-projection,
+.league-summary-value .dual-score-projection,
+.matchup-team-score .dual-score-projection { font-size: 8px; }
+@media (min-width: 620px) {
+  .player-points .dual-score-primary { font-size: 17px; }
+  .league-summary-value .dual-score-primary { font-size: 18px; }
+  .matchup-team-score .dual-score-primary { font-size: 19px; }
+  .player-points .dual-score-projection,
+  .league-summary-value .dual-score-projection,
+  .matchup-team-score .dual-score-projection { font-size: 9px; }
+}
