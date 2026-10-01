@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-01T18:34:14.985Z",
+  "savedAt": "2026-10-01T22:53:36.719Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 4,
@@ -29,7 +29,7 @@
         "team": "LV",
         "position": "RB",
         "points": 12.3,
-        "projected": 18.8,
+        "projected": 18.9,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -152,7 +152,7 @@
         "team": "JAX",
         "position": "QB",
         "points": 19.8,
-        "projected": 18.4,
+        "projected": 18.5,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -215,7 +215,7 @@
         "team": "SF",
         "position": "RB",
         "points": 21.6,
-        "projected": 20.2,
+        "projected": 20.3,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -226,63 +226,19 @@
         "team": "NO",
         "position": "WR",
         "points": 19.7,
-        "projected": 18.3,
+        "projected": 18.2,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
       },
       {
-        "id": "16737",
-        "name": "Mike Evans",
-        "team": "SF",
-        "position": "WR",
-        "points": 12.4,
-        "projected": 12.4,
-        "injuryStatus": "QUESTIONABLE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "4385690",
-        "name": "Dalton Kincaid",
-        "team": "BUF",
+        "id": "5083076",
+        "name": "Harold Fannin Jr.",
+        "team": "CLE",
         "position": "TE",
-        "points": 3.8,
-        "projected": 10.7,
+        "points": 24.1,
+        "projected": 11.2,
         "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "3912547",
-        "name": "Sam Darnold",
-        "team": "SEA",
-        "position": "QB",
-        "points": 27.7,
-        "projected": 16.1,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "3917232",
-        "name": "Tyler Bass",
-        "team": "BUF",
-        "position": "K",
-        "points": 6,
-        "projected": 8.5,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
-      },
-      {
-        "id": "-16002",
-        "name": "Bills D/ST",
-        "team": "BUF",
-        "position": "DEF",
-        "points": 5,
-        "projected": 6.3,
-        "injuryStatus": "",
         "headshot": "",
         "starter": true
       },
@@ -296,6 +252,50 @@
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
+      },
+      {
+        "id": "-16005",
+        "name": "Browns D/ST",
+        "team": "CLE",
+        "position": "DEF",
+        "points": 4,
+        "projected": 6.5,
+        "injuryStatus": "",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4034949",
+        "name": "Eddy Pineiro",
+        "team": "SF",
+        "position": "K",
+        "points": 8,
+        "projected": 9.3,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "2576980",
+        "name": "Marcus Mariota",
+        "team": "WAS",
+        "position": "QB",
+        "points": 20.4,
+        "projected": 18.6,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "2973405",
+        "name": "Kalif Raymond",
+        "team": "CHI",
+        "position": "WR",
+        "points": 21,
+        "projected": 10.1,
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": true
       }
     ],
     "bench": [
@@ -305,7 +305,7 @@
         "team": "LAC",
         "position": "RB",
         "points": 5.6,
-        "projected": 10.9,
+        "projected": 10.7,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -333,24 +333,13 @@
         "starter": false
       },
       {
-        "id": "5083076",
-        "name": "Harold Fannin Jr.",
-        "team": "CLE",
-        "position": "TE",
-        "points": 24.1,
-        "projected": 11.2,
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
-        "id": "4038941",
-        "name": "Justin Herbert",
-        "team": "LAC",
-        "position": "QB",
-        "points": 12.7,
-        "projected": 12.6,
-        "injuryStatus": "ACTIVE",
+        "id": "16737",
+        "name": "Mike Evans",
+        "team": "SF",
+        "position": "WR",
+        "points": 12.4,
+        "projected": 11.8,
+        "injuryStatus": "QUESTIONABLE",
         "headshot": "",
         "starter": false
       },
@@ -366,24 +355,35 @@
         "starter": false
       },
       {
-        "id": "4360939",
-        "name": "Rashod Bateman",
-        "team": "BAL",
-        "position": "WR",
-        "points": 5.7,
-        "projected": 7.9,
+        "id": "4385690",
+        "name": "Dalton Kincaid",
+        "team": "BUF",
+        "position": "TE",
+        "points": 3.8,
+        "projected": 10.7,
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
       },
       {
-        "id": "4360423",
-        "name": "Michael Penix Jr.",
-        "team": "ATL",
+        "id": "3912547",
+        "name": "Sam Darnold",
+        "team": "SEA",
         "position": "QB",
-        "points": 14,
-        "projected": 14.7,
+        "points": 27.7,
+        "projected": 16.1,
         "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "3116406",
+        "name": "Tyreek Hill",
+        "team": "FA",
+        "position": "WR",
+        "points": 0,
+        "projected": 263.7,
+        "injuryStatus": "OUT",
         "headshot": "",
         "starter": false
       }
