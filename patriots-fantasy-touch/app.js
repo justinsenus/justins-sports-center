@@ -15,7 +15,7 @@
   const ESPN_PUBLIC_URL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/919590140?view=mMatchup&view=mBoxScore&view=mLiveScoring";
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
-  const ESPN_BENCH_SLOTS = new Set([20, 21, 22, 23]);
+  const ESPN_BENCH_SLOTS = new Set([20, 21, 22]);
   // ESPN's public player pool can legitimately omit a line for an inactive,
   // questionable, or newly-added player. Keep the card useful and explicit
   // in that case instead of rendering a dash or an empty projection.
@@ -56,6 +56,10 @@
     if (value == null || value === "") return null;
     const n = Number(value);
     return Number.isFinite(n) ? n : null;
+  };
+  const pointValue = (value) => {
+    if (value && typeof value === "object") return finite(value.points ?? value.fantasy_points ?? value.pts ?? value.total ?? value.value);
+    return finite(value);
   };
   const number = (value, decimals = 1, fallback = "0.0") => {
     const n = finite(value);
@@ -125,6 +129,14 @@
     return (roster && roster.players || []).map(String);
   }
 
+  function orderedSleeperPlayerIds(roster) {
+    const players = sleeperPlayerIds(roster);
+    const available = new Set(players);
+    const starters = (roster && roster.starters || []).map(String).filter((id) => available.has(id));
+    const starterSet = new Set(starters);
+    return [...starters, ...players.filter((id) => !starterSet.has(id))];
+  }
+
   function rosterName(roster, users, fallback) {
     const owner = users && users.find((user) => String(user.user_id) === String(roster && roster.owner_id));
     return owner && owner.metadata && owner.metadata.team_name || owner && owner.display_name || fallback;
@@ -134,10 +146,12 @@
     const source = players && players[id] || { player_id: id, full_name: id, team: "FA", position: "UTIL" };
     const player = { ...source, player_id: id, name: source.full_name || source.name || id };
     const event = findPlayerEvent(player);
-    const status = event && eventState(event).live ? "LIVE" : player.injury_status ? String(player.injury_status).toUpperCase() : event && eventState(event).upcoming ? "NEXT" : "NO GAME";
-    const actualRaw = finite(pointsMap && pointsMap[id]) || 0;
-    const started = event && (eventState(event).live || eventState(event).final);
-    const actual = started ? actualRaw : 0;
+    // Sleeper's players_points map is the authoritative live/final total. Do
+    // not hide a value merely because the ESPN scoreboard has not matched the
+    // player's game yet.
+    const actualRaw = pointValue(pointsMap && pointsMap[id]) ?? 0;
+    const actual = actualRaw;
+    const status = event && eventState(event).live ? "LIVE" : event && eventState(event).final ? "FINAL" : player.injury_status ? String(player.injury_status).toUpperCase() : actualRaw > 0 ? "LIVE" : event && eventState(event).upcoming ? "NEXT" : "NO GAME";
     const consensus = consensusFor(player, consensusData);
     const starterSet = new Set((roster && roster.starters || []).map(String));
     return {
@@ -329,6 +343,17 @@
     return playerData;
   }
 
+  function espnEntrySortKey(entry, index) {
+    const slot = Number(entry && entry.lineupSlotId);
+    const slotOrder = { 0: 0, 2: 1, 23: 6, 4: 3, 6: 5, 17: 8, 16: 9 };
+    if (slotOrder[slot] != null) return slotOrder[slot] * 1000 + index;
+    if (ESPN_BENCH_SLOTS.has(slot)) return 100000 + index;
+    const player = entry && entry.playerPoolEntry && entry.playerPoolEntry.player || entry && entry.player || {};
+    const position = ESPN_POSITION_BY_ID[player.defaultPositionId] || "UTIL";
+    const positionOrder = { QB: 0, RB: 1, WR: 3, TE: 5, K: 8, DEF: 9 };
+    return (positionOrder[position] == null ? 20 : positionOrder[position]) * 1000 + index;
+  }
+
   function normalizeESPNTeam(rawTeam, currentSide, scoringPeriodId, side) {
     if (!rawTeam) return null;
     const entries = rawTeam.roster && rawTeam.roster.entries || [];
@@ -337,7 +362,8 @@
     const players = {};
     const ids = [];
     const starters = [];
-    entries.forEach((entry) => {
+    const orderedEntries = entries.map((entry, index) => ({ entry, index })).sort((a, b) => espnEntrySortKey(a.entry, a.index) - espnEntrySortKey(b.entry, b.index)).map((item) => item.entry);
+    orderedEntries.forEach((entry) => {
       const id = String(entry.playerId || entry.playerPoolEntry && entry.playerPoolEntry.id || "");
       if (!id) return;
       const row = normalizeESPNEntry(entry, currentById.get(id), scoringPeriodId, side);
@@ -459,8 +485,8 @@
   function currentLeague() {
     if (state.league === "sleeper" && state.sleeper) {
       const data = state.sleeper;
-      const own = sleeperPlayerIds(data.roster).map((id) => normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus));
-      const opponent = data.opponentRoster ? sleeperPlayerIds(data.opponentRoster).map((id) => normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus)) : [];
+      const own = orderedSleeperPlayerIds(data.roster).map((id) => normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus));
+      const opponent = data.opponentRoster ? orderedSleeperPlayerIds(data.opponentRoster).map((id) => normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus)) : [];
       const ownRecord = data.roster && data.roster.settings || {};
       const opponentRecord = data.opponentRoster && data.opponentRoster.settings || {};
       return { id: "sleeper", name: CONFIG.sleeperTeamName, ownName: CONFIG.sleeperTeamName, opponentName: rosterName(data.opponentRoster, data.users, "OPPONENT"), ownAvatar: sleeperAvatar(data.ownUser), opponentAvatar: sleeperAvatar(data.opponentUser), ownRecord: { wins: finite(ownRecord.wins), losses: finite(ownRecord.losses) }, opponentRecord: { wins: finite(opponentRecord.wins), losses: finite(opponentRecord.losses) }, own, opponent, ownActual: finite(data.matchup && data.matchup.points) || 0, opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0, week: data.week, ready: true };
@@ -630,7 +656,7 @@
   }
 
   function arcadeRosterPanel(league, side) {
-    const players = (side === "own" ? league.own : league.opponent || []).filter((player) => player.starter !== false).slice(0, 9);
+    const players = (side === "own" ? league.own : league.opponent || []).filter((player) => player.starter !== false).slice(0, 10);
     const name = side === "own" ? league.ownName : league.opponentName;
     return `<section class="arcade-panel arcade-roster ${side}"><div class="arcade-panel-head"><div><b>${side === "own" ? "MY STARTERS" : "OPPONENT STARTERS"}</b><small>${esc(name)} • LIVE SCORING</small></div><span class="arcade-live-indicator"><i></i>${players.filter((player) => player.status === "LIVE").length} LIVE</span></div><div class="arcade-table-head"><span>POS</span><span>PLAYER</span><span>STATUS</span><span>LIVE / PROJ</span></div><div class="arcade-player-list">${players.length ? players.map((player) => arcadePlayerRow(player, side)).join("") : `<div class="empty-card compact"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the league provider.</span></div>`}</div></section>`;
   }
