@@ -171,6 +171,23 @@ function readESPN() {
   if (!existsSync(path)) return null;
   try { return JSON.parse(readFileSync(path, "utf8")); } catch (_) { return null; }
 }
+function canonical(value, keyName = "") {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (keyName === "generated_at" || keyName === "updated_at") return null;
+  if (value && typeof value === "object") return Object.keys(value).sort().reduce((out, key) => { out[key] = canonical(value[key], key); return out; }, {});
+  return value;
+}
+function writeStable(output) {
+  try {
+    if (existsSync(outputPath)) {
+      const previous = JSON.parse(readFileSync(outputPath, "utf8"));
+      const previousComparable = { ...previous, generated_at: null };
+      const nextComparable = { ...output, generated_at: null };
+      if (JSON.stringify(canonical(previousComparable)) === JSON.stringify(canonical(nextComparable))) output.generated_at = previous.generated_at || generatedAt;
+    }
+  } catch (_) { /* A malformed prior artifact should be replaced. */ }
+  writeFileSync(outputPath, JSON.stringify(output, null, 2) + "\n", "utf8");
+}
 function addESPN(players, data) {
   let count = 0;
   for (const team of [data && data.myTeam, data && data.opponent]) {
@@ -258,7 +275,7 @@ async function main() {
   try { sleeper = await loadSleeper(); mark(sources, "sleeper", { count: sleeper.rows.length }); }
   catch (error) {
     console.error("Sleeper load failed: " + error.message);
-    writeFileSync(outputPath, JSON.stringify({ schema_version: 1, status: "unavailable", generated_at: generatedAt, season, week: null, source_catalog_count: CATALOG.length, odds_books: 0, sources, players: {}, insights: [], notes: ["Sleeper was unavailable; the browser will retry the direct feed.", "Provider credentials are never written to this file."] }, null, 2) + "\n", "utf8");
+    writeStable({ schema_version: 1, status: "unavailable", generated_at: generatedAt, season, week: null, source_catalog_count: CATALOG.length, odds_books: 0, sources, players: {}, insights: [], notes: ["Sleeper was unavailable; the browser will retry the direct feed.", "Provider credentials are never written to this file."] });
     return;
   }
   const players = sleeper.rows;
@@ -303,7 +320,7 @@ async function main() {
     source_catalog_count: CATALOG.length, odds_books: oddsBooks, sources, players: Object.fromEntries(rows.map((row) => [row.player_id, row])), insights: insights.slice(0, 12),
     notes: ["Projection consensus is the median of enabled source values.", "Projection and odds ranges are max minus min; missing sources are excluded, not treated as zero.", fpKey || sgoKey || oddsKey ? "Provider keys were available; inspect source status and count for coverage." : "Add provider keys to GitHub Actions secrets to expand beyond the direct Sleeper/ESPN fallback.", "This file contains no provider credentials."]
   };
-  writeFileSync(outputPath, JSON.stringify(output, null, 2) + "\n", "utf8");
+  writeStable(output);
   console.log("Consensus sync saved " + rows.length + " players, " + liveSources + "/" + CATALOG.length + " live sources, and " + oddsBooks + " odds books.");
 }
 
