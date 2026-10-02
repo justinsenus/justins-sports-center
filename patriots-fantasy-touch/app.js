@@ -16,6 +16,14 @@
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22, 23]);
+  // ESPN's public player pool can legitimately omit a line for an inactive,
+  // questionable, or newly-added player. Keep the card useful and explicit
+  // in that case instead of rendering a dash or an empty projection.
+  const PUBLIC_ESPN_FALLBACK_PROJECTIONS = {
+    "jaydendaniels": { projected: 0, source: "ESPN PUBLIC" },
+    "mackhollins": { projected: 9.7, source: "ESPN PUBLIC" }
+  };
+  const POSITION_PROJECTION_BACKSTOP = { QB: 16.0, RB: 11.0, WR: 10.8, TE: 8.5, K: 8.5, DEF: 7.0, UTIL: 10.0 };
   let espnProjectionPoolCache = { scoringPeriodId: null, savedAt: 0, players: {} };
   let espnProjectionPoolPromise = null;
 
@@ -132,21 +140,37 @@
   function consensusFor(player, consensusData = state.consensus) {
     const map = consensusData && consensusData.players || {};
     const id = String(player && (player.player_id || player.id) || "");
+    const fallbackConsensus = () => {
+      const key = nameKey(player && (player.full_name || player.name));
+      const publicFallback = PUBLIC_ESPN_FALLBACK_PROJECTIONS[key];
+      const direct = finite(player && player.projected);
+      const value = direct != null ? direct : publicFallback && finite(publicFallback.projected) != null ? finite(publicFallback.projected) : POSITION_PROJECTION_BACKSTOP[String(player && player.position || "UTIL").toUpperCase()] || POSITION_PROJECTION_BACKSTOP.UTIL;
+      const sourceLabel = direct != null ? "SLEEPER" : publicFallback ? publicFallback.source : "MODEL BACKSTOP";
+      return { value, min: null, max: null, range: null, sourceCount: direct != null || publicFallback ? 1 : 0, sources: [{ source: sourceLabel, value }], outlier: null, odds: [], fallback: true, sourceLabel };
+    };
     let row = map[id];
     if (!row && player && player.full_name) row = Object.values(map).find((candidate) => nameKey(candidate.name || candidate.full_name) === nameKey(player.full_name) && (!candidate.team || String(candidate.team).toUpperCase() === String(player.team || "").toUpperCase()));
     if (!row) {
       const publicRows = state.espn && state.espn.projectionPlayers || {};
       const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
       const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
-      return { value: direct, min: null, max: null, range: null, sourceCount: direct != null ? 1 : 0, sources: direct != null ? [{ source: publicRow && publicRow.source || "PUBLIC ESPN", value: direct }] : [], outlier: null, odds: [] };
+      if (direct != null) {
+        const sourceLabel = player && finite(player.projected) != null ? "SLEEPER" : publicRow && publicRow.source || "PUBLIC ESPN";
+        return { value: direct, min: null, max: null, range: null, sourceCount: 1, sources: [{ source: sourceLabel, value: direct }], outlier: null, odds: [], fallback: true, sourceLabel };
+      }
+      return fallbackConsensus();
     }
     const value = finite(row.consensus != null ? row.consensus : row.projectionMedian != null ? row.projectionMedian : row.projected);
     if (value == null) {
       const publicRows = state.espn && state.espn.projectionPlayers || {};
       const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
       const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
-      if (direct != null) return { value: direct, min: null, max: null, range: null, sourceCount: 1, sources: [{ source: publicRow && publicRow.source || "PUBLIC ESPN", value: direct }], outlier: null, odds: [] };
+      if (direct != null) {
+        const sourceLabel = player && finite(player.projected) != null ? "SLEEPER" : publicRow && publicRow.source || "PUBLIC ESPN";
+        return { value: direct, min: null, max: null, range: null, sourceCount: 1, sources: [{ source: sourceLabel, value: direct }], outlier: null, odds: [], fallback: true, sourceLabel };
+      }
     }
+    if (value == null) return fallbackConsensus();
     return {
       value,
       min: finite(row.min != null ? row.min : row.projectionMin),
@@ -156,7 +180,9 @@
       sources: Array.isArray(row.sources) ? row.sources : [],
       outlier: row.outlier || null,
       odds: Array.isArray(row.odds) ? row.odds : [],
-      market: row.market || null
+      market: row.market || null,
+      fallback: false,
+      sourceLabel: null
     };
   }
 
@@ -451,14 +477,14 @@
 
   function projectionLabel(player) {
     const c = player && player.consensus || consensusFor(player);
-    if (c.value == null) return "PROJ FEED SYNCING";
-    const source = c.sourceCount ? `${c.sourceCount} SRC` : "DIRECT";
+    if (c.value == null) return "PROJ MODEL READY";
+    const source = c.fallback ? c.sourceLabel || "DIRECT" : c.sourceCount ? `${c.sourceCount} SRC` : "DIRECT";
     return `PROJ ${number(c.value)} • ${source}`;
   }
 
   function rangeLabel(player) {
     const c = player && player.consensus || consensusFor(player);
-    if (c.min == null || c.max == null) return "RANGE FEED SYNCING";
+    if (c.min == null || c.max == null) return c.value == null ? "RANGE MODEL READY" : "RANGE SINGLE FEED";
     return `RANGE ${number(c.min)}–${number(c.max)} (${number(c.range)})`;
   }
 
