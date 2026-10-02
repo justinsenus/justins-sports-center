@@ -70,6 +70,19 @@ async function safeJSON(url, options) {
   try { return { ok: true, data: await json(url, options) }; }
   catch (error) { return { ok: false, error: error && error.message || "provider request failed" }; }
 }
+async function text(url, options) {
+  const response = await fetch(url, {
+    ...(options || {}),
+    headers: { Accept: "text/html", "User-Agent": "Mozilla/5.0 justins-sports-center consensus sync", ...((options && options.headers) || {}) },
+    signal: (options && options.signal) || AbortSignal.timeout(20000)
+  });
+  if (!response.ok) throw new Error("HTTP " + response.status);
+  return response.text();
+}
+async function safeText(url, options) {
+  try { return { ok: true, data: await text(url, options) }; }
+  catch (error) { return { ok: false, error: error && error.message || "provider request failed" }; }
+}
 
 const sourceRows = () => CATALOG.map(([id, name, type]) => ({ id, name, type, status: "waiting", updated_at: null, count: 0 }));
 function mark(sources, id, patch) {
@@ -101,6 +114,15 @@ function findPlayer(players, name, team) {
   const wantedTeam = nameKey(team);
   const exact = players.find((player) => nameKey(player.name) === wanted && (!wantedTeam || !player.team || nameKey(player.team) === wantedTeam));
   if (exact) return exact;
+  const suffixes = new Set(["jr", "sr", "ii", "iii", "iv", "v"]);
+  const parts = (value) => clean(value).toLowerCase().split(/\s+/).map((part) => part.replace(/[^a-z0-9]/g, "")).filter((part) => part && !suffixes.has(part));
+  const wantedParts = parts(name);
+  const fuzzy = players.find((player) => {
+    const candidateParts = parts(player.name);
+    const sameName = wantedParts.length > 1 && candidateParts.length > 1 && wantedParts[0] === candidateParts[0] && wantedParts[wantedParts.length - 1] === candidateParts[candidateParts.length - 1];
+    return sameName && (!wantedTeam || !player.team || nameKey(player.team) === wantedTeam);
+  });
+  if (fuzzy) return fuzzy;
   return players.find((player) => nameKey(player.name) === wanted) || null;
 }
 function addProjection(player, source, value, label) {
@@ -133,6 +155,33 @@ function addFantasyPros(players, payload) {
     const target = findPlayer(players, rowName(raw), rowTeam(raw));
     const value = projectionValue(row);
     if (target && value != null) { addProjection(target, "fantasypros", value, "FantasyPros"); count += 1; }
+  }
+  return count;
+}
+function decodeHTML(value) {
+  return clean(String(value || "").replace(/&#39;|&#x27;/gi, "'").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"').replace(/&nbsp;/gi, " "));
+}
+function addFantasyProsHTML(players, html) {
+  let count = 0;
+  const rows = String(html || "").match(/<tr[^>]*class=["'][^"']*mpb-player-[^"']*["'][^>]*>[\s\S]*?<\/tr>/gi) || [];
+  for (const row of rows) {
+    const nameMatch = row.match(/fp-player-name="([^"]+)"/i) || row.match(/fp-player-name='([^']+)'/i);
+    if (!nameMatch) continue;
+    const teamMatch = row.match(/class=["'][^"']*player-label[^"']*["'][^>]*>[\s\S]*?<\/a>\s*([A-Z]{2,3})\s*<\/td>/i);
+    const sortValues = [...row.matchAll(/data-sort-value=["']([-+0-9.]+)["']/gi)].map((match) => num(match[1])).filter((value) => value != null);
+    const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((match) => clean(match[1].replace(/<[^>]+>/g, " "))).filter(Boolean);
+    const value = sortValues.length ? sortValues[sortValues.length - 1] : num(cells[cells.length - 1]);
+    const target = findPlayer(players, decodeHTML(nameMatch[1]), teamMatch && teamMatch[1]);
+    if (target && value != null) { addProjection(target, "fantasypros", value, "FantasyPros public"); count += 1; }
+  }
+  return count;
+}
+async function addFantasyProsPublic(players, week) {
+  let count = 0;
+  const pages = ["qb", "rb", "wr", "te", "k", "dst"];
+  for (const page of pages) {
+    const result = await safeText("https://www.fantasypros.com/nfl/projections/" + page + ".php?week=" + encodeURIComponent(week));
+    if (result.ok) count += addFantasyProsHTML(players, result.data);
   }
   return count;
 }
@@ -291,6 +340,14 @@ async function main() {
     }
     if (count) mark(sources, "fantasypros", { count });
     else if (!sources.find((source) => source.id === "fantasypros").error) markError(sources, "fantasypros", "No roster matches returned");
+    if (!count) {
+      const publicCount = await addFantasyProsPublic(players, sleeper.week);
+      if (publicCount) mark(sources, "fantasypros", { count: publicCount, access: "public fallback" });
+    }
+  } else {
+    const publicCount = await addFantasyProsPublic(players, sleeper.week);
+    if (publicCount) mark(sources, "fantasypros", { count: publicCount, access: "public fallback" });
+    else markError(sources, "fantasypros", "Public projection table unavailable; add FANTASYPROS_API_KEY for JSON access");
   }
   if (sgoKey) {
     const result = await safeJSON("https://api.sportsgameodds.com/v2/events?apiKey=" + encodeURIComponent(sgoKey) + "&leagueID=NFL&oddsAvailable=true&includeAltLines=true&limit=100", { headers: { "x-api-key": sgoKey } });

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-02T04:11:35.752Z",
+  "generated_at": "2026-10-02T04:32:47.615Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -11,9 +11,10 @@
       "id": "fantasypros",
       "name": "FantasyPros",
       "type": "projection",
-      "status": "waiting",
-      "updated_at": null,
-      "count": 0
+      "status": "live",
+      "updated_at": "2026-10-02T04:32:47.615Z",
+      "count": 15,
+      "access": "public fallback"
     },
     {
       "id": "rotowire",
@@ -52,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T04:12:09.560Z",
+      "updated_at": "2026-10-02T04:32:47.615Z",
       "count": 34
     },
     {
@@ -269,12 +270,18 @@
       "name": "Ka'imi Fairbairn",
       "team": "HOU",
       "position": "K",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 8.7,
+      "min": 8.7,
+      "max": 8.7,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 8.7
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -344,12 +351,18 @@
       "name": "Juwan Johnson",
       "team": "NO",
       "position": "TE",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 8.9,
+      "min": 8.9,
+      "max": 8.9,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 8.9
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -359,12 +372,18 @@
       "name": "Trevor Lawrence",
       "team": "JAX",
       "position": "QB",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 19.5,
+      "min": 19.5,
+      "max": 19.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 19.5
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -374,12 +393,18 @@
       "name": "Ja'Marr Chase",
       "team": "CIN",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 16.3,
+      "min": 16.3,
+      "max": 16.3,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 16.3
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -389,12 +414,18 @@
       "name": "Nico Collins",
       "team": "HOU",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 13.5,
+      "min": 13.5,
+      "max": 13.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 13.5
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -434,12 +465,18 @@
       "name": "Trey McBride",
       "team": "ARI",
       "position": "TE",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 13.7,
+      "min": 13.7,
+      "max": 13.7,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 13.7
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -464,12 +501,18 @@
       "name": "Chris Olave",
       "team": "NO",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 15.5,
+      "min": 15.5,
+      "max": 15.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 15.5
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -479,12 +522,18 @@
       "name": "Garrett Wilson",
       "team": "NYJ",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 13.5,
+      "min": 13.5,
+      "max": 13.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 13.5
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -494,12 +543,18 @@
       "name": "Kenneth Walker",
       "team": "KC",
       "position": "RB",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 17,
+      "min": 17,
+      "max": 17,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 17
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -539,12 +594,18 @@
       "name": "Jaxon Smith-Njigba",
       "team": "SEA",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 18.8,
+      "min": 18.8,
+      "max": 18.8,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 18.8
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -614,12 +675,18 @@
       "name": "Drake Maye",
       "team": "NE",
       "position": "QB",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 18.1,
+      "min": 18.1,
+      "max": 18.1,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 18.1
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -659,12 +726,18 @@
       "name": "Harold Fannin",
       "team": "CLE",
       "position": "TE",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 8.7,
+      "min": 8.7,
+      "max": 8.7,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 8.7
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -704,12 +777,18 @@
       "name": "Chicago Bears",
       "team": "CHI",
       "position": "DEF",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 6.5,
+      "min": 6.5,
+      "max": 6.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 6.5
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -719,12 +798,18 @@
       "name": "Seattle Seahawks",
       "team": "SEA",
       "position": "DEF",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 7.7,
+      "min": 7.7,
+      "max": 7.7,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 7.7
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -734,12 +819,18 @@
       "name": "Buffalo Bills",
       "team": "BUF",
       "position": "DEF",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 6.6,
+      "min": 6.6,
+      "max": 6.6,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 6.6
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
