@@ -118,6 +118,80 @@
     return state.scoreboard.find((event) => eventCompetitors(event).some((c) => teamCode(c.team && c.team.abbreviation) === team)) || null;
   }
 
+  // ESPN's public NFL scoreboard includes the currently published game line
+  // (provider, spread, moneyline, and total) for upcoming games. Keep this
+  // separate from player-prop odds: a game line is still useful context for a
+  // fantasy player's matchup, but it should never be presented as a prop.
+  function eventOdds(event) {
+    const competition = event && event.competitions && event.competitions[0];
+    const odd = competition && competition.odds && competition.odds[0];
+    if (!odd) return null;
+    const competitors = eventCompetitors(event);
+    const away = competitors.find((item) => item.homeAway === "away") || competitors[0] || {};
+    const home = competitors.find((item) => item.homeAway === "home") || competitors[1] || {};
+    const moneyline = odd.moneyline || {};
+    const pointSpread = odd.pointSpread || {};
+    const total = odd.total || {};
+    const closeOdds = (entry) => entry && entry.close && entry.close.odds || entry && entry.open && entry.open.odds || "";
+    const closeLine = (entry) => entry && entry.close && entry.close.line || entry && entry.open && entry.open.line || "";
+    const provider = odd.provider && (odd.provider.displayName || odd.provider.name) || "PUBLIC SPORTSBOOK";
+    return {
+      event,
+      provider,
+      away,
+      home,
+      details: odd.details || "GAME LINE",
+      overUnder: finite(odd.overUnder),
+      spread: finite(odd.spread),
+      awayMoneyline: closeOdds(moneyline.away),
+      homeMoneyline: closeOdds(moneyline.home),
+      awaySpread: closeLine(pointSpread.away),
+      homeSpread: closeLine(pointSpread.home),
+      awaySpreadOdds: closeOdds(pointSpread.away),
+      homeSpreadOdds: closeOdds(pointSpread.home),
+      totalOver: closeLine(total.over),
+      totalUnder: closeLine(total.under)
+    };
+  }
+
+  function gameOddsFor(playerOrEvent) {
+    const event = playerOrEvent && playerOrEvent.competitions
+      ? playerOrEvent
+      : playerOrEvent && (playerOrEvent.event || findPlayerEvent(playerOrEvent));
+    const market = eventOdds(event);
+    if (!market) return null;
+    const requestedTeam = teamCode(playerOrEvent && playerOrEvent.team || "");
+    const competitors = eventCompetitors(event);
+    const own = competitors.find((item) => teamCode(item.team && item.team.abbreviation) === requestedTeam) || null;
+    const opponent = own
+      ? competitors.find((item) => item !== own)
+      : null;
+    const away = own && own.homeAway === "away";
+    const teamSpread = away ? market.awaySpread : market.homeSpread;
+    const teamSpreadOdds = away ? market.awaySpreadOdds : market.homeSpreadOdds;
+    const teamMoneyline = away ? market.awayMoneyline : market.homeMoneyline;
+    const priceParts = [
+      teamSpread && `SP ${teamSpread}${teamSpreadOdds ? ` ${teamSpreadOdds}` : ""}`,
+      teamMoneyline && `ML ${teamMoneyline}`,
+      market.overUnder != null && `O/U ${number(market.overUnder)}`
+    ].filter(Boolean);
+    return {
+      ...market,
+      team: own && own.team && own.team.abbreviation || requestedTeam || "TEAM",
+      opponent: opponent && opponent.team && opponent.team.abbreviation || "TBD",
+      line: market.details,
+      price: priceParts.join(" • ")
+    };
+  }
+
+  function scoreboardOdds() {
+    return (state.scoreboard || []).map(eventOdds).filter(Boolean).sort((a, b) => {
+      const aTime = new Date(a.event && a.event.date || 0).getTime();
+      const bTime = new Date(b.event && b.event.date || 0).getTime();
+      return aTime - bTime;
+    });
+  }
+
   function playerImage(player) {
     const id = player && (player.player_id || player.playerId || player.id);
     const fallback = player && (player.headshot || player.imageUrl || player.image || "");
@@ -569,7 +643,10 @@
       ...(state.espn && state.espn.ready ? [{ id: "espn", name: "ESPN public", status: "live" }] : [])
     ];
     const all = [...liveSources, ...direct].filter((source, index, list) => list.findIndex((candidate) => candidate.id === source.id) === index);
-    return { catalog: catalog.length || 30, live: all.length, sources: all, oddsBooks: state.consensus && state.consensus.odds_books || 0 };
+    const boardOdds = scoreboardOdds();
+    const oddsProviders = [...new Set(boardOdds.map((item) => item.provider).filter(Boolean))];
+    const staticBooks = finite(state.consensus && state.consensus.odds_books) || 0;
+    return { catalog: catalog.length || 30, live: all.length, sources: all, oddsBooks: Math.max(staticBooks, oddsProviders.length), oddsProviders, boardOdds };
   }
 
   function projectionLabel(player) {
@@ -588,7 +665,9 @@
   function oddsLabel(player) {
     const c = player && player.consensus || consensusFor(player);
     if (c.market && c.market.min != null && c.market.max != null) return `ODDS RANGE ${number(c.market.min)}–${number(c.market.max)} (${number(c.market.range, 1, "0")})`;
-    return c.odds && c.odds.length ? `ODDS ${c.odds.length} LINES` : "ODDS NOT CONNECTED";
+    if (c.odds && c.odds.length) return `ODDS ${c.odds.length} LINES`;
+    const gameOdds = gameOddsFor(player);
+    return gameOdds ? `${gameOdds.provider} • ${gameOdds.line}` : "GAME ODDS WAITING";
   }
 
   function scoreMoveFor(player) {
@@ -672,12 +751,25 @@
     const status = consensus.status === "ready" || consensus.status === "live" ? "CONSENSUS LIVE" : live > 1 ? "PARTIAL CONSENSUS" : "DIRECT FEED ONLY";
     const sourceNames = stats.sources.slice(0, 6).map((source) => `<span class="source-chip live">${esc(source.name || source.id)}</span>`).join("");
     const unavailable = Math.max(0, catalog - live);
-    return `<section class="source-panel" data-action="refresh" role="button" tabindex="0" aria-label="Refresh projection feeds"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live} LIVE • ${unavailable} NOT ENABLED</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${stats.oddsBooks ? `${stats.oddsBooks} BOOKS` : "ODDS NOT CONNECTED"}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Tap this panel to refresh the connected feeds. Actual points go live when games start; projections remain visible from ESPN or Sleeper.</p></section>`;
+    const oddsStatus = stats.oddsBooks ? `${stats.oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
+    const oddsProviders = stats.oddsProviders && stats.oddsProviders.length ? ` • ${stats.oddsProviders.join(" + ")}` : "";
+    return `<section class="source-panel" data-action="refresh" role="button" tabindex="0" aria-label="Refresh projection feeds"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live} LIVE • ${unavailable} NOT ENABLED</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${esc(oddsStatus)}${esc(oddsProviders)}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Tap this panel to refresh. Actual points and projections refresh every 5 seconds; public game lines are supplied by the ESPN scoreboard's sportsbook feed.</p></section>`;
   }
 
   function insightMarkup() {
     const insights = state.consensus && state.consensus.insights || [];
-    if (!insights.length) return `<div class="empty-card compact"><strong>DIFFERENCE FEED NOT CONNECTED</strong><span>Enable an odds or second projection provider to compare lines.</span></div>`;
+    if (!insights.length) {
+      const boardOdds = scoreboardOdds().filter((item) => item.away && item.home).slice(0, 5);
+      if (!boardOdds.length) return `<div class="empty-card compact"><strong>LIVE MARKET LINES WAITING</strong><span>Public game lines appear as sportsbooks publish them.</span></div>`;
+      return `<div class="insight-list">${boardOdds.map((item, index) => {
+        const away = item.away.team && item.away.team.abbreviation || "TEAM";
+        const home = item.home.team && item.home.team.abbreviation || "TEAM";
+        const when = item.event && item.event.date ? new Date(item.event.date).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" }) : "TIME PENDING";
+        const market = item.details || "GAME LINE";
+        const total = item.overUnder == null ? "TOTAL —" : `O/U ${number(item.overUnder)}`;
+        return `<div class="insight-row market-odds-row"><span class="insight-rank">${index + 1}</span><span><strong>${esc(away)} @ ${esc(home)}</strong><small>${esc(item.provider)} • ${esc(when)}</small></span><b>${esc(market)}<small>${esc(total)}</small></b></div>`;
+      }).join("")}</div>`;
+    }
     return `<div class="insight-list">${insights.slice(0, 5).map((item) => `<button class="insight-row" type="button" data-player-name="${esc(item.name)}"><span class="insight-rank">${esc(item.rank || "#")}</span><span><strong>${esc(item.name)}</strong><small>${esc(item.market || "FANTASY PROJECTION")} • ${esc(item.source || "OUTLIER")}</small></span><b>${item.delta == null ? "SYNC" : `+${number(item.delta)}`}<small>${item.range == null ? "RANGE FEED" : `RANGE ${number(item.range)}`}</small></b></button>`).join("")}</div>`;
   }
 
@@ -700,17 +792,29 @@
   }
 
   function renderMomentumChart(league) {
-    const history = state.scoreHistory[state.league] && state.scoreHistory[state.league].length ? state.scoreHistory[state.league] : [{ own: leagueActual(league, "own"), opponent: leagueActual(league, "opponent") }];
+    const rawHistory = state.scoreHistory[state.league] && state.scoreHistory[state.league].length ? state.scoreHistory[state.league] : [{ own: leagueActual(league, "own"), opponent: leagueActual(league, "opponent") }];
+    const latest = rawHistory[rawHistory.length - 1] || { own: 0, opponent: 0 };
+    // A first load often has one snapshot. Show the start-to-current move so
+    // the chart still reads like a ticker; subsequent refreshes use only real
+    // score snapshots from the connected league feed.
+    const history = rawHistory.length === 1
+      ? (latest.own || latest.opponent ? [{ own: 0, opponent: 0 }, latest] : [latest, latest])
+      : rawHistory;
     const max = Math.max(1, ...history.map((point) => Math.max(point.own || 0, point.opponent || 0)));
     const pointsFor = (side) => history.map((point, index) => {
-      const x = history.length === 1 ? 160 : 12 + index / (history.length - 1) * 296;
+      const x = 12 + index / Math.max(1, history.length - 1) * 296;
       const value = side === "own" ? point.own || 0 : point.opponent || 0;
       const y = 130 - value / max * 104;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(" ");
     const ownTotal = leagueActual(league, "own");
     const opponentTotal = leagueActual(league, "opponent");
-    return `<section class="arcade-panel momentum-panel"><div class="arcade-panel-head"><div><b>⚡ SCORING MOMENTUM</b><small>REAL SCORE HISTORY • 5s REFRESH</small></div><span class="arcade-live-indicator"><i></i>LIVE</span></div><div class="momentum-scoreline"><strong class="own-score">${number(ownTotal)}</strong><span>VS</span><strong class="opp-score">${number(opponentTotal)}</strong></div><svg class="momentum-chart" viewBox="0 0 320 150" role="img" aria-label="Live fantasy scoring momentum"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><polyline class="momentum-line own" points="${pointsFor("own")}" /><polyline class="momentum-line opponent" points="${pointsFor("opponent")}" /><circle class="momentum-dot own" cx="${history.length === 1 ? 160 : 12 + (history.length - 1) / (history.length - 1) * 296}" cy="${(130 - ownTotal / max * 104).toFixed(1)}" r="5" /><circle class="momentum-dot opponent" cx="${history.length === 1 ? 160 : 308}" cy="${(130 - opponentTotal / max * 104).toFixed(1)}" r="5" /></svg><div class="momentum-labels"><span>START</span><span>LIVE SNAPSHOT ${formatAge(state.refreshedAt)}</span></div></section>`;
+    const leadDelta = Math.abs(ownTotal - opponentTotal);
+    const leadText = leadDelta < 0.05 ? "TIED" : `${ownTotal > opponentTotal ? "YOUR TEAM" : "OPPONENT"} LEADS +${number(leadDelta)}`;
+    const currentOwnY = (130 - ownTotal / max * 104).toFixed(1);
+    const currentOpponentY = (130 - opponentTotal / max * 104).toFixed(1);
+    const leadClass = leadDelta < 0.05 ? "tie" : ownTotal > opponentTotal ? "own" : "opponent";
+    return `<section class="arcade-panel momentum-panel"><div class="arcade-panel-head"><div><b>⚡ SCORING MOMENTUM</b><small>STOCK-STYLE SCORE TRAJECTORY • 5s REFRESH</small></div><span class="arcade-live-indicator"><i></i>LIVE</span></div><div class="momentum-scoreline"><strong class="own-score">${number(ownTotal)}</strong><span>VS</span><strong class="opp-score">${number(opponentTotal)}</strong></div><div class="momentum-lead"><span class="momentum-lead-dot ${leadClass}"></span><b>${esc(leadText)}</b><small>LIVE SNAPSHOT • LINES UPDATE WHEN POINTS MOVE</small></div><svg class="momentum-chart stock-chart" viewBox="0 0 320 150" role="img" aria-label="Live fantasy scoring momentum"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><polyline class="momentum-line own" points="${pointsFor("own")}" /><polyline class="momentum-line opponent" points="${pointsFor("opponent")}" /><circle class="momentum-dot own" cx="308" cy="${currentOwnY}" r="5" /><circle class="momentum-dot opponent" cx="308" cy="${currentOpponentY}" r="5" /></svg><div class="momentum-labels"><span>START</span><span>LIVE SNAPSHOT ${formatAge(state.refreshedAt)}</span></div></section>`;
   }
 
   function renderScoringFeed() {
@@ -746,7 +850,9 @@
     const opponentPct = 100 - ownPct;
     const ownDelta = teamDelta(league, "own");
     const opponentDelta = teamDelta(league, "opponent");
-    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>PROJ ${ownHasProj ? number(ownProjection) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% WIN PROBABILITY • LIVE CONSENSUS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(sourceStats().live)} LIVE FEEDS</span><span>${state.consensus && state.consensus.odds_books ? `${esc(state.consensus.odds_books)} ODDS BOOKS` : "ODDS NOT CONNECTED"}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
+    const stats = sourceStats();
+    const oddsMeta = stats.oddsBooks ? `${stats.oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
+    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>PROJ ${ownHasProj ? number(ownProjection) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% WIN PROBABILITY • LIVE CONSENSUS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(stats.live)} LIVE FEEDS</span><span>${esc(oddsMeta)}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
   }
 
   function renderMonitorTabs() {
@@ -781,13 +887,13 @@
     const starters = (league.own || []).filter((player) => player.starter !== false).slice(0, 10);
     const opponentStarters = (league.opponent || []).filter((player) => player.starter !== false).slice(0, 10);
     const bench = (league.own || []).filter((player) => player.starter === false).slice(0, 6);
-    return `<div class="overview-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>MY STARTERS</b><small>${esc(league.ownName)} • LIVE TOTALS + PROJECTIONS</small></span><button class="panel-action" data-view="players" type="button">ALL PLAYERS ›</button></div><div class="player-stack">${starters.length ? starters.map((player) => playerCard(player, "own")).join("") : `<div class="empty-card"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the fantasy provider to return starters.</span></div>`}</div><div class="bench-strip"><span>BENCH • ${bench.length} SHOWN</span>${bench.slice(0, 3).map(compactPlayerRow).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>OPPONENT STARTERS</b><small>${esc(league.opponentName)} • MATCHUP LIVE FEED</small></span><button class="panel-action" data-view="matchups" type="button">MATCHUP ›</button></div><div class="player-stack">${opponentStarters.length ? opponentStarters.map((player) => playerCard(player, "opponent")).join("") : `<div class="empty-card"><strong>OPPONENT FEED SYNCING</strong><span>Waiting for the matchup side to respond.</span></div>`}</div></section><aside class="overview-side"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAMES</b><small>TOUCH A GAME FOR DETAILS</small></span><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${liveGamesMarkup()}</section><section class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>BIGGEST DIFFERENCES</b><small>PROJECTION + ODDS RANGE</small></span><button class="panel-action" data-view="players" type="button">OPEN ›</button></div>${insightMarkup()}</section>${sourceCoverageMarkup()}</aside></div>`;
+    return `<div class="overview-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>MY STARTERS</b><small>${esc(league.ownName)} • LIVE TOTALS + PROJECTIONS</small></span><button class="panel-action" data-view="players" type="button">ALL PLAYERS ›</button></div><div class="player-stack">${starters.length ? starters.map((player) => playerCard(player, "own")).join("") : `<div class="empty-card"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the fantasy provider to return starters.</span></div>`}</div><div class="bench-strip"><span>BENCH • ${bench.length} SHOWN</span>${bench.slice(0, 3).map(compactPlayerRow).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>OPPONENT STARTERS</b><small>${esc(league.opponentName)} • MATCHUP LIVE FEED</small></span><button class="panel-action" data-view="matchups" type="button">MATCHUP ›</button></div><div class="player-stack">${opponentStarters.length ? opponentStarters.map((player) => playerCard(player, "opponent")).join("") : `<div class="empty-card"><strong>OPPONENT FEED SYNCING</strong><span>Waiting for the matchup side to respond.</span></div>`}</div></section><aside class="overview-side"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAMES</b><small>TOUCH A GAME FOR DETAILS</small></span><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${liveGamesMarkup()}</section><section class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>LIVE MARKET ODDS</b><small>PUBLIC GAME LINES</small></span><button class="panel-action" data-view="players" type="button">OPEN ›</button></div>${insightMarkup()}</section>${sourceCoverageMarkup()}</aside></div>`;
   }
 
   function renderMatchups(league) {
     const own = (league.own || []).filter((player) => player.starter !== false);
     const opponent = (league.opponent || []).filter((player) => player.starter !== false);
-    return `<div class="matchup-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>${esc(league.ownName)}</b><small>STARTERS • ${own.length} SLOTS</small></span><span class="panel-total">${number(leagueActual(league, "own"))}</span></div><div class="player-stack">${own.map((player) => playerCard(player, "own")).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>${esc(league.opponentName)}</b><small>OPPONENT • ${opponent.length} SLOTS</small></span><span class="panel-total">${number(leagueActual(league, "opponent"))}</span></div><div class="player-stack">${opponent.map((player) => playerCard(player, "opponent")).join("")}</div></section><aside class="workspace-panel matchup-insights"><div class="panel-heading amber-heading"><span><b>MARKET DIFFERENCES</b><small>MAX − MIN BY PLAYER</small></span></div>${insightMarkup()}${sourceCoverageMarkup()}</aside></div>`;
+    return `<div class="matchup-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>${esc(league.ownName)}</b><small>STARTERS • ${own.length} SLOTS</small></span><span class="panel-total">${number(leagueActual(league, "own"))}</span></div><div class="player-stack">${own.map((player) => playerCard(player, "own")).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>${esc(league.opponentName)}</b><small>OPPONENT • ${opponent.length} SLOTS</small></span><span class="panel-total">${number(leagueActual(league, "opponent"))}</span></div><div class="player-stack">${opponent.map((player) => playerCard(player, "opponent")).join("")}</div></section><aside class="workspace-panel matchup-insights"><div class="panel-heading amber-heading"><span><b>LIVE MARKET ODDS</b><small>PUBLIC GAME LINES</small></span></div>${insightMarkup()}${sourceCoverageMarkup()}</aside></div>`;
   }
 
   function renderPlayers(league) {
@@ -824,7 +930,12 @@
       ? `<div class="player-news-card"><span class="news-dot"></span><div><strong>${esc(playerNews)}</strong><small>${esc(playerStatus)} • PROVIDER UPDATE</small></div></div>`
       : `<div class="player-news-card"><span class="news-dot muted"></span><div><strong>NO PLAYER-SPECIFIC NEWS RETURNED</strong><small>${esc(playerStatus)} • PRACTICE / NEWS FEED WILL APPEAR WHEN PROVIDERS REPORT AN UPDATE</small></div></div>`;
     const sourceRows = c.sources && c.sources.length ? c.sources.slice(0, 8).map((source) => `<div class="source-value"><span>${esc(source.source || source.name || "SOURCE")}</span><b>${number(source.value, 1, "MODEL")}</b></div>`).join("") : `<div class="empty-card compact"><strong>PUBLIC PROJECTION FEED</strong><span>ESPN or Sleeper projection is being used until another source is enabled.</span></div>`;
-    const oddsRows = c.odds && c.odds.length ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "NOT SET" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("") : `<div class="empty-card compact"><strong>ODDS NOT CONNECTED</strong><span>No sportsbook provider is enabled, so no market range is shown.</span></div>`;
+    const gameOdds = gameOddsFor(player);
+    const oddsRows = c.odds && c.odds.length
+      ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "NOT SET" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("")
+      : gameOdds
+        ? `<div class="source-value"><span>${esc(gameOdds.provider)} • GAME LINE</span><b>${esc(gameOdds.line)} <small>${esc(gameOdds.price || "PUBLIC LINE")}</small></b></div>`
+        : `<div class="empty-card compact"><strong>GAME ODDS WAITING</strong><span>The public scoreboard has not published a line for this matchup yet.</span></div>`;
     drawer.classList.add("open");
     drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${statMarkup(player.pass_yd ?? player.passing_yards)}</b><small>PASS YDS</small></div><div><b>${statMarkup(player.pass_td ?? player.passing_tds)}</b><small>PASS TD</small></div><div><b>${statMarkup(player.rush_yd ?? player.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${statMarkup(player.rec ?? player.receptions)}</b><small>REC</small></div><div><b>${statMarkup(player.rec_yd ?? player.receiving_yards)}</b><small>REC YDS</small></div><div><b>${statMarkup(player.tgt ?? player.targets)}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
     $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
@@ -857,7 +968,7 @@
     $("#clock").textContent = formatClock(new Date());
     $("#sourceStatus").textContent = `${sourceStats().live} LIVE FEEDS`;
     const oddsStatus = $("#oddsStatus");
-    if (oddsStatus) oddsStatus.textContent = sourceStats().oddsBooks ? `${sourceStats().oddsBooks} ODDS BOOKS` : "ODDS NOT CONNECTED";
+    if (oddsStatus) oddsStatus.textContent = sourceStats().oddsBooks ? `${sourceStats().oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
   }
 
   function animateLiveScores() {
