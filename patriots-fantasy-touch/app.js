@@ -460,7 +460,21 @@
   async function loadScoreboard() {
     const date = new Date();
     const stamp = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
-    try { return await getJSON(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${stamp}`); } catch (_) { return { events: [] }; }
+    const week = Number(state.week) || 1;
+    const weekUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&seasontype=2&week=${week}`;
+    const todayUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${stamp}`;
+    const [weekResult, todayResult] = await Promise.all([
+      getJSON(weekUrl).catch(() => ({ events: [] })),
+      getJSON(todayUrl).catch(() => ({ events: [] }))
+    ]);
+    const seen = new Set();
+    const events = [...(weekResult.events || []), ...(todayResult.events || [])].filter((event) => {
+      const key = String(event && (event.id || event.uid || event.date) || "");
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    return { events };
   }
 
   function mergeESPNTeam(team, side) {
@@ -598,6 +612,24 @@
     return other && other.team && other.team.abbreviation || "UPCOMING";
   }
 
+  function playerGameLabel(player) {
+    const event = player && (player.event || findPlayerEvent(player));
+    const team = String(player && (player.team || player.proTeam) || "").toUpperCase();
+    if (!event) return team ? `${team} • GAME TIME PENDING` : "GAME TIME PENDING • OPPONENT TBD";
+    const competitors = eventCompetitors(event);
+    const own = competitors.find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() === team);
+    const other = competitors.find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() !== team);
+    const opponent = other && other.team && other.team.abbreviation || "TBD";
+    const at = own && own.homeAway === "away" ? "@" : "vs";
+    const when = event.date ? new Date(event.date) : null;
+    const time = when && !Number.isNaN(when.getTime())
+      ? when.toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" })
+      : "TIME PENDING";
+    const status = eventState(event);
+    const prefix = status.final ? "FINAL" : status.live ? "LIVE" : time;
+    return `${prefix} ${at} ${opponent}`;
+  }
+
   function playerCard(player, side = "own") {
     const actual = actualForPlayer(player);
     const c = player.consensus || consensusFor(player);
@@ -606,12 +638,12 @@
     const moveClass = move ? `score-${move.direction}` : "";
     const moveBadge = move ? `<i class="score-move ${move.direction}" aria-label="Points ${move.direction}">${move.direction === "up" ? "▲" : "▼"}</i>` : "";
     const moveAttrs = move ? `data-score-from="${esc(move.from)}" data-score-to="${esc(move.to)}"` : "";
-    return `<button class="player-card ${side} ${statusClass} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${side}" type="button"><div class="player-position">${esc(player.position || "UTIL")}</div>${playerFace(player)}<div class="player-card-copy"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><span>${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))} • <b class="status-text">${esc(player.status || "UPCOMING")}</b></span><small>${esc(player.statLine || "PREGAME • LIVE STAT LINE READY")}</small></div><div class="player-card-score"><strong class="actual-score" ${moveAttrs}>${number(actual)}</strong><small>PTS</small><span>${esc(projectionLabel({ ...player, consensus: c }))}</span><em>${esc(rangeLabel({ ...player, consensus: c }))}</em>${moveBadge}</div><span class="chevron">›</span></button>`;
+    return `<button class="player-card ${side} ${statusClass} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${side}" type="button"><div class="player-position">${esc(player.position || "UTIL")}</div>${playerFace(player)}<div class="player-card-copy"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><span>${esc(playerGameLabel(player))} • <b class="status-text">${esc(player.status || "UPCOMING")}</b></span><small>${esc(player.statLine || "PREGAME • LIVE STAT LINE READY")}</small></div><div class="player-card-score"><strong class="actual-score" ${moveAttrs}>${number(actual)}</strong><small>PTS</small><span>${esc(projectionLabel({ ...player, consensus: c }))}</span><em>${esc(rangeLabel({ ...player, consensus: c }))}</em>${moveBadge}</div><span class="chevron">›</span></button>`;
   }
 
   function compactPlayerRow(player) {
     const actual = actualForPlayer(player);
-    return `<button class="compact-player" data-player-id="${esc(player.player_id)}" data-side="own" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • ${esc(player.status || "UPCOMING")}</small></span><b>${number(actual)}<small>${esc(projectionLabel(player))}</small></b></button>`;
+    return `<button class="compact-player" data-player-id="${esc(player.player_id)}" data-side="own" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(playerGameLabel(player))}</small></span><b>${number(actual)}<small>${esc(projectionLabel(player))}</small></b></button>`;
   }
 
   function liveGamesMarkup() {
@@ -652,7 +684,7 @@
     const movement = move ? `<span class="arcade-row-move ${move.direction}">${move.direction === "up" ? "▲" : "▼"} ${move.delta > 0 ? "+" : ""}${number(move.delta)}</span>` : "";
     const moveClass = move ? `arcade-score-${move.direction}` : "";
     const status = player.status === "LIVE" ? "LIVE" : /OUT|IR|DOUBTFUL|QUESTIONABLE/i.test(String(player.status || "")) ? String(player.status).toUpperCase() : player.status === "FINAL" ? "FINAL" : "NEXT";
-    return `<button class="arcade-player-row ${side} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><b class="arcade-pos">${esc(player.position || "UTIL")}</b><span class="arcade-row-player">${playerFace(player, "small")}<span class="arcade-row-name"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><small>${esc(player.team || "FA")} • ${esc(playerOpponent(player))}</small></span></span><span class="arcade-row-live ${status === "LIVE" ? "is-live" : status === "OUT" || status === "IR" ? "is-out" : ""}">${status}</span><span class="arcade-row-points"><strong class="arcade-row-score actual-score">${number(actual)}</strong><span class="arcade-row-proj">${esc(projectedLabel)}</span></span>${movement}</button>`;
+    return `<button class="arcade-player-row ${side} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><b class="arcade-pos">${esc(player.position || "UTIL")}</b><span class="arcade-row-player">${playerFace(player, "small")}<span class="arcade-row-name"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><small>${esc(playerGameLabel(player))}</small></span></span><span class="arcade-row-live ${status === "LIVE" ? "is-live" : status === "OUT" || status === "IR" ? "is-out" : ""}">${status}</span><span class="arcade-row-points"><strong class="arcade-row-score actual-score">${number(actual)}</strong><span class="arcade-row-proj">${esc(projectedLabel)}</span></span>${movement}</button>`;
   }
 
   function arcadeRosterPanel(league, side) {
@@ -874,18 +906,20 @@
   async function refresh() {
     if (refreshInFlight) return;
     refreshInFlight = true;
-    const scoreboardResult = await loadScoreboard().then((value) => ({ value })).catch((error) => ({ error }));
-    if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
-    const [sleeperResult, espnResult, consensusResult] = await Promise.all([
-      loadSleeper().then((value) => ({ value })).catch((error) => ({ error })),
+    // Load Sleeper first so the scoreboard request can use the current NFL
+    // week and expose upcoming game times/opponents, not only today's games.
+    const sleeperResult = await loadSleeper().then((value) => ({ value })).catch((error) => ({ error }));
+    if (sleeperResult.value && sleeperResult.value.week) state.week = sleeperResult.value.week;
+    const [scoreboardResult, espnResult, consensusResult] = await Promise.all([
+      loadScoreboard().then((value) => ({ value })).catch((error) => ({ error })),
       loadESPN().then((value) => ({ value })).catch((error) => ({ error })),
       loadConsensus().then((value) => ({ value })).catch((error) => ({ error }))
     ]);
     const failures = [];
+    if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
     if (sleeperResult.value) state.sleeper = sleeperResult.value; else failures.push("SLEEPER");
     if (espnResult.value) state.espn = espnResult.value; else failures.push("ESPN");
     if (consensusResult.value) state.consensus = consensusResult.value; else if (!state.consensus) state.consensus = { status: "unavailable", players: {}, sources: [], insights: [] };
-    if (sleeperResult.value && sleeperResult.value.week) state.week = sleeperResult.value.week;
     updateScoreMoves(currentLeague());
     state.error = failures.length ? `${failures.join(" + ")} FEED RETRYING` : "";
     state.loading = false;
