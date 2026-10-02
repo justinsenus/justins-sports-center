@@ -91,6 +91,48 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 .win-label { position: absolute; inset: 0; display: grid; place-items: center; color: white; font-size: 7px; font-weight: 900; letter-spacing: .1em; text-shadow: 0 1px 3px #000; }
 .hero-meta { position: absolute; right: 18px; bottom: 8px; left: 18px; display: flex; justify-content: center; gap: 22px; color: var(--muted); font-size: 8px; font-weight: 900; letter-spacing: .08em; }
 
+.monitor-tabs { display: flex; gap: 6px; min-width: 0; margin: 10px 0 8px; padding: 0 1px; }
+.monitor-tabs button { flex: 1; min-height: 40px; cursor: pointer; border: 1px solid #2c5371; border-radius: 7px; color: var(--muted); background: #0d2033; font-size: 9px; font-weight: 950; letter-spacing: .08em; }
+.monitor-tabs button:hover, .monitor-tabs button.active { border-color: var(--red); color: var(--text); background: linear-gradient(180deg, rgba(245,45,80,.25), rgba(245,45,80,.07)); box-shadow: inset 0 -2px 0 var(--red); }
+.monitor-tabs button:nth-child(2).active { border-color: var(--blue); box-shadow: inset 0 -2px 0 var(--blue); }
+.monitor-tabs button:nth-child(4).active { border-color: var(--green); box-shadow: inset 0 -2px 0 var(--green); }
+.focus-panel { min-height: 0; overflow: hidden; padding: 13px; }
+.focus-top { display: flex; justify-content: space-between; align-items: center; }
+.focus-close { cursor: pointer; border: 0; color: var(--muted); background: transparent; font-size: 25px; line-height: 1; }
+.focus-player { display: flex; align-items: center; gap: 13px; margin-top: 12px; }
+.focus-player h2 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 20px; font-weight: 950; }
+.focus-player p { margin: 5px 0 9px; color: var(--muted); font-size: 9px; font-weight: 900; }
+.focus-score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
+.focus-score-grid > div { min-width: 0; padding: 9px 5px; border: 1px solid #315977; border-radius: 8px; background: linear-gradient(145deg, #153554, #0d2034); text-align: center; }
+.focus-score-grid strong { display: block; color: var(--text); font: 900 27px/.85 var(--num); }
+.focus-score-grid small { display: block; margin-top: 6px; color: var(--muted); font-size: 7px; font-weight: 950; letter-spacing: .05em; }
+.focus-tabs { display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid #294a64; }
+.focus-tabs span { flex: 1; padding: 8px 3px; color: var(--muted); text-align: center; font-size: 7px; font-weight: 950; letter-spacing: .06em; }
+.focus-tabs span.active { color: var(--text); border-bottom: 2px solid var(--red); }
+.focus-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
+.focus-stat-grid > div { min-width: 0; padding: 8px 3px; border: 1px solid #2c506c; border-radius: 6px; background: #0d2237; text-align: center; }
+.focus-stat-grid b { display: block; overflow: hidden; color: var(--text); text-overflow: ellipsis; white-space: nowrap; font: 900 16px/.9 var(--num); }
+.focus-stat-grid small { display: block; margin-top: 5px; color: var(--muted); font-size: 6px; font-weight: 950; }
+.focus-trend-heading { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 7px; font-weight: 950; letter-spacing: .06em; }
+.focus-trend-heading span { color: var(--cyan); }
+.focus-trend { display: flex; align-items: end; gap: 9px; height: 68px; margin-top: 7px; padding: 8px 12px 0; border-bottom: 1px solid #2c4d67; background: linear-gradient(180deg, rgba(33,74,103,.22), rgba(7,17,28,.1)); }
+.focus-trend span { flex: 1; min-height: 14%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--cyan), #1979a8); }
+.focus-trend span.current { background: linear-gradient(180deg, var(--red-soft), var(--red)); }
+.focus-trend-labels { display: flex; justify-content: space-around; color: var(--dim); font-size: 6px; font-weight: 900; letter-spacing: .06em; }
+.focus-next { display: flex; justify-content: space-between; gap: 6px; margin-top: 10px; padding: 8px; border: 1px solid #2d526c; border-radius: 6px; background: #0f253c; font-size: 7px; font-weight: 950; }
+.focus-next span { color: var(--muted); }
+.focus-next b { color: var(--text); text-align: right; }
+.focus-feed { display: flex; align-items: center; gap: 7px; margin-top: 9px; color: var(--green); font-size: 7px; font-weight: 900; line-height: 1.3; }
+.focus-feed .status-dot { width: 6px; height: 6px; flex-basis: 6px; }
+.focus-panel .source-panel { margin-top: 11px; padding: 9px; }
+.scoring-ticker { display: grid; grid-template-columns: minmax(170px, 1.25fr) repeat(3, minmax(120px, 1fr)); align-items: center; gap: 7px; min-height: 52px; margin-top: 9px; padding: 6px 9px; border: 1px solid #2e5673; border-radius: 9px; background: linear-gradient(90deg, #0d2237, #102c47); }
+.scoring-ticker > div:not(.ticker-label) { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 5px 9px; min-width: 0; padding: 4px 7px; border-left: 1px solid #2d506b; }
+.scoring-ticker span, .scoring-ticker small { display: block; overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; font-size: 7px; font-weight: 950; letter-spacing: .05em; }
+.scoring-ticker b { color: var(--text); font: 900 22px/.8 var(--num); text-align: right; }
+.scoring-ticker small { grid-column: 1 / -1; color: var(--cyan); font: 500 8px/1 var(--num); }
+.ticker-label span { color: var(--text); font-size: 10px; }
+.ticker-label small { margin-top: 5px; color: var(--dim); }
+
 .workspace { min-height: 0; }
 .overview-grid, .matchup-grid, .live-view, .injuries-view { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 1.02fr) minmax(270px, .8fr); align-items: start; gap: 10px; min-height: 0; }
 .matchup-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(280px, .74fr); }
@@ -344,4 +386,79 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   .player-drawer { top: 75px; right: -100%; bottom: 31px; width: 100%; border-radius: 12px 0 0 12px; }
   .touch-footer { position: sticky; bottom: 0; z-index: 4; height: 28px; margin-top: 7px; font-size: 6px; background: rgba(5,8,13,.95); }
   #lastSync { font-size: 8px; }
+}
+
+/* Large touch monitor: match the supplied Matchup Center reference at a
+   readable across-the-room scale while keeping the overview inside one
+   viewport. Detail views remain available from the touch tabs. */
+@media (min-width: 1400px) {
+  body[data-layout="monitor"] .touch-app { padding: 18px 22px 12px; grid-template-rows: 64px auto minmax(0, 1fr) 32px; gap: 12px; }
+  body[data-layout="monitor"] .touch-header { padding: 0 8px 10px; }
+  body[data-layout="monitor"] .brand-lockup { min-width: 320px; gap: 12px; }
+  body[data-layout="monitor"] .brand-mark { width: 40px; height: 40px; flex-basis: 40px; font-size: 27px; }
+  body[data-layout="monitor"] .brand-lockup strong { font-size: 21px; }
+  body[data-layout="monitor"] .brand-lockup small { font-size: 9px; }
+  body[data-layout="monitor"] .top-nav { gap: 8px; }
+  body[data-layout="monitor"] .top-nav button { min-width: 110px; font-size: 11px; }
+  body[data-layout="monitor"] .connection-lockup { min-width: 260px; font-size: 10px; }
+  body[data-layout="monitor"] .connection-lockup #clock { font-size: 20px; }
+  body[data-layout="monitor"] .control-strip { min-height: 52px; padding: 9px 14px; }
+  body[data-layout="monitor"] .league-switcher button { min-height: 40px; padding: 0 17px; font-size: 11px; }
+  body[data-layout="monitor"] .league-switcher button b { font-size: 10px; }
+  body[data-layout="monitor"] .week-control strong { min-width: 118px; font-size: 12px; }
+  body[data-layout="monitor"] .control-status { font-size: 9px; }
+  body[data-layout="monitor"] .matchup-hero { min-height: 190px; padding: 23px 30px 38px; gap: 20px; border-radius: 14px; }
+  body[data-layout="monitor"] .hero-team-copy span, body[data-layout="monitor"] .hero-team-copy small { font-size: 11px; }
+  body[data-layout="monitor"] .hero-team-copy strong { margin: 7px 0; font-size: clamp(25px, 2.2vw, 34px); }
+  body[data-layout="monitor"] .hero-team-copy small { font-size: 10px; }
+  body[data-layout="monitor"] .hero-mark { width: 82px; height: 82px; flex-basis: 82px; border-radius: 20px; font-size: 49px; }
+  body[data-layout="monitor"] .hero-score > div:first-of-type strong { font-size: clamp(72px, 6vw, 104px); }
+  body[data-layout="monitor"] .hero-score > div:first-of-type em { font-size: 15px; }
+  body[data-layout="monitor"] .hero-proj { margin-top: 11px; font-size: 16px; }
+  body[data-layout="monitor"] .hero-proj span { min-width: 165px; }
+  body[data-layout="monitor"] .live-pill { padding: 7px 13px; font-size: 10px; }
+  body[data-layout="monitor"] .win-bar { height: 13px; margin-top: 13px; }
+  body[data-layout="monitor"] .win-label { font-size: 9px; }
+  body[data-layout="monitor"] .hero-meta { right: 28px; bottom: 10px; left: 28px; gap: 32px; font-size: 9px; }
+  body[data-layout="monitor"] .monitor-tabs { gap: 8px; margin: 11px 0 9px; }
+  body[data-layout="monitor"] .monitor-tabs button { min-height: 47px; font-size: 11px; }
+  body[data-layout="monitor"] .overview-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(380px, .78fr); gap: 13px; overflow: hidden; }
+  body[data-layout="monitor"] .panel-heading { min-height: 61px; padding: 0 16px; }
+  body[data-layout="monitor"] .panel-heading b { font-size: 16px; }
+  body[data-layout="monitor"] .panel-heading small { font-size: 9px; }
+  body[data-layout="monitor"] .panel-action { font-size: 10px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-stack { gap: 6px; padding: 9px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card { grid-template-columns: 38px 52px minmax(0, 1fr) 150px 20px; min-height: 70px; padding: 8px 11px; gap: 10px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card:nth-child(n+9) { display: none; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-position { min-height: 30px; font-size: 11px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-face { width: 50px; height: 50px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-copy strong { font-size: 14px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-copy span { margin-top: 4px; font-size: 10px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-copy small { margin-top: 5px; font-size: 9px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-score > strong { font-size: 33px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-score > small { font-size: 8px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-score > span { font-size: 11px; }
+  body[data-layout="monitor"] .overview-grid > .roster-panel .player-card-score > em { font-size: 8px; }
+  body[data-layout="monitor"] .bench-strip { gap: 7px; padding: 9px; }
+  body[data-layout="monitor"] .bench-strip > span { font-size: 10px; }
+  body[data-layout="monitor"] .compact-player { padding: 7px; }
+  body[data-layout="monitor"] .compact-player strong { font-size: 10px; }
+  body[data-layout="monitor"] .compact-player small { font-size: 8px; }
+  body[data-layout="monitor"] .compact-player > b { font-size: 19px; }
+  body[data-layout="monitor"] .compact-player > b small { font-size: 8px; }
+  body[data-layout="monitor"] .focus-panel { padding: 16px; }
+  body[data-layout="monitor"] .focus-player h2 { font-size: 23px; }
+  body[data-layout="monitor"] .focus-player p { font-size: 10px; }
+  body[data-layout="monitor"] .focus-score-grid strong { font-size: 34px; }
+  body[data-layout="monitor"] .focus-score-grid small { font-size: 8px; }
+  body[data-layout="monitor"] .focus-stat-grid b { font-size: 19px; }
+  body[data-layout="monitor"] .focus-stat-grid small { font-size: 7px; }
+  body[data-layout="monitor"] .focus-next, body[data-layout="monitor"] .focus-feed { font-size: 9px; }
+  body[data-layout="monitor"] .source-panel p { font-size: 9px; }
+  body[data-layout="monitor"] .scoring-ticker { min-height: 60px; margin-top: 11px; }
+  body[data-layout="monitor"] .scoring-ticker b { font-size: 28px; }
+  body[data-layout="monitor"] .scoring-ticker span, body[data-layout="monitor"] .scoring-ticker small { font-size: 8px; }
+  body[data-layout="monitor"] .ticker-label span { font-size: 12px; }
+  body[data-layout="monitor"] .touch-footer { font-size: 9px; }
+  body[data-layout="monitor"] #lastSync { font-size: 12px; }
 }
