@@ -7,6 +7,7 @@
     sleeperOwnerId: "1137609122398482432",
     sleeperTeamName: "The Big Senus",
     espnTeamName: "Gumby's Big D",
+    espnLeagueId: "919590140",
     refreshMs: 5000,
     playersCacheMs: 12 * 60 * 60 * 1000
   };
@@ -15,6 +16,8 @@
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22, 23]);
+  let espnProjectionPoolCache = { scoringPeriodId: null, savedAt: 0, players: {} };
+  let espnProjectionPoolPromise = null;
 
   const root = document.body.dataset.root || "./";
   const state = {
@@ -210,7 +213,10 @@
   function espnProjection(player, scoringPeriodId) {
     const rows = espnStatRows(player, scoringPeriodId);
     const projected = rows.find((row) => Number(row.statSourceId) === 1) || rows.find((row) => row.appliedTotal != null);
-    return finite(projected && (projected.appliedTotal != null ? projected.appliedTotal : projected.appliedTotalCeiling)) || finite(player && (player.projectedTotal || player.projected)) || null;
+    const rowValue = finite(projected && (projected.appliedTotal != null ? projected.appliedTotal : projected.appliedTotalCeiling));
+    if (rowValue != null) return rowValue;
+    const direct = finite(player && (player.projectedTotal != null ? player.projectedTotal : player.projected));
+    return direct;
   }
 
   function espnSeasonAverage(player) {
@@ -309,6 +315,28 @@
     };
   }
 
+  async function loadESPNProjectionPool(scoringPeriodId) {
+    if (espnProjectionPoolCache.scoringPeriodId === scoringPeriodId && Date.now() - espnProjectionPoolCache.savedAt < 10 * 60 * 1000) return espnProjectionPoolCache.players;
+    if (espnProjectionPoolPromise) return espnProjectionPoolPromise;
+    const filter = encodeURIComponent(JSON.stringify({ players: { limit: 1000, offset: 0, sortPercOwned: { sortAsc: false, sortPriority: 1 } } }));
+    const url = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${CONFIG.season}/segments/0/leagues/${CONFIG.espnLeagueId || "919590140"}?view=kona_playercard&scoringPeriodId=${scoringPeriodId}&filter=${filter}`;
+    espnProjectionPoolPromise = getJSON(url).then((payload) => {
+      const players = {};
+      (payload && payload.players || []).forEach((entry) => {
+        const player = entry && (entry.player || entry.playerPoolEntry && entry.playerPoolEntry.player) || {};
+        const projected = espnProjection(player, scoringPeriodId);
+        if (player.fullName && projected != null) players[nameKey(player.fullName)] = { projected, source: "PUBLIC ESPN PLAYER POOL" };
+      });
+      espnProjectionPoolCache = { scoringPeriodId, savedAt: Date.now(), players };
+      espnProjectionPoolPromise = null;
+      return players;
+    }).catch((error) => {
+      espnProjectionPoolPromise = null;
+      throw error;
+    });
+    return espnProjectionPoolPromise;
+  }
+
   async function loadESPNPublic() {
     const data = await getJSON(`${ESPN_PUBLIC_URL}&ts=${Date.now()}`);
     const scoringPeriodId = Number(data.status && (data.status.currentMatchupPeriod || data.status.latestScoringPeriod) || 1);
@@ -327,7 +355,15 @@
       const row = normalizeESPNEntry(entry, null, scoringPeriodId, "projection");
       if (row && row.full_name && finite(row.projected) != null) projectionPlayers[nameKey(row.full_name)] = { projected: row.projected, source: "PUBLIC ESPN" };
     }));
-    return { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, projectionPlayers, public: true };
+    const result = { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, projectionPlayers, public: true };
+    loadESPNProjectionPool(scoringPeriodId).then((pool) => {
+      result.projectionPlayers = { ...result.projectionPlayers, ...pool };
+      if (state.espn && state.espn.public && state.espn.scoringPeriodId === scoringPeriodId) {
+        state.espn.projectionPlayers = result.projectionPlayers;
+        render();
+      }
+    }).catch(() => { /* Team rosters remain available when the larger public pool is slow. */ });
+    return result;
   }
 
   async function loadESPN() {
