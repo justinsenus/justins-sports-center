@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05080d">
+  <meta name="description" content="Justin's touch-first mobile fantasy football matchup center.">
+  <title>Justin's Fantasy Matchup Center Mobile</title>
+  <link rel="stylesheet" href="../patriots-fantasy-touch/styles.css?v=2">
+</head>
+<body data-root="../patriots-fantasy-touch/" data-layout="mobile">
+  <div class="touch-app">
+    <header class="touch-header">
+      <div class="brand-lockup"><span class="brand-mark">J</span><div><strong>FANTASY COMMAND CENTER</strong><small>MOBILE • LIVE CONSENSUS • 2026</small></div></div>
+      <div class="connection-lockup"><span id="connectionDot" class="status-dot"></span><span id="connectionText">CONNECTING</span><span id="clock">--:--</span></div>
+    </header>
+    <nav class="top-nav mobile-top-nav" aria-label="Fantasy views">
+      <button data-view="overview" class="active" type="button">HOME</button><button data-view="matchups" type="button">MATCHUP</button><button data-view="players" type="button">PLAYERS</button><button data-view="injuries" type="button">INJURY</button><button data-view="live" type="button">LIVE</button>
+    </nav>
+    <section class="control-strip"><div class="league-switcher"><button data-league="sleeper" class="active" type="button">SLEEPER</button><button data-league="espn" type="button">ESPN</button></div><div class="week-control"><strong id="weekLabel">WEEK —</strong></div><div class="control-status"><span id="sourceStatus">SOURCES —</span></div></section>
+    <main><section id="matchupHero" class="matchup-hero"><div class="loading-panel">LOADING MATCHUP CENTER…</div></section><section id="workspace" class="workspace"><div class="loading-panel">LOADING LIVE FANTASY DATA…</div></section></main>
+    <aside id="playerDrawer" class="player-drawer" aria-live="polite"></aside>
+    <footer class="touch-footer"><span><i class="footer-dot"></i>FANTASY ONLY</span><span id="lastSync">SYNC --:--</span></footer>
+  </div>
+  <script src="../patriots-fantasy-touch/source-catalog.js?v=2"></script>
+  <script src="../patriots-fantasy-touch/app.js?v=2" defer></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+name: Projection and odds consensus sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: projection-consensus-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      FANTASYPROS_API_KEY: ${{ secrets.FANTASYPROS_API_KEY }}
+      SPORTSGAMEODDS_API_KEY: ${{ secrets.SPORTSGAMEODDS_API_KEY }}
+      THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+      SLEEPER_LEAGUE_ID: "1387635903379300352"
+      SLEEPER_OWNER_ID: "1137609122398482432"
+      SEASON: "2026"
+    steps:
+      - name: Check out dashboard
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build consensus artifact
+        run: node scripts/projection-consensus-sync.mjs
+
+      - name: Commit refreshed consensus
+        run: |
+          if git diff --quiet -- patriots-fantasy-touch/consensus-data.json; then
+            echo "No consensus changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add patriots-fantasy-touch/consensus-data.json
+          git commit -m "Refresh projection and odds consensus"
+          git push
