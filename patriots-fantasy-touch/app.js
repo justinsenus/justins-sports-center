@@ -138,6 +138,12 @@
       return { value: direct, min: null, max: null, range: null, sourceCount: direct != null ? 1 : 0, sources: direct != null ? [{ source: publicRow && publicRow.source || "PUBLIC ESPN", value: direct }] : [], outlier: null, odds: [] };
     }
     const value = finite(row.consensus != null ? row.consensus : row.projectionMedian != null ? row.projectionMedian : row.projected);
+    if (value == null) {
+      const publicRows = state.espn && state.espn.projectionPlayers || {};
+      const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
+      const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
+      if (direct != null) return { value: direct, min: null, max: null, range: null, sourceCount: 1, sources: [{ source: publicRow && publicRow.source || "PUBLIC ESPN", value: direct }], outlier: null, odds: [] };
+    }
     return {
       value,
       min: finite(row.min != null ? row.min : row.projectionMin),
