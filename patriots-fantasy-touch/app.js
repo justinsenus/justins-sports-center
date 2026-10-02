@@ -131,7 +131,12 @@
     const id = String(player && (player.player_id || player.id) || "");
     let row = map[id];
     if (!row && player && player.full_name) row = Object.values(map).find((candidate) => nameKey(candidate.name || candidate.full_name) === nameKey(player.full_name) && (!candidate.team || String(candidate.team).toUpperCase() === String(player.team || "").toUpperCase()));
-    if (!row) return { value: finite(player && player.projected), min: null, max: null, range: null, sourceCount: finite(player && player.projected) != null ? 1 : 0, sources: [], outlier: null, odds: [] };
+    if (!row) {
+      const publicRows = state.espn && state.espn.projectionPlayers || {};
+      const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
+      const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
+      return { value: direct, min: null, max: null, range: null, sourceCount: direct != null ? 1 : 0, sources: direct != null ? [{ source: publicRow && publicRow.source || "PUBLIC ESPN", value: direct }] : [], outlier: null, odds: [] };
+    }
     const value = finite(row.consensus != null ? row.consensus : row.projectionMedian != null ? row.projectionMedian : row.projected);
     return {
       value,
@@ -208,11 +213,23 @@
     return finite(season && (season.appliedAverage || season.appliedTotal));
   }
 
+  function espnLiveFields(player, scoringPeriodId) {
+    const row = espnStatRows(player, scoringPeriodId).find((candidate) => Number(candidate.statSourceId) === 0);
+    const stats = row && row.stats || {};
+    if (!row) return {};
+    const value = (key) => finite(stats[key]);
+    if (Number(player && player.defaultPositionId) === 1) {
+      return { pass_yd: value("3"), pass_td: value("4"), interceptions: value("19"), rush_yd: value("24"), rush_td: value("25") };
+    }
+    return { rush_yd: value("24"), rush_td: value("25"), rec_yd: value("42"), rec_td: value("43"), receptions: value("53"), targets: value("58") };
+  }
+
   function espnStatLine(player, actual, projected, event) {
     const status = event && eventState(event).live ? "LIVE" : event && eventState(event).final ? "FINAL" : "PREGAME";
     const opponent = event && eventCompetitors(event).find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() !== String(ESPN_TEAM_BY_PRO_ID[player && player.proTeamId] || "").toUpperCase());
     const matchup = opponent && opponent.team && opponent.team.abbreviation ? `VS ${opponent.team.abbreviation}` : "NEXT GAME";
-    return `${status} • ${matchup} • ${number(actual)} PTS • PROJ ${projected == null ? "FEED SYNCING" : number(projected)}`;
+    const visibleActual = event && (eventState(event).live || eventState(event).final) ? actual : 0;
+    return `${status} • ${matchup} • ${number(visibleActual)} PTS • PROJ ${projected == null ? "FEED SYNCING" : number(projected)}`;
   }
 
   function normalizeESPNEntry(entry, currentEntry, scoringPeriodId, side) {
@@ -227,6 +244,7 @@
     const actualRow = rows.find((row) => Number(row.statSourceId) === 0) || rows.find((row) => Number(row.statSourceId) === 1 && row.appliedTotal != null);
     const actual = finite(currentEntry && currentEntry.playerPoolEntry && currentEntry.playerPoolEntry.appliedStatTotal) ?? finite(entry && entry.playerPoolEntry && entry.playerPoolEntry.appliedStatTotal) ?? finite(actualRow && actualRow.appliedTotal) ?? 0;
     const projected = espnProjection(player, scoringPeriodId);
+    const liveFields = espnLiveFields(player, scoringPeriodId);
     const headshot = `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`;
     const lineupSlotId = Number(entry && entry.lineupSlotId);
     const playerData = {
@@ -248,6 +266,7 @@
       event,
       statLine: espnStatLine(player, actual, projected, event),
       statRows: rows,
+      ...liveFields,
       side
     };
     return playerData;
@@ -297,7 +316,12 @@
     const opponentSide = matchup && Number(matchup.home && matchup.home.teamId) === Number(opponentId) ? matchup.home : matchup && matchup.away;
     const ownTeam = normalizeESPNTeam(ownRaw, ownSide, scoringPeriodId, "own");
     const opponentTeam = normalizeESPNTeam(opponentRaw, opponentSide, scoringPeriodId, "opponent");
-    return { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, public: true };
+    const projectionPlayers = {};
+    teams.forEach((team) => (team.roster && team.roster.entries || []).forEach((entry) => {
+      const row = normalizeESPNEntry(entry, null, scoringPeriodId, "projection");
+      if (row && row.full_name && finite(row.projected) != null) projectionPlayers[nameKey(row.full_name)] = { projected: row.projected, source: "PUBLIC ESPN" };
+    }));
+    return { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, projectionPlayers, public: true };
   }
 
   async function loadESPN() {
