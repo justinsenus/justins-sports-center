@@ -40,6 +40,8 @@
     playerFilter: "all",
     scoreSnapshot: {},
     scoreMoves: {},
+    scoreHistory: { sleeper: [], espn: [] },
+    scoreEvents: { sleeper: [], espn: [] },
     loading: true,
     error: "",
     lastSync: null,
@@ -69,7 +71,18 @@
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m AGO`;
     return `${Math.floor(seconds / 3600)}h AGO`;
   };
+  const recordLabel = (record) => {
+    const wins = finite(record && record.wins);
+    const losses = finite(record && record.losses);
+    return wins == null || losses == null ? "RECORD PENDING" : `${wins}-${losses}`;
+  };
   const teamLogo = (team) => `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(team || "nfl").toLowerCase())}.png`;
+  const sleeperAvatar = (user) => {
+    if (!user) return "";
+    const direct = user.metadata && user.metadata.avatar;
+    return direct || (user.avatar ? `https://sleepercdn.com/avatars/${encodeURIComponent(user.avatar)}.jpg` : "");
+  };
+  const profileAvatar = (src, name, className = "") => `<span class="profile-avatar ${className}" data-initials="${esc(initials(name))}">${src ? `<img src="${esc(src)}" alt="${esc(name)}" onerror="this.style.opacity='.12'">` : ""}</span>`;
   const textValue = (value, fallback = "NOT STARTED") => value == null || value === "" ? fallback : String(value);
   const statMarkup = (value) => finite(value) == null ? `<span class="pending-stat">NOT STARTED</span>` : esc(textValue(value));
   const initials = (value) => String(value || "PLAYER").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "P";
@@ -233,7 +246,9 @@
     Object.entries(projectedMap).forEach(([id, value]) => { if (mergedPlayers[id]) mergedPlayers[id] = { ...mergedPlayers[id], projected: Number(value.toFixed(1)) }; });
     const pointsMap = matchup.players_points || {};
     const opponentPointsMap = opponentMatchup && opponentMatchup.players_points || {};
-    return { league, users, rosters, roster, opponentRoster, matchup, opponentMatchup, players: mergedPlayers, pointsMap, opponentPointsMap, week };
+    const ownUser = users.find((user) => String(user.user_id) === String(roster && roster.owner_id)) || named || null;
+    const opponentUser = users.find((user) => String(user.user_id) === String(opponentRoster && opponentRoster.owner_id)) || null;
+    return { league, users, rosters, roster, opponentRoster, ownUser, opponentUser, matchup, opponentMatchup, players: mergedPlayers, pointsMap, opponentPointsMap, week };
   }
 
   function espnStatRows(player, scoringPeriodId) {
@@ -333,9 +348,13 @@
     const starterRows = ids.map((id) => players[id]).filter((row) => row && row.starter);
     const actual = starterRows.reduce((sum, row) => sum + (finite(row.actual) || 0), 0);
     const projected = starterRows.reduce((sum, row) => sum + (finite(row.projected) || 0), 0);
+    const imageTeam = (starterRows[0] || players[ids[0]] || {}).team;
+    const overall = rawTeam.record && (rawTeam.record.overall || rawTeam.record.current) || {};
     return {
       name: rawTeam.name || rawTeam.abbrev || (side === "own" ? CONFIG.espnTeamName : "OPPONENT"),
       abbrev: rawTeam.abbrev || "TEAM",
+      avatar: rawTeam.logoURL || rawTeam.logo || teamLogo(imageTeam),
+      record: { wins: finite(overall.wins), losses: finite(overall.losses) },
       roster: { players: ids, starters },
       players,
       pointsMap: Object.fromEntries(ids.map((id) => [id, players[id].actual])),
@@ -434,7 +453,7 @@
       const eventStatus = event && eventState(event).live ? "LIVE" : event && eventState(event).final ? "FINAL" : null;
       return { ...player, actual, projected, seasonAvg: finite(player.seasonAvg), status: eventStatus || player.status || (player.injury_status ? String(player.injury_status).toUpperCase() : "UPCOMING"), starter: player.starter != null ? player.starter : starters.has(id), side, event, consensus };
     });
-    return { name: team.name || (side === "own" ? CONFIG.espnTeamName : "OPPONENT"), players, roster, total: finite(team.total) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.actual) || 0), 0), projected: finite(team.projected) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.projected) || 0), 0) };
+    return { name: team.name || (side === "own" ? CONFIG.espnTeamName : "OPPONENT"), abbrev: team.abbrev || "TEAM", avatar: team.avatar || teamLogo(players.find((player) => player.team) && players.find((player) => player.team).team), record: team.record || { wins: null, losses: null }, players, roster, total: finite(team.total) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.actual) || 0), 0), projected: finite(team.projected) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.projected) || 0), 0) };
   }
 
   function currentLeague() {
@@ -442,15 +461,17 @@
       const data = state.sleeper;
       const own = sleeperPlayerIds(data.roster).map((id) => normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus));
       const opponent = data.opponentRoster ? sleeperPlayerIds(data.opponentRoster).map((id) => normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus)) : [];
-      return { id: "sleeper", name: CONFIG.sleeperTeamName, ownName: CONFIG.sleeperTeamName, opponentName: rosterName(data.opponentRoster, data.users, "OPPONENT"), own, opponent, ownActual: finite(data.matchup && data.matchup.points) || 0, opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0, week: data.week, ready: true };
+      const ownRecord = data.roster && data.roster.settings || {};
+      const opponentRecord = data.opponentRoster && data.opponentRoster.settings || {};
+      return { id: "sleeper", name: CONFIG.sleeperTeamName, ownName: CONFIG.sleeperTeamName, opponentName: rosterName(data.opponentRoster, data.users, "OPPONENT"), ownAvatar: sleeperAvatar(data.ownUser), opponentAvatar: sleeperAvatar(data.opponentUser), ownRecord: { wins: finite(ownRecord.wins), losses: finite(ownRecord.losses) }, opponentRecord: { wins: finite(opponentRecord.wins), losses: finite(opponentRecord.losses) }, own, opponent, ownActual: finite(data.matchup && data.matchup.points) || 0, opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0, week: data.week, ready: true };
     }
     const data = state.espn;
     if (data && data.ready && data.myTeam) {
       const own = mergeESPNTeam(data.myTeam, "own");
       const opponent = mergeESPNTeam(data.opponent, "opponent");
-      return { id: "espn", name: CONFIG.espnTeamName, ownName: own && own.name || CONFIG.espnTeamName, opponentName: opponent && opponent.name || "MATCHUP PENDING", own: own && own.players || [], opponent: opponent && opponent.players || [], ownActual: own && own.total || 0, opponentActual: opponent && opponent.total || 0, week: data.matchupPeriodId || state.week, ready: true };
+      return { id: "espn", name: CONFIG.espnTeamName, ownName: own && own.name || CONFIG.espnTeamName, opponentName: opponent && opponent.name || "MATCHUP PENDING", ownAvatar: own && own.avatar || "", opponentAvatar: opponent && opponent.avatar || "", ownRecord: own && own.record || { wins: null, losses: null }, opponentRecord: opponent && opponent.record || { wins: null, losses: null }, own, opponent, ownActual: own && own.total || 0, opponentActual: opponent && opponent.total || 0, week: data.matchupPeriodId || state.week, ready: true };
     }
-    return { id: "espn", name: CONFIG.espnTeamName, ownName: CONFIG.espnTeamName, opponentName: "MATCHUP PENDING", own: [], opponent: [], ownActual: 0, opponentActual: 0, week: state.week, ready: false };
+    return { id: "espn", name: CONFIG.espnTeamName, ownName: CONFIG.espnTeamName, opponentName: "MATCHUP PENDING", ownAvatar: "", opponentAvatar: "", ownRecord: {}, opponentRecord: {}, own: [], opponent: [], ownActual: 0, opponentActual: 0, week: state.week, ready: false };
   }
 
   function leagueStarted(league) {
@@ -466,17 +487,27 @@
   function updateScoreMoves(league) {
     const next = {};
     const moves = {};
+    const events = state.scoreEvents[state.league] || [];
     [...(league.own || []), ...(league.opponent || [])].forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
       next[key] = value;
       const previous = finite(state.scoreSnapshot[key]);
       if (previous != null && value !== previous) {
-        moves[key] = { direction: value > previous ? "up" : "down", from: previous, to: value };
+        const delta = value - previous;
+        moves[key] = { direction: delta > 0 ? "up" : "down", from: previous, to: value, delta };
+        events.unshift({ at: Date.now(), playerId: String(player.player_id), name: player.full_name || player.name || "PLAYER", team: player.team || "FA", side: player.side || "own", direction: delta > 0 ? "up" : "down", delta, total: value });
       }
     });
+    state.scoreEvents[state.league] = events.slice(0, 12);
     state.scoreMoves = moves;
     state.scoreSnapshot = next;
+    const ownTotal = leagueActual(league, "own");
+    const opponentTotal = leagueActual(league, "opponent");
+    const history = state.scoreHistory[state.league] || [];
+    const last = history[history.length - 1];
+    if (!last || last.own !== ownTotal || last.opponent !== opponentTotal) history.push({ at: Date.now(), own: ownTotal, opponent: opponentTotal });
+    state.scoreHistory[state.league] = history.slice(-24);
   }
 
   function leagueActual(league, side) {
@@ -515,8 +546,22 @@
   }
 
   function scoreMoveFor(player) {
-    if (state.view !== "live" || !player) return null;
+    if (!player) return null;
     return state.scoreMoves[`${state.league}:${String(player.player_id)}`] || null;
+  }
+
+  function teamDelta(league, side) {
+    const history = state.scoreHistory[state.league] || [];
+    if (history.length < 2) return 0;
+    const current = history[history.length - 1];
+    const previous = history[history.length - 2];
+    return (side === "own" ? current.own - previous.own : current.opponent - previous.opponent) || 0;
+  }
+
+  function deltaMarkup(delta) {
+    const value = finite(delta) || 0;
+    if (!value) return `<span class="arcade-delta idle">● LIVE</span>`;
+    return `<span class="arcade-delta ${value > 0 ? "up" : "down"}">${value > 0 ? "▲" : "▼"} ${value > 0 ? "+" : ""}${number(value)}</span>`;
   }
 
   function playerOpponent(player) {
@@ -572,6 +617,55 @@
     return `<div class="insight-list">${insights.slice(0, 5).map((item) => `<button class="insight-row" type="button" data-player-name="${esc(item.name)}"><span class="insight-rank">${esc(item.rank || "#")}</span><span><strong>${esc(item.name)}</strong><small>${esc(item.market || "FANTASY PROJECTION")} • ${esc(item.source || "OUTLIER")}</small></span><b>${item.delta == null ? "SYNC" : `+${number(item.delta)}`}<small>${item.range == null ? "RANGE FEED" : `RANGE ${number(item.range)}`}</small></b></button>`).join("")}</div>`;
   }
 
+  function arcadePlayerRow(player, side) {
+    const actual = actualForPlayer(player);
+    const move = scoreMoveFor(player);
+    const movement = move ? `<span class="arcade-row-move ${move.direction}">${move.direction === "up" ? "▲" : "▼"} ${move.delta > 0 ? "+" : ""}${number(move.delta)}</span>` : "";
+    const moveClass = move ? `arcade-score-${move.direction}` : "";
+    const status = player.status === "LIVE" ? "LIVE" : /OUT|IR|DOUBTFUL|QUESTIONABLE/i.test(String(player.status || "")) ? String(player.status).toUpperCase() : player.status === "FINAL" ? "FINAL" : "NEXT";
+    return `<button class="arcade-player-row ${side} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><b class="arcade-pos">${esc(player.position || "UTIL")}</b>${playerFace(player, "small")}<span class="arcade-row-name"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><small>${esc(player.team || "FA")} • ${esc(playerOpponent(player))}</small></span><span class="arcade-row-live ${status === "LIVE" ? "is-live" : status === "OUT" || status === "IR" ? "is-out" : ""}">${status}</span><strong class="arcade-row-score actual-score">${number(actual)}</strong><span class="arcade-row-proj">${esc(projectionLabel(player).replace(" • PUBLIC ESPN PLAYER POOL", ""))}</span>${movement}</button>`;
+  }
+
+  function arcadeRosterPanel(league, side) {
+    const players = (side === "own" ? league.own : league.opponent || []).filter((player) => player.starter !== false).slice(0, 9);
+    const name = side === "own" ? league.ownName : league.opponentName;
+    return `<section class="arcade-panel arcade-roster ${side}"><div class="arcade-panel-head"><div><b>${side === "own" ? "MY STARTERS" : "OPPONENT STARTERS"}</b><small>${esc(name)} • LIVE SCORING</small></div><span class="arcade-live-indicator"><i></i>${players.filter((player) => player.status === "LIVE").length} LIVE</span></div><div class="arcade-table-head"><span>POS</span><span>PLAYER</span><span>STATUS</span><span>LIVE</span></div><div class="arcade-player-list">${players.length ? players.map((player) => arcadePlayerRow(player, side)).join("") : `<div class="empty-card compact"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the league provider.</span></div>`}</div></section>`;
+  }
+
+  function renderMomentumChart(league) {
+    const history = state.scoreHistory[state.league] && state.scoreHistory[state.league].length ? state.scoreHistory[state.league] : [{ own: leagueActual(league, "own"), opponent: leagueActual(league, "opponent") }];
+    const max = Math.max(1, ...history.map((point) => Math.max(point.own || 0, point.opponent || 0)));
+    const pointsFor = (side) => history.map((point, index) => {
+      const x = history.length === 1 ? 160 : 12 + index / (history.length - 1) * 296;
+      const value = side === "own" ? point.own || 0 : point.opponent || 0;
+      const y = 130 - value / max * 104;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+    const ownTotal = leagueActual(league, "own");
+    const opponentTotal = leagueActual(league, "opponent");
+    return `<section class="arcade-panel momentum-panel"><div class="arcade-panel-head"><div><b>⚡ SCORING MOMENTUM</b><small>REAL SCORE HISTORY • 5s REFRESH</small></div><span class="arcade-live-indicator"><i></i>LIVE</span></div><div class="momentum-scoreline"><strong class="own-score">${number(ownTotal)}</strong><span>VS</span><strong class="opp-score">${number(opponentTotal)}</strong></div><svg class="momentum-chart" viewBox="0 0 320 150" role="img" aria-label="Live fantasy scoring momentum"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><polyline class="momentum-line own" points="${pointsFor("own")}" /><polyline class="momentum-line opponent" points="${pointsFor("opponent")}" /><circle class="momentum-dot own" cx="${history.length === 1 ? 160 : 12 + (history.length - 1) / (history.length - 1) * 296}" cy="${(130 - ownTotal / max * 104).toFixed(1)}" r="5" /><circle class="momentum-dot opponent" cx="${history.length === 1 ? 160 : 308}" cy="${(130 - opponentTotal / max * 104).toFixed(1)}" r="5" /></svg><div class="momentum-labels"><span>START</span><span>LIVE SNAPSHOT ${formatAge(state.refreshedAt)}</span></div></section>`;
+  }
+
+  function renderScoringFeed() {
+    const events = state.scoreEvents[state.league] || [];
+    return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>ONLY PROVIDER SCORE CHANGES APPEAR HERE</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${events.length ? events.slice(0, 6).map((event) => `<div class="scoring-feed-row ${event.direction}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time><strong>${esc(event.name)}</strong><span>${esc(event.team)} • ${event.direction === "up" ? "+" : ""}${number(event.delta)} PTS</span><b>${number(event.total)}</b></div>`).join("") : `<div class="empty-card compact"><strong>WAITING FOR A REAL POINT CHANGE</strong><span>When Sleeper or ESPN reports a new fantasy total, it will animate here.</span></div>`}</div></section>`;
+  }
+
+  function renderInjuryWatch(league) {
+    const players = [...(league.own || []), ...(league.opponent || [])].filter((player) => /OUT|IR|DOUBTFUL|QUESTIONABLE|INJURY/i.test(String(player.status || player.injury_status || ""))).slice(0, 5);
+    return `<section class="arcade-panel injury-watch-panel"><div class="arcade-panel-head"><div><b>✚ INJURY WATCH</b><small>REAL PROVIDER STATUS</small></div><span class="arcade-live-indicator warning"><i></i>${players.length} FLAGS</span></div><div class="injury-watch-list">${players.length ? players.map((player) => `<button class="injury-watch-row" data-player-id="${esc(player.player_id)}" data-side="${esc(player.side || "own")}" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.team || "FA")} • ${esc(player.position || "UTIL")}</small></span><b>${esc(player.status || player.injury_status || "QUESTIONABLE")}</b></button>`).join("") : `<div class="empty-card compact"><strong>NO ACTIVE FLAGS</strong><span>Provider injury status is clear for this matchup.</span></div>`}</div></section>`;
+  }
+
+  function renderNextGames() {
+    const events = (state.scoreboard || []).filter((event) => eventState(event).live || eventState(event).upcoming).slice(0, 5);
+    if (!events.length) return `<div class="empty-card compact"><strong>NO LIVE OR NEXT GAMES</strong><span>The schedule panel will populate from the live NFL scoreboard.</span></div>`;
+    return `<div class="next-games-list">${events.map((event) => { const status = eventState(event); const competitors = eventCompetitors(event); const away = competitors.find((item) => item.homeAway === "away") || competitors[0] || {}; const home = competitors.find((item) => item.homeAway === "home") || competitors[1] || {}; return `<article class="next-game-row ${status.live ? "is-live" : ""}"><span class="next-game-status">${status.live ? "LIVE" : "NEXT"}</span><div><strong>${esc(away.team && away.team.abbreviation || "TEAM")} <b>${esc(away.score == null ? "—" : away.score)}</b></strong><strong>${esc(home.team && home.team.abbreviation || "TEAM")} <b>${esc(home.score == null ? "—" : home.score)}</b></strong></div><small>${esc(status.live ? status.type.shortDetail || "IN PROGRESS" : new Date(event.date || 0).toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" }))}</small></article>`; }).join("")}</div>`;
+  }
+
+  function renderArcadeDashboard(league) {
+    return `<div class="arcade-dashboard"><div class="arcade-columns"><div class="arcade-column left-column">${arcadeRosterPanel(league, "own")}${renderInjuryWatch(league)}</div><div class="arcade-column center-column">${renderMomentumChart(league)}${renderScoringFeed(league)}</div><div class="arcade-column right-column">${arcadeRosterPanel(league, "opponent")}<section class="arcade-panel next-games-panel"><div class="arcade-panel-head"><div><b>▣ NEXT GAMES</b><small>ESPN NFL LIVE SCOREBOARD</small></div><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${renderNextGames()}</section></div></div></div>`;
+  }
+
   function renderHero(league) {
     const started = leagueStarted(league);
     const ownActual = leagueActual(league, "own");
@@ -583,9 +677,9 @@
     const totalProjection = ownProjection + opponentProjection;
     const ownPct = totalProjection > 0 ? Math.round(ownProjection / totalProjection * 100) : 50;
     const opponentPct = 100 - ownPct;
-    const ownMark = initials(league.ownName);
-    const opponentMark = initials(league.opponentName);
-    return `<section class="matchup-hero"><div class="hero-team own"><div class="hero-team-copy"><span>YOUR TEAM</span><strong>${esc(league.ownName)}</strong><small>WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div><span class="hero-mark red-mark" aria-label="${esc(league.ownName)}">${esc(ownMark)}</span></div><div class="hero-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE" : "PREGAME"}</span><div><strong>${number(ownActual)}</strong><em>VS</em><strong>${number(opponentActual)}</strong></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN PROBABILITY • MODEL FROM LIVE PROJECTIONS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent"><span class="hero-mark blue-mark" aria-label="${esc(league.opponentName)}">${esc(opponentMark)}</span><div class="hero-team-copy"><span>OPPONENT</span><strong>${esc(league.opponentName)}</strong><small>${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(sourceStats().live)} LIVE PROJECTION FEEDS</span><span>${state.consensus && state.consensus.odds_books ? `${esc(state.consensus.odds_books)} ODDS BOOKS` : "ODDS NOT CONNECTED"}</span><span>UPDATED ${esc(formatAge(state.consensus && state.consensus.generated_at || state.refreshedAt))}</span></div></section>`;
+    const ownDelta = teamDelta(league, "own");
+    const opponentDelta = teamDelta(league, "opponent");
+    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>PROJ ${ownHasProj ? number(ownProjection) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% WIN PROBABILITY • LIVE CONSENSUS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(sourceStats().live)} LIVE FEEDS</span><span>${state.consensus && state.consensus.odds_books ? `${esc(state.consensus.odds_books)} ODDS BOOKS` : "ODDS NOT CONNECTED"}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
   }
 
   function renderMonitorTabs() {
@@ -616,11 +710,11 @@
   }
 
   function renderOverview(league) {
+    if (document.body.dataset.layout === "monitor") return renderArcadeDashboard(league);
     const starters = (league.own || []).filter((player) => player.starter !== false).slice(0, 10);
     const opponentStarters = (league.opponent || []).filter((player) => player.starter !== false).slice(0, 10);
     const bench = (league.own || []).filter((player) => player.starter === false).slice(0, 6);
-    const monitor = document.body.dataset.layout === "monitor";
-    return `${monitor ? renderMonitorTabs() : ""}<div class="overview-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>MY STARTERS</b><small>${esc(league.ownName)} • LIVE TOTALS + PROJECTIONS</small></span><button class="panel-action" data-view="players" type="button">ALL PLAYERS ›</button></div><div class="player-stack">${starters.length ? starters.map((player) => playerCard(player, "own")).join("") : `<div class="empty-card"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the fantasy provider to return starters.</span></div>`}</div><div class="bench-strip"><span>BENCH • ${bench.length} SHOWN</span>${bench.slice(0, 3).map(compactPlayerRow).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>OPPONENT STARTERS</b><small>${esc(league.opponentName)} • MATCHUP LIVE FEED</small></span><button class="panel-action" data-view="matchups" type="button">MATCHUP ›</button></div><div class="player-stack">${opponentStarters.length ? opponentStarters.map((player) => playerCard(player, "opponent")).join("") : `<div class="empty-card"><strong>OPPONENT FEED SYNCING</strong><span>Waiting for the matchup side to respond.</span></div>`}</div></section><aside class="overview-side">${monitor ? renderFocusPanel(league) : `<section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAMES</b><small>TOUCH A GAME FOR DETAILS</small></span><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${liveGamesMarkup()}</section><section class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>BIGGEST DIFFERENCES</b><small>PROJECTION + ODDS RANGE</small></span><button class="panel-action" data-view="players" type="button">OPEN ›</button></div>${insightMarkup()}</section>${sourceCoverageMarkup()}`}</aside></div>${monitor ? renderScoringTicker(league) : ""}`;
+    return `<div class="overview-grid"><section class="workspace-panel roster-panel"><div class="panel-heading red-heading"><span><b>MY STARTERS</b><small>${esc(league.ownName)} • LIVE TOTALS + PROJECTIONS</small></span><button class="panel-action" data-view="players" type="button">ALL PLAYERS ›</button></div><div class="player-stack">${starters.length ? starters.map((player) => playerCard(player, "own")).join("") : `<div class="empty-card"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the fantasy provider to return starters.</span></div>`}</div><div class="bench-strip"><span>BENCH • ${bench.length} SHOWN</span>${bench.slice(0, 3).map(compactPlayerRow).join("")}</div></section><section class="workspace-panel roster-panel opponent-panel"><div class="panel-heading blue-heading"><span><b>OPPONENT STARTERS</b><small>${esc(league.opponentName)} • MATCHUP LIVE FEED</small></span><button class="panel-action" data-view="matchups" type="button">MATCHUP ›</button></div><div class="player-stack">${opponentStarters.length ? opponentStarters.map((player) => playerCard(player, "opponent")).join("") : `<div class="empty-card"><strong>OPPONENT FEED SYNCING</strong><span>Waiting for the matchup side to respond.</span></div>`}</div></section><aside class="overview-side"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAMES</b><small>TOUCH A GAME FOR DETAILS</small></span><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${liveGamesMarkup()}</section><section class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>BIGGEST DIFFERENCES</b><small>PROJECTION + ODDS RANGE</small></span><button class="panel-action" data-view="players" type="button">OPEN ›</button></div>${insightMarkup()}</section>${sourceCoverageMarkup()}</aside></div>`;
   }
 
   function renderMatchups(league) {
