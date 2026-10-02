@@ -469,7 +469,7 @@
     if (data && data.ready && data.myTeam) {
       const own = mergeESPNTeam(data.myTeam, "own");
       const opponent = mergeESPNTeam(data.opponent, "opponent");
-      return { id: "espn", name: CONFIG.espnTeamName, ownName: own && own.name || CONFIG.espnTeamName, opponentName: opponent && opponent.name || "MATCHUP PENDING", ownAvatar: own && own.avatar || "", opponentAvatar: opponent && opponent.avatar || "", ownRecord: own && own.record || { wins: null, losses: null }, opponentRecord: opponent && opponent.record || { wins: null, losses: null }, own, opponent, ownActual: own && own.total || 0, opponentActual: opponent && opponent.total || 0, week: data.matchupPeriodId || state.week, ready: true };
+      return { id: "espn", name: CONFIG.espnTeamName, ownName: own && own.name || CONFIG.espnTeamName, opponentName: opponent && opponent.name || "MATCHUP PENDING", ownAvatar: own && own.avatar || "", opponentAvatar: opponent && opponent.avatar || "", ownRecord: own && own.record || { wins: null, losses: null }, opponentRecord: opponent && opponent.record || { wins: null, losses: null }, own: own && own.players || [], opponent: opponent && opponent.players || [], ownActual: own && own.total || 0, opponentActual: opponent && opponent.total || 0, week: data.matchupPeriodId || state.week, ready: true };
     }
     return { id: "espn", name: CONFIG.espnTeamName, ownName: CONFIG.espnTeamName, opponentName: "MATCHUP PENDING", ownAvatar: "", opponentAvatar: "", ownRecord: {}, opponentRecord: {}, own: [], opponent: [], ownActual: 0, opponentActual: 0, week: state.week, ready: false };
   }
