@@ -31,6 +31,9 @@ button { color: inherit; font: inherit; }
 .num { font-family: var(--num); font-weight: 900; }
 
 .touch-app { width: min(1900px, 100%); min-height: 100vh; margin: 0 auto; padding: 14px 16px 10px; display: grid; grid-template-rows: 54px auto minmax(0, 1fr) 28px; gap: 10px; }
+body[data-layout="mobile"] .touch-app { display: block; }
+body[data-layout="mobile"] main { margin-top: 10px; }
+body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 .touch-header, .brand-lockup, .connection-lockup, .control-strip, .league-switcher, .week-control, .control-status, .hero-team, .hero-score > div, .panel-heading, .source-top, .source-meta, .drawer-top, .drawer-player, .drawer-score-grid, .drawer-tabs, .drawer-heading, .filter-row, .compact-player { display: flex; align-items: center; }
 .touch-header { justify-content: space-between; gap: 16px; min-width: 0; padding: 0 6px 8px; border-bottom: 1px solid #213b53; }
 .brand-lockup { min-width: 245px; gap: 10px; }
