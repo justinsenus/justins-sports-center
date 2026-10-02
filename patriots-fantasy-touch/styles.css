@@ -941,3 +941,111 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   body[data-layout="monitor"] .player-news-card small { font-size: 9px; }
   body[data-layout="monitor"] .news-dot { width: 11px; height: 11px; }
 }
+
+/* 1366px-class touch monitors: keep the command center wide, but reclaim
+   vertical space from the chrome so the roster body and complete scores stay
+   visible without browser zoom. */
+@media (min-width: 900px) and (max-width: 1450px) {
+  body[data-layout="monitor"] .touch-app {
+    padding: 9px 16px 18px;
+    gap: 8px;
+  }
+  body[data-layout="monitor"] .touch-header {
+    min-height: 52px;
+    padding: 0 8px 6px;
+    gap: 10px;
+  }
+  body[data-layout="monitor"] .brand-lockup { min-width: 210px; gap: 8px; }
+  body[data-layout="monitor"] .brand-mark { width: 30px; height: 30px; flex-basis: 30px; border-radius: 8px; font-size: 20px; }
+  body[data-layout="monitor"] .brand-lockup strong { font-size: 16px; }
+  body[data-layout="monitor"] .brand-lockup small { font-size: 7px; }
+  body[data-layout="monitor"] .top-nav { gap: 1px; }
+  body[data-layout="monitor"] .top-nav button { min-width: 72px; padding-inline: 7px; font-size: 8px; }
+  body[data-layout="monitor"] .connection-lockup { min-width: 176px; gap: 6px; font-size: 8px; }
+  body[data-layout="monitor"] .connection-lockup #clock { font-size: 15px; }
+  body[data-layout="monitor"] .control-strip { gap: 8px; padding: 5px 8px; }
+  body[data-layout="monitor"] .strip-label { font-size: 7px; }
+  body[data-layout="monitor"] .league-switcher { gap: 4px; }
+  body[data-layout="monitor"] .league-switcher button { min-height: 30px; padding-inline: 9px; font-size: 8px; }
+  body[data-layout="monitor"] .league-switcher button b { margin-left: 5px; font-size: 7px; }
+  body[data-layout="monitor"] .week-control { gap: 6px; }
+  body[data-layout="monitor"] .week-control button { width: 24px; height: 24px; font-size: 18px; }
+  body[data-layout="monitor"] .week-control strong { min-width: 72px; font-size: 8px; }
+  body[data-layout="monitor"] .week-control .refresh-action { padding: 6px 8px; font-size: 7px; }
+  body[data-layout="monitor"] .control-status { min-width: 154px; gap: 7px; font-size: 7px; }
+
+  body[data-layout="monitor"] .matchup-hero.arcade-hero {
+    min-height: 154px;
+    padding: 12px 22px 28px;
+    gap: 10px;
+  }
+  body[data-layout="monitor"] .arcade-hero .arcade-side {
+    grid-template-columns: minmax(0, 1fr) 58px 105px;
+    gap: 8px;
+  }
+  body[data-layout="monitor"] .arcade-hero .arcade-side.opponent {
+    grid-template-columns: 105px 58px minmax(0, 1fr);
+  }
+  body[data-layout="monitor"] .arcade-hero .profile-avatar { width: 58px; height: 58px; font-size: 19px; }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy span { font-size: 8px; }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy strong {
+    margin: 5px 0;
+    font-size: clamp(20px, 1.8vw, 26px);
+    line-height: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy small { font-size: 8px; }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block { min-width: 0; overflow: visible; }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block strong {
+    font-size: clamp(46px, 3.7vw, 62px);
+    line-height: .86;
+    letter-spacing: -.04em;
+    white-space: nowrap;
+  }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block small { font-size: 10px; }
+  body[data-layout="monitor"] .arcade-delta { margin-top: 4px; font-size: 10px; }
+  body[data-layout="monitor"] .arcade-delta.idle { font-size: 7px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-vs { margin-top: 3px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-vs strong { font-size: 40px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-vs span { font-size: 7px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-proj { margin-top: 5px; font-size: 11px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-proj span { min-width: 78px; }
+  body[data-layout="monitor"] .arcade-center-score .win-bar { height: 9px; margin-top: 7px; }
+  body[data-layout="monitor"] .arcade-center-score .win-label { font-size: 7px; }
+  body[data-layout="monitor"] .arcade-hero .hero-meta { right: 12px; bottom: 5px; left: 12px; gap: 10px; font-size: 7px; }
+
+  body[data-layout="monitor"] .arcade-columns { gap: 9px; }
+  body[data-layout="monitor"] .arcade-column { gap: 9px; }
+  body[data-layout="monitor"] .arcade-panel { border-radius: 10px; }
+  body[data-layout="monitor"] .arcade-panel-head { min-height: 46px; padding-inline: 10px; }
+  body[data-layout="monitor"] .arcade-panel-head b { font-size: 12px; }
+  body[data-layout="monitor"] .arcade-panel-head small { margin-top: 2px; font-size: 7px; }
+  body[data-layout="monitor"] .arcade-live-indicator { font-size: 8px; }
+  body[data-layout="monitor"] .arcade-live-indicator i { width: 8px; height: 8px; }
+  body[data-layout="monitor"] .arcade-table-head {
+    grid-template-columns: 34px minmax(0, 1fr) 56px 72px;
+    gap: 6px;
+    padding: 5px 8px;
+    font-size: 7px;
+  }
+  body[data-layout="monitor"] .arcade-player-list { gap: 4px; padding: 6px; }
+  body[data-layout="monitor"] .arcade-player-row {
+    grid-template-columns: 34px minmax(0, 1fr) 56px 72px;
+    gap: 6px;
+    min-height: 53px;
+    padding: 5px 6px;
+    border-radius: 7px;
+  }
+  body[data-layout="monitor"] .arcade-row-player { grid-template-columns: 37px minmax(0, 1fr); gap: 6px; }
+  body[data-layout="monitor"] .arcade-player-row .player-face.small { width: 37px; height: 37px; }
+  body[data-layout="monitor"] .arcade-pos { min-height: 27px; font-size: 10px; }
+  body[data-layout="monitor"] .arcade-row-name strong { font-size: 10px; line-height: 1.05; }
+  body[data-layout="monitor"] .arcade-row-name small { margin-top: 3px; font-size: 7px; }
+  body[data-layout="monitor"] .arcade-row-live { font-size: 7px; }
+  body[data-layout="monitor"] .arcade-row-points { gap: 3px; }
+  body[data-layout="monitor"] .arcade-row-score { font-size: 25px; line-height: .86; }
+  body[data-layout="monitor"] .arcade-row-proj { font-size: 8px; }
+  body[data-layout="monitor"] .arcade-row-move { top: 3px; right: 5px; font-size: 8px; }
+  body[data-layout="monitor"] .arcade-panel-head + .arcade-table-head { min-height: 25px; }
+}
