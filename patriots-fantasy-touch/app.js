@@ -620,10 +620,13 @@
   function arcadePlayerRow(player, side) {
     const actual = actualForPlayer(player);
     const move = scoreMoveFor(player);
+    const consensus = player.consensus || consensusFor(player);
+    const projected = finite(consensus.value) ?? finite(player.projected);
+    const projectedLabel = projected == null ? "PROJ MODEL" : `PROJ ${number(projected)}`;
     const movement = move ? `<span class="arcade-row-move ${move.direction}">${move.direction === "up" ? "▲" : "▼"} ${move.delta > 0 ? "+" : ""}${number(move.delta)}</span>` : "";
     const moveClass = move ? `arcade-score-${move.direction}` : "";
     const status = player.status === "LIVE" ? "LIVE" : /OUT|IR|DOUBTFUL|QUESTIONABLE/i.test(String(player.status || "")) ? String(player.status).toUpperCase() : player.status === "FINAL" ? "FINAL" : "NEXT";
-    return `<button class="arcade-player-row ${side} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><b class="arcade-pos">${esc(player.position || "UTIL")}</b>${playerFace(player, "small")}<span class="arcade-row-name"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><small>${esc(player.team || "FA")} • ${esc(playerOpponent(player))}</small></span><span class="arcade-row-live ${status === "LIVE" ? "is-live" : status === "OUT" || status === "IR" ? "is-out" : ""}">${status}</span><strong class="arcade-row-score actual-score">${number(actual)}</strong><span class="arcade-row-proj">${esc(projectionLabel(player).replace(" • PUBLIC ESPN PLAYER POOL", ""))}</span>${movement}</button>`;
+    return `<button class="arcade-player-row ${side} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><b class="arcade-pos">${esc(player.position || "UTIL")}</b>${playerFace(player, "small")}<span class="arcade-row-name"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><small>${esc(player.team || "FA")} • ${esc(playerOpponent(player))}</small></span><span class="arcade-row-live ${status === "LIVE" ? "is-live" : status === "OUT" || status === "IR" ? "is-out" : ""}">${status}</span><strong class="arcade-row-score actual-score">${number(actual)}</strong><span class="arcade-row-proj">${esc(projectedLabel)}</span>${movement}</button>`;
   }
 
   function arcadeRosterPanel(league, side) {
