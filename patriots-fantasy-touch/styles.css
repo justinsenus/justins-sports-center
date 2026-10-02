@@ -694,3 +694,173 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   body[data-layout="monitor"] .next-game-row strong b { font-size: 17px; }
   body[data-layout="monitor"] .next-game-row small { font-size: 8px; }
 }
+
+/* Wide monitor readability pass. The monitor is a touch surface, not a
+   screenshot: let the board grow vertically so every roster row remains
+   available at normal browser zoom, while keeping the three-column arcade
+   composition and a full-width canvas. */
+@media (min-width: 900px) {
+  body[data-layout="monitor"] {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-color: #2a6eb4 #07101a;
+  }
+
+  body[data-layout="monitor"] .touch-app {
+    width: min(2200px, 100%);
+    height: auto;
+    min-height: 100vh;
+    padding: 18px clamp(16px, 2vw, 34px) 28px;
+    grid-template-rows: auto auto auto auto;
+    gap: 14px;
+  }
+
+  body[data-layout="monitor"] .touch-header {
+    position: sticky;
+    z-index: 15;
+    top: 0;
+    min-height: 70px;
+    padding: 0 10px 12px;
+    background: linear-gradient(180deg, rgba(5, 8, 13, .98) 78%, rgba(5, 8, 13, .8));
+    backdrop-filter: blur(8px);
+  }
+
+  body[data-layout="monitor"] main,
+  body[data-layout="monitor"] #workspace,
+  body[data-layout="monitor"] .arcade-dashboard {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body[data-layout="monitor"] .matchup-hero.arcade-hero {
+    height: auto;
+    min-height: 220px;
+    padding: 26px 38px 45px;
+    gap: 24px;
+  }
+
+  body[data-layout="monitor"] .arcade-hero .arcade-side {
+    grid-template-columns: minmax(0, 1fr) 78px 140px;
+    gap: 16px;
+  }
+
+  body[data-layout="monitor"] .arcade-hero .arcade-side.opponent {
+    grid-template-columns: 140px 78px minmax(0, 1fr);
+  }
+
+  body[data-layout="monitor"] .arcade-hero .profile-avatar {
+    width: 78px;
+    height: 78px;
+    font-size: 24px;
+  }
+
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy span { font-size: 12px; }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy strong {
+    margin: 9px 0;
+    font-size: clamp(26px, 2.2vw, 38px);
+    line-height: 1.05;
+  }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy small { font-size: 11px; }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block strong { font-size: clamp(62px, 5vw, 88px); }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block small { font-size: 13px; }
+  body[data-layout="monitor"] .arcade-delta { font-size: 14px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-vs strong { font-size: 52px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-vs span { font-size: 10px; }
+  body[data-layout="monitor"] .arcade-center-score .hero-proj { margin-top: 10px; font-size: 15px; }
+  body[data-layout="monitor"] .arcade-center-score .win-bar { height: 14px; margin-top: 12px; }
+  body[data-layout="monitor"] .arcade-center-score .win-label { font-size: 9px; }
+  body[data-layout="monitor"] .arcade-hero .hero-meta { font-size: 10px; }
+
+  body[data-layout="monitor"] .arcade-columns {
+    grid-template-columns: minmax(350px, 1fr) minmax(420px, 1.12fr) minmax(350px, 1fr);
+    gap: 16px;
+  }
+
+  body[data-layout="monitor"] .arcade-column { gap: 16px; }
+  body[data-layout="monitor"] .arcade-panel { border-radius: 14px; }
+  body[data-layout="monitor"] .arcade-panel-head {
+    min-height: 64px;
+    padding: 0 16px;
+  }
+  body[data-layout="monitor"] .arcade-panel-head b { font-size: 17px; }
+  body[data-layout="monitor"] .arcade-panel-head small { font-size: 10px; }
+  body[data-layout="monitor"] .arcade-live-indicator { font-size: 10px; }
+  body[data-layout="monitor"] .arcade-live-indicator i { width: 10px; height: 10px; }
+  body[data-layout="monitor"] .arcade-table-head {
+    grid-template-columns: 42px minmax(0, 1fr) 82px 88px;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 9px;
+  }
+  body[data-layout="monitor"] .arcade-player-list { gap: 6px; padding: 9px; }
+  body[data-layout="monitor"] .arcade-player-row {
+    grid-template-columns: 42px 46px minmax(0, 1fr) 82px 82px;
+    gap: 9px;
+    min-height: 66px;
+    padding: 7px 9px;
+    border-radius: 8px;
+  }
+  body[data-layout="monitor"] .arcade-pos { min-height: 31px; font-size: 11px; }
+  body[data-layout="monitor"] .arcade-player-row .player-face.small { width: 43px; height: 43px; }
+  body[data-layout="monitor"] .arcade-row-name strong {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  body[data-layout="monitor"] .arcade-row-name small { margin-top: 4px; font-size: 9px; }
+  body[data-layout="monitor"] .arcade-row-live { font-size: 9px; }
+  body[data-layout="monitor"] .arcade-row-score { font-size: 29px; }
+  body[data-layout="monitor"] .arcade-row-proj { font-size: 10px; }
+  body[data-layout="monitor"] .arcade-row-move { top: 4px; right: 7px; font-size: 9px; }
+  body[data-layout="monitor"] .momentum-scoreline { padding-top: 20px; }
+  body[data-layout="monitor"] .momentum-scoreline strong { font-size: 44px; }
+  body[data-layout="monitor"] .momentum-scoreline span { font-size: 15px; }
+  body[data-layout="monitor"] .momentum-chart { height: 230px; }
+  body[data-layout="monitor"] .momentum-labels { padding: 10px 16px 13px; font-size: 9px; }
+  body[data-layout="monitor"] .scoring-feed-row {
+    grid-template-columns: 28px 52px minmax(0, 1fr) auto 58px;
+    min-height: 50px;
+    padding: 8px 10px;
+  }
+  body[data-layout="monitor"] .scoring-feed-row .feed-icon { width: 25px; height: 25px; font-size: 13px; }
+  body[data-layout="monitor"] .scoring-feed-row time { font-size: 9px; }
+  body[data-layout="monitor"] .scoring-feed-row strong { font-size: 12px; }
+  body[data-layout="monitor"] .scoring-feed-row span:not(.feed-icon) { font-size: 9px; }
+  body[data-layout="monitor"] .scoring-feed-row b { font-size: 19px; }
+  body[data-layout="monitor"] .injury-watch-list,
+  body[data-layout="monitor"] .next-games-list,
+  body[data-layout="monitor"] .scoring-feed-list { gap: 7px; padding: 11px; }
+  body[data-layout="monitor"] .injury-watch-row {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    min-height: 58px;
+    gap: 9px;
+    padding: 8px;
+  }
+  body[data-layout="monitor"] .injury-watch-row .player-face.small { width: 40px; height: 40px; }
+  body[data-layout="monitor"] .injury-watch-row strong { font-size: 13px; }
+  body[data-layout="monitor"] .injury-watch-row small { font-size: 9px; }
+  body[data-layout="monitor"] .injury-watch-row b { font-size: 10px; }
+  body[data-layout="monitor"] .next-game-row { grid-template-columns: 54px minmax(0, 1fr) auto; min-height: 70px; padding: 9px 11px; }
+  body[data-layout="monitor"] .next-game-status { font-size: 9px; }
+  body[data-layout="monitor"] .next-game-row strong { font-size: 12px; }
+  body[data-layout="monitor"] .next-game-row strong b { font-size: 19px; }
+  body[data-layout="monitor"] .next-game-row small { font-size: 9px; }
+}
+
+/* Keep the three-column board usable on a smaller landscape monitor without
+   forcing browser zoom. It grows vertically and keeps the readable type. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  body[data-layout="monitor"] .touch-app { padding-inline: 12px; }
+  body[data-layout="monitor"] .matchup-hero.arcade-hero { padding-inline: 20px; gap: 12px; }
+  body[data-layout="monitor"] .arcade-columns { grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.08fr) minmax(280px, 1fr); gap: 10px; }
+  body[data-layout="monitor"] .arcade-hero .arcade-side { grid-template-columns: minmax(0, 1fr) 58px 94px; gap: 8px; }
+  body[data-layout="monitor"] .arcade-hero .arcade-side.opponent { grid-template-columns: 94px 58px minmax(0, 1fr); }
+  body[data-layout="monitor"] .arcade-hero .profile-avatar { width: 58px; height: 58px; }
+  body[data-layout="monitor"] .arcade-hero .hero-team-copy strong { font-size: 23px; }
+  body[data-layout="monitor"] .arcade-player-row { grid-template-columns: 34px 38px minmax(0, 1fr) 62px 68px; gap: 6px; min-height: 60px; }
+  body[data-layout="monitor"] .arcade-row-name strong { font-size: 11px; }
+  body[data-layout="monitor"] .arcade-row-name small,
+  body[data-layout="monitor"] .arcade-row-live { font-size: 8px; }
+  body[data-layout="monitor"] .arcade-row-score { font-size: 25px; }
+}
