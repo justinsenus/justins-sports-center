@@ -16,6 +16,7 @@
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22]);
+  const TEAM_ABBR_ALIASES = { WAS: "WSH", WSH: "WSH", JAC: "JAX", JAX: "JAX", LVR: "LV", LV: "LV" };
   // ESPN's public player pool can legitimately omit a line for an inactive,
   // questionable, or newly-added player. Keep the card useful and explicit
   // in that case instead of rendering a dash or an empty projection.
@@ -107,9 +108,14 @@
     return event && event.competitions && event.competitions[0] && event.competitions[0].competitors || [];
   }
 
+  function teamCode(value) {
+    const code = String(value || "").trim().toUpperCase();
+    return TEAM_ABBR_ALIASES[code] || code;
+  }
+
   function findPlayerEvent(player) {
-    const team = String(player && (player.team || player.proTeam || "")).toUpperCase();
-    return state.scoreboard.find((event) => eventCompetitors(event).some((c) => String(c.team && c.team.abbreviation || "").toUpperCase() === team)) || null;
+    const team = teamCode(player && (player.team || player.proTeam || ""));
+    return state.scoreboard.find((event) => eventCompetitors(event).some((c) => teamCode(c.team && c.team.abbreviation) === team)) || null;
   }
 
   function playerImage(player) {
@@ -310,7 +316,7 @@
     const name = player.fullName || [player.firstName, player.lastName].filter(Boolean).join(" ") || id || "Player";
     const position = ESPN_POSITION_BY_ID[player.defaultPositionId] || "UTIL";
     const team = ESPN_TEAM_BY_PRO_ID[player.proTeamId] || "FA";
-    const event = state.scoreboard.find((candidate) => eventCompetitors(candidate).some((competitor) => String(competitor.team && competitor.team.abbreviation || "").toUpperCase() === team)) || null;
+    const event = findPlayerEvent({ team }) || null;
     const rows = espnStatRows(player, scoringPeriodId);
     const actualRow = rows.find((row) => Number(row.statSourceId) === 0) || rows.find((row) => Number(row.statSourceId) === 1 && row.appliedTotal != null);
     const actual = finite(currentEntry && currentEntry.playerPoolEntry && currentEntry.playerPoolEntry.appliedStatTotal) ?? finite(entry && entry.playerPoolEntry && entry.playerPoolEntry.appliedStatTotal) ?? finite(actualRow && actualRow.appliedTotal) ?? 0;
@@ -607,18 +613,18 @@
   function playerOpponent(player) {
     const event = player && (player.event || findPlayerEvent(player));
     if (!event) return "UPCOMING";
-    const team = String(player.team || "").toUpperCase();
-    const other = eventCompetitors(event).find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() !== team);
+    const team = teamCode(player.team || "");
+    const other = eventCompetitors(event).find((candidate) => teamCode(candidate.team && candidate.team.abbreviation) !== team);
     return other && other.team && other.team.abbreviation || "UPCOMING";
   }
 
   function playerGameLabel(player) {
     const event = player && (player.event || findPlayerEvent(player));
-    const team = String(player && (player.team || player.proTeam) || "").toUpperCase();
+    const team = teamCode(player && (player.team || player.proTeam) || "");
     if (!event) return team ? `${team} • GAME TIME PENDING` : "GAME TIME PENDING • OPPONENT TBD";
     const competitors = eventCompetitors(event);
-    const own = competitors.find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() === team);
-    const other = competitors.find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() !== team);
+    const own = competitors.find((candidate) => teamCode(candidate.team && candidate.team.abbreviation) === team);
+    const other = competitors.find((candidate) => teamCode(candidate.team && candidate.team.abbreviation) !== team);
     const opponent = other && other.team && other.team.abbreviation || "TBD";
     const at = own && own.homeAway === "away" ? "@" : "vs";
     const when = event.date ? new Date(event.date) : null;
