@@ -37,6 +37,7 @@
     consensus: null,
     scoreboard: [],
     selectedPlayer: null,
+    playerFilter: "all",
     loading: true,
     error: "",
     lastSync: null,
@@ -67,7 +68,7 @@
     return `${Math.floor(seconds / 3600)}h AGO`;
   };
   const teamLogo = (team) => `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(team || "nfl").toLowerCase())}.png`;
-  const textValue = (value, fallback = "SYNCING") => value == null || value === "" ? fallback : String(value);
+  const textValue = (value, fallback = "PREGAME") => value == null || value === "" ? fallback : String(value);
   const initials = (value) => String(value || "PLAYER").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "P";
 
   async function getJSON(url) {
@@ -267,7 +268,7 @@
     const opponent = event && eventCompetitors(event).find((candidate) => String(candidate.team && candidate.team.abbreviation || "").toUpperCase() !== String(ESPN_TEAM_BY_PRO_ID[player && player.proTeamId] || "").toUpperCase());
     const matchup = opponent && opponent.team && opponent.team.abbreviation ? `VS ${opponent.team.abbreviation}` : "NEXT GAME";
     const visibleActual = event && (eventState(event).live || eventState(event).final) ? actual : 0;
-    return `${status} • ${matchup} • ${number(visibleActual)} PTS • PROJ ${projected == null ? "FEED SYNCING" : number(projected)}`;
+    return `${status} • ${matchup} • ${number(visibleActual)} PTS • PROJ ${projected == null ? "MODEL READY" : number(projected)}`;
   }
 
   function normalizeESPNEntry(entry, currentEntry, scoringPeriodId, side) {
@@ -491,7 +492,7 @@
   function oddsLabel(player) {
     const c = player && player.consensus || consensusFor(player);
     if (c.market && c.market.min != null && c.market.max != null) return `ODDS RANGE ${number(c.market.min)}–${number(c.market.max)} (${number(c.market.range, 1, "0")})`;
-    return c.odds && c.odds.length ? `ODDS ${c.odds.length} LINES` : "ODDS FEED CONNECTING";
+    return c.odds && c.odds.length ? `ODDS ${c.odds.length} LINES` : "ODDS NOT CONNECTED";
   }
 
   function playerOpponent(player) {
@@ -516,7 +517,7 @@
 
   function liveGamesMarkup() {
     const events = (state.scoreboard || []).filter((event) => eventState(event).live || eventState(event).upcoming).slice(0, 8);
-    if (!events.length) return `<div class="empty-card"><strong>LIVE GAME FEED WAITING</strong><span>Games, quarter/clock, possession, and prop markets will appear here on game day.</span></div>`;
+    if (!events.length) return `<div class="empty-card"><strong>NO LIVE GAMES RIGHT NOW</strong><span>The live board will populate automatically when a game is in progress or scheduled.</span></div>`;
     return `<div class="live-games-grid">${events.map((event) => {
       const status = eventState(event);
       const competitors = eventCompetitors(event);
@@ -533,12 +534,13 @@
     const consensus = state.consensus || {};
     const status = consensus.status === "ready" || consensus.status === "live" ? "CONSENSUS LIVE" : live > 1 ? "PARTIAL CONSENSUS" : "DIRECT FEED ONLY";
     const sourceNames = stats.sources.slice(0, 6).map((source) => `<span class="source-chip live">${esc(source.name || source.id)}</span>`).join("");
-    return `<section class="source-panel"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live}/${catalog} SOURCES</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${stats.oddsBooks ? `${stats.oddsBooks} BOOKS` : "ODDS FEED CONNECTING"}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Actual points are live when games start. Projections stay visible from the available public feed; ranges appear when multiple lines respond.</p></section>`;
+    const unavailable = Math.max(0, catalog - live);
+    return `<section class="source-panel" data-action="refresh" role="button" tabindex="0" aria-label="Refresh projection feeds"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live} LIVE • ${unavailable} NOT ENABLED</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${stats.oddsBooks ? `${stats.oddsBooks} BOOKS` : "ODDS NOT CONNECTED"}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Tap this panel to refresh the connected feeds. Actual points go live when games start; projections remain visible from ESPN or Sleeper.</p></section>`;
   }
 
   function insightMarkup() {
     const insights = state.consensus && state.consensus.insights || [];
-    if (!insights.length) return `<div class="empty-card compact"><strong>DIFFERENCE FEED SYNCING</strong><span>Provider ranges will appear as soon as public projection lines respond.</span></div>`;
+    if (!insights.length) return `<div class="empty-card compact"><strong>DIFFERENCE FEED NOT CONNECTED</strong><span>Enable an odds or second projection provider to compare lines.</span></div>`;
     return `<div class="insight-list">${insights.slice(0, 5).map((item) => `<button class="insight-row" type="button" data-player-name="${esc(item.name)}"><span class="insight-rank">${esc(item.rank || "#")}</span><span><strong>${esc(item.name)}</strong><small>${esc(item.market || "FANTASY PROJECTION")} • ${esc(item.source || "OUTLIER")}</small></span><b>${item.delta == null ? "SYNC" : `+${number(item.delta)}`}<small>${item.range == null ? "RANGE FEED" : `RANGE ${number(item.range)}`}</small></b></button>`).join("")}</div>`;
   }
 
@@ -555,7 +557,7 @@
     const opponentPct = 100 - ownPct;
     const ownMark = initials(league.ownName);
     const opponentMark = initials(league.opponentName);
-    return `<section class="matchup-hero"><div class="hero-team own"><div class="hero-team-copy"><span>YOUR TEAM</span><strong>${esc(league.ownName)}</strong><small>WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div><span class="hero-mark red-mark" aria-label="${esc(league.ownName)}">${esc(ownMark)}</span></div><div class="hero-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE" : "PREGAME"}</span><div><strong>${number(ownActual)}</strong><em>VS</em><strong>${number(opponentActual)}</strong></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "FEED SYNCING"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "FEED SYNCING"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN PROBABILITY • MODEL FROM LIVE PROJECTIONS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent"><span class="hero-mark blue-mark" aria-label="${esc(league.opponentName)}">${esc(opponentMark)}</span><div class="hero-team-copy"><span>OPPONENT</span><strong>${esc(league.opponentName)}</strong><small>${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(sourceStats().live)}/${esc(sourceStats().catalog)} PROJECTION SOURCES</span><span>${esc(state.consensus && state.consensus.odds_books || 0)} ODDS BOOKS CONNECTED</span><span>UPDATED ${esc(formatAge(state.consensus && state.consensus.generated_at || state.refreshedAt))}</span></div></section>`;
+    return `<section class="matchup-hero"><div class="hero-team own"><div class="hero-team-copy"><span>YOUR TEAM</span><strong>${esc(league.ownName)}</strong><small>WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div><span class="hero-mark red-mark" aria-label="${esc(league.ownName)}">${esc(ownMark)}</span></div><div class="hero-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE" : "PREGAME"}</span><div><strong>${number(ownActual)}</strong><em>VS</em><strong>${number(opponentActual)}</strong></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN PROBABILITY • MODEL FROM LIVE PROJECTIONS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent"><span class="hero-mark blue-mark" aria-label="${esc(league.opponentName)}">${esc(opponentMark)}</span><div class="hero-team-copy"><span>OPPONENT</span><strong>${esc(league.opponentName)}</strong><small>${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(sourceStats().live)} LIVE PROJECTION FEEDS</span><span>${state.consensus && state.consensus.odds_books ? `${esc(state.consensus.odds_books)} ODDS BOOKS` : "ODDS NOT CONNECTED"}</span><span>UPDATED ${esc(formatAge(state.consensus && state.consensus.generated_at || state.refreshedAt))}</span></div></section>`;
   }
 
   function renderMonitorTabs() {
@@ -565,17 +567,17 @@
   function renderFocusPanel(league) {
     const players = [...(league.own || []), ...(league.opponent || [])];
     const focus = state.selectedPlayer && players.find((player) => String(player.player_id) === String(state.selectedPlayer.player_id)) || players.find((player) => player.status === "LIVE") || players.find((player) => player.starter !== false) || players[0];
-    if (!focus) return `<section class="focus-panel workspace-panel"><div class="empty-card"><strong>PLAYER DETAIL SYNCING</strong><span>Live player details appear when the roster feed responds.</span></div></section>`;
+    if (!focus) return `<section class="focus-panel workspace-panel"><div class="empty-card"><strong>PLAYER DETAIL NOT AVAILABLE</strong><span>Choose a player after the roster feed connects.</span></div></section>`;
     const c = focus.consensus || consensusFor(focus);
     const actual = actualForPlayer(focus);
     const projection = finite(c.value) ?? finite(focus.projected);
     const average = finite(focus.seasonAvg) ?? projection;
-    const stat = (value) => textValue(value, "SYNCING");
+    const stat = (value) => textValue(value, "PREGAME");
     const trendValues = [finite(focus.actual) || 0, projection || 0, average || 0];
     const peak = Math.max(...trendValues, 1);
     const bars = trendValues.map((value, index) => `<span style="height:${Math.max(14, Math.round(value / peak * 72))}%" class="${index === 0 ? "current" : ""}"></span>`).join("");
     const next = playerOpponent(focus);
-    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Clear player focus">×</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "SYNC" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "SYNC" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">STATS</span><span>TRENDS</span><span>MATCHUP</span><span>NEWS</span></div><div class="focus-stat-grid"><div><b>${stat(focus.pass_yd || focus.passing_yards)}</b><small>PASS YDS</small></div><div><b>${stat(focus.pass_td || focus.passing_tds)}</b><small>PASS TD</small></div><div><b>${stat(focus.interceptions || focus.int)}</b><small>INT</small></div><div><b>${stat(focus.rush_yd || focus.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${stat(focus.rec || focus.receptions)}</b><small>REC</small></div><div><b>${stat(focus.tgt || focus.targets)}</b><small>TARGETS</small></div></div><div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
+    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Reset player focus">RESET</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "MODEL" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "PREGAME" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><div class="focus-stat-grid"><div><b>${stat(focus.pass_yd || focus.passing_yards)}</b><small>PASS YDS</small></div><div><b>${stat(focus.pass_td || focus.passing_tds)}</b><small>PASS TD</small></div><div><b>${stat(focus.interceptions || focus.int)}</b><small>INT</small></div><div><b>${stat(focus.rush_yd || focus.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${stat(focus.rec || focus.receptions)}</b><small>REC</small></div><div><b>${stat(focus.tgt || focus.targets)}</b><small>TARGETS</small></div></div><div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
   }
 
   function renderScoringTicker(league) {
@@ -601,9 +603,12 @@
   }
 
   function renderPlayers(league) {
-    const players = [...(league.own || []).map((player) => ({ ...player, rosterSide: "YOUR ROSTER" })), ...(league.opponent || []).map((player) => ({ ...player, rosterSide: "OPPONENT" }))];
-    const live = players.filter((player) => player.status === "LIVE");
-    return `<div class="players-view"><div class="filter-row"><button class="filter active" type="button">ALL PLAYERS</button><button class="filter" type="button">STARTERS</button><button class="filter" type="button">BENCH</button><button class="filter" type="button">LIVE NOW${live.length ? ` • ${live.length}` : ""}</button><span class="filter-note">Actual large • projection small • source range under every row</span></div><div class="players-table"><div class="players-table-head"><span>PLAYER</span><span>STATUS / MATCHUP</span><span>ACTUAL</span><span>CONSENSUS</span><span>ODDS / RANGE</span></div>${players.map((player) => `<button class="players-table-row" data-player-id="${esc(player.player_id)}" data-side="own" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • ${esc(player.rosterSide)}</small></span><span><b class="status-text">${esc(player.status || "UPCOMING")}</b><small>VS ${esc(playerOpponent(player))}</small></span><strong class="table-actual">${number(actualForPlayer(player))}<small>PTS</small></strong><span class="table-proj">${esc(projectionLabel(player))}<small>${esc(rangeLabel(player))}</small></span><span class="table-odds">${esc(oddsLabel(player))}<small>OPEN DETAIL ›</small></span></button>`).join("")}</div></div>`;
+    const allPlayers = [...(league.own || []).map((player) => ({ ...player, rosterSide: "YOUR ROSTER" })), ...(league.opponent || []).map((player) => ({ ...player, rosterSide: "OPPONENT" }))];
+    const filter = state.playerFilter || "all";
+    const players = allPlayers.filter((player) => filter === "all" || filter === "starters" && player.starter !== false || filter === "bench" && player.starter === false || filter === "live" && player.status === "LIVE");
+    const liveCount = allPlayers.filter((player) => player.status === "LIVE").length;
+    const rows = players.length ? players.map((player) => `<button class="players-table-row" data-player-id="${esc(player.player_id)}" data-side="${esc(player.side || "own")}" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • ${esc(player.rosterSide)}</small></span><span><b class="status-text">${esc(player.status || "UPCOMING")}</b><small>VS ${esc(playerOpponent(player))}</small></span><strong class="table-actual">${number(actualForPlayer(player))}<small>PTS</small></strong><span class="table-proj">${esc(projectionLabel(player))}<small>${esc(rangeLabel(player))}</small></span><span class="table-odds">${esc(oddsLabel(player))}<small>OPEN DETAIL ›</small></span></button>`).join("") : `<div class="empty-card"><strong>NO PLAYERS IN THIS FILTER</strong><span>Try ALL PLAYERS or refresh the connected roster feed.</span></div>`;
+    return `<div class="players-view"><div class="filter-row"><button class="filter ${filter === "all" ? "active" : ""}" data-filter="all" type="button">ALL PLAYERS</button><button class="filter ${filter === "starters" ? "active" : ""}" data-filter="starters" type="button">STARTERS</button><button class="filter ${filter === "bench" ? "active" : ""}" data-filter="bench" type="button">BENCH</button><button class="filter ${filter === "live" ? "active" : ""}" data-filter="live" type="button">LIVE NOW${liveCount ? ` • ${liveCount}` : ""}</button><span class="filter-note">Tap any row for the focus panel${document.body.dataset.layout === "mobile" ? " • detail opens here" : ""}</span></div><div class="players-table"><div class="players-table-head"><span>PLAYER</span><span>STATUS / MATCHUP</span><span>ACTUAL</span><span>CONSENSUS</span><span>ODDS / RANGE</span></div>${rows}</div></div>`;
   }
 
   function renderInjuries(league) {
@@ -620,21 +625,22 @@
 
   function renderDrawer() {
     const drawer = $("#playerDrawer");
+    if (document.body.dataset.layout === "monitor") { drawer.classList.remove("open"); drawer.innerHTML = ""; return; }
     if (!state.selectedPlayer) { drawer.classList.remove("open"); drawer.innerHTML = ""; return; }
     const player = state.selectedPlayer;
     const c = player.consensus || consensusFor(player);
     const actual = actualForPlayer(player);
-    const sourceRows = c.sources && c.sources.length ? c.sources.slice(0, 8).map((source) => `<div class="source-value"><span>${esc(source.source || source.name || "SOURCE")}</span><b>${number(source.value, 1, "SYNC")}</b></div>`).join("") : `<div class="empty-card compact"><strong>PUBLIC PROJECTION FEED</strong><span>Additional source values appear when provider endpoints respond.</span></div>`;
-    const oddsRows = c.odds && c.odds.length ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "SYNC" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("") : `<div class="empty-card compact"><strong>ODDS FEED CONNECTING</strong><span>Market range appears after an odds provider is enabled.</span></div>`;
+    const sourceRows = c.sources && c.sources.length ? c.sources.slice(0, 8).map((source) => `<div class="source-value"><span>${esc(source.source || source.name || "SOURCE")}</span><b>${number(source.value, 1, "MODEL")}</b></div>`).join("") : `<div class="empty-card compact"><strong>PUBLIC PROJECTION FEED</strong><span>ESPN or Sleeper projection is being used until another source is enabled.</span></div>`;
+    const oddsRows = c.odds && c.odds.length ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "NOT SET" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("") : `<div class="empty-card compact"><strong>ODDS NOT CONNECTED</strong><span>No sportsbook provider is enabled, so no market range is shown.</span></div>`;
     drawer.classList.add("open");
-    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "SYNC" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "SYNC" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><button class="active" type="button">STATS</button><button type="button">TRENDS</button><button type="button">MARKET</button><button type="button">NEWS</button></div><section class="drawer-section"><div class="drawer-heading"><b>LIVE / PROJECTED STAT LINE</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${esc(textValue(player.pass_yd || player.passing_yards))}</b><small>PASS YDS</small></div><div><b>${esc(textValue(player.pass_td || player.passing_tds))}</b><small>PASS TD</small></div><div><b>${esc(textValue(player.rush_yd || player.rushing_yards))}</b><small>RUSH YDS</small></div><div><b>${esc(textValue(player.rec || player.receptions))}</b><small>REC</small></div><div><b>${esc(textValue(player.rec_yd || player.receiving_yards))}</b><small>REC YDS</small></div><div><b>${esc(textValue(player.tgt || player.targets))}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Lines can move, disappear, or be delayed by a provider. Biggest difference means the largest absolute gap from the current median.</p>`;
-    $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; renderDrawer(); });
+    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "SINGLE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><section class="drawer-section"><div class="drawer-heading"><b>LIVE / PROJECTED STAT LINE</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${esc(textValue(player.pass_yd || player.passing_yards))}</b><small>PASS YDS</small></div><div><b>${esc(textValue(player.pass_td || player.passing_tds))}</b><small>PASS TD</small></div><div><b>${esc(textValue(player.rush_yd || player.rushing_yards))}</b><small>RUSH YDS</small></div><div><b>${esc(textValue(player.rec || player.receptions))}</b><small>REC</small></div><div><b>${esc(textValue(player.rec_yd || player.receiving_yards))}</b><small>REC YDS</small></div><div><b>${esc(textValue(player.tgt || player.targets))}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Lines can move, disappear, or be delayed by a provider. Biggest difference means the largest absolute gap from the current median.</p>`;
+    $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
   }
 
   function renderWorkspace(league) {
     const workspace = $("#workspace");
     if (state.loading) { workspace.innerHTML = `<div class="loading-panel">LOADING LIVE FANTASY DATA…</div>`; return; }
-    if (!league.ready && state.view !== "overview") { workspace.innerHTML = `<div class="loading-panel"><strong>ESPN PRIVATE SYNC NEEDED</strong><span>Make the league public or add ESPN_S2 and ESPN_SWID as private Actions secrets.</span></div>`; return; }
+    if (!league.ready && state.view !== "overview") { workspace.innerHTML = `<div class="loading-panel"><strong>ESPN FEED NOT CONNECTED</strong><span>Use the public ESPN league setting, then tap REFRESH NOW.</span><button class="refresh-action" data-action="refresh" type="button">REFRESH NOW</button></div>`; wireInteractions(); return; }
     if (state.view === "matchups") workspace.innerHTML = renderMatchups(league);
     else if (state.view === "players") workspace.innerHTML = renderPlayers(league);
     else if (state.view === "injuries") workspace.innerHTML = renderInjuries(league);
@@ -654,19 +660,36 @@
     $("#connectionText").textContent = state.error ? "FEED PARTIAL" : state.loading ? "CONNECTING" : "LIVE DATA CONNECTED";
     $("#connectionDot").className = `status-dot ${state.error ? "warn" : state.loading ? "" : "live"}`;
     $("#lastSync").textContent = `SYNC ${formatClock(state.refreshedAt || new Date())}`;
-    $("#sourceStatus").textContent = `${sourceStats().live}/${sourceStats().catalog} PROJECTION SOURCES`;
+    $("#clock").textContent = formatClock(new Date());
+    $("#sourceStatus").textContent = `${sourceStats().live} LIVE FEEDS`;
     const oddsStatus = $("#oddsStatus");
-    if (oddsStatus) oddsStatus.textContent = sourceStats().oddsBooks ? `${sourceStats().oddsBooks} ODDS BOOKS` : "ODDS FEED CONNECTING";
+    if (oddsStatus) oddsStatus.textContent = sourceStats().oddsBooks ? `${sourceStats().oddsBooks} ODDS BOOKS` : "ODDS NOT CONNECTED";
   }
 
   function wireInteractions() {
-    $$("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; state.selectedPlayer = null; render(); }));
-    $$("[data-league]").forEach((button) => button.addEventListener("click", () => { state.league = button.dataset.league; state.selectedPlayer = null; render(); }));
+    $$("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; state.selectedPlayer = null; if (state.view !== "players") state.playerFilter = "all"; render(); }));
+    $$("[data-league]").forEach((button) => button.addEventListener("click", () => { state.league = button.dataset.league; state.selectedPlayer = null; state.playerFilter = "all"; render(); }));
+    $$("[data-action=refresh]").forEach((button) => {
+      const refreshNow = () => {
+        button.classList.add("is-refreshing");
+        refresh().finally(() => button.classList.remove("is-refreshing"));
+      };
+      button.addEventListener("click", refreshNow);
+      button.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); refreshNow(); } });
+    });
+    $$('[data-filter]').forEach((button) => button.addEventListener("click", () => { state.playerFilter = button.dataset.filter || "all"; render(); }));
     $$('[data-player-id]').forEach((button) => button.addEventListener("click", () => {
       const league = currentLeague();
       const players = [...(league.own || []), ...(league.opponent || [])];
       state.selectedPlayer = players.find((player) => String(player.player_id) === String(button.dataset.playerId)) || null;
-      renderDrawer();
+      render();
+    }));
+    $$('[data-player-name]').forEach((button) => button.addEventListener("click", () => {
+      const league = currentLeague();
+      const players = [...(league.own || []), ...(league.opponent || [])];
+      const target = nameKey(button.dataset.playerName);
+      state.selectedPlayer = players.find((player) => nameKey(player.full_name || player.name) === target) || null;
+      render();
     }));
     const focusClose = $(".focus-close");
     if (focusClose) focusClose.addEventListener("click", () => { state.selectedPlayer = null; render(); });
@@ -675,17 +698,17 @@
   async function refresh() {
     if (refreshInFlight) return;
     refreshInFlight = true;
-    const [sleeperResult, espnResult, consensusResult, scoreboardResult] = await Promise.all([
+    const scoreboardResult = await loadScoreboard().then((value) => ({ value })).catch((error) => ({ error }));
+    if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
+    const [sleeperResult, espnResult, consensusResult] = await Promise.all([
       loadSleeper().then((value) => ({ value })).catch((error) => ({ error })),
       loadESPN().then((value) => ({ value })).catch((error) => ({ error })),
-      loadConsensus().then((value) => ({ value })).catch((error) => ({ error })),
-      loadScoreboard().then((value) => ({ value })).catch((error) => ({ error }))
+      loadConsensus().then((value) => ({ value })).catch((error) => ({ error }))
     ]);
     const failures = [];
     if (sleeperResult.value) state.sleeper = sleeperResult.value; else failures.push("SLEEPER");
     if (espnResult.value) state.espn = espnResult.value; else failures.push("ESPN");
     if (consensusResult.value) state.consensus = consensusResult.value; else if (!state.consensus) state.consensus = { status: "unavailable", players: {}, sources: [], insights: [] };
-    if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
     if (sleeperResult.value && sleeperResult.value.week) state.week = sleeperResult.value.week;
     state.error = failures.length ? `${failures.join(" + ")} FEED RETRYING` : "";
     state.loading = false;
@@ -704,4 +727,8 @@
 
   refresh();
   setInterval(refresh, CONFIG.refreshMs);
+  setInterval(() => {
+    const clock = $("#clock");
+    if (clock) clock.textContent = formatClock(new Date());
+  }, 1000);
 })();

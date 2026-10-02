@@ -24,8 +24,8 @@
 
     <section class="control-strip">
       <div class="league-switcher"><span class="strip-label">LEAGUE</span><button data-league="sleeper" class="active" type="button">SLEEPER <b>THE BIG SENUS</b></button><button data-league="espn" type="button">ESPN <b>GUMBY'S BIG D</b></button></div>
-      <div class="week-control"><button type="button" aria-label="Previous week">‹</button><strong id="weekLabel">WEEK —</strong><button type="button" aria-label="Next week">›</button></div>
-      <div class="control-status"><span id="sourceStatus">SOURCES SYNCING</span><span id="oddsStatus">ODDS FEED CONNECTING</span></div>
+      <div class="week-control"><strong id="weekLabel">WEEK —</strong><button class="refresh-action" data-action="refresh" type="button">REFRESH NOW</button></div>
+      <div class="control-status"><span id="sourceStatus">FEEDS SYNCING</span><span id="oddsStatus">ODDS NOT CONNECTED</span></div>
     </section>
 
     <main>
@@ -38,6 +38,6 @@
     <footer class="touch-footer"><span><i class="footer-dot"></i>FANTASY DATA ONLY • ACTUAL/LIVE PRIMARY • PROJ ALWAYS VISIBLE</span><span id="lastSync">SYNC --:--</span></footer>
   </div>
   <script src="source-catalog.js?v=2"></script>
-  <script src="app.js?v=5" defer></script>
+  <script src="app.js?v=6" defer></script>
 </body>
 </html>
