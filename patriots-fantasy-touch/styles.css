@@ -218,6 +218,18 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 .momentum-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .momentum-line.own { stroke: var(--red-soft); filter: drop-shadow(0 0 5px rgba(255,107,131,.75)); }
 .momentum-line.opponent { stroke: var(--blue); filter: drop-shadow(0 0 5px rgba(66,200,255,.75)); }
+.stock-chart { overflow: visible; }
+.stock-chart .momentum-line { stroke-dasharray: 7 5; animation: momentumTicker 2.6s linear infinite; }
+.stock-chart .momentum-line.opponent { animation-delay: -.7s; }
+@keyframes momentumTicker { to { stroke-dashoffset: -48; } }
+.momentum-lead { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 20px; padding: 2px 9px 4px; color: var(--text); }
+.momentum-lead b { color: var(--green); font: 900 9px/1 var(--num); letter-spacing: .06em; }
+.momentum-lead small { color: var(--dim); font-size: 6px; letter-spacing: .06em; }
+.momentum-lead-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px currentColor; animation: momentumPulse 1.2s ease-in-out infinite; }
+.momentum-lead-dot.own { color: var(--red-soft); background: var(--red-soft); }
+.momentum-lead-dot.opponent { color: var(--blue); background: var(--blue); }
+.momentum-lead-dot.tie { color: var(--amber); background: var(--amber); }
+@keyframes momentumPulse { 50% { transform: scale(1.55); opacity: .66; } }
 .momentum-dot { stroke: #fff; stroke-width: 2; }
 .momentum-dot.own { fill: var(--red-soft); }
 .momentum-dot.opponent { fill: var(--blue); }
@@ -1048,4 +1060,37 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   body[data-layout="monitor"] .arcade-row-proj { font-size: 8px; }
   body[data-layout="monitor"] .arcade-row-move { top: 3px; right: 5px; font-size: 8px; }
   body[data-layout="monitor"] .arcade-panel-head + .arcade-table-head { min-height: 25px; }
+}
+
+/* Keep the numeric score in its own lane. The glowing team badge must never
+   sit behind a score glyph on a touch monitor or on a narrow browser window. */
+@media (min-width: 900px) and (max-width: 1450px) {
+  body[data-layout="monitor"] .arcade-hero .arcade-side {
+    grid-template-columns: minmax(0, 1fr) 66px 118px;
+    gap: 12px;
+  }
+  body[data-layout="monitor"] .arcade-hero .arcade-side.opponent {
+    grid-template-columns: 118px 66px minmax(0, 1fr);
+  }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 8px;
+    isolation: isolate;
+  }
+  body[data-layout="monitor"] .arcade-hero .hero-score-block strong {
+    max-width: 100%;
+    font-size: clamp(44px, 3.35vw, 56px);
+    letter-spacing: -.055em;
+  }
+  body[data-layout="monitor"] .arcade-hero .profile-avatar {
+    position: relative;
+    z-index: 1;
+    margin-inline: 4px;
+  }
 }
