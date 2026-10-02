@@ -38,6 +38,8 @@
     scoreboard: [],
     selectedPlayer: null,
     playerFilter: "all",
+    scoreSnapshot: {},
+    scoreMoves: {},
     loading: true,
     error: "",
     lastSync: null,
@@ -68,7 +70,8 @@
     return `${Math.floor(seconds / 3600)}h AGO`;
   };
   const teamLogo = (team) => `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(team || "nfl").toLowerCase())}.png`;
-  const textValue = (value, fallback = "PREGAME") => value == null || value === "" ? fallback : String(value);
+  const textValue = (value, fallback = "NOT STARTED") => value == null || value === "" ? fallback : String(value);
+  const statMarkup = (value) => finite(value) == null ? `<span class="pending-stat">NOT STARTED</span>` : esc(textValue(value));
   const initials = (value) => String(value || "PLAYER").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "P";
 
   async function getJSON(url) {
@@ -460,6 +463,22 @@
     return event && (eventState(event).live || eventState(event).final) ? finite(player.actual) || 0 : player && player.status === "LIVE" ? finite(player.actual) || 0 : 0;
   }
 
+  function updateScoreMoves(league) {
+    const next = {};
+    const moves = {};
+    [...(league.own || []), ...(league.opponent || [])].forEach((player) => {
+      const key = `${state.league}:${String(player.player_id)}`;
+      const value = actualForPlayer(player);
+      next[key] = value;
+      const previous = finite(state.scoreSnapshot[key]);
+      if (previous != null && value !== previous) {
+        moves[key] = { direction: value > previous ? "up" : "down", from: previous, to: value };
+      }
+    });
+    state.scoreMoves = moves;
+    state.scoreSnapshot = next;
+  }
+
   function leagueActual(league, side) {
     const value = side === "own" ? league.ownActual : league.opponentActual;
     return leagueStarted(league) ? finite(value) || 0 : 0;
@@ -485,7 +504,7 @@
 
   function rangeLabel(player) {
     const c = player && player.consensus || consensusFor(player);
-    if (c.min == null || c.max == null) return c.value == null ? "RANGE MODEL READY" : "RANGE SINGLE FEED";
+    if (c.min == null || c.max == null) return c.value == null ? "RANGE MODEL READY" : "RANGE ONE FEED";
     return `RANGE ${number(c.min)}–${number(c.max)} (${number(c.range)})`;
   }
 
@@ -493,6 +512,11 @@
     const c = player && player.consensus || consensusFor(player);
     if (c.market && c.market.min != null && c.market.max != null) return `ODDS RANGE ${number(c.market.min)}–${number(c.market.max)} (${number(c.market.range, 1, "0")})`;
     return c.odds && c.odds.length ? `ODDS ${c.odds.length} LINES` : "ODDS NOT CONNECTED";
+  }
+
+  function scoreMoveFor(player) {
+    if (state.view !== "live" || !player) return null;
+    return state.scoreMoves[`${state.league}:${String(player.player_id)}`] || null;
   }
 
   function playerOpponent(player) {
@@ -507,7 +531,11 @@
     const actual = actualForPlayer(player);
     const c = player.consensus || consensusFor(player);
     const statusClass = /OUT|IR|DOUBTFUL|QUESTIONABLE/.test(String(player.status || "")) ? "warn" : player.status === "LIVE" ? "live" : "";
-    return `<button class="player-card ${side} ${statusClass}" data-player-id="${esc(player.player_id)}" data-side="${side}" type="button"><div class="player-position">${esc(player.position || "UTIL")}</div>${playerFace(player)}<div class="player-card-copy"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><span>${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))} • <b class="status-text">${esc(player.status || "UPCOMING")}</b></span><small>${esc(player.statLine || "PREGAME • LIVE STAT LINE READY")}</small></div><div class="player-card-score"><strong class="actual-score">${number(actual)}</strong><small>PTS</small><span>${esc(projectionLabel({ ...player, consensus: c }))}</span><em>${esc(rangeLabel({ ...player, consensus: c }))}</em></div><span class="chevron">›</span></button>`;
+    const move = scoreMoveFor(player);
+    const moveClass = move ? `score-${move.direction}` : "";
+    const moveBadge = move ? `<i class="score-move ${move.direction}" aria-label="Points ${move.direction}">${move.direction === "up" ? "▲" : "▼"}</i>` : "";
+    const moveAttrs = move ? `data-score-from="${esc(move.from)}" data-score-to="${esc(move.to)}"` : "";
+    return `<button class="player-card ${side} ${statusClass} ${moveClass}" data-player-id="${esc(player.player_id)}" data-side="${side}" type="button"><div class="player-position">${esc(player.position || "UTIL")}</div>${playerFace(player)}<div class="player-card-copy"><strong>${esc(player.full_name || player.name || player.player_id)}</strong><span>${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))} • <b class="status-text">${esc(player.status || "UPCOMING")}</b></span><small>${esc(player.statLine || "PREGAME • LIVE STAT LINE READY")}</small></div><div class="player-card-score"><strong class="actual-score" ${moveAttrs}>${number(actual)}</strong><small>PTS</small><span>${esc(projectionLabel({ ...player, consensus: c }))}</span><em>${esc(rangeLabel({ ...player, consensus: c }))}</em>${moveBadge}</div><span class="chevron">›</span></button>`;
   }
 
   function compactPlayerRow(player) {
@@ -572,12 +600,11 @@
     const actual = actualForPlayer(focus);
     const projection = finite(c.value) ?? finite(focus.projected);
     const average = finite(focus.seasonAvg) ?? projection;
-    const stat = (value) => textValue(value, "PREGAME");
     const trendValues = [finite(focus.actual) || 0, projection || 0, average || 0];
     const peak = Math.max(...trendValues, 1);
     const bars = trendValues.map((value, index) => `<span style="height:${Math.max(14, Math.round(value / peak * 72))}%" class="${index === 0 ? "current" : ""}"></span>`).join("");
     const next = playerOpponent(focus);
-    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Reset player focus">RESET</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "MODEL" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "PREGAME" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><div class="focus-stat-grid"><div><b>${stat(focus.pass_yd || focus.passing_yards)}</b><small>PASS YDS</small></div><div><b>${stat(focus.pass_td || focus.passing_tds)}</b><small>PASS TD</small></div><div><b>${stat(focus.interceptions || focus.int)}</b><small>INT</small></div><div><b>${stat(focus.rush_yd || focus.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${stat(focus.rec || focus.receptions)}</b><small>REC</small></div><div><b>${stat(focus.tgt || focus.targets)}</b><small>TARGETS</small></div></div><div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
+    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Reset player focus">RESET</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "MODEL" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "NOT STARTED" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><div class="focus-stat-grid"><div><b>${statMarkup(focus.pass_yd ?? focus.passing_yards)}</b><small>PASS YDS</small></div><div><b>${statMarkup(focus.pass_td ?? focus.passing_tds)}</b><small>PASS TD</small></div><div><b>${statMarkup(focus.interceptions ?? focus.int)}</b><small>INT</small></div><div><b>${statMarkup(focus.rush_yd ?? focus.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${statMarkup(focus.rec ?? focus.receptions)}</b><small>REC</small></div><div><b>${statMarkup(focus.tgt ?? focus.targets)}</b><small>TARGETS</small></div></div><div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
   }
 
   function renderScoringTicker(league) {
@@ -608,7 +635,8 @@
     const players = allPlayers.filter((player) => filter === "all" || filter === "starters" && player.starter !== false || filter === "bench" && player.starter === false || filter === "live" && player.status === "LIVE");
     const liveCount = allPlayers.filter((player) => player.status === "LIVE").length;
     const rows = players.length ? players.map((player) => `<button class="players-table-row" data-player-id="${esc(player.player_id)}" data-side="${esc(player.side || "own")}" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • ${esc(player.rosterSide)}</small></span><span><b class="status-text">${esc(player.status || "UPCOMING")}</b><small>VS ${esc(playerOpponent(player))}</small></span><strong class="table-actual">${number(actualForPlayer(player))}<small>PTS</small></strong><span class="table-proj">${esc(projectionLabel(player))}<small>${esc(rangeLabel(player))}</small></span><span class="table-odds">${esc(oddsLabel(player))}<small>OPEN DETAIL ›</small></span></button>`).join("") : `<div class="empty-card"><strong>NO PLAYERS IN THIS FILTER</strong><span>Try ALL PLAYERS or refresh the connected roster feed.</span></div>`;
-    return `<div class="players-view"><div class="filter-row"><button class="filter ${filter === "all" ? "active" : ""}" data-filter="all" type="button">ALL PLAYERS</button><button class="filter ${filter === "starters" ? "active" : ""}" data-filter="starters" type="button">STARTERS</button><button class="filter ${filter === "bench" ? "active" : ""}" data-filter="bench" type="button">BENCH</button><button class="filter ${filter === "live" ? "active" : ""}" data-filter="live" type="button">LIVE NOW${liveCount ? ` • ${liveCount}` : ""}</button><span class="filter-note">Tap any row for the focus panel${document.body.dataset.layout === "mobile" ? " • detail opens here" : ""}</span></div><div class="players-table"><div class="players-table-head"><span>PLAYER</span><span>STATUS / MATCHUP</span><span>ACTUAL</span><span>CONSENSUS</span><span>ODDS / RANGE</span></div>${rows}</div></div>`;
+    const refreshLabel = document.body.dataset.layout === "mobile" ? "REFRESH PROJ" : "REFRESH PROJECTIONS";
+    return `<div class="players-view"><div class="projection-intro"><div><strong>PROJECTION BOARD</strong><small>ACTUAL, median projection, source range, and odds status stay visible for every player.</small></div><button class="refresh-action" data-action="refresh" type="button">${refreshLabel}</button></div><div class="filter-row"><button class="filter ${filter === "all" ? "active" : ""}" data-filter="all" type="button">ALL PLAYERS</button><button class="filter ${filter === "starters" ? "active" : ""}" data-filter="starters" type="button">STARTERS</button><button class="filter ${filter === "bench" ? "active" : ""}" data-filter="bench" type="button">BENCH</button><button class="filter ${filter === "live" ? "active" : ""}" data-filter="live" type="button">LIVE NOW${liveCount ? ` • ${liveCount}` : ""}</button><span class="filter-note">Tap a row for detail • PROJ = current feed median/backstop • RANGE = source spread</span></div><div class="players-table"><div class="players-table-head"><span>PLAYER</span><span>STATUS / MATCHUP</span><span>ACTUAL</span><span>CONSENSUS</span><span>ODDS / RANGE</span></div>${rows}</div></div>`;
   }
 
   function renderInjuries(league) {
@@ -620,7 +648,7 @@
 
   function renderLive(league) {
     const livePlayers = [...(league.own || []), ...(league.opponent || [])].filter((player) => player.status === "LIVE");
-    return `<div class="live-view"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAME BOARD</b><small>REFRESHING EVERY ${CONFIG.refreshMs / 1000}s</small></span><span class="panel-total">${livePlayers.length} FANTASY LIVE</span></div>${liveGamesMarkup()}</section><section class="workspace-panel live-players"><div class="panel-heading green-heading"><span><b>LIVE PLAYER PERFORMANCE</b><small>ACTUAL SCORE IS PRIMARY • PROJ STAYS VISIBLE</small></span></div><div class="player-stack">${livePlayers.length ? livePlayers.map((player) => playerCard(player, player.side || "own")).join("") : `<div class="empty-card"><strong>NO ROSTER PLAYERS LIVE</strong><span>When a game starts, actual points and live stat lines replace the pregame zero.</span></div>`}</div></section><aside class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>LIVE MARKET MOVES</b><small>LINE RANGE + OUTLIER</small></span></div>${insightMarkup()}</aside></div>`;
+    return `<div class="live-arcade-head"><div class="arcade-title"><span class="arcade-pulse"></span><div><strong>LIVE SCORE ARCADE</strong><small>POINTS POP WHEN A PLAY HAPPENS • 5s REFRESH</small></div></div><div class="arcade-legend"><span class="up">▲ UP</span><span class="down">▼ DOWN</span><span>ACTUAL + PROJ</span></div></div><div class="live-view arcade-live-view"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAME BOARD</b><small>REFRESHING EVERY ${CONFIG.refreshMs / 1000}s</small></span><span class="panel-total">${livePlayers.length} FANTASY LIVE</span></div>${liveGamesMarkup()}</section><section class="workspace-panel live-players"><div class="panel-heading green-heading"><span><b>LIVE PLAYER PERFORMANCE</b><small>ACTUAL SCORE IS PRIMARY • PROJ STAYS VISIBLE</small></span></div><div class="player-stack">${livePlayers.length ? livePlayers.map((player) => playerCard(player, player.side || "own")).join("") : `<div class="empty-card"><strong>NO ROSTER PLAYERS LIVE</strong><span>When a game starts, actual points and live stat lines replace the pregame zero.</span></div>`}</div></section><aside class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>LIVE MARKET MOVES</b><small>LINE RANGE + OUTLIER</small></span></div>${insightMarkup()}</aside></div>`;
   }
 
   function renderDrawer() {
@@ -633,7 +661,7 @@
     const sourceRows = c.sources && c.sources.length ? c.sources.slice(0, 8).map((source) => `<div class="source-value"><span>${esc(source.source || source.name || "SOURCE")}</span><b>${number(source.value, 1, "MODEL")}</b></div>`).join("") : `<div class="empty-card compact"><strong>PUBLIC PROJECTION FEED</strong><span>ESPN or Sleeper projection is being used until another source is enabled.</span></div>`;
     const oddsRows = c.odds && c.odds.length ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "NOT SET" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("") : `<div class="empty-card compact"><strong>ODDS NOT CONNECTED</strong><span>No sportsbook provider is enabled, so no market range is shown.</span></div>`;
     drawer.classList.add("open");
-    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "SINGLE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><section class="drawer-section"><div class="drawer-heading"><b>LIVE / PROJECTED STAT LINE</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${esc(textValue(player.pass_yd || player.passing_yards))}</b><small>PASS YDS</small></div><div><b>${esc(textValue(player.pass_td || player.passing_tds))}</b><small>PASS TD</small></div><div><b>${esc(textValue(player.rush_yd || player.rushing_yards))}</b><small>RUSH YDS</small></div><div><b>${esc(textValue(player.rec || player.receptions))}</b><small>REC</small></div><div><b>${esc(textValue(player.rec_yd || player.receiving_yards))}</b><small>REC YDS</small></div><div><b>${esc(textValue(player.tgt || player.targets))}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Lines can move, disappear, or be delayed by a provider. Biggest difference means the largest absolute gap from the current median.</p>`;
+    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><section class="drawer-section"><div class="drawer-heading"><b>LIVE / PROJECTED STAT LINE</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${statMarkup(player.pass_yd ?? player.passing_yards)}</b><small>PASS YDS</small></div><div><b>${statMarkup(player.pass_td ?? player.passing_tds)}</b><small>PASS TD</small></div><div><b>${statMarkup(player.rush_yd ?? player.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${statMarkup(player.rec ?? player.receptions)}</b><small>REC</small></div><div><b>${statMarkup(player.rec_yd ?? player.receiving_yards)}</b><small>REC YDS</small></div><div><b>${statMarkup(player.tgt ?? player.targets)}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Lines can move, disappear, or be delayed by a provider. Biggest difference means the largest absolute gap from the current median.</p>`;
     $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
   }
 
@@ -655,6 +683,7 @@
     $("#matchupHero").innerHTML = renderHero(league);
     renderWorkspace(league);
     renderDrawer();
+    animateLiveScores();
     $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === state.view));
     $$("[data-league]").forEach((button) => button.classList.toggle("active", button.dataset.league === state.league));
     $("#connectionText").textContent = state.error ? "FEED PARTIAL" : state.loading ? "CONNECTING" : "LIVE DATA CONNECTED";
@@ -666,9 +695,29 @@
     if (oddsStatus) oddsStatus.textContent = sourceStats().oddsBooks ? `${sourceStats().oddsBooks} ODDS BOOKS` : "ODDS NOT CONNECTED";
   }
 
+  function animateLiveScores() {
+    if (state.view !== "live") return;
+    $$(".live-view .actual-score[data-score-from]").forEach((element) => {
+      if (element.dataset.animated === "1") return;
+      const from = finite(element.dataset.scoreFrom);
+      const to = finite(element.dataset.scoreTo);
+      if (from == null || to == null || from === to) return;
+      element.dataset.animated = "1";
+      const started = performance.now();
+      const duration = 1100;
+      const ease = (value) => 1 - Math.pow(1 - value, 3);
+      const tick = (now) => {
+        const progress = Math.min(1, (now - started) / duration);
+        element.textContent = (from + (to - from) * ease(progress)).toFixed(1);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
   function wireInteractions() {
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; state.selectedPlayer = null; if (state.view !== "players") state.playerFilter = "all"; render(); }));
-    $$("[data-league]").forEach((button) => button.addEventListener("click", () => { state.league = button.dataset.league; state.selectedPlayer = null; state.playerFilter = "all"; render(); }));
+    $$("[data-league]").forEach((button) => button.addEventListener("click", () => { state.league = button.dataset.league; state.selectedPlayer = null; state.playerFilter = "all"; state.scoreSnapshot = {}; state.scoreMoves = {}; render(); }));
     $$("[data-action=refresh]").forEach((button) => {
       const refreshNow = () => {
         button.classList.add("is-refreshing");
@@ -710,6 +759,7 @@
     if (espnResult.value) state.espn = espnResult.value; else failures.push("ESPN");
     if (consensusResult.value) state.consensus = consensusResult.value; else if (!state.consensus) state.consensus = { status: "unavailable", players: {}, sources: [], insights: [] };
     if (sleeperResult.value && sleeperResult.value.week) state.week = sleeperResult.value.week;
+    updateScoreMoves(currentLeague());
     state.error = failures.length ? `${failures.join(" + ")} FEED RETRYING` : "";
     state.loading = false;
     state.refreshedAt = new Date();
