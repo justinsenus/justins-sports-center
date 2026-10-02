@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-02T10:28:08.276Z",
+  "generated_at": "2026-10-02T16:20:09.760Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,8 +12,8 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T10:28:08.276Z",
-      "count": 15,
+      "updated_at": "2026-10-02T16:20:09.760Z",
+      "count": 16,
       "access": "public fallback"
     },
     {
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T10:28:08.276Z",
+      "updated_at": "2026-10-02T16:20:09.760Z",
       "count": 7
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T10:28:08.276Z",
+      "updated_at": "2026-10-02T16:20:09.760Z",
       "count": 34
     },
     {
@@ -699,12 +699,18 @@
       "name": "Brandon Aubrey",
       "team": "DAL",
       "position": "K",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 8,
+      "min": 8,
+      "max": 8,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 8
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -852,16 +858,16 @@
       "name": "Seattle Seahawks",
       "team": "SEA",
       "position": "DEF",
-      "consensus": 7.7,
-      "min": 7.7,
-      "max": 7.7,
+      "consensus": 7.6,
+      "min": 7.6,
+      "max": 7.6,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 7.7
+          "value": 7.6
         }
       ],
       "outlier": null,
