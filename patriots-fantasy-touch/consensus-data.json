@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-02T20:49:17.106Z",
+  "generated_at": "2026-10-03T00:01:16.119Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T20:49:17.106Z",
+      "updated_at": "2026-10-03T00:01:16.119Z",
       "count": 16,
       "access": "public fallback"
     },
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T20:49:17.106Z",
+      "updated_at": "2026-10-03T00:01:16.119Z",
       "count": 7
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-02T20:49:17.106Z",
+      "updated_at": "2026-10-03T00:01:16.119Z",
       "count": 34
     },
     {
@@ -306,16 +306,16 @@
       "name": "Sam Darnold",
       "team": "SEA",
       "position": "QB",
-      "consensus": 16.1,
-      "min": 16.1,
-      "max": 16.1,
+      "consensus": 17,
+      "min": 17,
+      "max": 17,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "espn",
           "label": "ESPN Fantasy",
-          "value": 16.1
+          "value": 17
         }
       ],
       "outlier": null,
@@ -522,10 +522,10 @@
       "name": "Chris Olave",
       "team": "NO",
       "position": "WR",
-      "consensus": 16.9,
-      "min": 15.5,
+      "consensus": 16.8,
+      "min": 15.4,
       "max": 18.2,
-      "range": 2.7,
+      "range": 2.8,
       "sourceCount": 2,
       "sources": [
         {
@@ -536,12 +536,12 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 15.5
+          "value": 15.4
         }
       ],
       "outlier": {
         "source": "FantasyPros public",
-        "value": 15.5,
+        "value": 15.4,
         "delta": 1.4
       },
       "odds": [],
@@ -624,16 +624,16 @@
       "name": "Jaxon Smith-Njigba",
       "team": "SEA",
       "position": "WR",
-      "consensus": 19.9,
+      "consensus": 20.4,
       "min": 18.8,
-      "max": 21,
-      "range": 2.2,
+      "max": 21.9,
+      "range": 3.1,
       "sourceCount": 2,
       "sources": [
         {
           "source": "espn",
           "label": "ESPN Fantasy",
-          "value": 21
+          "value": 21.9
         },
         {
           "source": "fantasypros",
@@ -642,9 +642,9 @@
         }
       ],
       "outlier": {
-        "source": "ESPN Fantasy",
-        "value": 21,
-        "delta": 1.1
+        "source": "FantasyPros public",
+        "value": 18.8,
+        "delta": 1.6
       },
       "odds": [],
       "market": null
@@ -720,16 +720,16 @@
       "name": "Drake Maye",
       "team": "NE",
       "position": "QB",
-      "consensus": 18.2,
-      "min": 18.2,
-      "max": 18.2,
+      "consensus": 18.3,
+      "min": 18.3,
+      "max": 18.3,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 18.2
+          "value": 18.3
         }
       ],
       "outlier": null,
@@ -858,16 +858,16 @@
       "name": "Seattle Seahawks",
       "team": "SEA",
       "position": "DEF",
-      "consensus": 7.6,
-      "min": 7.6,
-      "max": 7.6,
+      "consensus": 7.7,
+      "min": 7.7,
+      "max": 7.7,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 7.6
+          "value": 7.7
         }
       ],
       "outlier": null,
@@ -913,12 +913,20 @@
   },
   "insights": [
     {
+      "name": "Jaxon Smith-Njigba",
+      "market": "PROJECTION OUTLIER",
+      "source": "FantasyPros public",
+      "delta": 1.6,
+      "range": 3.1,
+      "rank": "01"
+    },
+    {
       "name": "Chris Olave",
       "market": "PROJECTION OUTLIER",
       "source": "FantasyPros public",
       "delta": 1.4,
-      "range": 2.7,
-      "rank": "01"
+      "range": 2.8,
+      "rank": "02"
     },
     {
       "name": "Harold Fannin",
@@ -926,14 +934,6 @@
       "source": "ESPN Fantasy",
       "delta": 1.3,
       "range": 2.5,
-      "rank": "02"
-    },
-    {
-      "name": "Jaxon Smith-Njigba",
-      "market": "PROJECTION OUTLIER",
-      "source": "ESPN Fantasy",
-      "delta": 1.1,
-      "range": 2.2,
       "rank": "03"
     },
     {
