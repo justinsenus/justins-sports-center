@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-03T14:45:40.147Z",
+  "generated_at": "2026-10-03T18:17:52.117Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T14:45:40.147Z",
+      "updated_at": "2026-10-03T18:17:52.117Z",
       "count": 16,
       "access": "public fallback"
     },
@@ -45,15 +45,15 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T14:45:40.147Z",
-      "count": 7
+      "updated_at": "2026-10-03T18:17:52.117Z",
+      "count": 6
     },
     {
       "id": "sleeper",
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T14:45:40.147Z",
+      "updated_at": "2026-10-03T18:17:52.117Z",
       "count": 34
     },
     {
@@ -342,18 +342,12 @@
       "name": "Terry McLaurin",
       "team": "WAS",
       "position": "WR",
-      "consensus": 13,
-      "min": 13,
-      "max": 13,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "espn",
-          "label": "ESPN Fantasy",
-          "value": 13
-        }
-      ],
+      "consensus": null,
+      "min": null,
+      "max": null,
+      "range": null,
+      "sourceCount": 0,
+      "sources": [],
       "outlier": null,
       "odds": [],
       "market": null
@@ -720,16 +714,16 @@
       "name": "Drake Maye",
       "team": "NE",
       "position": "QB",
-      "consensus": 18.2,
-      "min": 18.2,
-      "max": 18.2,
+      "consensus": 18.1,
+      "min": 18.1,
+      "max": 18.1,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 18.2
+          "value": 18.1
         }
       ],
       "outlier": null,
