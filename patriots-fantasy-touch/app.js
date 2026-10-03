@@ -17,6 +17,7 @@
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22]);
   const TEAM_ABBR_ALIASES = { WAS: "WSH", WSH: "WSH", JAC: "JAX", JAX: "JAX", LVR: "LV", LV: "LV" };
+  const TEAM_STOCK_COLORS = ["#ff6378", "#39c7ff", "#ffc857", "#b58bff", "#48dfa4", "#ff984f", "#ff77c8", "#a7df58", "#668fff", "#ee7958", "#38d5c0", "#d6ee56"];
   // ESPN's public player pool can legitimately omit a line for an inactive,
   // questionable, or newly-added player. Keep the card useful and explicit
   // in that case instead of rendering a dash or an empty projection.
@@ -44,6 +45,7 @@
     scoreHistory: { sleeper: [], espn: [] },
     scoreEvents: { sleeper: [], espn: [] },
     playerHistories: { sleeper: {}, espn: {} },
+    teamScoreHistory: { sleeper: [], espn: [] },
     loading: true,
     error: "",
     lastSync: null,
@@ -226,6 +228,25 @@
     return owner && owner.metadata && owner.metadata.team_name || owner && owner.display_name || fallback;
   }
 
+  function colorLeagueTeams(teams) {
+    const ordered = [...(teams || [])].sort((left, right) => String(left.id || left.teamId || left.name).localeCompare(String(right.id || right.teamId || right.name), undefined, { numeric: true }));
+    const colorById = new Map(ordered.map((team, index) => [String(team.id || team.teamId || team.name || index), TEAM_STOCK_COLORS[index % TEAM_STOCK_COLORS.length]]));
+    return (teams || []).map((team, index) => {
+      const id = String(team.id || team.teamId || team.name || index);
+      const color = colorById.get(id) || TEAM_STOCK_COLORS[index % TEAM_STOCK_COLORS.length];
+      return {
+        ...team,
+        teamColor: color,
+        players: (team.players || []).map((player) => ({
+          ...player,
+          fantasyTeamId: id,
+          fantasyTeamName: team.name || "LEAGUE TEAM",
+          fantasyTeamColor: color
+        }))
+      };
+    });
+  }
+
   function normalizeSleeperPlayer(id, players, pointsMap, roster, consensusData) {
     const source = players && players[id] || { player_id: id, full_name: id, team: "FA", position: "UTIL" };
     const player = { ...source, player_id: id, name: source.full_name || source.name || id };
@@ -346,7 +367,7 @@
     const opponentPointsMap = opponentMatchup && opponentMatchup.players_points || {};
     const ownUser = users.find((user) => String(user.user_id) === String(roster && roster.owner_id)) || named || null;
     const opponentUser = users.find((user) => String(user.user_id) === String(opponentRoster && opponentRoster.owner_id)) || null;
-    return { league, users, rosters, roster, opponentRoster, ownUser, opponentUser, matchup, opponentMatchup, players: mergedPlayers, pointsMap, opponentPointsMap, week };
+    return { league, users, rosters, roster, opponentRoster, ownUser, opponentUser, matchup, opponentMatchup, matchups, players: mergedPlayers, pointsMap, opponentPointsMap, week };
   }
 
   function espnStatRows(player, scoringPeriodId) {
@@ -505,16 +526,24 @@
     const matchup = (data.schedule || []).find((row) => Number(row.matchupPeriodId) === scoringPeriodId && (Number(row.home && row.home.teamId) === Number(ownRaw.id) || Number(row.away && row.away.teamId) === Number(ownRaw.id)));
     const opponentId = matchup && (Number(matchup.home && matchup.home.teamId) === Number(ownRaw.id) ? Number(matchup.away && matchup.away.teamId) : Number(matchup.home && matchup.home.teamId));
     const opponentRaw = teams.find((team) => Number(team.id) === opponentId) || null;
-    const ownSide = matchup && Number(matchup.home && matchup.home.teamId) === Number(ownRaw.id) ? matchup.home : matchup && matchup.away;
-    const opponentSide = matchup && Number(matchup.home && matchup.home.teamId) === Number(opponentId) ? matchup.home : matchup && matchup.away;
-    const ownTeam = normalizeESPNTeam(ownRaw, ownSide, scoringPeriodId, "own");
-    const opponentTeam = normalizeESPNTeam(opponentRaw, opponentSide, scoringPeriodId, "opponent");
+    const leagueSides = new Map();
+    (data.schedule || []).filter((row) => Number(row.matchupPeriodId) === scoringPeriodId).forEach((row) => {
+      if (row.home && row.home.teamId != null) leagueSides.set(String(row.home.teamId), row.home);
+      if (row.away && row.away.teamId != null) leagueSides.set(String(row.away.teamId), row.away);
+    });
+    const leagueTeams = colorLeagueTeams(teams.map((rawTeam) => {
+      const teamId = String(rawTeam.id);
+      const side = teamId === String(ownRaw.id) ? "own" : teamId === String(opponentId) ? "opponent" : "league";
+      return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side), id: `espn:${teamId}`, teamId };
+    }));
+    const ownTeam = leagueTeams.find((team) => String(team.teamId) === String(ownRaw.id)) || null;
+    const opponentTeam = leagueTeams.find((team) => String(team.teamId) === String(opponentId)) || null;
     const projectionPlayers = {};
     teams.forEach((team) => (team.roster && team.roster.entries || []).forEach((entry) => {
       const row = normalizeESPNEntry(entry, null, scoringPeriodId, "projection");
       if (row && row.full_name && finite(row.projected) != null) projectionPlayers[nameKey(row.full_name)] = { projected: row.projected, source: "PUBLIC ESPN" };
     }));
-    const result = { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, projectionPlayers, public: true };
+    const result = { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId: scoringPeriodId, myTeam: ownTeam, opponent: opponentTeam, leagueTeams, projectionPlayers, public: true };
     loadESPNProjectionPool(scoringPeriodId).then((pool) => {
       result.projectionPlayers = { ...result.projectionPlayers, ...pool };
       if (state.espn && state.espn.public && state.espn.scoringPeriodId === scoringPeriodId) {
@@ -583,17 +612,83 @@
   function currentLeague() {
     if (state.league === "sleeper" && state.sleeper) {
       const data = state.sleeper;
-      const own = orderedSleeperPlayerIds(data.roster).map((id) => ({ ...normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus), side: "own" }));
-      const opponent = data.opponentRoster ? orderedSleeperPlayerIds(data.opponentRoster).map((id) => ({ ...normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus), side: "opponent" })) : [];
-      const ownRecord = data.roster && data.roster.settings || {};
-      const opponentRecord = data.opponentRoster && data.opponentRoster.settings || {};
-      return { id: "sleeper", name: CONFIG.sleeperTeamName, ownName: CONFIG.sleeperTeamName, opponentName: rosterName(data.opponentRoster, data.users, "OPPONENT"), ownAvatar: sleeperAvatar(data.ownUser), opponentAvatar: sleeperAvatar(data.opponentUser), ownRecord: { wins: finite(ownRecord.wins), losses: finite(ownRecord.losses) }, opponentRecord: { wins: finite(opponentRecord.wins), losses: finite(opponentRecord.losses) }, own, opponent, ownActual: finite(data.matchup && data.matchup.points) || 0, opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0, week: data.week, ready: true };
+      const teams = colorLeagueTeams((data.rosters || []).map((teamRoster) => {
+        const teamMatchup = (data.matchups || []).find((row) => Number(row.roster_id) === Number(teamRoster.roster_id)) || {};
+        const pointsMap = teamMatchup.players_points || {};
+        const players = orderedSleeperPlayerIds(teamRoster).map((id) => ({
+          ...normalizeSleeperPlayer(id, data.players, pointsMap, teamRoster, state.consensus),
+          side: "league"
+        }));
+        const starters = players.filter((player) => player.starter !== false);
+        const settings = teamRoster.settings || {};
+        const owner = (data.users || []).find((user) => String(user.user_id) === String(teamRoster.owner_id));
+        return {
+          id: `sleeper:${teamRoster.roster_id}`,
+          teamId: String(teamRoster.roster_id),
+          name: rosterName(teamRoster, data.users, "LEAGUE TEAM"),
+          avatar: sleeperAvatar(owner),
+          record: { wins: finite(settings.wins), losses: finite(settings.losses) },
+          players,
+          total: finite(teamMatchup.points) ?? starters.reduce((sum, player) => sum + (finite(player.actual) || 0), 0),
+          projected: starters.reduce((sum, player) => sum + projectionForPlayer(player), 0)
+        };
+      }));
+      const ownTeam = teams.find((team) => String(team.teamId) === String(data.roster && data.roster.roster_id));
+      const opponentTeam = teams.find((team) => String(team.teamId) === String(data.opponentRoster && data.opponentRoster.roster_id));
+      const own = ownTeam ? ownTeam.players.map((player) => ({ ...player, side: "own" })) : [];
+      const opponent = opponentTeam ? opponentTeam.players.map((player) => ({ ...player, side: "opponent" })) : [];
+      return {
+        id: "sleeper",
+        name: CONFIG.sleeperTeamName,
+        ownName: ownTeam && ownTeam.name || CONFIG.sleeperTeamName,
+        opponentName: opponentTeam && opponentTeam.name || "OPPONENT",
+        ownAvatar: ownTeam && ownTeam.avatar || "",
+        opponentAvatar: opponentTeam && opponentTeam.avatar || "",
+        ownRecord: ownTeam && ownTeam.record || {},
+        opponentRecord: opponentTeam && opponentTeam.record || {},
+        own,
+        opponent,
+        teams,
+        allPlayers: teams.flatMap((team) => team.players),
+        ownActual: finite(data.matchup && data.matchup.points) || 0,
+        opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0,
+        week: data.week,
+        ready: true
+      };
     }
     const data = state.espn;
     if (data && data.ready && data.myTeam) {
-      const own = mergeESPNTeam(data.myTeam, "own");
-      const opponent = mergeESPNTeam(data.opponent, "opponent");
-      return { id: "espn", name: CONFIG.espnTeamName, ownName: own && own.name || CONFIG.espnTeamName, opponentName: opponent && opponent.name || "MATCHUP PENDING", ownAvatar: own && own.avatar || "", opponentAvatar: opponent && opponent.avatar || "", ownRecord: own && own.record || { wins: null, losses: null }, opponentRecord: opponent && opponent.record || { wins: null, losses: null }, own: own && own.players || [], opponent: opponent && opponent.players || [], ownActual: own && own.total || 0, opponentActual: opponent && opponent.total || 0, week: data.matchupPeriodId || state.week, ready: true };
+      const sourceTeams = data.leagueTeams && data.leagueTeams.length ? data.leagueTeams : [data.myTeam, data.opponent].filter(Boolean);
+      const ownKey = String(data.myTeam.id || data.myTeam.teamId || "");
+      const opponentKey = String(data.opponent && (data.opponent.id || data.opponent.teamId) || "");
+      const teams = colorLeagueTeams(sourceTeams.map((team, index) => {
+        const key = String(team.id || team.teamId || index);
+        const isOwn = team === data.myTeam || key === ownKey || nameKey(team.name) === nameKey(CONFIG.espnTeamName);
+        const isOpponent = team === data.opponent || key === opponentKey;
+        const merged = mergeESPNTeam(team, isOwn ? "own" : isOpponent ? "opponent" : "league");
+        const projected = merged.players.filter((player) => player.starter !== false).reduce((sum, player) => sum + projectionForPlayer(player), 0);
+        return { ...merged, id: team.id || `espn:${team.teamId || index}`, teamId: String(team.teamId || team.id || index), projected };
+      }));
+      const ownTeam = teams.find((team) => String(team.id) === ownKey || String(team.teamId) === ownKey || nameKey(team.name) === nameKey(CONFIG.espnTeamName)) || teams[0];
+      const opponentTeam = teams.find((team) => String(team.id) === opponentKey || String(team.teamId) === opponentKey) || teams.find((team) => team !== ownTeam) || null;
+      return {
+        id: "espn",
+        name: CONFIG.espnTeamName,
+        ownName: ownTeam && ownTeam.name || CONFIG.espnTeamName,
+        opponentName: opponentTeam && opponentTeam.name || "MATCHUP PENDING",
+        ownAvatar: ownTeam && ownTeam.avatar || "",
+        opponentAvatar: opponentTeam && opponentTeam.avatar || "",
+        ownRecord: ownTeam && ownTeam.record || { wins: null, losses: null },
+        opponentRecord: opponentTeam && opponentTeam.record || { wins: null, losses: null },
+        own: ownTeam && ownTeam.players || [],
+        opponent: opponentTeam && opponentTeam.players || [],
+        teams,
+        allPlayers: teams.flatMap((team) => team.players),
+        ownActual: ownTeam && ownTeam.total || 0,
+        opponentActual: opponentTeam && opponentTeam.total || 0,
+        week: data.matchupPeriodId || state.week,
+        ready: true
+      };
     }
     return { id: "espn", name: CONFIG.espnTeamName, ownName: CONFIG.espnTeamName, opponentName: "MATCHUP PENDING", ownAvatar: "", opponentAvatar: "", ownRecord: {}, opponentRecord: {}, own: [], opponent: [], ownActual: 0, opponentActual: 0, week: state.week, ready: false };
   }
@@ -601,6 +696,20 @@
   function leagueStarted(league) {
     const rows = [...(league.own || []), ...(league.opponent || [])];
     return rows.some((player) => player.event && (eventState(player.event).live || eventState(player.event).final)) || rows.some((player) => player.status === "LIVE" || player.status === "FINAL");
+  }
+
+  function leagueGamesStarted(league) {
+    const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
+    return players.some((player) => {
+      const event = player.event || findPlayerEvent(player);
+      const status = event && eventState(event);
+      return player.status === "LIVE" || player.status === "FINAL" || Boolean(status && (status.live || status.final));
+    });
+  }
+
+  function leagueTeamMetric(team, started) {
+    if (started) return finite(team.total) ?? (team.players || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + (finite(actualForPlayer(player)) || 0), 0);
+    return finite(team.projected) ?? finite(team.total) ?? 0;
   }
 
   function actualForPlayer(player) {
@@ -613,7 +722,8 @@
     const moves = {};
     const events = state.scoreEvents[state.league] || [];
     const playerHistories = state.playerHistories[state.league] || {};
-    [...(league.own || []), ...(league.opponent || [])].forEach((player) => {
+    const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
+    players.forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
       next[key] = value;
@@ -625,13 +735,35 @@
       if (previous != null && value !== previous) {
         const delta = value - previous;
         moves[key] = { direction: delta > 0 ? "up" : "down", from: previous, to: value, delta };
-        events.unshift({ at: Date.now(), playerId: String(player.player_id), name: player.full_name || player.name || "PLAYER", team: player.team || "FA", side: player.side || "own", direction: delta > 0 ? "up" : "down", delta, total: value });
+        events.unshift({
+          at: Date.now(),
+          playerId,
+          name: player.full_name || player.name || "PLAYER",
+          team: player.team || "FA",
+          fantasyTeamId: player.fantasyTeamId || "",
+          fantasyTeamName: player.fantasyTeamName || "OWNER UNKNOWN",
+          teamColor: player.fantasyTeamColor || "#a8b7c9",
+          headshot: player.headshot || player.imageUrl || "",
+          direction: delta > 0 ? "up" : "down",
+          delta,
+          total: value
+        });
       }
     });
     state.scoreEvents[state.league] = events.slice(0, 12);
     state.scoreMoves = moves;
     state.scoreSnapshot = next;
     state.playerHistories[state.league] = playerHistories;
+    const started = leagueGamesStarted(league);
+    const teams = league.teams || [];
+    if (teams.length) {
+      const totals = Object.fromEntries(teams.map((team) => [String(team.id), leagueTeamMetric(team, started)]));
+      const history = state.teamScoreHistory[state.league] || [];
+      const last = history[history.length - 1];
+      const changed = !last || Object.entries(totals).some(([id, value]) => Math.abs((finite(last.totals && last.totals[id]) || 0) - value) >= 0.05);
+      if (changed) history.push({ at: Date.now(), totals });
+      state.teamScoreHistory[state.league] = history.slice(-24);
+    }
     const ownTotal = leagueActual(league, "own");
     const opponentTotal = leagueActual(league, "opponent");
     const history = state.scoreHistory[state.league] || [];
@@ -639,7 +771,6 @@
     if (!last || last.own !== ownTotal || last.opponent !== opponentTotal) history.push({ at: Date.now(), own: ownTotal, opponent: opponentTotal });
     state.scoreHistory[state.league] = history.slice(-24);
   }
-
   function leagueActual(league, side) {
     const value = side === "own" ? league.ownActual : league.opponentActual;
     return leagueStarted(league) ? finite(value) || 0 : 0;
@@ -830,6 +961,22 @@
     return `<svg class="player-stock-spark ${compact ? "compact" : ""}" viewBox="0 0 100 26" role="img" aria-label="${esc(player.full_name || player.name)} stock line"><path class="spark-grid" d="M2 23H98M2 13H98M2 3H98"/><polyline class="spark-line ${player.side === "opponent" ? "opponent" : "own"}" points="${points}"/><circle class="spark-dot ${player.side === "opponent" ? "opponent" : "own"}" cx="98" cy="${(23 - (values[values.length - 1] || 0) / max * 19).toFixed(1)}" r="2.4"/></svg>`;
   }
 
+  function teamStockSparkline(team, currentValue) {
+    const id = String(team.id);
+    const history = (state.teamScoreHistory[state.league] || []).map((point) => finite(point.totals && point.totals[id])).filter((value) => value != null);
+    if (!history.length) history.push(currentValue, currentValue);
+    else if (history[history.length - 1] !== currentValue) history.push(currentValue);
+    if (history.length === 1) history.unshift(history[0]);
+    const max = Math.max(1, ...history);
+    const points = history.map((value, index) => {
+      const x = 2 + index / Math.max(1, history.length - 1) * 96;
+      const y = 23 - value / max * 19;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+    const lastY = (23 - (history[history.length - 1] || 0) / max * 19).toFixed(1);
+    return `<svg class="team-stock-sparkline" viewBox="0 0 100 26" role="img" aria-label="${esc(team.name)} total points trend"><path class="spark-grid" d="M2 23H98M2 13H98M2 3H98"/><polyline points="${points}"/><circle cx="98" cy="${lastY}" r="2.4"/></svg>`;
+  }
+
   function renderMomentumChart(league) {
     const started = leagueStarted(league);
     const ownProjection = (league.own || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + projectionForPlayer(player), 0);
@@ -865,22 +1012,22 @@
   }
 
   function renderLeagueStockBoard(league) {
-    const players = leaguePlayerRows(league);
-    const ownName = league.ownName || "YOUR TEAM";
-    const opponentName = league.opponentName || "OPPONENT";
-    return `<section class="arcade-panel league-stock-panel"><div class="arcade-panel-head"><div><b>📈 LEAGUE STOCK BOARD</b><small>EVERY MATCHUP PLAYER • PROJ / LIVE • 5s REFRESH</small></div><div class="stock-legend"><span class="own"><i></i>${esc(ownName)}</span><span class="opponent"><i></i>${esc(opponentName)}</span></div></div><div class="league-stock-list">${players.length ? players.map((player) => { const actual = actualForPlayer(player); const projected = projectionForPlayer(player); const move = scoreMoveFor(player); const side = player.side === "opponent" ? "opponent" : "own"; return `<button class="league-stock-row ${side} ${move ? `stock-${move.direction}` : ""}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><span class="stock-side-dot ${side}"></span>${playerFace(player, "small")}<span class="league-stock-name"><strong>${esc(player.full_name || player.name || "PLAYER")}</strong><small>${esc(player.team || "FA")} • ${esc(playerGameLabel(player))}</small></span>${stockSparkline(player, true)}<span class="league-stock-values"><b>${number(actual)}</b><small>PROJ ${number(projected)}</small></span>${move ? `<em>${move.direction === "up" ? "▲" : "▼"} ${move.direction === "up" ? "+" : ""}${number(move.delta)}</em>` : `<em>${side === "own" ? "YOUR TEAM" : "OPPONENT"}</em>`}</button>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE STOCK FEED SYNCING</strong><span>Roster lines appear when Sleeper or ESPN responds.</span></div>`}</div></section>`;
+    const teams = league.teams || [];
+    const started = leagueGamesStarted(league);
+    const metric = started ? "LIVE PTS" : "PROJ PTS";
+    const rows = [...teams].sort((a, b) => leagueTeamMetric(b, started) - leagueTeamMetric(a, started));
+    return `<section class="arcade-panel league-stock-panel"><div class="arcade-panel-head"><div><b>📈 LEAGUE STOCK BOARD</b><small>${teams.length} TEAMS • TOTAL POINTS • 5s REFRESH</small></div><div class="stock-legend team-stock-legend"><span><i></i>COLOR ALSO TAGS SCORERS</span></div></div><div class="league-stock-list">${rows.length ? rows.map((team) => { const value = leagueTeamMetric(team, started); const color = team.teamColor || "#a8b7c9"; return `<div class="league-stock-row team-stock-row" style="--team-color:${esc(color)}"><span class="stock-side-dot"></span><span class="league-stock-name"><strong>${esc(team.name || "LEAGUE TEAM")}</strong><small>${esc(recordLabel(team.record))} • ${started ? "LIVE TOTAL" : "WEEK PROJECTION"}</small></span>${teamStockSparkline(team, value)}<span class="league-stock-values"><b>${number(value)}</b><small>${metric}</small></span></div>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE TEAM FEED SYNCING</strong><span>Every team appears when the league provider responds.</span></div>`}</div></section>`;
   }
-
   function renderScoringFeed(league) {
     const events = state.scoreEvents[state.league] || [];
-    const players = leaguePlayerRows(league);
-    const ownName = league.ownName || "YOUR TEAM";
-    const opponentName = league.opponentName || "OPPONENT";
-    const eventMarkup = events.length ? events.slice(0, 5).map((event) => `<div class="scoring-feed-row ${event.direction} ${event.side === "opponent" ? "opponent" : "own"}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time><strong>${esc(event.name)}</strong><span>${esc(event.team)} • ${event.side === "opponent" ? esc(opponentName) : esc(ownName)} • ${event.direction === "up" ? "+" : ""}${number(event.delta)} PTS</span><b>${number(event.total)}</b></div>`).join("") : `<div class="empty-card compact"><strong>WAITING FOR A REAL POINT CHANGE</strong><span>All roster players stay listed below; a provider point change will animate into this feed.</span></div>`;
-    const liveMarkup = players.length ? players.map((player) => { const side = player.side === "opponent" ? "opponent" : "own"; const move = scoreMoveFor(player); const actual = actualForPlayer(player); return `<button class="league-live-row ${side} ${move ? `live-${move.direction}` : ""}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><span class="live-side-tag ${side}">${side === "own" ? "RED" : "BLUE"}</span>${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name || "PLAYER")}</strong><small>${esc(player.team || "FA")} • ${esc(playerGameLabel(player))}</small></span><b class="league-live-score">${number(actual)}</b><small class="league-live-proj">PROJ ${number(projectionForPlayer(player))}</small>${move ? `<em>${move.direction === "up" ? "▲" : "▼"} ${move.direction === "up" ? "+" : ""}${number(move.delta)}</em>` : ""}</button>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE LIVE ROSTER WAITING</strong><span>Every player will appear when the connected league feed responds.</span></div>`;
-    return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>EVERY PLAYER • TEAM COLOR + POINT MOVEMENT</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${eventMarkup}</div><div class="league-live-legend"><span class="own"><i></i>${esc(ownName)} / RED</span><span class="opponent"><i></i>${esc(opponentName)} / BLUE</span></div><div class="league-live-list">${liveMarkup}</div></section>`;
+    const eventMarkup = events.length ? events.slice(0, 6).map((event) => {
+      const color = event.teamColor || "#a8b7c9";
+      const delta = `${event.delta > 0 ? "+" : "−"}${number(Math.abs(event.delta))}`;
+      const player = { player_id: event.playerId, full_name: event.name, name: event.name, team: event.team, headshot: event.headshot };
+      return `<div class="scoring-feed-row team-event ${event.direction}" style="--team-color:${esc(color)}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time>${playerFace(player, "small")}<span class="feed-player"><strong>${esc(event.name)}</strong><small>${esc(event.team || "NFL")} • <i class="feed-team-swatch" style="background:${esc(color)}"></i>${esc(event.fantasyTeamName || "OWNER UNKNOWN")}</small></span><b class="feed-points"><em class="feed-delta">${delta} PTS</em>${number(event.total)}</b></div>`;
+    }).join("") : `<div class="empty-card compact"><strong>WAITING FOR A LEAGUE SCORER</strong><span>Player point changes appear here with the owner team and matching stock-line color.</span></div>`;
+    return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>SCORING PLAYER • FANTASY OWNER • TEAM COLOR</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${eventMarkup}</div></section>`;
   }
-
   function renderInjuryWatch(league) {
     const players = [...(league.own || []), ...(league.opponent || [])].filter((player) => /OUT|IR|DOUBTFUL|QUESTIONABLE|INJURY/i.test(String(player.status || player.injury_status || ""))).slice(0, 5);
     return `<section class="arcade-panel injury-watch-panel"><div class="arcade-panel-head"><div><b>✚ INJURY WATCH</b><small>REAL PROVIDER STATUS</small></div><span class="arcade-live-indicator warning"><i></i>${players.length} FLAGS</span></div><div class="injury-watch-list">${players.length ? players.map((player) => `<button class="injury-watch-row" data-player-id="${esc(player.player_id)}" data-side="${esc(player.side || "own")}" type="button">${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name)}</strong><small>${esc(player.team || "FA")} • ${esc(player.position || "UTIL")}</small></span><b>${esc(player.status || player.injury_status || "QUESTIONABLE")}</b></button>`).join("") : `<div class="empty-card compact"><strong>NO ACTIVE FLAGS</strong><span>Provider injury status is clear for this matchup.</span></div>`}</div></section>`;
