@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-03T00:01:16.119Z",
+  "generated_at": "2026-10-03T05:06:29.273Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T00:01:16.119Z",
+      "updated_at": "2026-10-03T05:06:29.273Z",
       "count": 16,
       "access": "public fallback"
     },
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T00:01:16.119Z",
+      "updated_at": "2026-10-03T05:06:29.273Z",
       "count": 7
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-03T00:01:16.119Z",
+      "updated_at": "2026-10-03T05:06:29.273Z",
       "count": 34
     },
     {
@@ -414,16 +414,16 @@
       "name": "Ja'Marr Chase",
       "team": "CIN",
       "position": "WR",
-      "consensus": 16.3,
-      "min": 16.3,
-      "max": 16.3,
+      "consensus": 16.2,
+      "min": 16.2,
+      "max": 16.2,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 16.3
+          "value": 16.2
         }
       ],
       "outlier": null,
@@ -625,9 +625,9 @@
       "team": "SEA",
       "position": "WR",
       "consensus": 20.4,
-      "min": 18.8,
+      "min": 18.9,
       "max": 21.9,
-      "range": 3.1,
+      "range": 3,
       "sourceCount": 2,
       "sources": [
         {
@@ -638,13 +638,13 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 18.8
+          "value": 18.9
         }
       ],
       "outlier": {
-        "source": "FantasyPros public",
-        "value": 18.8,
-        "delta": 1.6
+        "source": "ESPN Fantasy",
+        "value": 21.9,
+        "delta": 1.5
       },
       "odds": [],
       "market": null
@@ -720,16 +720,16 @@
       "name": "Drake Maye",
       "team": "NE",
       "position": "QB",
-      "consensus": 18.3,
-      "min": 18.3,
-      "max": 18.3,
+      "consensus": 18.1,
+      "min": 18.1,
+      "max": 18.1,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 18.3
+          "value": 18.1
         }
       ],
       "outlier": null,
@@ -915,9 +915,9 @@
     {
       "name": "Jaxon Smith-Njigba",
       "market": "PROJECTION OUTLIER",
-      "source": "FantasyPros public",
-      "delta": 1.6,
-      "range": 3.1,
+      "source": "ESPN Fantasy",
+      "delta": 1.5,
+      "range": 3,
       "rank": "01"
     },
     {
