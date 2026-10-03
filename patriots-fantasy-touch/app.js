@@ -583,8 +583,8 @@
   function currentLeague() {
     if (state.league === "sleeper" && state.sleeper) {
       const data = state.sleeper;
-      const own = orderedSleeperPlayerIds(data.roster).map((id) => normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus));
-      const opponent = data.opponentRoster ? orderedSleeperPlayerIds(data.opponentRoster).map((id) => normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus)) : [];
+      const own = orderedSleeperPlayerIds(data.roster).map((id) => ({ ...normalizeSleeperPlayer(id, data.players, data.pointsMap, data.roster, state.consensus), side: "own" }));
+      const opponent = data.opponentRoster ? orderedSleeperPlayerIds(data.opponentRoster).map((id) => ({ ...normalizeSleeperPlayer(id, data.players, data.opponentPointsMap, data.opponentRoster, state.consensus), side: "opponent" })) : [];
       const ownRecord = data.roster && data.roster.settings || {};
       const opponentRecord = data.opponentRoster && data.opponentRoster.settings || {};
       return { id: "sleeper", name: CONFIG.sleeperTeamName, ownName: CONFIG.sleeperTeamName, opponentName: rosterName(data.opponentRoster, data.users, "OPPONENT"), ownAvatar: sleeperAvatar(data.ownUser), opponentAvatar: sleeperAvatar(data.opponentUser), ownRecord: { wins: finite(ownRecord.wins), losses: finite(ownRecord.losses) }, opponentRecord: { wins: finite(opponentRecord.wins), losses: finite(opponentRecord.losses) }, own, opponent, ownActual: finite(data.matchup && data.matchup.points) || 0, opponentActual: finite(data.opponentMatchup && data.opponentMatchup.points) || 0, week: data.week, ready: true };
