@@ -1202,3 +1202,51 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   body[data-layout="monitor"] .momentum-legend, body[data-layout="monitor"] .league-live-legend { font-size: 8px; }
   body[data-layout="monitor"] .drawer-context-grid b { font-size: 10px; }
 }
+
+/* League-wide team stock lines and owner-colored scoring events. */
+.team-stock-legend { justify-content: flex-end; padding: 0; font-size: 6px; }
+.team-stock-legend > span { color: var(--text); }
+.team-stock-legend i { width: 14px; height: 3px; flex: 0 0 14px; border-radius: 3px; background: linear-gradient(90deg, #ff6378, #39c7ff, #ffc857, #b58bff); }
+.league-stock-row.team-stock-row { grid-template-columns: 9px minmax(0, 1fr) minmax(54px, .8fr) 54px; min-height: 30px; padding: 3px 6px; cursor: default; border-color: var(--team-color); }
+.league-stock-row.team-stock-row:hover, .league-stock-row.team-stock-row:focus-visible { border-color: var(--team-color); outline: 0; }
+.team-stock-row .stock-side-dot { background: var(--team-color); color: var(--team-color); }
+.team-stock-row .league-stock-name strong { font-size: 8px; }
+.team-stock-row .league-stock-name small { font-size: 5.5px; }
+.team-stock-sparkline { display: block; width: 100%; min-width: 48px; height: 22px; overflow: visible; }
+.team-stock-sparkline .spark-grid { fill: none; stroke: rgba(101,153,207,.23); stroke-width: .7; stroke-dasharray: 2 3; }
+.team-stock-sparkline polyline { fill: none; stroke: var(--team-color); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 3; filter: drop-shadow(0 0 3px var(--team-color)); animation: momentumTicker 2.4s linear infinite; }
+.team-stock-sparkline circle { fill: var(--team-color); stroke: #fff; stroke-width: 1; }
+.team-stock-row .league-stock-values b { font-size: 13px; }
+.team-stock-row .league-stock-values small { color: var(--team-color); font-size: 5.5px; }
+
+.scoring-feed-row.team-event { grid-template-columns: 18px 31px 28px minmax(0, 1fr) 53px; min-height: 34px; border-color: var(--team-color); font: inherit; text-align: left; }
+.scoring-feed-row.team-event:hover { border-color: var(--team-color); }
+.scoring-feed-row.team-event .player-face.small { width: 25px; height: 25px; border: 2px solid var(--team-color); box-shadow: 0 0 8px var(--team-color); }
+.team-event .feed-player { display: block; min-width: 0; overflow: hidden; }
+.team-event .feed-player strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; }
+.team-event .feed-player small { display: block; overflow: hidden; margin-top: 2px; color: var(--muted); font-size: 5.5px; text-overflow: ellipsis; white-space: nowrap; }
+.feed-team-swatch { display: inline-block; width: 6px; height: 6px; margin-right: 2px; border-radius: 50%; vertical-align: 1px; }
+.team-event .feed-points { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; color: var(--text); font: 900 13px/.9 var(--num); text-align: right; }
+.team-event .feed-delta { color: var(--green); font: 900 6px/1 var(--num); font-style: normal; white-space: nowrap; }
+.team-event.down .feed-delta { color: var(--red-soft); }
+.team-event.up .feed-icon { color: #062116; background: var(--green); }
+.team-event.down .feed-icon { color: #2d0610; background: var(--red-soft); }
+
+@media (min-width: 900px) and (max-width: 1450px) {
+  body[data-layout="monitor"] .league-stock-row.team-stock-row { grid-template-columns: 8px minmax(0, 1fr) minmax(45px, .7fr) 48px; min-height: 28px; gap: 4px; }
+  body[data-layout="monitor"] .league-stock-row.team-stock-row .league-stock-name strong { font-size: 7px; }
+  body[data-layout="monitor"] .scoring-feed-row.team-event { grid-template-columns: 19px 32px 27px minmax(0, 1fr) 51px; min-height: 32px; }
+  body[data-layout="monitor"] .team-event .feed-player strong { font-size: 7px; }
+  body[data-layout="monitor"] .team-event .feed-player small { font-size: 5px; }
+}
+@media (min-width: 1451px) {
+  body[data-layout="monitor"] .league-stock-row.team-stock-row { grid-template-columns: 9px minmax(0, 1fr) minmax(78px, .8fr) 62px; min-height: 31px; }
+  body[data-layout="monitor"] .league-stock-row.team-stock-row .league-stock-name strong { font-size: 9px; }
+  body[data-layout="monitor"] .league-stock-row.team-stock-row .league-stock-name small { font-size: 6.5px; }
+  body[data-layout="monitor"] .league-stock-row.team-stock-row .league-stock-values b { font-size: 17px; }
+  body[data-layout="monitor"] .scoring-feed-row.team-event { grid-template-columns: 23px 38px 33px minmax(0, 1fr) 61px; min-height: 39px; }
+  body[data-layout="monitor"] .scoring-feed-row.team-event .player-face.small { width: 30px; height: 30px; }
+  body[data-layout="monitor"] .team-event .feed-player strong { font-size: 10px; }
+  body[data-layout="monitor"] .team-event .feed-player small { font-size: 7px; }
+  body[data-layout="monitor"] .team-event .feed-points { font-size: 17px; }
+}
