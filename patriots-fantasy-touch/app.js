@@ -43,6 +43,7 @@
     scoreMoves: {},
     scoreHistory: { sleeper: [], espn: [] },
     scoreEvents: { sleeper: [], espn: [] },
+    playerHistories: { sleeper: {}, espn: {} },
     loading: true,
     error: "",
     lastSync: null,
@@ -90,6 +91,9 @@
   const profileAvatar = (src, name, className = "") => `<span class="profile-avatar ${className}" data-initials="${esc(initials(name))}">${src ? `<img src="${esc(src)}" alt="${esc(name)}" onerror="this.style.opacity='.12'">` : ""}</span>`;
   const textValue = (value, fallback = "NOT STARTED") => value == null || value === "" ? fallback : String(value);
   const statMarkup = (value) => finite(value) == null ? `<span class="pending-stat">NOT STARTED</span>` : esc(textValue(value));
+  // Detail panels should stay informative before kickoff. A missing live stat
+  // is a known pregame state, not an empty card or a broken feed.
+  const detailStatMarkup = (value) => finite(value) == null ? `<span class="pending-stat">PREGAME</span>` : esc(number(value, 1));
   const initials = (value) => String(value || "PLAYER").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "P";
 
   async function getJSON(url) {
@@ -608,10 +612,15 @@
     const next = {};
     const moves = {};
     const events = state.scoreEvents[state.league] || [];
+    const playerHistories = state.playerHistories[state.league] || {};
     [...(league.own || []), ...(league.opponent || [])].forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
       next[key] = value;
+      const playerId = String(player.player_id);
+      const history = playerHistories[playerId] || [];
+      if (!history.length || history[history.length - 1] !== value) history.push(value);
+      playerHistories[playerId] = history.slice(-18);
       const previous = finite(state.scoreSnapshot[key]);
       if (previous != null && value !== previous) {
         const delta = value - previous;
@@ -622,6 +631,7 @@
     state.scoreEvents[state.league] = events.slice(0, 12);
     state.scoreMoves = moves;
     state.scoreSnapshot = next;
+    state.playerHistories[state.league] = playerHistories;
     const ownTotal = leagueActual(league, "own");
     const opponentTotal = leagueActual(league, "opponent");
     const history = state.scoreHistory[state.league] || [];
@@ -791,12 +801,47 @@
     return `<section class="arcade-panel arcade-roster ${side}"><div class="arcade-panel-head"><div><b>${side === "own" ? "MY STARTERS" : "OPPONENT STARTERS"}</b><small>${esc(name)} • LIVE SCORING</small></div><span class="arcade-live-indicator"><i></i>${players.filter((player) => player.status === "LIVE").length} LIVE</span></div><div class="arcade-table-head"><span>POS</span><span>PLAYER</span><span>STATUS</span><span>LIVE / PROJ</span></div><div class="arcade-player-list">${players.length ? players.map((player) => arcadePlayerRow(player, side)).join("") : `<div class="empty-card compact"><strong>ROSTER FEED SYNCING</strong><span>Waiting for the league provider.</span></div>`}</div></section>`;
   }
 
+  function projectionForPlayer(player) {
+    return finite(player && player.projected) ?? finite(player && player.consensus && player.consensus.value) ?? finite(consensusFor(player).value) ?? 0;
+  }
+
+  function leaguePlayerRows(league) {
+    return [...(league.own || []), ...(league.opponent || [])].filter(Boolean);
+  }
+
+  function stockPointsForPlayer(player) {
+    const histories = state.playerHistories[state.league] || {};
+    const history = (histories[String(player.player_id)] || []).map((value) => finite(value) || 0);
+    const projected = projectionForPlayer(player);
+    const actual = actualForPlayer(player);
+    if (history.length > 1) return history.slice(-18);
+    if (projected > 0) return [actual, projected];
+    return [actual, actual];
+  }
+
+  function stockSparkline(player, compact = false) {
+    const values = stockPointsForPlayer(player);
+    const max = Math.max(1, ...values);
+    const points = values.map((value, index) => {
+      const x = 2 + index / Math.max(1, values.length - 1) * 96;
+      const y = 23 - value / max * 19;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+    return `<svg class="player-stock-spark ${compact ? "compact" : ""}" viewBox="0 0 100 26" role="img" aria-label="${esc(player.full_name || player.name)} stock line"><path class="spark-grid" d="M2 23H98M2 13H98M2 3H98"/><polyline class="spark-line ${player.side === "opponent" ? "opponent" : "own"}" points="${points}"/><circle class="spark-dot ${player.side === "opponent" ? "opponent" : "own"}" cx="98" cy="${(23 - (values[values.length - 1] || 0) / max * 19).toFixed(1)}" r="2.4"/></svg>`;
+  }
+
   function renderMomentumChart(league) {
-    const rawHistory = state.scoreHistory[state.league] && state.scoreHistory[state.league].length ? state.scoreHistory[state.league] : [{ own: leagueActual(league, "own"), opponent: leagueActual(league, "opponent") }];
+    const started = leagueStarted(league);
+    const ownProjection = (league.own || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + projectionForPlayer(player), 0);
+    const opponentProjection = (league.opponent || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + projectionForPlayer(player), 0);
+    const liveOwn = leagueActual(league, "own");
+    const liveOpponent = leagueActual(league, "opponent");
+    const ownTotal = started ? liveOwn : ownProjection;
+    const opponentTotal = started ? liveOpponent : opponentProjection;
+    const rawHistory = started && state.scoreHistory[state.league] && state.scoreHistory[state.league].length
+      ? state.scoreHistory[state.league]
+      : [{ own: 0, opponent: 0 }, { own: ownTotal, opponent: opponentTotal }];
     const latest = rawHistory[rawHistory.length - 1] || { own: 0, opponent: 0 };
-    // A first load often has one snapshot. Show the start-to-current move so
-    // the chart still reads like a ticker; subsequent refreshes use only real
-    // score snapshots from the connected league feed.
     const history = rawHistory.length === 1
       ? (latest.own || latest.opponent ? [{ own: 0, opponent: 0 }, latest] : [latest, latest])
       : rawHistory;
@@ -807,19 +852,33 @@
       const y = 130 - value / max * 104;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(" ");
-    const ownTotal = leagueActual(league, "own");
-    const opponentTotal = leagueActual(league, "opponent");
     const leadDelta = Math.abs(ownTotal - opponentTotal);
-    const leadText = leadDelta < 0.05 ? "TIED" : `${ownTotal > opponentTotal ? "YOUR TEAM" : "OPPONENT"} LEADS +${number(leadDelta)}`;
+    const leadText = leadDelta < 0.05 ? "TIED" : `${ownTotal > opponentTotal ? "YOUR TEAM" : "OPPONENT"} ${started ? "LEADS" : "PROJECTED TO LEAD"} +${number(leadDelta)}`;
     const currentOwnY = (130 - ownTotal / max * 104).toFixed(1);
     const currentOpponentY = (130 - opponentTotal / max * 104).toFixed(1);
     const leadClass = leadDelta < 0.05 ? "tie" : ownTotal > opponentTotal ? "own" : "opponent";
-    return `<section class="arcade-panel momentum-panel"><div class="arcade-panel-head"><div><b>⚡ SCORING MOMENTUM</b><small>STOCK-STYLE SCORE TRAJECTORY • 5s REFRESH</small></div><span class="arcade-live-indicator"><i></i>LIVE</span></div><div class="momentum-scoreline"><strong class="own-score">${number(ownTotal)}</strong><span>VS</span><strong class="opp-score">${number(opponentTotal)}</strong></div><div class="momentum-lead"><span class="momentum-lead-dot ${leadClass}"></span><b>${esc(leadText)}</b><small>LIVE SNAPSHOT • LINES UPDATE WHEN POINTS MOVE</small></div><svg class="momentum-chart stock-chart" viewBox="0 0 320 150" role="img" aria-label="Live fantasy scoring momentum"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><polyline class="momentum-line own" points="${pointsFor("own")}" /><polyline class="momentum-line opponent" points="${pointsFor("opponent")}" /><circle class="momentum-dot own" cx="308" cy="${currentOwnY}" r="5" /><circle class="momentum-dot opponent" cx="308" cy="${currentOpponentY}" r="5" /></svg><div class="momentum-labels"><span>START</span><span>LIVE SNAPSHOT ${formatAge(state.refreshedAt)}</span></div></section>`;
+    const gameLines = leaguePlayerRows(league).map((player) => gameOddsFor(player)).filter(Boolean).filter((item, index, list) => list.findIndex((candidate) => candidate.event && item.event && candidate.event.id === item.event.id) === index).slice(0, 2);
+    const oddsText = gameLines.length ? gameLines.map((item) => `${item.provider} ${item.team} ${item.price || item.line}`).join(" • ") : "PUBLIC ODDS FEED WAITING";
+    const ownName = league.ownName || "YOUR TEAM";
+    const opponentName = league.opponentName || "OPPONENT";
+    return `<section class="arcade-panel momentum-panel"><div class="arcade-panel-head"><div><b>⚡ SCORING MOMENTUM</b><small>${started ? "STOCK-STYLE LIVE SCORE TRAJECTORY" : "STOCK-STYLE PREGAME PROJECTION + ODDS"} • 5s REFRESH</small></div><span class="arcade-live-indicator"><i></i>${started ? "LIVE" : "PRE"}</span></div><div class="momentum-scoreline"><strong class="own-score">${number(ownTotal)}</strong><span>VS</span><strong class="opp-score">${number(opponentTotal)}</strong></div><div class="momentum-lead"><span class="momentum-lead-dot ${leadClass}"></span><b>${esc(leadText)}</b><small>${started ? "LIVE SNAPSHOT" : "PROJECTION TICKER"} • ${esc(oddsText)}</small></div><div class="momentum-legend"><span class="momentum-legend-item own"><i></i>${esc(ownName)} <em>RED</em></span><span class="momentum-legend-item opponent"><i></i>${esc(opponentName)} <em>BLUE</em></span></div><svg class="momentum-chart stock-chart" viewBox="0 0 320 150" role="img" aria-label="${started ? "Live" : "Pregame projected"} fantasy scoring momentum"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><polyline class="momentum-line own" points="${pointsFor("own")}" /><polyline class="momentum-line opponent" points="${pointsFor("opponent")}" /><circle class="momentum-dot own" cx="308" cy="${currentOwnY}" r="5" /><circle class="momentum-dot opponent" cx="308" cy="${currentOpponentY}" r="5" /></svg><div class="momentum-labels"><span>START</span><span>${started ? "LIVE SNAPSHOT" : "PROJ / ODDS SNAPSHOT"} ${formatAge(state.refreshedAt)}</span></div></section>`;
   }
 
-  function renderScoringFeed() {
+  function renderLeagueStockBoard(league) {
+    const players = leaguePlayerRows(league);
+    const ownName = league.ownName || "YOUR TEAM";
+    const opponentName = league.opponentName || "OPPONENT";
+    return `<section class="arcade-panel league-stock-panel"><div class="arcade-panel-head"><div><b>📈 LEAGUE STOCK BOARD</b><small>EVERY MATCHUP PLAYER • PROJ / LIVE • 5s REFRESH</small></div><div class="stock-legend"><span class="own"><i></i>${esc(ownName)}</span><span class="opponent"><i></i>${esc(opponentName)}</span></div></div><div class="league-stock-list">${players.length ? players.map((player) => { const actual = actualForPlayer(player); const projected = projectionForPlayer(player); const move = scoreMoveFor(player); const side = player.side === "opponent" ? "opponent" : "own"; return `<button class="league-stock-row ${side} ${move ? `stock-${move.direction}` : ""}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><span class="stock-side-dot ${side}"></span>${playerFace(player, "small")}<span class="league-stock-name"><strong>${esc(player.full_name || player.name || "PLAYER")}</strong><small>${esc(player.team || "FA")} • ${esc(playerGameLabel(player))}</small></span>${stockSparkline(player, true)}<span class="league-stock-values"><b>${number(actual)}</b><small>PROJ ${number(projected)}</small></span>${move ? `<em>${move.direction === "up" ? "▲" : "▼"} ${move.direction === "up" ? "+" : ""}${number(move.delta)}</em>` : `<em>${side === "own" ? "YOUR TEAM" : "OPPONENT"}</em>`}</button>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE STOCK FEED SYNCING</strong><span>Roster lines appear when Sleeper or ESPN responds.</span></div>`}</div></section>`;
+  }
+
+  function renderScoringFeed(league) {
     const events = state.scoreEvents[state.league] || [];
-    return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>ONLY PROVIDER SCORE CHANGES APPEAR HERE</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${events.length ? events.slice(0, 6).map((event) => `<div class="scoring-feed-row ${event.direction}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time><strong>${esc(event.name)}</strong><span>${esc(event.team)} • ${event.direction === "up" ? "+" : ""}${number(event.delta)} PTS</span><b>${number(event.total)}</b></div>`).join("") : `<div class="empty-card compact"><strong>WAITING FOR A REAL POINT CHANGE</strong><span>When Sleeper or ESPN reports a new fantasy total, it will animate here.</span></div>`}</div></section>`;
+    const players = leaguePlayerRows(league);
+    const ownName = league.ownName || "YOUR TEAM";
+    const opponentName = league.opponentName || "OPPONENT";
+    const eventMarkup = events.length ? events.slice(0, 5).map((event) => `<div class="scoring-feed-row ${event.direction} ${event.side === "opponent" ? "opponent" : "own"}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time><strong>${esc(event.name)}</strong><span>${esc(event.team)} • ${event.side === "opponent" ? esc(opponentName) : esc(ownName)} • ${event.direction === "up" ? "+" : ""}${number(event.delta)} PTS</span><b>${number(event.total)}</b></div>`).join("") : `<div class="empty-card compact"><strong>WAITING FOR A REAL POINT CHANGE</strong><span>All roster players stay listed below; a provider point change will animate into this feed.</span></div>`;
+    const liveMarkup = players.length ? players.map((player) => { const side = player.side === "opponent" ? "opponent" : "own"; const move = scoreMoveFor(player); const actual = actualForPlayer(player); return `<button class="league-live-row ${side} ${move ? `live-${move.direction}` : ""}" data-player-id="${esc(player.player_id)}" data-side="${esc(side)}" type="button"><span class="live-side-tag ${side}">${side === "own" ? "RED" : "BLUE"}</span>${playerFace(player, "small")}<span><strong>${esc(player.full_name || player.name || "PLAYER")}</strong><small>${esc(player.team || "FA")} • ${esc(playerGameLabel(player))}</small></span><b class="league-live-score">${number(actual)}</b><small class="league-live-proj">PROJ ${number(projectionForPlayer(player))}</small>${move ? `<em>${move.direction === "up" ? "▲" : "▼"} ${move.direction === "up" ? "+" : ""}${number(move.delta)}</em>` : ""}</button>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE LIVE ROSTER WAITING</strong><span>Every player will appear when the connected league feed responds.</span></div>`;
+    return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>EVERY PLAYER • TEAM COLOR + POINT MOVEMENT</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${eventMarkup}</div><div class="league-live-legend"><span class="own"><i></i>${esc(ownName)} / RED</span><span class="opponent"><i></i>${esc(opponentName)} / BLUE</span></div><div class="league-live-list">${liveMarkup}</div></section>`;
   }
 
   function renderInjuryWatch(league) {
@@ -834,7 +893,7 @@
   }
 
   function renderArcadeDashboard(league) {
-    return `<div class="arcade-dashboard"><div class="arcade-columns"><div class="arcade-column left-column">${arcadeRosterPanel(league, "own")}${renderInjuryWatch(league)}</div><div class="arcade-column center-column">${renderMomentumChart(league)}${renderScoringFeed(league)}</div><div class="arcade-column right-column">${arcadeRosterPanel(league, "opponent")}<section class="arcade-panel next-games-panel"><div class="arcade-panel-head"><div><b>▣ NEXT GAMES</b><small>ESPN NFL LIVE SCOREBOARD</small></div><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${renderNextGames()}</section></div></div></div>`;
+    return `<div class="arcade-dashboard"><div class="arcade-columns"><div class="arcade-column left-column">${arcadeRosterPanel(league, "own")}${renderInjuryWatch(league)}</div><div class="arcade-column center-column">${renderMomentumChart(league)}${renderLeagueStockBoard(league)}${renderScoringFeed(league)}</div><div class="arcade-column right-column">${arcadeRosterPanel(league, "opponent")}<section class="arcade-panel next-games-panel"><div class="arcade-panel-head"><div><b>▣ NEXT GAMES</b><small>ESPN NFL LIVE SCOREBOARD</small></div><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${renderNextGames()}</section></div></div></div>`;
   }
 
   function renderHero(league) {
@@ -925,19 +984,21 @@
     const c = player.consensus || consensusFor(player);
     const actual = actualForPlayer(player);
     const playerStatus = String(player.status || player.injury_status || "UPCOMING").toUpperCase();
+    const event = player.event || findPlayerEvent(player);
+    const gameLabel = playerGameLabel(player);
+    const odds = gameOddsFor(player);
     const playerNews = player.news || player.news_headline || player.injury_notes || player.notes || "";
     const newsMarkup = playerNews
       ? `<div class="player-news-card"><span class="news-dot"></span><div><strong>${esc(playerNews)}</strong><small>${esc(playerStatus)} • PROVIDER UPDATE</small></div></div>`
-      : `<div class="player-news-card"><span class="news-dot muted"></span><div><strong>NO PLAYER-SPECIFIC NEWS RETURNED</strong><small>${esc(playerStatus)} • PRACTICE / NEWS FEED WILL APPEAR WHEN PROVIDERS REPORT AN UPDATE</small></div></div>`;
+      : `<div class="player-news-card"><span class="news-dot muted"></span><div><strong>${/OUT|IR|DOUBTFUL|QUESTIONABLE/i.test(playerStatus) ? "INJURY FLAG IS THE CURRENT UPDATE" : "NO INJURY FLAG REPORTED"}</strong><small>${esc(playerStatus)} • ${event && eventState(event).live ? "LIVE PLAY-BY-PLAY FEED" : "PREGAME PRACTICE / NEWS FEED WILL APPEAR WHEN A PROVIDER REPORTS AN UPDATE"}</small></div></div>`;
     const sourceRows = c.sources && c.sources.length ? c.sources.slice(0, 8).map((source) => `<div class="source-value"><span>${esc(source.source || source.name || "SOURCE")}</span><b>${number(source.value, 1, "MODEL")}</b></div>`).join("") : `<div class="empty-card compact"><strong>PUBLIC PROJECTION FEED</strong><span>ESPN or Sleeper projection is being used until another source is enabled.</span></div>`;
-    const gameOdds = gameOddsFor(player);
     const oddsRows = c.odds && c.odds.length
       ? c.odds.slice(0, 8).map((odd) => `<div class="source-value"><span>${esc(odd.book || odd.bookmaker || odd.source || "BOOK")} • ${esc(odd.market || "PROP")}</span><b>${esc(odd.line == null ? "NOT SET" : odd.line)} <small>${esc(odd.price == null ? "" : odd.price)}</small></b></div>`).join("")
       : gameOdds
         ? `<div class="source-value"><span>${esc(gameOdds.provider)} • GAME LINE</span><b>${esc(gameOdds.line)} <small>${esc(gameOdds.price || "PUBLIC LINE")}</small></b></div>`
         : `<div class="empty-card compact"><strong>GAME ODDS WAITING</strong><span>The public scoreboard has not published a line for this matchup yet.</span></div>`;
     drawer.classList.add("open");
-    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${statMarkup(player.pass_yd ?? player.passing_yards)}</b><small>PASS YDS</small></div><div><b>${statMarkup(player.pass_td ?? player.passing_tds)}</b><small>PASS TD</small></div><div><b>${statMarkup(player.rush_yd ?? player.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${statMarkup(player.rec ?? player.receptions)}</b><small>REC</small></div><div><b>${statMarkup(player.rec_yd ?? player.receiving_yards)}</b><small>REC YDS</small></div><div><b>${statMarkup(player.tgt ?? player.targets)}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
+    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-context-grid"><div><small>GAME</small><b>${esc(gameLabel)}</b></div><div><small>TEAM</small><b>${esc(player.team || "FA")}</b></div><div><small>STATUS</small><b>${esc(playerStatus)}</b></div><div><small>ODDS</small><b>${esc(odds ? `${odds.provider} • ${odds.price || odds.line}` : "PUBLIC LINE PENDING")}</b></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${detailStatMarkup(player.pass_yd ?? player.passing_yards)}</b><small>PASS YDS</small></div><div><b>${detailStatMarkup(player.pass_td ?? player.passing_tds)}</b><small>PASS TD</small></div><div><b>${detailStatMarkup(player.rush_yd ?? player.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${detailStatMarkup(player.rec ?? player.receptions)}</b><small>REC</small></div><div><b>${detailStatMarkup(player.rec_yd ?? player.receiving_yards)}</b><small>REC YDS</small></div><div><b>${detailStatMarkup(player.tgt ?? player.targets)}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
     $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
   }
 
