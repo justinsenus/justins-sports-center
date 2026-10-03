@@ -1164,6 +1164,9 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 .pending-stat { color: var(--amber); font-size: .72em; letter-spacing: .03em; }
 
 @media (min-width: 900px) and (max-width: 1450px) {
+  body[data-layout="monitor"] .matchup-hero.arcade-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, .58fr) minmax(0, 1fr);
+  }
   body[data-layout="monitor"] .matchup-hero.arcade-hero { padding-inline: 22px; gap: 9px; }
   body[data-layout="monitor"] .momentum-legend { font-size: 6px; gap: 6px 9px; }
   body[data-layout="monitor"] .league-stock-list { max-height: 238px; }
@@ -1179,6 +1182,9 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 }
 
 @media (min-width: 1451px) {
+  body[data-layout="monitor"] .matchup-hero.arcade-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(230px, .62fr) minmax(0, 1fr);
+  }
   body[data-layout="monitor"] .arcade-hero .arcade-side { grid-template-columns: minmax(0, 1fr) 74px 155px; gap: 14px; }
   body[data-layout="monitor"] .arcade-hero .arcade-side.opponent { grid-template-columns: 155px 74px minmax(0, 1fr); }
   body[data-layout="monitor"] .arcade-hero .hero-team.own .hero-score-block { align-items: flex-end; text-align: right; }
