@@ -108,7 +108,6 @@ function normalizePlayer(entry, index) {
     team: displayTeam(player),
     position: displayPosition(player),
     points: Number(points.toFixed(1)),
-    actual: Number(points.toFixed(1)),
     projected: projectedValue == null ? null : Number(projectedValue.toFixed(1)),
     injuryStatus: status,
     headshot: playerImage(player, entry),
@@ -186,8 +185,9 @@ function applyMatchupTotal(team, side) {
   return team;
 }
 
-async function fetchLeague() {
-  const endpoint = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${encodeURIComponent(season)}/segments/0/leagues/${encodeURIComponent(leagueId)}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring`;
+async function fetchLeagueFor(scoringPeriodId = null) {
+  const periodQuery = scoringPeriodId == null ? "" : `&scoringPeriodId=${encodeURIComponent(scoringPeriodId)}`;
+  const endpoint = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${encodeURIComponent(season)}/segments/0/leagues/${encodeURIComponent(leagueId)}?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring${periodQuery}`;
   const response = await fetch(endpoint, {
     headers: {
       Accept: "application/json",
@@ -198,6 +198,13 @@ async function fetchLeague() {
   });
   if (!response.ok) throw new Error(`ESPN returned HTTP ${response.status}`);
   return response.json();
+}
+
+async function fetchLeague() {
+  const settings = await fetchLeagueFor();
+  const scoringPeriodId = numberOrNull(settings && settings.status && (settings.status.currentScoringPeriod || settings.status.latestScoringPeriod))
+    ?? numberOrNull(settings && settings.scoringPeriodId);
+  return scoringPeriodId == null ? settings : fetchLeagueFor(scoringPeriodId);
 }
 
 async function main() {
