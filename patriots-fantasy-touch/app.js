@@ -15,6 +15,7 @@
   const ESPN_PUBLIC_URL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/919590140?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring";
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
+  const ESPN_STAT_ID_LABELS = { 3: "Passing Yards", 4: "Passing Touchdowns", 19: "Interceptions", 24: "Rushing Yards", 25: "Rushing Touchdowns", 42: "Receiving Yards", 43: "Receiving Touchdowns", 53: "Receptions", 58: "Targets" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22]);
   const TEAM_ABBR_ALIASES = { WAS: "WSH", WSH: "WSH", JAC: "JAX", JAX: "JAX", LVR: "LV", LV: "LV" };
   const TEAM_STOCK_COLORS = ["#ff6378", "#39c7ff", "#ffc857", "#b58bff", "#48dfa4", "#ff984f", "#ff77c8", "#a7df58", "#668fff", "#ee7958", "#38d5c0", "#d6ee56"];
@@ -47,6 +48,7 @@
     playerHistories: { sleeper: {}, espn: {} },
     teamScoreHistory: { sleeper: [], espn: [] },
     teamScoreHistoryMode: { sleeper: "", espn: "" },
+    teamScoreHistoryScope: { sleeper: "", espn: "" },
     loading: true,
     error: "",
     lastSync: null,
@@ -377,11 +379,10 @@
 
   function espnProjection(player, scoringPeriodId) {
     const rows = espnStatRows(player, scoringPeriodId);
-    const projected = rows.find((row) => Number(row.statSourceId) === 1) || rows.find((row) => row.appliedTotal != null);
-    const rowValue = finite(projected && (projected.appliedTotal != null ? projected.appliedTotal : projected.appliedTotalCeiling));
+    const projected = rows.find((row) => Number(row.statSourceId) === 1);
+    const rowValue = finite(projected && (projected.appliedTotal ?? projected.projectedTotal ?? projected.projectedPoints));
     if (rowValue != null) return rowValue;
-    const direct = finite(player && (player.projectedTotal != null ? player.projectedTotal : player.projected));
-    return direct;
+    return finite(player && (player.projectedTotal != null ? player.projectedTotal : player.projected));
   }
 
   function espnSeasonAverage(player) {
@@ -390,15 +391,35 @@
     return finite(season && (season.appliedAverage || season.appliedTotal));
   }
 
-  function espnLiveFields(player, scoringPeriodId) {
+  function espnStatLabels(data) {
+    const labels = { ...ESPN_STAT_ID_LABELS };
+    const items = data && data.settings && data.settings.scoringSettings && data.settings.scoringSettings.scoringItems;
+    (Array.isArray(items) ? items : []).forEach((item) => {
+      const id = item && (item.statId ?? item.id);
+      const label = item && (item.name || item.abbrev || item.abbreviation);
+      if (id != null && label) labels[String(id)] = String(label);
+    });
+    return labels;
+  }
+
+  function formatESPNStatLabel(value) {
+    return String(value || "").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim().toUpperCase();
+  }
+
+  function espnLiveFields(player, scoringPeriodId, labels = ESPN_STAT_ID_LABELS) {
     const row = espnStatRows(player, scoringPeriodId).find((candidate) => Number(candidate.statSourceId) === 0);
     const stats = row && row.stats || {};
     if (!row) return {};
     const value = (key) => finite(stats[key]);
+    const gameStats = Object.entries(stats).map(([id, rawValue]) => ({
+      id: String(id),
+      label: formatESPNStatLabel(labels[String(id)]),
+      value: finite(rawValue)
+    })).filter((stat) => stat.label && stat.value != null && Math.abs(stat.value) > 0.001);
     if (Number(player && player.defaultPositionId) === 1) {
-      return { pass_yd: value("3"), pass_td: value("4"), interceptions: value("19"), rush_yd: value("24"), rush_td: value("25") };
+      return { pass_yd: value("3"), pass_td: value("4"), interceptions: value("19"), rush_yd: value("24"), rush_td: value("25"), gameStats };
     }
-    return { rush_yd: value("24"), rush_td: value("25"), rec_yd: value("42"), rec_td: value("43"), receptions: value("53"), targets: value("58") };
+    return { rush_yd: value("24"), rush_td: value("25"), rec_yd: value("42"), rec_td: value("43"), receptions: value("53"), targets: value("58"), gameStats };
   }
 
   function espnStatLine(player, actual, projected, event) {
@@ -412,7 +433,7 @@
     return `${label} • ${matchup} • ${number(visibleActual)} PTS • PROJ ${projected == null ? "MODEL READY" : number(projected)}`;
   }
 
-  function normalizeESPNEntry(entry, currentEntry, scoringPeriodId, side) {
+  function normalizeESPNEntry(entry, currentEntry, scoringPeriodId, side, statLabels = ESPN_STAT_ID_LABELS) {
     const pool = entry && entry.playerPoolEntry || {};
     const currentPool = currentEntry && currentEntry.playerPoolEntry || {};
     const basePlayer = pool.player || entry && entry.player || {};
@@ -425,22 +446,29 @@
     const event = findPlayerEvent({ team }) || null;
     const eventStatus = event && eventState(event);
     const rows = espnStatRows(player, scoringPeriodId);
-    const actualRow = rows.find((row) => Number(row.statSourceId) === 0) || rows.find((row) => Number(row.statSourceId) === 1 && row.appliedTotal != null);
+    const actualRow = rows.find((row) => Number(row.statSourceId) === 0);
     const actualValue = [
-      currentPool.appliedStatTotal,
-      currentEntry && currentEntry.appliedStatTotal,
-      pool.appliedStatTotal,
       actualRow && actualRow.appliedTotal,
-      actualRow && actualRow.appliedTotalCeiling
+      actualRow && actualRow.appliedStatTotal,
+      currentEntry && currentEntry.appliedStatTotal,
+      currentPool.appliedStatTotal,
+      entry && entry.appliedStatTotal,
+      pool.appliedStatTotal
     ].map(finite).find((value) => value != null);
-    const reportedActual = actualValue ?? 0;
-    const actual = eventStatus && (eventStatus.live || eventStatus.final) ? reportedActual : 0;
-    const projected = espnProjection(player, scoringPeriodId);
-    const liveFields = espnLiveFields(player, scoringPeriodId);
+    const actual = actualValue ?? 0;
+    const rowProjection = espnProjection(player, scoringPeriodId);
+    const entryProjection = [
+      currentEntry && (currentEntry.projectedTotal ?? currentEntry.projectedPoints),
+      currentPool && (currentPool.projectedTotal ?? currentPool.projectedPoints),
+      entry && (entry.projectedTotal ?? entry.projectedPoints),
+      pool && (pool.projectedTotal ?? pool.projectedPoints)
+    ].map(finite).find((value) => value != null);
+    const projected = rowProjection ?? entryProjection ?? null;
+    const liveFields = espnLiveFields(player, scoringPeriodId, statLabels);
     const headshot = `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`;
     const lineupSlotId = Number(entry && entry.lineupSlotId);
     const injury = entry && entry.injuryStatus && entry.injuryStatus !== "NORMAL" ? entry.injuryStatus : player.injuryStatus;
-    const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
+    const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : actual > 0 ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
     return {
       player_id: id,
       playerId: id,
@@ -476,7 +504,7 @@
     return (positionOrder[position] == null ? 20 : positionOrder[position]) * 1000 + index;
   }
 
-  function normalizeESPNTeam(rawTeam, currentSide, scoringPeriodId, side) {
+  function normalizeESPNTeam(rawTeam, currentSide, scoringPeriodId, side, statLabels = ESPN_STAT_ID_LABELS) {
     if (!rawTeam) return null;
     const entries = rawTeam.roster && rawTeam.roster.entries || [];
     const currentEntries = currentSide && currentSide.rosterForCurrentScoringPeriod && currentSide.rosterForCurrentScoringPeriod.entries || [];
@@ -488,7 +516,7 @@
     orderedEntries.forEach((entry) => {
       const id = String(entry.playerId || entry.playerPoolEntry && entry.playerPoolEntry.id || "");
       if (!id) return;
-      const row = normalizeESPNEntry(entry, currentById.get(id), scoringPeriodId, side);
+      const row = normalizeESPNEntry(entry, currentById.get(id), scoringPeriodId, side, statLabels);
       players[id] = row;
       ids.push(id);
       if (row.starter) starters.push(id);
@@ -496,7 +524,7 @@
     const starterRows = ids.map((id) => players[id]).filter((row) => row && row.starter);
     const actualSum = starterRows.reduce((sum, row) => sum + (finite(row.actual) || 0), 0);
     const sideTotal = finite(currentSide && currentSide.totalPoints);
-    const actual = sideTotal != null && (sideTotal > 0 || actualSum === 0) ? sideTotal : actualSum;
+    const actual = actualSum > 0 ? actualSum : sideTotal ?? actualSum;
     const projected = starterRows.reduce((sum, row) => sum + (finite(row.projected) || 0), 0);
     const imageTeam = (starterRows[0] || players[ids[0]] || {}).team;
     const overall = rawTeam.record && (rawTeam.record.overall || rawTeam.record.current) || {};
@@ -538,6 +566,7 @@
 
   async function loadESPNPublic() {
     const data = await getJSON(`${ESPN_PUBLIC_URL}&scoringPeriodId=${encodeURIComponent(state.week || 1)}&ts=${Date.now()}`);
+    const statLabels = espnStatLabels(data);
     const status = data.status || {};
     const matchupPeriodId = Number(status.currentMatchupPeriod || status.latestScoringPeriod || 1);
     const scoringPeriodId = Number(status.currentScoringPeriod || status.latestScoringPeriod || matchupPeriodId || 1);
@@ -554,13 +583,13 @@
     const leagueTeams = colorLeagueTeams(teams.map((rawTeam) => {
       const teamId = String(rawTeam.id);
       const side = teamId === String(ownRaw.id) ? "own" : teamId === String(opponentId) ? "opponent" : "league";
-      return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side), id: `espn:${teamId}`, teamId };
+      return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side, statLabels), id: `espn:${teamId}`, teamId };
     }));
     const ownTeam = leagueTeams.find((team) => String(team.teamId) === String(ownRaw.id)) || null;
     const opponentTeam = leagueTeams.find((team) => String(team.teamId) === String(opponentId)) || null;
     const projectionPlayers = {};
     teams.forEach((team) => (team.roster && team.roster.entries || []).forEach((entry) => {
-      const row = normalizeESPNEntry(entry, null, scoringPeriodId, "projection");
+      const row = normalizeESPNEntry(entry, null, scoringPeriodId, "projection", statLabels);
       if (row && row.full_name && finite(row.projected) != null) projectionPlayers[nameKey(row.full_name)] = { projected: row.projected, source: "PUBLIC ESPN" };
     }));
     const result = { ready: true, source: "PUBLIC ESPN LIVE", savedAt: new Date().toISOString(), scoringPeriodId, matchupPeriodId, myTeam: ownTeam, opponent: opponentTeam, leagueTeams, projectionPlayers, public: true };
@@ -592,12 +621,11 @@
       const projected = finite(row.projected) ?? finite(row.projectedPoints);
       const event = findPlayerEvent(row) || null;
       const eventStatus = event && eventState(event);
-      const reportedActual = finite(row.actual) ?? finite(row.appliedStatTotal) ?? finite(row.points);
-      // ESPN snapshots may contain a prior period's total. Use actuals only
-      // while the player's current NFL game is live or final.
-      const actual = eventStatus && (eventStatus.live || eventStatus.final) ? reportedActual ?? 0 : 0;
+      // The sync file is normalized for scoringPeriodId before publish.
+      // Trust its weekly row even while the separate NFL scoreboard lags.
+      const actual = finite(row.actual) ?? finite(row.points) ?? finite(row.appliedStatTotal) ?? 0;
       const injury = row.injuryStatus || row.injury_status || "";
-      const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
+      const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : actual > 0 ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
       const name = row.full_name || row.name || id;
       players[id] = {
         ...row,
@@ -610,6 +638,7 @@
         position: row.position || "UTIL",
         actual,
         projected,
+        gameStats: Array.isArray(row.gameStats) ? row.gameStats : [],
         status,
         event,
         injury_status: injury,
@@ -621,7 +650,7 @@
     });
     const startersOnly = ids.map((id) => players[id]).filter((player) => player && player.starter);
     const total = startersOnly.reduce((sum, player) => sum + (finite(player.actual) || 0), 0);
-    const projected = startersOnly.reduce((sum, player) => sum + (finite(player.projected) || 0), 0);
+    const projected = startersOnly.reduce((sum, player) => sum + projectionForPlayer(player), 0);
     const teamId = String(team.id || team.teamId || "");
     return {
       ...team,
@@ -794,7 +823,7 @@
 
   function leagueStarted(league) {
     const rows = [...(league.own || []), ...(league.opponent || [])];
-    return rows.some((player) => player.event && (eventState(player.event).live || eventState(player.event).final)) || rows.some((player) => player.status === "LIVE" || player.status === "FINAL");
+    return rows.some((player) => player.event && (eventState(player.event).live || eventState(player.event).final)) || rows.some((player) => player.status === "LIVE" || player.status === "FINAL" || actualForPlayer(player) > 0);
   }
 
   function leagueGamesStarted(league) {
@@ -819,6 +848,34 @@
     return finite(player && player.actual) ?? finite(player && player.points) ?? 0;
   }
 
+  function teamHistoryStorageKey(league) {
+    const leagueId = state.league === "espn" ? CONFIG.espnLeagueId : CONFIG.sleeperLeagueId;
+    const week = Number(league && league.week || state.week) || 1;
+    return `fantasy-team-score-history:v1:${CONFIG.season}:${state.league}:${leagueId}:${week}`;
+  }
+
+  function restoreTeamScoreHistory(league) {
+    const scope = teamHistoryStorageKey(league);
+    if (state.teamScoreHistoryScope[state.league] === scope) return;
+    state.teamScoreHistoryScope[state.league] = scope;
+    state.teamScoreHistory[state.league] = [];
+    state.teamScoreHistoryMode[state.league] = "";
+    try {
+      const saved = JSON.parse(localStorage.getItem(scope) || "null");
+      if (!saved || !Array.isArray(saved.samples)) return;
+      const samples = saved.samples.filter((sample) => sample && sample.totals && typeof sample.totals === "object")
+        .map((sample) => ({ at: Number(sample.at) || Date.now(), totals: Object.fromEntries(Object.entries(sample.totals).map(([id, value]) => [id, finite(value)]).filter(([, value]) => value != null)) }))
+        .filter((sample) => Object.keys(sample.totals).length);
+      state.teamScoreHistory[state.league] = samples.slice(-720);
+      state.teamScoreHistoryMode[state.league] = saved.mode === "live" || saved.mode === "projection" ? saved.mode : "";
+    } catch (_) { /* Keep the live chart working if browser storage is unavailable. */ }
+  }
+
+  function persistTeamScoreHistory(league, mode) {
+    try {
+      localStorage.setItem(teamHistoryStorageKey(league), JSON.stringify({ mode, samples: (state.teamScoreHistory[state.league] || []).slice(-720) }));
+    } catch (_) { /* Quota or private-browsing limits do not interrupt live scoring. */ }
+  }
   function updateScoreMoves(league) {
     const next = {};
     const moves = {};
@@ -875,18 +932,22 @@
     const started = leagueGamesStarted(league);
     const teams = league.teams || [];
     if (teams.length) {
+      restoreTeamScoreHistory(league);
       const mode = started ? "live" : "projection";
       const previousMode = state.teamScoreHistoryMode[state.league];
-      const history = previousMode === mode ? state.teamScoreHistory[state.league] || [] : [];
+      let history = previousMode === mode ? state.teamScoreHistory[state.league] || [] : [];
       const totals = Object.fromEntries(teams.map((team) => [String(team.id), leagueTeamMetric(team, started)]));
-      if (started && previousMode !== mode) {
+      const modeChanged = previousMode !== mode;
+      if (started && modeChanged) {
         history.push({ at: Date.now(), totals: Object.fromEntries(teams.map((team) => [String(team.id), 0])) });
       }
       const last = history[history.length - 1];
       const changed = !last || Object.entries(totals).some(([id, value]) => Math.abs((finite(last.totals && last.totals[id]) || 0) - value) >= 0.05);
       if (changed) history.push({ at: Date.now(), totals });
-      state.teamScoreHistory[state.league] = history.length > 24 ? [history[0], ...history.slice(-23)] : history;
+      if (history.length > 720) history = [history[0], ...history.slice(-719)];
+      state.teamScoreHistory[state.league] = history;
       state.teamScoreHistoryMode[state.league] = mode;
+      if (changed || modeChanged) persistTeamScoreHistory(league, mode);
     }
     const ownTotal = leagueActual(league, "own");
     const opponentTotal = leagueActual(league, "opponent");
@@ -1149,7 +1210,7 @@
     if (teams.some((team) => Math.abs(finite(first[String(team.id)]) || 0) > 0.05)) history.unshift({ totals: zeroTotals });
     if (!started) history = [{ totals: zeroTotals }, { totals: currentTotals }];
     if (history.length === 1) history.unshift({ totals: zeroTotals });
-    if (history.length > 18) history = [history[0], ...history.slice(-17)];
+    if (history.length > 120) history = [history[0], ...history.slice(-119)];
     const maxValue = Math.max(10, ...history.flatMap((snapshot) => teams.map((team) => finite(snapshot.totals && snapshot.totals[String(team.id)]) || 0))) * 1.08;
     const pointsFor = (team) => history.map((snapshot, index) => {
       const x = 12 + index / Math.max(1, history.length - 1) * 296;
@@ -1160,6 +1221,50 @@
     const chart = teams.length ? `<div class="league-stock-chart-wrap"><svg class="league-team-stock-chart stock-chart" viewBox="0 0 320 142" role="img" aria-label="${started ? "Live" : "Projected"} total points for every league team"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><g class="league-team-stock-lines">${rows.map((team) => { const color = team.teamColor || "#a8b7c9"; const value = finite(values[String(team.id)]) || 0; const endY = (130 - value / maxValue * 104).toFixed(1); return `<polyline class="league-team-stock-line" points="${pointsFor(team)}" style="--team-color:${esc(color)}" /><circle class="league-team-stock-end" cx="308" cy="${endY}" r="3.2" style="--team-color:${esc(color)}" />`; }).join("")}</g></svg><div class="momentum-labels"><span>ALL TEAMS START AT 0</span><span>${started ? "LIVE TOTALS" : "PROJECTED TOTALS"} • ${formatAge(state.league === "espn" && state.espn && state.espn.savedAt ? state.espn.savedAt : state.refreshedAt)}</span></div></div>` : "";
     return `<section class="arcade-panel league-stock-panel"><div class="arcade-panel-head"><div><b>📈 LEAGUE STOCK BOARD</b><small>${teams.length} TEAMS • ${started ? "LIVE TOTAL POINTS" : "PROJECTED POINTS"} • 5s REFRESH</small></div><div class="stock-legend team-stock-legend"><span><i></i>ONE SHARED LIVE CHART</span></div></div>${chart}<div class="league-stock-list">${rows.length ? rows.map((team) => { const value = leagueTeamMetric(team, started); const color = team.teamColor || "#a8b7c9"; return `<div class="league-stock-row team-stock-row" style="--team-color:${esc(color)}"><span class="team-stock-key"></span><span class="league-stock-name"><strong>${esc(team.name || "LEAGUE TEAM")}</strong><small>${esc(recordLabel(team.record))} • ${started ? "LIVE TOTAL" : "WEEK PROJECTION"}</small></span><span class="league-stock-values"><b>${number(value)}</b><small>${metric}</small></span></div>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE TEAM FEED SYNCING</strong><span>Every team appears when the league provider responds.</span></div>`}</div></section>`;
   }
+  function teamMovementSparkline(team, samples) {
+    const id = String(team.id);
+    const changes = samples.slice(1).map((sample, index) => {
+      const current = finite(sample.totals && sample.totals[id]) ?? 0;
+      const previous = finite(samples[index].totals && samples[index].totals[id]) ?? 0;
+      return current - previous;
+    }).slice(-48);
+    if (changes.length < 2) changes.unshift(0);
+    const scale = Math.max(0.5, ...changes.map((value) => Math.abs(value)));
+    const points = changes.map((value, index) => {
+      const x = 2 + index / Math.max(1, changes.length - 1) * 96;
+      const y = 13 - value / scale * 10;
+      return x.toFixed(1) + "," + y.toFixed(1);
+    }).join(" ");
+    return '<svg class="movement-sparkline" viewBox="0 0 100 26" aria-label="' + esc(team.name) + ' saved score movements"><path class="movement-zero" d="M2 13H98"/><polyline points="' + points + '"/></svg>';
+  }
+
+  function renderLeagueMovementBoard(league) {
+    const teams = [...(league.teams || [])].sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+    const started = leagueGamesStarted(league);
+    const samples = state.teamScoreHistory[state.league] || [];
+    const changes = teams.map((team) => {
+      const id = String(team.id);
+      const latest = samples[samples.length - 1];
+      const previous = samples[samples.length - 2];
+      const current = latest ? finite(latest.totals && latest.totals[id]) ?? leagueTeamMetric(team, started) : leagueTeamMetric(team, started);
+      const before = previous ? finite(previous.totals && previous.totals[id]) ?? current : 0;
+      return { team, delta: current - before };
+    });
+    const maxDelta = Math.max(0.5, ...changes.map((row) => Math.abs(row.delta)));
+    const rows = changes.map(({ team, delta }) => {
+      const color = team.teamColor || "#a8b7c9";
+      const width = Math.min(50, Math.max(Math.abs(delta) > 0.001 ? 2 : 0, Math.abs(delta) / maxDelta * 50));
+      const direction = delta > 0.001 ? "up" : delta < -0.001 ? "down" : "flat";
+      const sign = delta > 0.001 ? "+" : delta < -0.001 ? "−" : "";
+      const moveText = Math.abs(delta) < 0.001 ? "0.0" : sign + number(Math.abs(delta));
+      return '<div class="movement-row ' + direction + '" style="--team-color:' + esc(color) + '"><i class="movement-key"></i><span class="movement-team"><b>' + esc(team.name || "LEAGUE TEAM") + '</b><small>' + esc(recordLabel(team.record)) + '</small></span>' + teamMovementSparkline(team, samples) + '<span class="movement-bar-track"><i class="movement-bar ' + direction + '" style="width:' + width.toFixed(1) + '%"></i></span><strong class="movement-delta ' + direction + '">' + moveText + '</strong></div>';
+    }).join("");
+    const lastTime = samples.length ? formatAge(samples[samples.length - 1].at) : "WAITING FOR FIRST SCORE UPDATE";
+    const mode = started ? "LIVE SCORING" : "PROJECTION CHANGES";
+    const empty = '<div class="empty-card compact"><strong>LEAGUE MOVEMENTS SYNCING</strong><span>Each team’s score changes will appear here.</span></div>';
+    return '<section class="arcade-panel league-movement-panel"><div class="arcade-panel-head"><div><b>↕ LEAGUE MOVEMENT</b><small>ALL TEAM SCORE CHANGES • ' + mode + '</small></div><span class="arcade-live-indicator"><i></i>' + samples.length + ' SAVED</span></div><div class="movement-scale"><span>DOWN</span><i></i><span>UP</span><small>LAST CHANGE • ' + esc(lastTime) + ' • HISTORY STAYS AFTER REFRESH</small></div><div class="movement-list">' + (rows || empty) + '</div></section>';
+  }
+
   function renderScoringFeed(league) {
     const events = state.scoreEvents[state.league] || [];
     const eventMarkup = events.length ? events.slice(0, 6).map((event) => {
@@ -1182,25 +1287,63 @@
   }
 
   function renderArcadeDashboard(league) {
-    return `<div class="arcade-dashboard"><div class="arcade-columns"><div class="arcade-column left-column">${arcadeRosterPanel(league, "own")}${renderInjuryWatch(league)}</div><div class="arcade-column center-column">${renderMomentumChart(league)}${renderLeagueStockBoard(league)}${renderScoringFeed(league)}</div><div class="arcade-column right-column">${arcadeRosterPanel(league, "opponent")}<section class="arcade-panel next-games-panel"><div class="arcade-panel-head"><div><b>▣ NEXT GAMES</b><small>ESPN NFL LIVE SCOREBOARD</small></div><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${renderNextGames()}</section></div></div></div>`;
+    return `<div class="arcade-dashboard"><div class="arcade-columns"><div class="arcade-column left-column">${arcadeRosterPanel(league, "own")}${renderInjuryWatch(league)}</div><div class="arcade-column center-column">${renderMomentumChart(league)}${renderLeagueStockBoard(league)}${renderLeagueMovementBoard(league)}${renderScoringFeed(league)}</div><div class="arcade-column right-column">${arcadeRosterPanel(league, "opponent")}<section class="arcade-panel next-games-panel"><div class="arcade-panel-head"><div><b>▣ NEXT GAMES</b><small>ESPN NFL LIVE SCOREBOARD</small></div><button class="panel-action" data-view="live" type="button">ALL GAMES ›</button></div>${renderNextGames()}</section></div></div></div>`;
   }
 
+  function playerFinishEstimate(player) {
+    const actual = Math.max(0, actualForPlayer(player));
+    const projection = Math.max(actual, projectionForPlayer(player));
+    const event = player.event || findPlayerEvent(player);
+    const game = event && eventState(event);
+    const final = player.status === "FINAL" || Boolean(game && game.final);
+    const live = player.status === "LIVE" || Boolean(game && game.live);
+    if (final) return { finish: actual, remaining: 0, isLive: false };
+    if (live) return { finish: actual + Math.max(0, projection - actual), remaining: Math.max(0, projection - actual), isLive: true };
+    return { finish: Math.max(actual, projection), remaining: projection, isLive: false };
+  }
+
+  function teamFinishEstimate(league, side) {
+    return (league[side] || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + playerFinishEstimate(player).finish, 0);
+  }
+
+  function teamFinishUncertainty(league, side) {
+    const variance = (league[side] || []).filter((player) => player.starter !== false).reduce((sum, player) => {
+      const estimate = playerFinishEstimate(player);
+      const deviation = estimate.isLive ? estimate.remaining * 0.45 : estimate.remaining * 0.38;
+      return sum + deviation * deviation;
+    }, 0);
+    return Math.sqrt(variance);
+  }
+
+  function errorFunction(value) {
+    const sign = value < 0 ? -1 : 1;
+    const x = Math.abs(value);
+    const t = 1 / (1 + 0.3275911 * x);
+    const polynomial = (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t;
+    return sign * (1 - polynomial * Math.exp(-x * x));
+  }
+
+  function matchupWinChance(ownFinish, opponentFinish, ownUncertainty, opponentUncertainty) {
+    const gap = ownFinish - opponentFinish;
+    const spread = Math.hypot(ownUncertainty, opponentUncertainty);
+    if (spread < 0.01) return gap === 0 ? 50 : gap > 0 ? 99 : 1;
+    return Math.max(1, Math.min(99, Math.round(0.5 * (1 + errorFunction((gap / spread) / Math.SQRT2)) * 100)));
+  }
   function renderHero(league) {
     const started = leagueStarted(league);
     const ownActual = leagueActual(league, "own");
     const opponentActual = leagueActual(league, "opponent");
-    const ownProjection = (league.own || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + (finite(player.projected) || 0), 0);
-    const opponentProjection = (league.opponent || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + (finite(player.projected) || 0), 0);
-    const ownHasProj = (league.own || []).some((player) => finite(player.projected) != null);
-    const oppHasProj = (league.opponent || []).some((player) => finite(player.projected) != null);
-    const totalProjection = ownProjection + opponentProjection;
-    const ownPct = totalProjection > 0 ? Math.round(ownProjection / totalProjection * 100) : 50;
+    const ownHasProj = (league.own || []).some((player) => finite(player.projected) != null || finite(player.consensus && player.consensus.value) != null);
+    const oppHasProj = (league.opponent || []).some((player) => finite(player.projected) != null || finite(player.consensus && player.consensus.value) != null);
+    const ownFinish = teamFinishEstimate(league, "own");
+    const opponentFinish = teamFinishEstimate(league, "opponent");
+    const ownPct = matchupWinChance(ownFinish, opponentFinish, teamFinishUncertainty(league, "own"), teamFinishUncertainty(league, "opponent"));
     const opponentPct = 100 - ownPct;
     const ownDelta = teamDelta(league, "own");
     const opponentDelta = teamDelta(league, "opponent");
     const stats = sourceStats();
     const oddsMeta = stats.oddsBooks ? `${stats.oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
-    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>PROJ ${ownHasProj ? number(ownProjection) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>PROJ ${ownHasProj ? number(ownProjection) : "MODEL READY"}</span><span>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% WIN PROBABILITY • LIVE CONSENSUS</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>PROJ ${oppHasProj ? number(opponentProjection) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(stats.live)} LIVE FEEDS</span><span>${esc(oddsMeta)}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
+    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL READY"}</span><span>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN CHANCE • ${number(ownFinish)}–${number(opponentFinish)} FINISH</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(stats.live)} LIVE FEEDS</span><span>${esc(oddsMeta)}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
   }
 
   function renderMonitorTabs() {
@@ -1219,7 +1362,7 @@
     const peak = Math.max(...trendValues, 1);
     const bars = trendValues.map((value, index) => `<span style="height:${Math.max(14, Math.round(value / peak * 72))}%" class="${index === 0 ? "current" : ""}"></span>`).join("");
     const next = playerOpponent(focus);
-    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Reset player focus">RESET</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "MODEL" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "NOT STARTED" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div><div class="focus-stat-grid"><div><b>${statMarkup(focus.pass_yd ?? focus.passing_yards)}</b><small>PASS YDS</small></div><div><b>${statMarkup(focus.pass_td ?? focus.passing_tds)}</b><small>PASS TD</small></div><div><b>${statMarkup(focus.interceptions ?? focus.int)}</b><small>INT</small></div><div><b>${statMarkup(focus.rush_yd ?? focus.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${statMarkup(focus.rec ?? focus.receptions)}</b><small>REC</small></div><div><b>${statMarkup(focus.tgt ?? focus.targets)}</b><small>TARGETS</small></div></div><div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
+    return `<section class="focus-panel workspace-panel"><div class="focus-top"><span class="section-kicker">PLAYER FOCUS</span><button class="focus-close" type="button" aria-label="Reset player focus">RESET</button></div><div class="focus-player">${playerFace(focus, "large")}<div><h2>${esc(focus.full_name || focus.name)}</h2><p>${esc(focus.position || "UTIL")} • ${esc(focus.team || "FA")} • ${esc(focus.side === "opponent" ? league.opponentName : league.ownName)}</p><span class="live-pill ${focus.status === "LIVE" ? "active" : ""}"><i></i>${esc(focus.status || "UPCOMING")} • VS ${esc(next)}</span></div></div><div class="focus-score-grid"><div><strong>${number(actual)}</strong><small>LIVE POINTS</small></div><div><strong>${projection == null ? "MODEL" : number(projection)}</strong><small>PROJ POINTS</small></div><div><strong>${average == null ? "NOT STARTED" : number(average)}</strong><small>SEASON AVG</small></div></div><div class="focus-tabs"><span class="active">LIVE SNAPSHOT</span><span>PROJECTION</span><span>STATUS</span></div>${playerDetailStatsGrid(focus, "focus-stat-grid")}<div class="focus-trend-heading"><b>FANTASY POINTS SNAPSHOT</b><span>LIVE • PROJ • AVG</span></div><div class="focus-trend">${bars}</div><div class="focus-trend-labels"><span>LIVE</span><span>PROJ</span><span>AVG</span></div><div class="focus-next"><span>NEXT GAME</span><b>${esc(next)} • ${esc(focus.status === "LIVE" ? "IN PROGRESS" : "SCHEDULED")}</b></div><div class="focus-feed"><span class="status-dot live"></span><b>${esc(focus.statLine || "PREGAME • LIVE STAT LINE READY")}</b></div>${sourceCoverageMarkup()}</section>`;
   }
 
   function renderScoringTicker(league) {
@@ -1266,6 +1409,52 @@
     return `<div class="live-arcade-head"><div class="arcade-title"><span class="arcade-pulse"></span><div><strong>LIVE SCORE ARCADE</strong><small>POINTS POP WHEN A PLAY HAPPENS • 5s REFRESH</small></div></div><div class="arcade-legend"><span class="up">▲ UP</span><span class="down">▼ DOWN</span><span>ACTUAL + PROJ</span></div></div><div class="live-view arcade-live-view"><section class="workspace-panel games-panel"><div class="panel-heading cyan-heading"><span><b>LIVE GAME BOARD</b><small>REFRESHING EVERY ${CONFIG.refreshMs / 1000}s</small></span><span class="panel-total">${livePlayers.length} FANTASY LIVE</span></div>${liveGamesMarkup()}</section><section class="workspace-panel live-players"><div class="panel-heading green-heading"><span><b>LIVE PLAYER PERFORMANCE</b><small>ACTUAL SCORE IS PRIMARY • PROJ STAYS VISIBLE</small></span></div><div class="player-stack">${livePlayers.length ? livePlayers.map((player) => playerCard(player, player.side || "own")).join("") : `<div class="empty-card"><strong>NO ROSTER PLAYERS LIVE</strong><span>When a game starts, actual points and live stat lines replace the pregame zero.</span></div>`}</div></section><aside class="workspace-panel difference-panel"><div class="panel-heading amber-heading"><span><b>LIVE MARKET MOVES</b><small>LINE RANGE + OUTLIER</small></span></div>${insightMarkup()}</aside></div>`;
   }
 
+  function playerDetailStats(player) {
+    const saved = Array.isArray(player && player.gameStats) ? player.gameStats : [];
+    const priority = [
+      "COMPLETIONS", "ATTEMPTS", "PASSING YARDS", "PASSING TOUCHDOWNS", "INTERCEPTIONS",
+      "RUSHING ATTEMPTS", "RUSHING YARDS", "RUSHING TOUCHDOWNS", "RECEPTIONS", "TARGETS",
+      "RECEIVING YARDS", "RECEIVING TOUCHDOWNS", "FUMBLES", "FUMBLES LOST"
+    ];
+    const unique = new Map();
+    saved.forEach((stat) => {
+      const label = formatESPNStatLabel(stat && stat.label);
+      const value = finite(stat && stat.value);
+      if (label && value != null) unique.set(label, { label, value });
+    });
+    const legacy = [
+      ["PASS YDS", player.pass_yd ?? player.passing_yards],
+      ["PASS TD", player.pass_td ?? player.passing_tds],
+      ["INT", player.interceptions ?? player.int],
+      ["RUSH YDS", player.rush_yd ?? player.rushing_yards],
+      ["RUSH TD", player.rush_td ?? player.rushing_tds],
+      ["CATCHES", player.receptions ?? player.rec],
+      ["REC YDS", player.rec_yd ?? player.receiving_yards],
+      ["REC TD", player.rec_td ?? player.receiving_tds],
+      ["TARGETS", player.targets ?? player.tgt]
+    ];
+    if (!unique.size) legacy.forEach(([label, raw]) => {
+      const value = finite(raw);
+      if (value != null) unique.set(label, { label, value });
+    });
+    return [...unique.values()].filter((stat) => Math.abs(stat.value) > 0.001).sort((a, b) => {
+      const ai = priority.findIndex((label) => a.label.includes(label));
+      const bi = priority.findIndex((label) => b.label.includes(label));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi) || a.label.localeCompare(b.label);
+    });
+  }
+
+  function playerDetailStatsGrid(player, className = "stat-grid") {
+    const stats = playerDetailStats(player);
+    if (!stats.length) {
+      const status = String(player && player.status || "").toUpperCase();
+      const copy = status === "LIVE" || status === "FINAL" ? "NO PLAYER STATS REPORTED YET" : "PREGAME • PLAYER STATS APPEAR AS THEY SCORE";
+      return '<div class="' + className + ' player-stat-grid"><div class="player-stats-empty">' + copy + '</div></div>';
+    }
+    const items = stats.map((stat) => '<div><b>' + number(stat.value, Number.isInteger(stat.value) ? 0 : 1) + '</b><small>' + esc(stat.label) + '</small></div>').join("");
+    return '<div class="' + className + ' player-stat-grid">' + items + '</div>';
+  }
+
   function renderDrawer() {
     const drawer = $("#playerDrawer");
     if (!state.selectedPlayer) { drawer.classList.remove("open"); drawer.innerHTML = ""; return; }
@@ -1287,7 +1476,7 @@
         ? `<div class="source-value"><span>${esc(odds.provider)} • GAME LINE</span><b>${esc(odds.line)} <small>${esc(odds.price || "PUBLIC LINE")}</small></b></div>`
         : `<div class="empty-card compact"><strong>GAME ODDS WAITING</strong><span>The public scoreboard has not published a line for this matchup yet.</span></div>`;
     drawer.classList.add("open");
-    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-context-grid"><div><small>GAME</small><b>${esc(gameLabel)}</b></div><div><small>TEAM</small><b>${esc(player.team || "FA")}</b></div><div><small>STATUS</small><b>${esc(playerStatus)}</b></div><div><small>ODDS</small><b>${esc(odds ? `${odds.provider} • ${odds.price || odds.line}` : "PUBLIC LINE PENDING")}</b></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div><div class="stat-grid"><div><b>${detailStatMarkup(player.pass_yd ?? player.passing_yards)}</b><small>PASS YDS</small></div><div><b>${detailStatMarkup(player.pass_td ?? player.passing_tds)}</b><small>PASS TD</small></div><div><b>${detailStatMarkup(player.rush_yd ?? player.rushing_yards)}</b><small>RUSH YDS</small></div><div><b>${detailStatMarkup(player.rec ?? player.receptions)}</b><small>REC</small></div><div><b>${detailStatMarkup(player.rec_yd ?? player.receiving_yards)}</b><small>REC YDS</small></div><div><b>${detailStatMarkup(player.tgt ?? player.targets)}</b><small>TARGETS</small></div></div></section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
+    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-context-grid"><div><small>GAME</small><b>${esc(gameLabel)}</b></div><div><small>TEAM</small><b>${esc(player.team || "FA")}</b></div><div><small>STATUS</small><b>${esc(playerStatus)}</b></div><div><small>ODDS</small><b>${esc(odds ? `${odds.provider} • ${odds.price || odds.line}` : "PUBLIC LINE PENDING")}</b></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div>${playerDetailStatsGrid(player, "stat-grid")}</section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
     $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
   }
 
