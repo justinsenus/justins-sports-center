@@ -825,7 +825,7 @@
     const events = state.scoreEvents[state.league] || [];
     const playerHistories = state.playerHistories[state.league] || {};
     const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
-    const seedCurrentScorers = events.length === 0 && Object.keys(state.scoreSnapshot).length === 0;
+    const seedCurrentScorers = events.length === 0;
     players.forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
