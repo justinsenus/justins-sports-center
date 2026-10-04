@@ -108,6 +108,7 @@ function normalizePlayer(entry, index) {
     team: displayTeam(player),
     position: displayPosition(player),
     points: Number(points.toFixed(1)),
+    actual: Number(points.toFixed(1)),
     projected: projectedValue == null ? null : Number(projectedValue.toFixed(1)),
     injuryStatus: status,
     headshot: playerImage(player, entry),
@@ -125,9 +126,13 @@ function normalizeTeam(team) {
   const players = entries.map(normalizePlayer);
   const starters = players.filter((player) => player.starter);
   const bench = players.filter((player) => !player.starter);
+  const overall = team && team.record && (team.record.overall || team.record.current) || {};
   return {
     id: team && team.id != null ? String(team.id) : "",
     name: teamLabel(team),
+    abbrev: clean(team && team.abbrev),
+    avatar: clean(team && (team.logoURL || team.logo)),
+    record: { wins: numberOrNull(overall.wins), losses: numberOrNull(overall.losses) },
     total: firstNumber(team && (team.totalPoints || team.points || team.score || team.total)),
     projected: firstNumberOrNull(team && (team.projectedTotal || team.projectedPoints || team.projectedScore || team.projected)),
     starters,
@@ -197,21 +202,36 @@ async function fetchLeague() {
 
 async function main() {
   const data = await fetchLeague();
-  const teams = Array.isArray(data && data.teams) ? data.teams : [];
-  if (!teams.length) throw new Error("ESPN response did not contain teams");
-  const ownRaw = findOwnTeam(teams);
+  const rawTeams = Array.isArray(data && data.teams) ? data.teams : [];
+  if (!rawTeams.length) throw new Error("ESPN response did not contain teams");
+  const ownRaw = findOwnTeam(rawTeams);
   if (!ownRaw) throw new Error("Configured ESPN team was not found in the league response");
-  const own = normalizeTeam(ownRaw);
-  const row = currentMatchup(data, own.id);
-  let opponent = null;
-  let matchupPeriodId = numberOrNull(row && row.matchupPeriodId);
-  if (row) {
-    const ownSide = String(row.home && row.home.teamId) === own.id ? row.home : row.away;
-    const opponentSide = ownSide === row.home ? row.away : row.home;
-    const opponentRaw = teams.find((team) => String(team.id) === String(opponentSide && opponentSide.teamId));
-    if (opponentRaw) opponent = applyMatchupTotal(normalizeTeam(opponentRaw), opponentSide);
-    applyMatchupTotal(own, ownSide);
+
+  const ownId = String(ownRaw.id);
+  const ownMatchup = currentMatchup(data, ownId);
+  const matchupPeriodId = numberOrNull(ownMatchup && ownMatchup.matchupPeriodId)
+    ?? numberOrNull(data && data.status && (data.status.currentMatchupPeriod || data.status.currentMatchupPeriodId))
+    ?? numberOrNull(data && data.matchupPeriodId)
+    ?? numberOrNull(data && data.scoringPeriodId);
+  const leagueSides = new Map();
+  if (matchupPeriodId != null) {
+    scheduleRows(data).filter((row) => Number(row && row.matchupPeriodId) === matchupPeriodId).forEach((row) => {
+      if (row && row.home && row.home.teamId != null) leagueSides.set(String(row.home.teamId), row.home);
+      if (row && row.away && row.away.teamId != null) leagueSides.set(String(row.away.teamId), row.away);
+    });
   }
+
+  const leagueTeams = rawTeams.map((rawTeam) => {
+    const team = normalizeTeam(rawTeam);
+    return applyMatchupTotal(team, leagueSides.get(team.id));
+  });
+  const own = leagueTeams.find((team) => team.id === ownId);
+  const ownSide = ownMatchup && (String(ownMatchup.home && ownMatchup.home.teamId) === ownId ? ownMatchup.home : ownMatchup.away);
+  const opponentSide = ownMatchup && (ownSide === ownMatchup.home ? ownMatchup.away : ownMatchup.home);
+  const opponentId = opponentSide && opponentSide.teamId != null ? String(opponentSide.teamId) : "";
+  const opponent = leagueTeams.find((team) => team.id === opponentId) || null;
+
+  if (!own) throw new Error("Configured ESPN team was not normalized");
   const output = {
     ready: true,
     source: "PRIVATE SYNC",
@@ -221,10 +241,11 @@ async function main() {
     scoringPeriodId: numberOrNull(data && data.scoringPeriodId),
     matchupPeriodId,
     myTeam: own,
-    opponent
+    opponent,
+    leagueTeams
   };
   writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");
-  console.log(`ESPN sync saved ${own.starters.length} starters and ${own.bench.length} bench players${opponent ? ` plus ${opponent.name}` : ""}.`);
+  console.log(`ESPN sync saved ${leagueTeams.length} league teams and ${leagueTeams.reduce((sum, team) => sum + team.starters.length, 0)} starters.`);
 }
 
 main().catch((error) => {
