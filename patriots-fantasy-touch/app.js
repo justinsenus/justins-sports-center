@@ -823,6 +823,7 @@
     const events = state.scoreEvents[state.league] || [];
     const playerHistories = state.playerHistories[state.league] || {};
     const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
+    const seedCurrentScorers = events.length === 0 && Object.keys(state.scoreSnapshot).length === 0;
     players.forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
@@ -847,6 +848,21 @@
           direction: delta > 0 ? "up" : "down",
           delta,
           total: value
+        });
+      } else if (seedCurrentScorers && value > 0 && player.event && eventState(player.event).live) {
+        events.unshift({
+          at: Date.now(),
+          playerId,
+          name: player.full_name || player.name || "PLAYER",
+          team: player.team || "FA",
+          fantasyTeamId: player.fantasyTeamId || "",
+          fantasyTeamName: player.fantasyTeamName || "OWNER UNKNOWN",
+          teamColor: player.fantasyTeamColor || "#a8b7c9",
+          headshot: player.headshot || player.imageUrl || "",
+          direction: "up",
+          delta: value,
+          total: value,
+          snapshot: true
         });
       }
     });
@@ -1146,9 +1162,9 @@
     const events = state.scoreEvents[state.league] || [];
     const eventMarkup = events.length ? events.slice(0, 6).map((event) => {
       const color = event.teamColor || "#a8b7c9";
-      const delta = `${event.delta > 0 ? "+" : "−"}${number(Math.abs(event.delta))}`;
+      const delta = event.snapshot ? "LIVE NOW" : `${event.delta > 0 ? "+" : "−"}${number(Math.abs(event.delta))} PTS`;
       const player = { player_id: event.playerId, full_name: event.name, name: event.name, team: event.team, headshot: event.headshot };
-      return `<div class="scoring-feed-row team-event ${event.direction}" style="--team-color:${esc(color)}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time>${playerFace(player, "small")}<span class="feed-player"><strong>${esc(event.name)}</strong><small>${esc(event.team || "NFL")} • <i class="feed-team-swatch" style="background:${esc(color)}"></i>${esc(event.fantasyTeamName || "OWNER UNKNOWN")}</small></span><b class="feed-points"><em class="feed-delta">${delta} PTS</em>${number(event.total)}</b></div>`;
+      return `<div class="scoring-feed-row team-event ${event.direction}" style="--team-color:${esc(color)}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time>${playerFace(player, "small")}<span class="feed-player"><strong>${esc(event.name)}</strong><small>${esc(event.team || "NFL")} • <i class="feed-team-swatch" style="background:${esc(color)}"></i>${esc(event.fantasyTeamName || "OWNER UNKNOWN")}</small></span><b class="feed-points"><em class="feed-delta">${delta}</em>${number(event.total)}</b></div>`;
     }).join("") : `<div class="empty-card compact"><strong>WAITING FOR A LEAGUE SCORER</strong><span>Player point changes appear here with the owner team and matching stock-line color.</span></div>`;
     return `<section class="arcade-panel scoring-feed-panel"><div class="arcade-panel-head"><div><b>⚡ LIVE SCORING FEED</b><small>SCORING PLAYER • FANTASY OWNER • TEAM COLOR</small></div><span class="arcade-live-indicator"><i></i>5s</span></div><div class="scoring-feed-list">${eventMarkup}</div></section>`;
   }
