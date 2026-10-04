@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-04T21:39:26.515Z",
+  "savedAt": "2026-10-04T23:51:23.312Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 4,
@@ -15,16 +15,33 @@
       "wins": 1,
       "losses": 2
     },
-    "total": 0,
-    "projected": null,
+    "total": 112.4,
+    "projected": 117.2,
     "starters": [
       {
         "id": "4430878",
         "name": "Jaxon Smith-Njigba",
         "team": "SEA",
         "position": "WR",
-        "points": 42.7,
+        "points": 12.6,
         "projected": 21.9,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 76
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 5
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 6
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -34,8 +51,30 @@
         "name": "Ashton Jeanty",
         "team": "LV",
         "position": "RB",
-        "points": 15,
+        "points": 18.6,
         "projected": 18.9,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 58
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 68
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 6
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 8
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -45,8 +84,30 @@
         "name": "Brock Bowers",
         "team": "LV",
         "position": "TE",
-        "points": 32.1,
+        "points": 20.6,
         "projected": 15.9,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 86
+          },
+          {
+            "id": "43",
+            "label": "RECEIVING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 6
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 11
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -56,8 +117,30 @@
         "name": "Malik Nabers",
         "team": "NYG",
         "position": "WR",
-        "points": 30.8,
+        "points": 23.2,
         "projected": 13.6,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 112
+          },
+          {
+            "id": "43",
+            "label": "RECEIVING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 6
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 7
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -67,8 +150,20 @@
         "name": "David Montgomery",
         "team": "HOU",
         "position": "RB",
-        "points": 11.1,
+        "points": 4.3,
         "projected": 13.5,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 24
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 19
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -78,8 +173,20 @@
         "name": "Trevor Lawrence",
         "team": "JAX",
         "position": "QB",
-        "points": 32.9,
+        "points": 13.1,
         "projected": 18.5,
+        "gameStats": [
+          {
+            "id": "3",
+            "label": "PASSING YARDS",
+            "value": 227
+          },
+          {
+            "id": "4",
+            "label": "PASSING TOUCHDOWNS",
+            "value": 1
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -89,8 +196,9 @@
         "name": "Cairo Santos",
         "team": "CHI",
         "position": "K",
-        "points": 21,
+        "points": 11,
         "projected": 8.5,
+        "gameStats": [],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -100,8 +208,9 @@
         "name": "Bears D/ST",
         "team": "CHI",
         "position": "DEF",
-        "points": 22,
+        "points": 9,
         "projected": 6.4,
+        "gameStats": [],
         "injuryStatus": "",
         "headshot": "",
         "starter": true
@@ -113,8 +222,25 @@
         "name": "Tee Higgins",
         "team": "CIN",
         "position": "WR",
-        "points": 47.7,
+        "points": 26.7,
         "projected": 13.7,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 157
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 11
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 16
+          }
+        ],
         "injuryStatus": "QUESTIONABLE",
         "headshot": "",
         "starter": false
@@ -125,7 +251,8 @@
         "team": "NYG",
         "position": "QB",
         "points": 0,
-        "projected": null,
+        "projected": 0,
+        "gameStats": [],
         "injuryStatus": "INJURY_RESERVE",
         "headshot": "",
         "starter": false
@@ -135,8 +262,30 @@
         "name": "Marvin Harrison Jr.",
         "team": "ARI",
         "position": "WR",
-        "points": 15.2,
+        "points": 8.2,
         "projected": 6.4,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 12
+          },
+          {
+            "id": "43",
+            "label": "RECEIVING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 1
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 4
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -146,8 +295,35 @@
         "name": "Kenny Gainwell",
         "team": "TB",
         "position": "RB",
-        "points": 13.7,
+        "points": 10.7,
         "projected": 8.3,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 5
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 22
+          },
+          {
+            "id": "43",
+            "label": "RECEIVING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 2
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 2
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -157,8 +333,25 @@
         "name": "Jakobi Meyers",
         "team": "JAX",
         "position": "WR",
-        "points": 25.7,
+        "points": 6.3,
         "projected": 10.8,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 33
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 3
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 4
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -168,8 +361,25 @@
         "name": "Makai Lemon",
         "team": "PHI",
         "position": "WR",
-        "points": 11.6,
+        "points": 5.7,
         "projected": 10.5,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 27
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 3
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 6
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -180,7 +390,8 @@
         "team": "DET",
         "position": "RB",
         "points": 0,
-        "projected": null,
+        "projected": 0,
+        "gameStats": [],
         "injuryStatus": "INJURY_RESERVE",
         "headshot": "",
         "starter": false
@@ -190,8 +401,20 @@
         "name": "Chris Rodriguez Jr.",
         "team": "JAX",
         "position": "RB",
-        "points": 19.2,
+        "points": 9.5,
         "projected": 5,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 35
+          },
+          {
+            "id": "25",
+            "label": "RUSHING TOUCHDOWNS",
+            "value": 1
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -201,8 +424,9 @@
         "name": "Buccaneers D/ST",
         "team": "TB",
         "position": "DEF",
-        "points": 14,
+        "points": 7,
         "projected": 5.8,
+        "gameStats": [],
         "injuryStatus": "",
         "headshot": "",
         "starter": false
@@ -218,16 +442,43 @@
       "wins": 1,
       "losses": 2
     },
-    "total": 0,
-    "projected": null,
+    "total": 82,
+    "projected": 92.69999999999999,
     "starters": [
       {
         "id": "3117251",
         "name": "Christian McCaffrey",
         "team": "SF",
         "position": "RB",
-        "points": 24.8,
+        "points": 16,
         "projected": 20.3,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 52
+          },
+          {
+            "id": "25",
+            "label": "RUSHING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 18
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 3
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 5
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -239,6 +490,7 @@
         "position": "WR",
         "points": 19.7,
         "projected": 18.2,
+        "gameStats": [],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -248,8 +500,9 @@
         "name": "Terry McLaurin",
         "team": "WAS",
         "position": "WR",
-        "points": 19.7,
-        "projected": null,
+        "points": 0,
+        "projected": 0,
+        "gameStats": [],
         "injuryStatus": "OUT",
         "headshot": "",
         "starter": true
@@ -259,8 +512,30 @@
         "name": "Harold Fannin Jr.",
         "team": "CLE",
         "position": "TE",
-        "points": 35.8,
+        "points": 11.7,
         "projected": 11.1,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 27
+          },
+          {
+            "id": "43",
+            "label": "RECEIVING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 3
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 5
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -270,8 +545,30 @@
         "name": "Braelon Allen",
         "team": "NYJ",
         "position": "RB",
-        "points": 13.4,
+        "points": 8.7,
         "projected": 12.7,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 59
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 8
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 2
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 2
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -281,8 +578,9 @@
         "name": "Browns D/ST",
         "team": "CLE",
         "position": "DEF",
-        "points": 12,
+        "points": 8,
         "projected": 6.6,
+        "gameStats": [],
         "injuryStatus": "",
         "headshot": "",
         "starter": true
@@ -292,8 +590,9 @@
         "name": "Eddy Pineiro",
         "team": "SF",
         "position": "K",
-        "points": 11,
+        "points": 5,
         "projected": 9.3,
+        "gameStats": [],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -303,8 +602,25 @@
         "name": "Deshaun Watson",
         "team": "CLE",
         "position": "QB",
-        "points": 33.2,
+        "points": 12.9,
         "projected": 14.5,
+        "gameStats": [
+          {
+            "id": "3",
+            "label": "PASSING YARDS",
+            "value": 268
+          },
+          {
+            "id": "4",
+            "label": "PASSING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 22
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -316,8 +632,35 @@
         "name": "Omarion Hampton",
         "team": "LAC",
         "position": "RB",
-        "points": 9.7,
+        "points": 13.3,
         "projected": 10.7,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 45
+          },
+          {
+            "id": "25",
+            "label": "RUSHING TOUCHDOWNS",
+            "value": 1
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 8
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 2
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 2
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -327,8 +670,9 @@
         "name": "Breece Hall",
         "team": "NYJ",
         "position": "RB",
-        "points": 8.5,
-        "projected": null,
+        "points": 0,
+        "projected": 0,
+        "gameStats": [],
         "injuryStatus": "OUT",
         "headshot": "",
         "starter": false
@@ -338,8 +682,25 @@
         "name": "Mike Evans",
         "team": "SF",
         "position": "WR",
-        "points": 15.2,
+        "points": 12.6,
         "projected": 11.8,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 76
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 5
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 8
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -349,8 +710,35 @@
         "name": "Kyle Monangai",
         "team": "CHI",
         "position": "RB",
-        "points": 31.1,
+        "points": 28,
         "projected": 8.3,
+        "gameStats": [
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 146
+          },
+          {
+            "id": "25",
+            "label": "RUSHING TOUCHDOWNS",
+            "value": 2
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 4
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 1
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 1
+          }
+        ],
         "injuryStatus": "QUESTIONABLE",
         "headshot": "",
         "starter": false
@@ -360,8 +748,25 @@
         "name": "Dalton Kincaid",
         "team": "BUF",
         "position": "TE",
-        "points": 5.5,
+        "points": 1.7,
         "projected": 10.7,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 7
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 1
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 2
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -371,8 +776,25 @@
         "name": "Sam Darnold",
         "team": "SEA",
         "position": "QB",
-        "points": 33.3,
+        "points": 13.3,
         "projected": 17,
+        "gameStats": [
+          {
+            "id": "3",
+            "label": "PASSING YARDS",
+            "value": 168
+          },
+          {
+            "id": "4",
+            "label": "PASSING TOUCHDOWNS",
+            "value": 2
+          },
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 6
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -382,8 +804,25 @@
         "name": "Kalif Raymond",
         "team": "CHI",
         "position": "WR",
-        "points": 23.6,
+        "points": 2.6,
         "projected": 10,
+        "gameStats": [
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 6
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 2
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 2
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
@@ -394,7 +833,8 @@
         "team": "FA",
         "position": "WR",
         "points": 0,
-        "projected": 263.7,
+        "projected": null,
+        "gameStats": [],
         "injuryStatus": "OUT",
         "headshot": "",
         "starter": false
@@ -411,8 +851,8 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 96.8,
+      "projected": 109.1,
       "starters": [
         {
           "id": "4429795",
@@ -421,6 +861,7 @@
           "position": "RB",
           "points": 41.4,
           "projected": 26.1,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -430,8 +871,25 @@
           "name": "Emeka Egbuka",
           "team": "TB",
           "position": "WR",
-          "points": 14.5,
+          "points": 3.3,
           "projected": 11.2,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 13
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -441,8 +899,20 @@
           "name": "Matthew Stafford",
           "team": "LAR",
           "position": "QB",
-          "points": 30.6,
+          "points": 9.7,
           "projected": 16.5,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 317
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 10
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -452,8 +922,25 @@
           "name": "Travis Kelce",
           "team": "KC",
           "position": "TE",
-          "points": 17.4,
+          "points": 3.5,
           "projected": 11.8,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 15
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -463,8 +950,9 @@
           "name": "Seahawks D/ST",
           "team": "SEA",
           "position": "DEF",
-          "points": 18,
+          "points": 12,
           "projected": 7.9,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -476,6 +964,7 @@
           "position": "RB",
           "points": 15,
           "projected": 16.6,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -485,8 +974,9 @@
           "name": "Evan McPherson",
           "team": "CIN",
           "position": "K",
-          "points": 16,
+          "points": 5,
           "projected": 8.4,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -498,6 +988,7 @@
           "position": "WR",
           "points": 6.9,
           "projected": 10.6,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -509,8 +1000,9 @@
           "name": "DeVonta Smith",
           "team": "PHI",
           "position": "WR",
-          "points": 12.5,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -521,7 +1013,8 @@
           "team": "GB",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "DAY_TO_DAY",
           "headshot": "",
           "starter": false
@@ -531,8 +1024,30 @@
           "name": "Aaron Jones Sr.",
           "team": "MIN",
           "position": "RB",
-          "points": 20.9,
+          "points": 16.8,
           "projected": 18,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 94
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 34
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -542,8 +1057,9 @@
           "name": "Chiefs D/ST",
           "team": "KC",
           "position": "DEF",
-          "points": 13,
+          "points": 1,
           "projected": 6.5,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -554,8 +1070,9 @@
           "team": "CAR",
           "position": "WR",
           "points": 3.8,
-          "projected": null,
-          "injuryStatus": "QUESTIONABLE",
+          "projected": 0,
+          "gameStats": [],
+          "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
         },
@@ -564,8 +1081,30 @@
           "name": "Pat Freiermuth",
           "team": "PIT",
           "position": "TE",
-          "points": 15.8,
+          "points": 10.7,
           "projected": 8.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 17
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -575,8 +1114,25 @@
           "name": "Kirk Cousins",
           "team": "LV",
           "position": "QB",
-          "points": 30.7,
+          "points": 22.6,
           "projected": 14,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 365
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "19",
+              "label": "INTERCEPTIONS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -586,8 +1142,35 @@
           "name": "Wan'Dale Robinson",
           "team": "TEN",
           "position": "WR",
-          "points": 29.7,
+          "points": 11,
           "projected": 9.2,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 19
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -603,16 +1186,33 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 105.8,
+      "projected": 111,
       "starters": [
         {
           "id": "4362628",
           "name": "Ja'Marr Chase",
           "team": "CIN",
           "position": "WR",
-          "points": 30.5,
+          "points": 5.7,
           "projected": 20.4,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 3
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
@@ -624,6 +1224,7 @@
           "position": "WR",
           "points": 28.4,
           "projected": 16.7,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -633,8 +1234,30 @@
           "name": "Jeremiyah Love",
           "team": "ARI",
           "position": "RB",
-          "points": 28.4,
+          "points": 6.5,
           "projected": 15.6,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 63
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": -8
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -644,8 +1267,35 @@
           "name": "Quinshon Judkins",
           "team": "CLE",
           "position": "RB",
-          "points": 31.5,
+          "points": 21.6,
           "projected": 12.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 53
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 43
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -655,8 +1305,25 @@
           "name": "Brock Purdy",
           "team": "SF",
           "position": "QB",
-          "points": 34.4,
+          "points": 19.6,
           "projected": 18.7,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 218
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 29
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -666,8 +1333,15 @@
           "name": "Kenyon Sadiq",
           "team": "NYJ",
           "position": "TE",
-          "points": 23.5,
+          "points": 0,
           "projected": 9.9,
+          "gameStats": [
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -677,8 +1351,9 @@
           "name": "Cam Little",
           "team": "JAX",
           "position": "K",
-          "points": 18,
+          "points": 14,
           "projected": 8.7,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -688,8 +1363,9 @@
           "name": "Vikings D/ST",
           "team": "MIN",
           "position": "DEF",
-          "points": 33,
+          "points": 10,
           "projected": 8.5,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -701,8 +1377,25 @@
           "name": "Colston Loveland",
           "team": "CHI",
           "position": "TE",
-          "points": 18.8,
+          "points": 11.7,
           "projected": 8.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 57
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 9
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -712,8 +1405,30 @@
           "name": "DJ Moore",
           "team": "BUF",
           "position": "WR",
-          "points": 15.4,
+          "points": 2.7,
           "projected": 13,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 6
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 11
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
@@ -723,8 +1438,9 @@
           "name": "Jadarian Price",
           "team": "SEA",
           "position": "RB",
-          "points": 1.2,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -734,8 +1450,25 @@
           "name": "Michael Wilson",
           "team": "ARI",
           "position": "WR",
-          "points": 42.4,
+          "points": 16.5,
           "projected": 13.4,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 95
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 7
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 13
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -745,8 +1478,20 @@
           "name": "Patrick Mahomes",
           "team": "KC",
           "position": "QB",
-          "points": 25.6,
+          "points": 17,
           "projected": 18.7,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 225
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -756,8 +1501,30 @@
           "name": "Brian Thomas Jr.",
           "team": "JAX",
           "position": "WR",
-          "points": 11.5,
+          "points": 9.7,
           "projected": 8.2,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 17
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -769,6 +1536,7 @@
           "position": "RB",
           "points": 5.1,
           "projected": 10.6,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -778,8 +1546,9 @@
           "name": "49ers D/ST",
           "team": "SF",
           "position": "DEF",
-          "points": 7,
+          "points": 5,
           "projected": 5.9,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -795,8 +1564,8 @@
         "wins": 2,
         "losses": 1
       },
-      "total": 0,
-      "projected": null,
+      "total": 59.3,
+      "projected": 110.1,
       "starters": [
         {
           "id": "4374302",
@@ -805,6 +1574,7 @@
           "position": "WR",
           "points": 11.9,
           "projected": 20.1,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -814,8 +1584,30 @@
           "name": "Josh Allen",
           "team": "BUF",
           "position": "QB",
-          "points": 36,
+          "points": 18.5,
           "projected": 22.2,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 253
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 4
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -825,8 +1617,30 @@
           "name": "Cam Skattebo",
           "team": "NYG",
           "position": "RB",
-          "points": 20.6,
+          "points": 7.6,
           "projected": 16.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 58
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 8
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -836,8 +1650,30 @@
           "name": "D'Andre Swift",
           "team": "CHI",
           "position": "RB",
-          "points": 18.2,
+          "points": 7.4,
           "projected": 14.7,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 58
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 16
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -847,8 +1683,30 @@
           "name": "Parker Washington",
           "team": "JAX",
           "position": "WR",
-          "points": 15,
+          "points": 2,
           "projected": 15.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 3
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 7
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 3
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -858,8 +1716,9 @@
           "name": "Eagles D/ST",
           "team": "PHI",
           "position": "DEF",
-          "points": 1,
+          "points": 2,
           "projected": 4,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -871,6 +1730,7 @@
           "position": "K",
           "points": 7,
           "projected": 8.7,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -880,8 +1740,25 @@
           "name": "Dalton Schultz",
           "team": "HOU",
           "position": "TE",
-          "points": 8.9,
+          "points": 2.9,
           "projected": 9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 9
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -893,9 +1770,16 @@
           "name": "Ladd McConkey",
           "team": "LAC",
           "position": "WR",
-          "points": 10.6,
+          "points": 0,
           "projected": 11.7,
-          "injuryStatus": "ACTIVE",
+          "gameStats": [
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
+          "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
         },
@@ -904,8 +1788,30 @@
           "name": "Luther Burden III",
           "team": "CHI",
           "position": "WR",
-          "points": 31.2,
+          "points": 11.4,
           "projected": 12.4,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 11
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 63
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -915,8 +1821,25 @@
           "name": "Jake Ferguson",
           "team": "DAL",
           "position": "TE",
-          "points": 13.4,
+          "points": 4.1,
           "projected": 8.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 11
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -926,8 +1849,9 @@
           "name": "Chargers D/ST",
           "team": "LAC",
           "position": "DEF",
-          "points": 22,
+          "points": 6,
           "projected": 4,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -939,6 +1863,7 @@
           "position": "QB",
           "points": 13.6,
           "projected": 20.2,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -948,8 +1873,25 @@
           "name": "Denzel Boston",
           "team": "CLE",
           "position": "WR",
-          "points": 21,
+          "points": 12.9,
           "projected": 10.6,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 89
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -960,7 +1902,8 @@
           "team": "DEN",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -970,8 +1913,25 @@
           "name": "Tre Tucker",
           "team": "LV",
           "position": "WR",
-          "points": 10.7,
+          "points": 8.4,
           "projected": 9.3,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 44
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -987,16 +1947,43 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 95.1,
+      "projected": 89.19999999999999,
       "starters": [
         {
           "id": "4567048",
           "name": "Kenneth Walker III",
           "team": "KC",
           "position": "RB",
-          "points": 28.7,
+          "points": 30.9,
           "projected": 20.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 177
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1006,8 +1993,25 @@
           "name": "Jalen Hurts",
           "team": "PHI",
           "position": "QB",
-          "points": 26.1,
+          "points": 13.5,
           "projected": 17.6,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 93
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 18
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1017,8 +2021,25 @@
           "name": "Davante Adams",
           "team": "LAR",
           "position": "WR",
-          "points": 27.9,
+          "points": 7.2,
           "projected": 15.6,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 32
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 9
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1030,6 +2051,7 @@
           "position": "TE",
           "points": 1.5,
           "projected": 7.4,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1039,8 +2061,9 @@
           "name": "Broncos D/ST",
           "team": "DEN",
           "position": "DEF",
-          "points": 16,
+          "points": 1,
           "projected": 3.2,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -1050,8 +2073,9 @@
           "name": "Cameron Dicker",
           "team": "LAC",
           "position": "K",
-          "points": 13,
+          "points": 12,
           "projected": 8,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1061,8 +2085,35 @@
           "name": "Deebo Samuel Sr.",
           "team": "SF",
           "position": "WR",
-          "points": 22.7,
+          "points": 18,
           "projected": 10.8,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 44
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 26
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1074,6 +2125,7 @@
           "position": "RB",
           "points": 11,
           "projected": 6.1,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1087,6 +2139,33 @@
           "position": "WR",
           "points": 27.7,
           "projected": 18.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 2
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 125
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 9
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 12
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1097,7 +2176,8 @@
           "team": "NO",
           "position": "RB",
           "points": 9,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1107,8 +2187,25 @@
           "name": "Courtland Sutton",
           "team": "DEN",
           "position": "WR",
-          "points": 7.6,
+          "points": 1.4,
           "projected": 10.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 4
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1119,7 +2216,8 @@
           "team": "PIT",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1131,6 +2229,7 @@
           "position": "QB",
           "points": 19.4,
           "projected": 17.3,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1141,7 +2240,8 @@
           "team": "SF",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1152,7 +2252,8 @@
           "team": "TB",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1163,7 +2264,8 @@
           "team": "HOU",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1173,8 +2275,9 @@
           "name": "Keenan Allen",
           "team": "IND",
           "position": "WR",
-          "points": 18.3,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1190,16 +2293,38 @@
         "wins": 2,
         "losses": 1
       },
-      "total": 0,
-      "projected": null,
+      "total": 99,
+      "projected": 105.7,
       "starters": [
         {
           "id": "3929630",
           "name": "Saquon Barkley",
           "team": "PHI",
           "position": "RB",
-          "points": 11,
+          "points": 2,
           "projected": 14.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 8
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
@@ -1209,8 +2334,25 @@
           "name": "Garrett Wilson",
           "team": "NYJ",
           "position": "WR",
-          "points": 32.4,
+          "points": 5.7,
           "projected": 16.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1220,8 +2362,35 @@
           "name": "Kyren Williams",
           "team": "LAR",
           "position": "RB",
-          "points": 58.5,
+          "points": 36.7,
           "projected": 13.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 80
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 67
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 10
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 13
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1231,8 +2400,9 @@
           "name": "Brandon Aubrey",
           "team": "DAL",
           "position": "K",
-          "points": 20,
+          "points": 10,
           "projected": 9.5,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1242,8 +2412,30 @@
           "name": "Jordan Addison",
           "team": "MIN",
           "position": "WR",
-          "points": 24.1,
+          "points": 9.1,
           "projected": 14.8,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": -1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 52
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1253,8 +2445,30 @@
           "name": "George Kittle",
           "team": "SF",
           "position": "TE",
-          "points": 28.9,
+          "points": 17,
           "projected": 13.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 70
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 4
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1264,8 +2478,20 @@
           "name": "Kyler Murray",
           "team": "MIN",
           "position": "QB",
-          "points": 16.3,
+          "points": 11.5,
           "projected": 19.2,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 247
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 16
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1277,6 +2503,7 @@
           "position": "DEF",
           "points": 7,
           "projected": 4.6,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -1288,8 +2515,9 @@
           "name": "Justin Jefferson",
           "team": "MIN",
           "position": "WR",
-          "points": 5.2,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1299,8 +2527,25 @@
           "name": "Rome Odunze",
           "team": "CHI",
           "position": "WR",
-          "points": 22.8,
+          "points": 15.4,
           "projected": 9.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 94
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1310,8 +2555,30 @@
           "name": "Bhayshul Tuten",
           "team": "JAX",
           "position": "RB",
-          "points": 28.1,
+          "points": 11.1,
           "projected": 12.7,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 73
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 18
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1322,7 +2589,8 @@
           "team": "CHI",
           "position": "QB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1332,8 +2600,25 @@
           "name": "T.J. Hockenson",
           "team": "MIN",
           "position": "TE",
-          "points": 10,
+          "points": 24.9,
           "projected": 9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 119
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 13
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 13
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1344,7 +2629,8 @@
           "team": "MIN",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1355,7 +2641,8 @@
           "team": "NO",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -1367,6 +2654,7 @@
           "position": "DEF",
           "points": 4,
           "projected": 4.3,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -1382,8 +2670,8 @@
         "wins": 3,
         "losses": 0
       },
-      "total": 0,
-      "projected": null,
+      "total": 127.9,
+      "projected": 114.4,
       "starters": [
         {
           "id": "4430807",
@@ -1392,6 +2680,7 @@
           "position": "RB",
           "points": 35.3,
           "projected": 21.5,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1401,8 +2690,25 @@
           "name": "Trey McBride",
           "team": "ARI",
           "position": "TE",
-          "points": 26.6,
+          "points": 10.1,
           "projected": 17.4,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 31
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 7
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 12
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1414,6 +2720,28 @@
           "position": "WR",
           "points": 30.8,
           "projected": 15.3,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 118
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 7
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1423,8 +2751,15 @@
           "name": "Bucky Irving",
           "team": "TB",
           "position": "RB",
-          "points": 13.9,
+          "points": 6.1,
           "projected": 15.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 61
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1434,8 +2769,30 @@
           "name": "Jaylen Waddle",
           "team": "DEN",
           "position": "WR",
-          "points": 11.1,
+          "points": 14.5,
           "projected": 11.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 35
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1445,8 +2802,25 @@
           "name": "Dak Prescott",
           "team": "DAL",
           "position": "QB",
-          "points": 37,
+          "points": 18.1,
           "projected": 17.3,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 335
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1456,8 +2830,9 @@
           "name": "Ravens D/ST",
           "team": "BAL",
           "position": "DEF",
-          "points": 8,
+          "points": 7,
           "projected": 6.6,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -1467,8 +2842,9 @@
           "name": "Harrison Mevis",
           "team": "LAR",
           "position": "K",
-          "points": 22,
+          "points": 6,
           "projected": 8.5,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1480,8 +2856,25 @@
           "name": "Carnell Tate",
           "team": "TEN",
           "position": "WR",
-          "points": 33.3,
+          "points": 21.5,
           "projected": 11.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 145
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 9
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 12
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1491,8 +2884,25 @@
           "name": "Michael Pittman Jr.",
           "team": "PIT",
           "position": "WR",
-          "points": 7.1,
+          "points": 3.5,
           "projected": 9.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 15
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1502,8 +2912,25 @@
           "name": "Stefon Diggs",
           "team": "WAS",
           "position": "WR",
-          "points": 15.8,
+          "points": 8.5,
           "projected": 12.8,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 35
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 9
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1513,8 +2940,30 @@
           "name": "Jacory Croskey-Merritt",
           "team": "WAS",
           "position": "RB",
-          "points": 12.3,
+          "points": 7,
           "projected": 11.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 15
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 35
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1524,8 +2973,25 @@
           "name": "Hunter Long",
           "team": "ARI",
           "position": "TE",
-          "points": 3.5,
+          "points": 2,
           "projected": 1.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 10
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
@@ -1535,8 +3001,9 @@
           "name": "Dylan Laube",
           "team": "LV",
           "position": "RB",
-          "points": -2,
+          "points": 0,
           "projected": 0,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1548,6 +3015,7 @@
           "position": "QB",
           "points": 0,
           "projected": null,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1559,6 +3027,7 @@
           "position": "RB",
           "points": 0,
           "projected": null,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1574,16 +3043,43 @@
         "wins": 2,
         "losses": 1
       },
-      "total": 0,
-      "projected": null,
+      "total": 131.5,
+      "projected": 105.6,
       "starters": [
         {
           "id": "4241389",
           "name": "CeeDee Lamb",
           "team": "DAL",
           "position": "WR",
-          "points": 61.5,
+          "points": 41.3,
           "projected": 16.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": -6
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 189
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 17
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 21
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1593,8 +3089,9 @@
           "name": "Rashee Rice",
           "team": "KC",
           "position": "WR",
-          "points": 15.8,
+          "points": 0,
           "projected": 14.9,
+          "gameStats": [],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
@@ -1604,8 +3101,35 @@
           "name": "Javonte Williams",
           "team": "DAL",
           "position": "RB",
-          "points": 49.6,
+          "points": 31.3,
           "projected": 14.6,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 62
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 3
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 21
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1615,8 +3139,9 @@
           "name": "Steelers D/ST",
           "team": "PIT",
           "position": "DEF",
-          "points": 9,
+          "points": 5,
           "projected": 8.2,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -1626,8 +3151,25 @@
           "name": "Isaiah Likely",
           "team": "NYG",
           "position": "TE",
-          "points": 16.9,
+          "points": 13.6,
           "projected": 11.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 66
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 7
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 12
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1637,8 +3179,9 @@
           "name": "Tyler Loop",
           "team": "BAL",
           "position": "K",
-          "points": 20,
+          "points": 8,
           "projected": 9.3,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1648,8 +3191,40 @@
           "name": "Emanuel Wilson",
           "team": "SEA",
           "position": "RB",
-          "points": 15.7,
+          "points": 27,
           "projected": 11.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 81
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 39
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1659,8 +3234,20 @@
           "name": "Marcus Mariota",
           "team": "WAS",
           "position": "QB",
-          "points": 25.8,
+          "points": 5.3,
           "projected": 18.5,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 46
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 35
+            }
+          ],
           "injuryStatus": "DOUBTFUL",
           "headshot": "",
           "starter": true
@@ -1673,7 +3260,8 @@
           "team": "WAS",
           "position": "QB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1685,6 +3273,7 @@
           "position": "TE",
           "points": 7.4,
           "projected": 11.2,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1694,8 +3283,20 @@
           "name": "TreVeyon Henderson",
           "team": "NE",
           "position": "RB",
-          "points": 8.1,
+          "points": 4.2,
           "projected": 9.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 42
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1705,8 +3306,25 @@
           "name": "DK Metcalf",
           "team": "PIT",
           "position": "WR",
-          "points": 28.6,
+          "points": 16.5,
           "projected": 10.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 115
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 9
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1716,8 +3334,9 @@
           "name": "Rachaad White",
           "team": "WAS",
           "position": "RB",
-          "points": 11.1,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -1727,8 +3346,25 @@
           "name": "KC Concepcion",
           "team": "CLE",
           "position": "WR",
-          "points": 14.3,
+          "points": 11.4,
           "projected": 9.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 64
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1738,8 +3374,25 @@
           "name": "C.J. Stroud",
           "team": "HOU",
           "position": "QB",
-          "points": 34.8,
+          "points": 23.1,
           "projected": 16.8,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 347
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 12
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1751,6 +3404,23 @@
           "position": "WR",
           "points": 2.3,
           "projected": 2.4,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 13
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1760,8 +3430,30 @@
           "name": "Malik Washington",
           "team": "MIA",
           "position": "WR",
-          "points": 16.1,
+          "points": 12,
           "projected": 10.4,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 3
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 67
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1777,16 +3469,43 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 98.4,
+      "projected": 101.5,
       "starters": [
         {
           "id": "4242335",
           "name": "Jonathan Taylor",
           "team": "IND",
           "position": "RB",
-          "points": 31.9,
+          "points": 22.7,
           "projected": 20.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 95
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1796,8 +3515,25 @@
           "name": "George Pickens",
           "team": "DAL",
           "position": "WR",
-          "points": 24.7,
+          "points": 9.5,
           "projected": 13.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 75
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 3
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1807,8 +3543,30 @@
           "name": "Drake Maye",
           "team": "NE",
           "position": "QB",
-          "points": 29.9,
+          "points": 26.2,
           "projected": 17.5,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 269
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 3
+            },
+            {
+              "id": "19",
+              "label": "INTERCEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 54
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1818,8 +3576,9 @@
           "name": "Texans D/ST",
           "team": "HOU",
           "position": "DEF",
-          "points": 13,
+          "points": 3,
           "projected": 4.9,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -1829,8 +3588,25 @@
           "name": "Tyler Warren",
           "team": "IND",
           "position": "TE",
-          "points": 23.8,
+          "points": 9.1,
           "projected": 13.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 41
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1842,6 +3618,7 @@
           "position": "WR",
           "points": 8.9,
           "projected": 10.4,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1851,8 +3628,9 @@
           "name": "Jason Myers",
           "team": "SEA",
           "position": "K",
-          "points": 10,
+          "points": 6,
           "projected": 9.8,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1862,8 +3640,35 @@
           "name": "Tony Pollard",
           "team": "TEN",
           "position": "RB",
-          "points": 26.6,
+          "points": 13,
           "projected": 11.8,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 48
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1875,8 +3680,30 @@
           "name": "Jaylen Warren",
           "team": "PIT",
           "position": "RB",
-          "points": 36.2,
+          "points": 15.6,
           "projected": 16.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 93
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 33
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1886,8 +3713,35 @@
           "name": "Matthew Golden",
           "team": "GB",
           "position": "WR",
-          "points": 32.7,
+          "points": 11.7,
           "projected": 12.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 6
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 21
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1897,8 +3751,30 @@
           "name": "Romeo Doubs",
           "team": "NE",
           "position": "WR",
-          "points": 31.7,
+          "points": 23.8,
           "projected": 9.8,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 58
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 9
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1908,8 +3784,30 @@
           "name": "Tyjae Spears",
           "team": "TEN",
           "position": "RB",
-          "points": 2.1,
+          "points": 1.6,
           "projected": 8,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 7
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": -1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1919,8 +3817,25 @@
           "name": "Daniel Jones",
           "team": "IND",
           "position": "QB",
-          "points": 15.8,
+          "points": 7.9,
           "projected": 15.2,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 143
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 2
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1932,6 +3847,7 @@
           "position": "TE",
           "points": 23.3,
           "projected": 10.6,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1941,8 +3857,25 @@
           "name": "Jordan Love",
           "team": "GB",
           "position": "QB",
-          "points": 31.6,
+          "points": 13.1,
           "projected": 14.9,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 197
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": -8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1952,8 +3885,30 @@
           "name": "Justice Hill",
           "team": "BAL",
           "position": "RB",
-          "points": 7.8,
+          "points": 4.5,
           "projected": 5.4,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 3
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 22
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 3
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -1969,16 +3924,43 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 82,
+      "projected": 92.69999999999999,
       "starters": [
         {
           "id": "3117251",
           "name": "Christian McCaffrey",
           "team": "SF",
           "position": "RB",
-          "points": 24.8,
+          "points": 16,
           "projected": 20.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 52
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 18
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1990,6 +3972,7 @@
           "position": "WR",
           "points": 19.7,
           "projected": 18.2,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -1999,8 +3982,9 @@
           "name": "Terry McLaurin",
           "team": "WAS",
           "position": "WR",
-          "points": 19.7,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": true
@@ -2010,8 +3994,30 @@
           "name": "Harold Fannin Jr.",
           "team": "CLE",
           "position": "TE",
-          "points": 35.8,
+          "points": 11.7,
           "projected": 11.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2021,8 +4027,30 @@
           "name": "Braelon Allen",
           "team": "NYJ",
           "position": "RB",
-          "points": 13.4,
+          "points": 8.7,
           "projected": 12.7,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 59
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 8
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2032,8 +4060,9 @@
           "name": "Browns D/ST",
           "team": "CLE",
           "position": "DEF",
-          "points": 12,
+          "points": 8,
           "projected": 6.6,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -2043,8 +4072,9 @@
           "name": "Eddy Pineiro",
           "team": "SF",
           "position": "K",
-          "points": 11,
+          "points": 5,
           "projected": 9.3,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2054,8 +4084,25 @@
           "name": "Deshaun Watson",
           "team": "CLE",
           "position": "QB",
-          "points": 33.2,
+          "points": 12.9,
           "projected": 14.5,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 268
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 22
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2067,8 +4114,35 @@
           "name": "Omarion Hampton",
           "team": "LAC",
           "position": "RB",
-          "points": 9.7,
+          "points": 13.3,
           "projected": 10.7,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 45
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 8
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2078,8 +4152,9 @@
           "name": "Breece Hall",
           "team": "NYJ",
           "position": "RB",
-          "points": 8.5,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -2089,8 +4164,25 @@
           "name": "Mike Evans",
           "team": "SF",
           "position": "WR",
-          "points": 15.2,
+          "points": 12.6,
           "projected": 11.8,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 76
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2100,8 +4192,35 @@
           "name": "Kyle Monangai",
           "team": "CHI",
           "position": "RB",
-          "points": 31.1,
+          "points": 28,
           "projected": 8.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 146
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 4
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
@@ -2111,8 +4230,25 @@
           "name": "Dalton Kincaid",
           "team": "BUF",
           "position": "TE",
-          "points": 5.5,
+          "points": 1.7,
           "projected": 10.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 7
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2122,8 +4258,25 @@
           "name": "Sam Darnold",
           "team": "SEA",
           "position": "QB",
-          "points": 33.3,
+          "points": 13.3,
           "projected": 17,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 168
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2133,8 +4286,25 @@
           "name": "Kalif Raymond",
           "team": "CHI",
           "position": "WR",
-          "points": 23.6,
+          "points": 2.6,
           "projected": 10,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 6
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2145,7 +4315,8 @@
           "team": "FA",
           "position": "WR",
           "points": 0,
-          "projected": 263.7,
+          "projected": null,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -2161,16 +4332,33 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 112.4,
+      "projected": 117.2,
       "starters": [
         {
           "id": "4430878",
           "name": "Jaxon Smith-Njigba",
           "team": "SEA",
           "position": "WR",
-          "points": 42.7,
+          "points": 12.6,
           "projected": 21.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 76
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2180,8 +4368,30 @@
           "name": "Ashton Jeanty",
           "team": "LV",
           "position": "RB",
-          "points": 15,
+          "points": 18.6,
           "projected": 18.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 58
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 68
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 8
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2191,8 +4401,30 @@
           "name": "Brock Bowers",
           "team": "LV",
           "position": "TE",
-          "points": 32.1,
+          "points": 20.6,
           "projected": 15.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 86
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 11
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2202,8 +4434,30 @@
           "name": "Malik Nabers",
           "team": "NYG",
           "position": "WR",
-          "points": 30.8,
+          "points": 23.2,
           "projected": 13.6,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 112
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2213,8 +4467,20 @@
           "name": "David Montgomery",
           "team": "HOU",
           "position": "RB",
-          "points": 11.1,
+          "points": 4.3,
           "projected": 13.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 24
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 19
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2224,8 +4490,20 @@
           "name": "Trevor Lawrence",
           "team": "JAX",
           "position": "QB",
-          "points": 32.9,
+          "points": 13.1,
           "projected": 18.5,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 227
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2235,8 +4513,9 @@
           "name": "Cairo Santos",
           "team": "CHI",
           "position": "K",
-          "points": 21,
+          "points": 11,
           "projected": 8.5,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2246,8 +4525,9 @@
           "name": "Bears D/ST",
           "team": "CHI",
           "position": "DEF",
-          "points": 22,
+          "points": 9,
           "projected": 6.4,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -2259,8 +4539,25 @@
           "name": "Tee Higgins",
           "team": "CIN",
           "position": "WR",
-          "points": 47.7,
+          "points": 26.7,
           "projected": 13.7,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 157
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 11
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 16
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
@@ -2271,7 +4568,8 @@
           "team": "NYG",
           "position": "QB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -2281,8 +4579,30 @@
           "name": "Marvin Harrison Jr.",
           "team": "ARI",
           "position": "WR",
-          "points": 15.2,
+          "points": 8.2,
           "projected": 6.4,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 12
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2292,8 +4612,35 @@
           "name": "Kenny Gainwell",
           "team": "TB",
           "position": "RB",
-          "points": 13.7,
+          "points": 10.7,
           "projected": 8.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 5
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 22
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2303,8 +4650,25 @@
           "name": "Jakobi Meyers",
           "team": "JAX",
           "position": "WR",
-          "points": 25.7,
+          "points": 6.3,
           "projected": 10.8,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 33
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2314,8 +4678,25 @@
           "name": "Makai Lemon",
           "team": "PHI",
           "position": "WR",
-          "points": 11.6,
+          "points": 5.7,
           "projected": 10.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2326,7 +4707,8 @@
           "team": "DET",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -2336,8 +4718,20 @@
           "name": "Chris Rodriguez Jr.",
           "team": "JAX",
           "position": "RB",
-          "points": 19.2,
+          "points": 9.5,
           "projected": 5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 35
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2347,8 +4741,9 @@
           "name": "Buccaneers D/ST",
           "team": "TB",
           "position": "DEF",
-          "points": 14,
+          "points": 7,
           "projected": 5.8,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -2364,16 +4759,38 @@
         "wins": 1,
         "losses": 2
       },
-      "total": 0,
-      "projected": null,
+      "total": 104.9,
+      "projected": 93.70000000000002,
       "starters": [
         {
           "id": "4362238",
           "name": "Chase Brown",
           "team": "CIN",
           "position": "RB",
-          "points": 28,
+          "points": 19.1,
           "projected": 16.2,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 10
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 71
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 11
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 11
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2383,8 +4800,25 @@
           "name": "Lamar Jackson",
           "team": "BAL",
           "position": "QB",
-          "points": 39.3,
+          "points": 18.9,
           "projected": 21.2,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 222
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 2
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 20
+            }
+          ],
           "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
@@ -2394,8 +4828,35 @@
           "name": "Rhamondre Stevenson",
           "team": "NE",
           "position": "RB",
-          "points": 25.2,
+          "points": 18.4,
           "projected": 11.6,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 47
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2405,8 +4866,9 @@
           "name": "Rams D/ST",
           "team": "LAR",
           "position": "DEF",
-          "points": 12,
+          "points": 7,
           "projected": 6.2,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -2416,8 +4878,25 @@
           "name": "Christian Watson",
           "team": "GB",
           "position": "WR",
-          "points": 30.3,
+          "points": 7.7,
           "projected": 14.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 47
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 3
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2427,8 +4906,9 @@
           "name": "Ka'imi Fairbairn",
           "team": "HOU",
           "position": "K",
-          "points": 21,
+          "points": 16,
           "projected": 9.9,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2438,8 +4918,25 @@
           "name": "Kayshon Boutte",
           "team": "HOU",
           "position": "WR",
-          "points": 10.7,
+          "points": 6.6,
           "projected": 5.2,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 36
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2449,8 +4946,25 @@
           "name": "Hunter Henry",
           "team": "NE",
           "position": "TE",
-          "points": 12.7,
+          "points": 11.2,
           "projected": 8.9,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 62
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2463,7 +4977,8 @@
           "team": "NE",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -2473,8 +4988,25 @@
           "name": "Bo Nix",
           "team": "DEN",
           "position": "QB",
-          "points": 28,
+          "points": 13.6,
           "projected": 15.1,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 214
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 10
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2484,8 +5016,30 @@
           "name": "MarShawn Lloyd",
           "team": "GB",
           "position": "RB",
-          "points": 13.7,
+          "points": 9.9,
           "projected": 6.5,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 13
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 36
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2495,8 +5049,30 @@
           "name": "J.K. Dobbins",
           "team": "DEN",
           "position": "RB",
-          "points": 8.6,
+          "points": 7.2,
           "projected": 10.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 40
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 12
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2506,8 +5082,30 @@
           "name": "RJ Harvey",
           "team": "DEN",
           "position": "RB",
-          "points": 17.4,
+          "points": 19.3,
           "projected": 10.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 25
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 68
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 10
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 10
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2519,6 +5117,7 @@
           "position": "QB",
           "points": 23.8,
           "projected": 18.6,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2529,7 +5128,8 @@
           "team": "SEA",
           "position": "RB",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "OUT",
           "headshot": "",
           "starter": false
@@ -2539,8 +5139,35 @@
           "name": "Tyler Allgeier",
           "team": "ARI",
           "position": "RB",
-          "points": 17.8,
+          "points": 12.9,
           "projected": 8.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 42
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 7
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2556,16 +5183,43 @@
         "wins": 2,
         "losses": 1
       },
-      "total": 0,
-      "projected": null,
+      "total": 106,
+      "projected": 109.5,
       "starters": [
         {
           "id": "4379399",
           "name": "James Cook III",
           "team": "BUF",
           "position": "RB",
-          "points": 35.7,
+          "points": 16.3,
           "projected": 17.4,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 75
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 8
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2575,8 +5229,35 @@
           "name": "Derrick Henry",
           "team": "BAL",
           "position": "RB",
-          "points": 37.8,
+          "points": 15.9,
           "projected": 20.3,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 73
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 6
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2586,8 +5267,30 @@
           "name": "Zay Flowers",
           "team": "BAL",
           "position": "WR",
-          "points": 41.2,
+          "points": 25.8,
           "projected": 15.5,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 118
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 8
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 10
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2597,8 +5300,30 @@
           "name": "Joe Burrow",
           "team": "CIN",
           "position": "QB",
-          "points": 46.3,
+          "points": 23.7,
           "projected": 18.1,
+          "gameStats": [
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 428
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 6
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2608,8 +5333,30 @@
           "name": "Mark Andrews",
           "team": "BAL",
           "position": "TE",
-          "points": 19.1,
+          "points": 13.7,
           "projected": 10.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 27
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 5
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 6
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2619,8 +5366,9 @@
           "name": "Harrison Butker",
           "team": "KC",
           "position": "K",
-          "points": 9,
+          "points": 6,
           "projected": 8.8,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2630,8 +5378,25 @@
           "name": "Josh Downs",
           "team": "IND",
           "position": "WR",
-          "points": 17.3,
+          "points": 4.6,
           "projected": 13.6,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 16
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 4
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -2643,6 +5408,7 @@
           "position": "DEF",
           "points": 0,
           "projected": 5.7,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": true
@@ -2656,6 +5422,7 @@
           "position": "WR",
           "points": 3.7,
           "projected": 15.8,
+          "gameStats": [],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2665,8 +5432,35 @@
           "name": "Tucker Kraft",
           "team": "GB",
           "position": "TE",
-          "points": 23.1,
+          "points": 16.5,
           "projected": 8.9,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 3
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 42
+            },
+            {
+              "id": "43",
+              "label": "RECEIVING TOUCHDOWNS",
+              "value": 1
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2676,8 +5470,25 @@
           "name": "Chris Godwin Jr.",
           "team": "TB",
           "position": "WR",
-          "points": 14.6,
+          "points": 9.1,
           "projected": 7.1,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 31
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 6
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 7
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2687,8 +5498,30 @@
           "name": "Blake Corum",
           "team": "LAR",
           "position": "RB",
-          "points": 6.6,
+          "points": 3.1,
           "projected": 8.1,
+          "gameStats": [
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 14
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 7
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2698,8 +5531,25 @@
           "name": "Dontayvion Wicks",
           "team": "PHI",
           "position": "WR",
-          "points": 10,
+          "points": 4.8,
           "projected": 11.2,
+          "gameStats": [
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 18
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 3
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 5
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
@@ -2709,8 +5559,9 @@
           "name": "Terrance Ferguson",
           "team": "LAR",
           "position": "TE",
-          "points": 1.9,
-          "projected": null,
+          "points": 0,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
@@ -2722,6 +5573,7 @@
           "position": "DEF",
           "points": 6,
           "projected": 2.6,
+          "gameStats": [],
           "injuryStatus": "",
           "headshot": "",
           "starter": false
@@ -2732,7 +5584,8 @@
           "team": "IND",
           "position": "WR",
           "points": 0,
-          "projected": null,
+          "projected": 0,
+          "gameStats": [],
           "injuryStatus": "INJURY_RESERVE",
           "headshot": "",
           "starter": false
