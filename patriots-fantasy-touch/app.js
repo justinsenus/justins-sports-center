@@ -12,7 +12,7 @@
     playersCacheMs: 12 * 60 * 60 * 1000
   };
 
-  const ESPN_PUBLIC_URL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/919590140?view=mMatchup&view=mBoxScore&view=mLiveScoring";
+  const ESPN_PUBLIC_URL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/919590140?view=mSettings&view=mTeam&view=mRoster&view=mMatchup&view=mMatchupScore&view=mBoxScore&view=mLiveScoring";
   const ESPN_TEAM_BY_PRO_ID = { 1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL", 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC", 13: "LV", 14: "LAR", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO", 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC", 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX", 33: "BAL", 34: "HOU" };
   const ESPN_POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
   const ESPN_BENCH_SLOTS = new Set([20, 21, 22]);
@@ -575,6 +575,7 @@
 
   function normalizeStoredESPNTeam(team) {
     if (!team) return null;
+    const snapshotTotal = finite(team.total);
     const oldRows = [
       ...(team.starters || []).map((player) => ({ ...player, starter: player.starter !== false })),
       ...(team.bench || []).map((player) => ({ ...player, starter: false }))
@@ -587,7 +588,9 @@
     rows.forEach((row) => {
       const id = String(row.id || row.player_id || row.playerId || "");
       if (!id) return;
-      const actual = finite(row.actual) ?? finite(row.points) ?? finite(row.appliedStatTotal) ?? 0;
+      // The legacy snapshot's generic "points" field can be the prior scoring period.
+      // Trust it only when that snapshot also has a non-zero team live total.
+      const actual = finite(row.actual) ?? finite(row.appliedStatTotal) ?? (snapshotTotal != null && snapshotTotal > 0 ? finite(row.points) : null) ?? 0;
       const projected = finite(row.projected) ?? finite(row.projectedPoints);
       const event = findPlayerEvent(row) || null;
       const eventStatus = event && eventState(event);
@@ -625,7 +628,7 @@
       roster: { players: ids, starters },
       players,
       pointsMap: Object.fromEntries(ids.map((id) => [id, players[id].actual])),
-      total: rows.length ? total : finite(team.total) || 0,
+      total: rows.length ? (snapshotTotal != null && snapshotTotal > 0 ? snapshotTotal : total) : snapshotTotal || 0,
       projected: rows.length ? projected : finite(team.projected),
       record: team.record || { wins: null, losses: null }
     };
@@ -637,6 +640,8 @@
     const findTeam = (target) => teams.find((team) => String(team.teamId || team.id) === String(target && (target.teamId || target.id)) || nameKey(team.name) === nameKey(target && target.name)) || null;
     return {
       ...data,
+      public: false,
+      staleFallback: true,
       myTeam: findTeam(data.myTeam),
       opponent: findTeam(data.opponent),
       leagueTeams: teams
@@ -879,7 +884,7 @@
     const liveSources = (state.consensus && state.consensus.sources || []).filter((source) => source.status === "live" || source.status === "ok");
     const direct = [
       ...(state.sleeper ? [{ id: "sleeper", name: "Sleeper", status: "live" }] : []),
-      ...(state.espn && state.espn.ready ? [{ id: "espn", name: "ESPN public", status: "live" }] : [])
+      ...(state.espn && state.espn.ready && state.espn.public ? [{ id: "espn", name: "ESPN public", status: "live" }] : [])
     ];
     const all = [...liveSources, ...direct].filter((source, index, list) => list.findIndex((candidate) => candidate.id === source.id) === index);
     const boardOdds = scoreboardOdds();
@@ -1360,7 +1365,7 @@
     if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
     if (sleeperResult.value) state.sleeper = sleeperResult.value; else failures.push("SLEEPER");
     if (espnResult.value) state.espn = espnResult.value;
-    if (!espnResult.value || !espnResult.value.ready) failures.push("ESPN");
+    if (!espnResult.value || !espnResult.value.ready || espnResult.value.staleFallback) failures.push("ESPN");
     if (consensusResult.value) state.consensus = consensusResult.value; else if (!state.consensus) state.consensus = { status: "unavailable", players: {}, sources: [], insights: [] };
     updateScoreMoves(currentLeague());
     state.error = failures.length ? `${failures.join(" + ")} FEED RETRYING` : "";
