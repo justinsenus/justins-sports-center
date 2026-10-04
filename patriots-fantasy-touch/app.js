@@ -45,6 +45,7 @@
     scoreMoves: {},
     scoreHistory: { sleeper: [], espn: [] },
     scoreEvents: { sleeper: [], espn: [] },
+    scoreEventScope: { sleeper: "", espn: "" },
     playerHistories: { sleeper: {}, espn: {} },
     teamScoreHistory: { sleeper: [], espn: [] },
     teamScoreHistoryMode: { sleeper: "", espn: "" },
@@ -683,17 +684,24 @@
   }
 
   async function loadESPN() {
+    let synced = null;
+    try {
+      const local = await getJSON(new URL("../patriots-fantasy/espn-data.json?ts=" + Date.now(), location.href));
+      if (local && local.ready) {
+        synced = normalizeStoredESPNData(local);
+        // The private sync is scoped to ESPN's current scoring period and has
+        // the authoritative lineup totals. Keep using it while fresh so the
+        // public and private endpoints cannot make the score board jump.
+        if (!synced.staleFallback) return synced;
+      }
+    } catch (_) { /* Try the public endpoint when the synced snapshot is unavailable. */ }
     try {
       return await loadESPNPublic();
     } catch (publicError) {
-      try {
-        const local = await getJSON(new URL("../patriots-fantasy/espn-data.json?ts=" + Date.now(), location.href));
-        if (local && local.ready) return normalizeStoredESPNData(local);
-      } catch (_) { /* Direct public feed remains the primary path. */ }
-      return { ready: false, error: publicError && publicError.message || "ESPN public feed unavailable" };
+      if (synced && synced.ready) return synced;
+      return { ready: false, error: publicError && publicError.message || "ESPN feed unavailable" };
     }
   }
-
   async function loadConsensus() {
     try { return await getJSON(new URL(`${root}consensus-data.json?ts=${Date.now()}`, location.href)); } catch (_) { return { status: "unavailable", players: {}, sources: [], insights: [] }; }
   }
@@ -854,6 +862,12 @@
     return `fantasy-team-score-history:v1:${CONFIG.season}:${state.league}:${leagueId}:${week}`;
   }
 
+  function scoreEventStorageKey(league) {
+    const leagueId = state.league === "espn" ? CONFIG.espnLeagueId : CONFIG.sleeperLeagueId;
+    const week = Number(league && league.week || state.week) || 1;
+    return `fantasy-player-score-events:v1:${CONFIG.season}:${state.league}:${leagueId}:${week}`;
+  }
+
   function restoreTeamScoreHistory(league) {
     const scope = teamHistoryStorageKey(league);
     if (state.teamScoreHistoryScope[state.league] === scope) return;
@@ -879,7 +893,16 @@
   function updateScoreMoves(league) {
     const next = {};
     const moves = {};
+    const eventScope = scoreEventStorageKey(league);
+    if (state.scoreEventScope[state.league] !== eventScope) {
+      state.scoreEventScope[state.league] = eventScope;
+      try {
+        const savedEvents = JSON.parse(localStorage.getItem(eventScope) || "null");
+        state.scoreEvents[state.league] = Array.isArray(savedEvents) ? savedEvents.filter((event) => event && event.playerId && Number.isFinite(Number(event.at))).slice(0, 12) : [];
+      } catch (_) { state.scoreEvents[state.league] = []; }
+    }
     const events = state.scoreEvents[state.league] || [];
+    let eventsChanged = false;
     const playerHistories = state.playerHistories[state.league] || {};
     const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
     const seedCurrentScorers = events.length === 0;
@@ -908,6 +931,7 @@
           delta,
           total: value
         });
+        eventsChanged = true;
       } else if (seedCurrentScorers && value > 0 && player.event && eventState(player.event).live) {
         events.unshift({
           at: Date.now(),
@@ -923,9 +947,13 @@
           total: value,
           snapshot: true
         });
+        eventsChanged = true;
       }
     });
     state.scoreEvents[state.league] = events.slice(0, 12);
+    if (eventsChanged) {
+      try { localStorage.setItem(eventScope, JSON.stringify(state.scoreEvents[state.league])); } catch (_) { /* Keep the live feed if browser storage is unavailable. */ }
+    }
     state.scoreMoves = moves;
     state.scoreSnapshot = next;
     state.playerHistories[state.league] = playerHistories;
@@ -1476,7 +1504,7 @@
         ? `<div class="source-value"><span>${esc(odds.provider)} • GAME LINE</span><b>${esc(odds.line)} <small>${esc(odds.price || "PUBLIC LINE")}</small></b></div>`
         : `<div class="empty-card compact"><strong>GAME ODDS WAITING</strong><span>The public scoreboard has not published a line for this matchup yet.</span></div>`;
     drawer.classList.add("open");
-    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-context-grid"><div><small>GAME</small><b>${esc(gameLabel)}</b></div><div><small>TEAM</small><b>${esc(player.team || "FA")}</b></div><div><small>STATUS</small><b>${esc(playerStatus)}</b></div><div><small>ODDS</small><b>${esc(odds ? `${odds.provider} • ${odds.price || odds.line}` : "PUBLIC LINE PENDING")}</b></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div>${playerDetailStatsGrid(player, "stat-grid")}</section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points and provider status refresh every 5 seconds when the connected league feed reports a change.</p>`;
+    drawer.innerHTML = `<div class="drawer-top"><span class="section-kicker">PLAYER DETAIL</span><button id="closeDrawer" type="button" aria-label="Close player detail">×</button></div><div class="drawer-player">${playerFace(player, "large")}<div><h2>${esc(player.full_name || player.name)}</h2><p>${esc(player.position || "UTIL")} • ${esc(player.team || "FA")} • VS ${esc(playerOpponent(player))}</p><span class="live-pill ${player.status === "LIVE" ? "active" : ""}"><i></i>${esc(player.status || "UPCOMING")}</span></div></div><div class="drawer-score-grid"><div><strong>${number(actual)}</strong><small>ACTUAL / LIVE</small></div><div><strong>${c.value == null ? "MODEL" : number(c.value)}</strong><small>CONSENSUS PROJ</small></div><div><strong>${c.range == null ? "ONE FEED" : number(c.range)}</strong><small>PROJ RANGE</small></div></div><div class="drawer-context-grid"><div><small>GAME</small><b>${esc(gameLabel)}</b></div><div><small>TEAM</small><b>${esc(player.team || "FA")}</b></div><div><small>STATUS</small><b>${esc(playerStatus)}</b></div><div><small>ODDS</small><b>${esc(odds ? `${odds.provider} • ${odds.price || odds.line}` : "PUBLIC LINE PENDING")}</b></div></div><div class="drawer-tabs"><span class="active">PERSONAL STATS</span><span>NEWS / PRACTICE</span><span>PROJECTION</span></div><section class="drawer-section"><div class="drawer-heading"><b>PERSONAL STATS • LIVE / PROJECTED</b><span>${esc(projectionLabel(player))}</span></div>${playerDetailStatsGrid(player, "stat-grid")}</section><section class="drawer-section"><div class="drawer-heading"><b>PLAYER NEWS / PRACTICE</b><span>${esc(playerStatus)}</span></div>${newsMarkup}</section><section class="drawer-section"><div class="drawer-heading"><b>PROJECTION SOURCES</b><span>${esc(rangeLabel(player))}</span></div>${sourceRows}</section><section class="drawer-section"><div class="drawer-heading"><b>SPORTSBOOK ODDS</b><span>${esc(oddsLabel(player))}</span></div>${oddsRows}</section><p class="drawer-disclaimer">Informational only. Actual points update when the connected league provider reports a change; saved score movement remains visible after refresh.</p>`;
     $("#closeDrawer").addEventListener("click", () => { state.selectedPlayer = null; render(); });
   }
 
