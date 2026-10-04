@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/espn-sync.yml"
       - "scripts/espn-sync.mjs"
+      - "patriots-fantasy-touch/app.js"
   schedule:
     - cron: "*/5 * * * *"
 
