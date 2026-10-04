@@ -423,6 +423,7 @@
     const position = ESPN_POSITION_BY_ID[player.defaultPositionId] || "UTIL";
     const team = ESPN_TEAM_BY_PRO_ID[player.proTeamId] || "FA";
     const event = findPlayerEvent({ team }) || null;
+    const eventStatus = event && eventState(event);
     const rows = espnStatRows(player, scoringPeriodId);
     const actualRow = rows.find((row) => Number(row.statSourceId) === 0) || rows.find((row) => Number(row.statSourceId) === 1 && row.appliedTotal != null);
     const actualValue = [
@@ -432,14 +433,14 @@
       actualRow && actualRow.appliedTotal,
       actualRow && actualRow.appliedTotalCeiling
     ].map(finite).find((value) => value != null);
-    const actual = actualValue ?? 0;
+    const reportedActual = actualValue ?? 0;
+    const actual = eventStatus && (eventStatus.live || eventStatus.final) ? reportedActual : 0;
     const projected = espnProjection(player, scoringPeriodId);
     const liveFields = espnLiveFields(player, scoringPeriodId);
     const headshot = `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`;
     const lineupSlotId = Number(entry && entry.lineupSlotId);
     const injury = entry && entry.injuryStatus && entry.injuryStatus !== "NORMAL" ? entry.injuryStatus : player.injuryStatus;
-    const eventStatus = event && eventState(event);
-    const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live || actual > 0 ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
+    const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
     return {
       player_id: id,
       playerId: id,
@@ -536,7 +537,7 @@
   }
 
   async function loadESPNPublic() {
-    const data = await getJSON(`${ESPN_PUBLIC_URL}&ts=${Date.now()}`);
+    const data = await getJSON(`${ESPN_PUBLIC_URL}&scoringPeriodId=${encodeURIComponent(state.week || 1)}&ts=${Date.now()}`);
     const status = data.status || {};
     const matchupPeriodId = Number(status.currentMatchupPeriod || status.latestScoringPeriod || 1);
     const scoringPeriodId = Number(status.currentScoringPeriod || status.latestScoringPeriod || matchupPeriodId || 1);
@@ -588,14 +589,15 @@
     rows.forEach((row) => {
       const id = String(row.id || row.player_id || row.playerId || "");
       if (!id) return;
-      // The legacy snapshot's generic "points" field can be the prior scoring period.
-      // Trust it only when that snapshot also has a non-zero team live total.
-      const actual = finite(row.actual) ?? finite(row.appliedStatTotal) ?? (snapshotTotal != null && snapshotTotal > 0 ? finite(row.points) : null) ?? 0;
       const projected = finite(row.projected) ?? finite(row.projectedPoints);
       const event = findPlayerEvent(row) || null;
       const eventStatus = event && eventState(event);
+      const reportedActual = finite(row.actual) ?? finite(row.appliedStatTotal) ?? finite(row.points);
+      // ESPN snapshots may contain a prior period's total. Use actuals only
+      // while the player's current NFL game is live or final.
+      const actual = eventStatus && (eventStatus.live || eventStatus.final) ? reportedActual ?? 0 : 0;
       const injury = row.injuryStatus || row.injury_status || "";
-      const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live || actual > 0 ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
+      const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
       const name = row.full_name || row.name || id;
       players[id] = {
         ...row,
@@ -628,7 +630,7 @@
       roster: { players: ids, starters },
       players,
       pointsMap: Object.fromEntries(ids.map((id) => [id, players[id].actual])),
-      total: rows.length ? (snapshotTotal != null && snapshotTotal > 0 ? snapshotTotal : total) : snapshotTotal || 0,
+      total: rows.length ? total : snapshotTotal || 0,
       projected: rows.length ? projected : finite(team.projected),
       record: team.record || { wins: null, losses: null }
     };
