@@ -638,10 +638,13 @@
     const sourceTeams = data.leagueTeams && data.leagueTeams.length ? data.leagueTeams : [data.myTeam, data.opponent].filter(Boolean);
     const teams = sourceTeams.map(normalizeStoredESPNTeam).filter(Boolean);
     const findTeam = (target) => teams.find((team) => String(team.teamId || team.id) === String(target && (target.teamId || target.id)) || nameKey(team.name) === nameKey(target && target.name)) || null;
+    const savedAtMs = data && data.savedAt ? new Date(data.savedAt).getTime() : NaN;
+    const syncAgeMs = Number.isFinite(savedAtMs) ? Math.max(0, Date.now() - savedAtMs) : Infinity;
     return {
       ...data,
       public: false,
-      staleFallback: true,
+      staleFallback: syncAgeMs > 15 * 60 * 1000,
+      syncAgeMs: Number.isFinite(syncAgeMs) ? syncAgeMs : null,
       myTeam: findTeam(data.myTeam),
       opponent: findTeam(data.opponent),
       leagueTeams: teams
@@ -884,7 +887,7 @@
     const liveSources = (state.consensus && state.consensus.sources || []).filter((source) => source.status === "live" || source.status === "ok");
     const direct = [
       ...(state.sleeper ? [{ id: "sleeper", name: "Sleeper", status: "live" }] : []),
-      ...(state.espn && state.espn.ready && state.espn.public ? [{ id: "espn", name: "ESPN public", status: "live" }] : [])
+      ...(state.espn && state.espn.ready && !state.espn.staleFallback ? [{ id: "espn", name: state.espn.public ? "ESPN public" : "ESPN sync", status: "live" }] : [])
     ];
     const all = [...liveSources, ...direct].filter((source, index, list) => list.findIndex((candidate) => candidate.id === source.id) === index);
     const boardOdds = scoreboardOdds();
@@ -1136,7 +1139,7 @@
       const y = 130 - value / maxValue * 104;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(" ");
-    const chart = teams.length ? `<div class="league-stock-chart-wrap"><svg class="league-team-stock-chart stock-chart" viewBox="0 0 320 142" role="img" aria-label="${started ? "Live" : "Projected"} total points for every league team"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><g class="league-team-stock-lines">${rows.map((team) => { const color = team.teamColor || "#a8b7c9"; const value = finite(values[String(team.id)]) || 0; const endY = (130 - value / maxValue * 104).toFixed(1); return `<polyline class="league-team-stock-line" points="${pointsFor(team)}" style="--team-color:${esc(color)}" /><circle class="league-team-stock-end" cx="308" cy="${endY}" r="3.2" style="--team-color:${esc(color)}" />`; }).join("")}</g></svg><div class="momentum-labels"><span>ALL TEAMS START AT 0</span><span>${started ? "LIVE TOTALS" : "PROJECTED TOTALS"} • ${formatAge(state.refreshedAt)}</span></div></div>` : "";
+    const chart = teams.length ? `<div class="league-stock-chart-wrap"><svg class="league-team-stock-chart stock-chart" viewBox="0 0 320 142" role="img" aria-label="${started ? "Live" : "Projected"} total points for every league team"><g class="chart-grid"><path d="M12 26H308M12 78H308M12 130H308" /></g><g class="league-team-stock-lines">${rows.map((team) => { const color = team.teamColor || "#a8b7c9"; const value = finite(values[String(team.id)]) || 0; const endY = (130 - value / maxValue * 104).toFixed(1); return `<polyline class="league-team-stock-line" points="${pointsFor(team)}" style="--team-color:${esc(color)}" /><circle class="league-team-stock-end" cx="308" cy="${endY}" r="3.2" style="--team-color:${esc(color)}" />`; }).join("")}</g></svg><div class="momentum-labels"><span>ALL TEAMS START AT 0</span><span>${started ? "LIVE TOTALS" : "PROJECTED TOTALS"} • ${formatAge(state.league === "espn" && state.espn && state.espn.savedAt ? state.espn.savedAt : state.refreshedAt)}</span></div></div>` : "";
     return `<section class="arcade-panel league-stock-panel"><div class="arcade-panel-head"><div><b>📈 LEAGUE STOCK BOARD</b><small>${teams.length} TEAMS • ${started ? "LIVE TOTAL POINTS" : "PROJECTED POINTS"} • 5s REFRESH</small></div><div class="stock-legend team-stock-legend"><span><i></i>ONE SHARED LIVE CHART</span></div></div>${chart}<div class="league-stock-list">${rows.length ? rows.map((team) => { const value = leagueTeamMetric(team, started); const color = team.teamColor || "#a8b7c9"; return `<div class="league-stock-row team-stock-row" style="--team-color:${esc(color)}"><span class="team-stock-key"></span><span class="league-stock-name"><strong>${esc(team.name || "LEAGUE TEAM")}</strong><small>${esc(recordLabel(team.record))} • ${started ? "LIVE TOTAL" : "WEEK PROJECTION"}</small></span><span class="league-stock-values"><b>${number(value)}</b><small>${metric}</small></span></div>`; }).join("") : `<div class="empty-card compact"><strong>LEAGUE TEAM FEED SYNCING</strong><span>Every team appears when the league provider responds.</span></div>`}</div></section>`;
   }
   function renderScoringFeed(league) {
