@@ -1321,3 +1321,5 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
   .movement-sparkline { min-width: 38px; height: 18px; }
   .movement-delta { font-size: 8px; }
 }
+
+.mobile-league-board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 8px; }
