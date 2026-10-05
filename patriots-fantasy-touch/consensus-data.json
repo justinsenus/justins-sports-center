@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-04T21:58:16.278Z",
+  "generated_at": "2026-10-05T00:30:11.923Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-04T21:58:16.278Z",
+      "updated_at": "2026-10-05T00:30:11.923Z",
       "count": 15,
       "access": "public fallback"
     },
@@ -45,15 +45,15 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-04T21:58:16.278Z",
-      "count": 6
+      "updated_at": "2026-10-05T00:30:11.923Z",
+      "count": 8
     },
     {
       "id": "sleeper",
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-04T21:58:16.278Z",
+      "updated_at": "2026-10-05T00:30:11.923Z",
       "count": 34
     },
     {
@@ -342,12 +342,18 @@
       "name": "Terry McLaurin",
       "team": "WAS",
       "position": "WR",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 0,
+      "min": 0,
+      "max": 0,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "espn",
+          "label": "ESPN Fantasy",
+          "value": 0
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -408,16 +414,16 @@
       "name": "Ja'Marr Chase",
       "team": "CIN",
       "position": "WR",
-      "consensus": 16.1,
-      "min": 16.1,
-      "max": 16.1,
+      "consensus": 15.1,
+      "min": 15.1,
+      "max": 15.1,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 16.1
+          "value": 15.1
         }
       ],
       "outlier": null,
@@ -450,16 +456,16 @@
       "name": "Chuba Hubbard",
       "team": "CAR",
       "position": "RB",
-      "consensus": 14.6,
-      "min": 14.6,
-      "max": 14.6,
+      "consensus": 14.7,
+      "min": 14.7,
+      "max": 14.7,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 14.6
+          "value": 14.7
         }
       ],
       "outlier": null,
@@ -609,12 +615,18 @@
       "name": "Isiah Pacheco",
       "team": "DET",
       "position": "RB",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 0,
+      "min": 0,
+      "max": 0,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "espn",
+          "label": "ESPN Fantasy",
+          "value": 0
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
