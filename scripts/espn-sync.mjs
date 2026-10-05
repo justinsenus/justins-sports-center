@@ -27,7 +27,13 @@ const TEAM_BY_PRO_ID = {
 };
 
 const POSITION_BY_ID = { 1: "QB", 2: "RB", 3: "WR", 4: "TE", 5: "K", 16: "DEF" };
-const STAT_ID_LABELS = { 3: "Passing Yards", 4: "Passing Touchdowns", 19: "Interceptions", 24: "Rushing Yards", 25: "Rushing Touchdowns", 42: "Receiving Yards", 43: "Receiving Touchdowns", 53: "Receptions", 58: "Targets" };
+const STAT_ID_LABELS = {
+  0: "Passing Attempts", 1: "Passing Completions", 2: "Incomplete Passes", 3: "Passing Yards", 4: "Passing Touchdowns", 19: "Interceptions",
+  20: "Sacks Taken", 23: "Rushing Attempts", 24: "Rushing Yards", 25: "Rushing Touchdowns",
+  41: "Receiving Targets", 42: "Receiving Yards", 43: "Receiving Touchdowns", 53: "Receptions", 58: "Targets",
+  72: "Fumbles Lost", 80: "Field Goals Made", 81: "Field Goals Attempted", 85: "Extra Points Made",
+  89: "Defense Sacks", 90: "Defense Interceptions", 91: "Defense Fumbles Recovered", 92: "Defense Touchdowns", 95: "Points Allowed", 96: "Yards Allowed"
+};
 const BENCH_SLOTS = new Set([20, 21, 22, 23]);
 const outputPath = resolve(process.cwd(), "patriots-fantasy", "espn-data.json");
 
@@ -76,12 +82,16 @@ function formatStatLabel(value) {
   return String(value || "").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim().toUpperCase();
 }
 
-function normalizeGameStats(stats, labels) {
-  return Object.entries(stats && typeof stats === "object" ? stats : {}).map(([id, rawValue]) => ({
-    id: String(id),
-    label: formatStatLabel(labels && labels[String(id)]),
-    value: numberOrNull(rawValue)
-  })).filter((stat) => stat.label && stat.value != null && Math.abs(stat.value) > 0.001);
+function normalizeGameStats(stats, labels, { projected = false } = {}) {
+  return Object.entries(stats && typeof stats === "object" ? stats : {}).map(([id, rawValue]) => {
+    const label = formatStatLabel(labels && labels[String(id)] || STAT_ID_LABELS[String(id)] || `STAT ${id}`);
+    return {
+      id: String(id),
+      label: projected ? `PROJ ${label}` : label,
+      value: numberOrNull(rawValue),
+      projected
+    };
+  }).filter((stat) => stat.label && stat.value != null && Math.abs(stat.value) > 0.001);
 }
 
 function playerFromEntry(entry) {
@@ -139,6 +149,7 @@ function normalizePlayer(entry, index, scoringPeriodId, labels) {
     points: Number((pointsValue ?? 0).toFixed(1)),
     projected: projectedValue == null ? null : Number(projectedValue.toFixed(1)),
     gameStats: normalizeGameStats(actualStats.stats, labels),
+    projectedGameStats: normalizeGameStats(projectedStats.stats, labels, { projected: true }),
     injuryStatus: status,
     headshot: playerImage(player, entry),
     starter: lineupSlotId == null ? true : !BENCH_SLOTS.has(lineupSlotId)
@@ -208,6 +219,18 @@ function currentMatchup(data, ownId) {
   return containing.find((row) => current != null && Number(row.matchupPeriodId) === current) || containing.slice().sort((a, b) => Number(b.matchupPeriodId || 0) - Number(a.matchupPeriodId || 0))[0];
 }
 
+function normalizeMatchups(data, matchupPeriodId) {
+  return scheduleRows(data).filter((row) => Number(row && row.matchupPeriodId) === Number(matchupPeriodId)).map((row, index) => ({
+    id: String(row.id || row.matchupId || `espn-${matchupPeriodId}-${index}`),
+    homeTeamId: row && row.home && row.home.teamId != null ? String(row.home.teamId) : "",
+    awayTeamId: row && row.away && row.away.teamId != null ? String(row.away.teamId) : "",
+    homeTotal: firstNumberOrNull(row && row.home && (row.home.totalPoints ?? row.home.points ?? row.home.score ?? row.home.total)),
+    awayTotal: firstNumberOrNull(row && row.away && (row.away.totalPoints ?? row.away.points ?? row.away.score ?? row.away.total)),
+    homeProjected: firstNumberOrNull(row && row.home && (row.home.projectedTotal ?? row.home.projectedPoints ?? row.home.projectedScore ?? row.home.projected)),
+    awayProjected: firstNumberOrNull(row && row.away && (row.away.projectedTotal ?? row.away.projectedPoints ?? row.away.projectedScore ?? row.away.projected))
+  })).filter((row) => row.homeTeamId && row.awayTeamId);
+}
+
 function applyMatchupTotal(team, side) {
   if (!team) return team;
   const hasPlayerActual = (team.starters || []).some((player) => Math.abs(numberOrNull(player.points) || 0) > 0.001);
@@ -275,6 +298,7 @@ async function main() {
   const opponentSide = ownMatchup && (ownSide === ownMatchup.home ? ownMatchup.away : ownMatchup.home);
   const opponentId = opponentSide && opponentSide.teamId != null ? String(opponentSide.teamId) : "";
   const opponent = leagueTeams.find((team) => team.id === opponentId) || null;
+  const matchups = normalizeMatchups(data, matchupPeriodId);
 
   if (!own) throw new Error("Configured ESPN team was not normalized");
   const output = {
@@ -287,7 +311,8 @@ async function main() {
     matchupPeriodId,
     myTeam: own,
     opponent,
-    leagueTeams
+    leagueTeams,
+    matchups
   };
   writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");
   console.log(`ESPN sync saved ${leagueTeams.length} league teams and ${leagueTeams.reduce((sum, team) => sum + team.starters.length, 0)} starters.`);
