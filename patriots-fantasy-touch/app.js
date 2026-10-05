@@ -24,8 +24,8 @@
   };
   const SLEEPER_STAT_LABELS = {
     pass_cmp: "Completions", pass_att: "Passing Attempts", pass_yd: "Passing Yards", pass_td: "Passing Touchdowns", pass_int: "Interceptions", pass_sack: "Sacks Taken",
-    rush_att: "Rushing Attempts", rush_yd: "Rushing Yards", rush_td: "Rushing Touchdowns",
-    rec: "Receptions", rec_tgt: "Targets", targets: "Targets", rec_yd: "Receiving Yards", rec_td: "Receiving Touchdowns",
+    rush_att: "Rushing Attempts", rush_yd: "Rushing Yards", rush_td: "Rushing Touchdowns", rush_lng: "Longest Rush", rush_rz_att: "Red Zone Rushes", rush_fd: "Rushing First Downs", rush_ypa: "Rush Yards Per Attempt",
+    rec: "Receptions", rec_tgt: "Targets", targets: "Targets", rec_yd: "Receiving Yards", rec_td: "Receiving Touchdowns", rec_lng: "Longest Catch", rec_air_yd: "Air Yards", rec_fd: "Receiving First Downs", rec_ypr: "Yards Per Catch", rec_ypt: "Yards Per Target", rush_rec_yd: "Total Scrimmage Yards",
     fum: "Fumbles", fum_lost: "Fumbles Lost", xpm: "Extra Points Made", xpa: "Extra Points Attempted", fgm: "Field Goals Made", fga: "Field Goals Attempted", fgmiss: "Field Goals Missed",
     sack: "Defense Sacks", int: "Defense Interceptions", ff: "Forced Fumbles", fum_rec: "Fumbles Recovered", def_td: "Defense Touchdowns", safe: "Safeties", blk_kick: "Blocked Kicks", pts_allow: "Points Allowed", yds_allow: "Yards Allowed"
   };
@@ -127,7 +127,7 @@
       if (skip.has(String(key))) return null;
       const value = finite(rawValue);
       if (value == null || Math.abs(value) < 0.001) return null;
-      const label = labels[String(key)] || labels[key] || formatESPNStatLabel(String(key));
+      const label = labels[String(key)] || labels[key] || (options.strictLabels ? "" : formatESPNStatLabel(String(key)));
       if (!label) return null;
       return { id: String(key), label: options.projected ? `PROJ ${formatESPNStatLabel(label)}` : formatESPNStatLabel(label), value, projected: Boolean(options.projected) };
     }).filter(Boolean);
@@ -312,8 +312,8 @@
     const consensus = consensusFor(player, consensusData);
     const liveStats = statsMap && statsMap[String(id)] || {};
     const projectionStats = projectedStatsMap && projectedStatsMap[String(id)] || {};
-    const gameStats = statRowsFromMap(liveStats, SLEEPER_STAT_LABELS);
-    const projectedGameStats = statRowsFromMap(projectionStats, SLEEPER_STAT_LABELS, { projected: true });
+    const gameStats = statRowsFromMap(liveStats, SLEEPER_STAT_LABELS, { strictLabels: true });
+    const projectedGameStats = statRowsFromMap(projectionStats, SLEEPER_STAT_LABELS, { projected: true, strictLabels: true });
     const starterSet = new Set((roster && roster.starters || []).map(String));
     const projected = consensus.value != null ? consensus.value : finite(player.projected);
     return {
