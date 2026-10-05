@@ -1795,3 +1795,313 @@ body {
   border-color: var(--team-color);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--team-color) 36%, transparent);
 }
+
+/* Cutout mascot and chart styling for the command center. */
+.touch-header {
+  min-height: 80px;
+  overflow: visible;
+}
+.brand-lockup {
+  position: relative;
+  z-index: 2;
+  gap: 12px;
+  overflow: visible;
+}
+.brand-mark.logo-mark {
+  display: block;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.logo-mark img {
+  width: 122%;
+  height: 122%;
+  margin: -11%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,.7)) drop-shadow(0 0 7px rgba(255,122,0,.24));
+}
+.brand-lockup strong {
+  letter-spacing: .025em;
+}
+.momentum-panel {
+  background: linear-gradient(155deg, rgba(21,22,24,.97), rgba(8,9,10,.99) 70%);
+}
+.momentum-scoreline {
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 5vw, 54px);
+  padding: 12px 8px 5px;
+}
+.momentum-score-side {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.momentum-scoreline .momentum-score-side strong {
+  color: var(--series-color);
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1;
+  text-shadow: 0 0 13px color-mix(in srgb, var(--series-color) 25%, transparent);
+}
+.momentum-scoreline .momentum-score-side small {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: min(42vw, 290px);
+  overflow: hidden;
+  color: #eef0f3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 750;
+}
+.momentum-score-side small i,
+.momentum-legend-item i {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: var(--series-color);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--series-color) 48%, transparent);
+}
+.momentum-scoreline > span {
+  color: var(--orange-neon);
+  font-size: 15px;
+}
+.momentum-lead {
+  flex-wrap: wrap;
+  gap: 6px 9px;
+  min-height: 25px;
+  padding: 3px 12px 7px;
+}
+.momentum-lead b {
+  color: #f1f4f7;
+  font-size: 9px;
+}
+.momentum-lead small {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.momentum-lead-dot.own,
+.momentum-lead-dot.opponent {
+  background: var(--series-color);
+  color: var(--series-color);
+}
+.momentum-chart,
+.league-team-stock-chart {
+  display: block;
+  width: calc(100% - 24px);
+  height: clamp(164px, 19vw, 226px);
+  margin: 0 12px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.league-stock-chart-wrap {
+  padding: 5px 0 2px;
+}
+.chart-grid path {
+  fill: none;
+  stroke: rgba(202,211,223,.17);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+.chart-y-label,
+.chart-x-label,
+.chart-unit {
+  fill: #aeb9c7;
+  font: 700 9px/1 var(--num);
+}
+.chart-x-label {
+  letter-spacing: .08em;
+}
+.chart-unit {
+  fill: #d0d6df;
+  font-size: 8px;
+  letter-spacing: .08em;
+}
+.chart-axis {
+  fill: none;
+  stroke: rgba(220,226,235,.44);
+  stroke-width: 1.2;
+}
+.momentum-line-outline,
+.league-team-stock-outline {
+  fill: none;
+  stroke: #07090d;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.momentum-line {
+  stroke-width: 2.8;
+  stroke-dasharray: none !important;
+  filter: drop-shadow(0 0 2.5px var(--series-color));
+}
+.momentum-line.own {
+  stroke: var(--series-color, var(--orange-neon));
+}
+.momentum-line.opponent {
+  stroke: var(--series-color, #b9c3d0);
+}
+.momentum-sample-outline {
+  fill: #080a0d;
+  stroke: #080a0d;
+  stroke-width: 2;
+}
+.momentum-sample {
+  fill: var(--series-color);
+  stroke: #f4f6f9;
+  stroke-width: 1.4;
+}
+.momentum-dot-outline {
+  fill: #080a0d;
+  stroke: #080a0d;
+  stroke-width: 2;
+}
+.momentum-dot {
+  fill: var(--series-color);
+  stroke: #fff;
+  stroke-width: 1.8;
+}
+.momentum-legend {
+  justify-content: center;
+  gap: 8px 22px;
+  padding: 5px 10px 7px;
+  color: #f1f4f7;
+  font-size: 9px;
+}
+.momentum-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  color: #f1f4f7;
+  font-weight: 800;
+}
+.momentum-labels {
+  padding: 6px 12px 9px;
+  color: #aeb9c7;
+  font-size: 8px;
+}
+.momentum-labels span:last-child {
+  color: #cbd2dc;
+}
+.league-team-stock-outline {
+  stroke-width: 5.6;
+}
+.league-team-stock-line {
+  fill: none;
+  stroke: var(--team-color);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 2.5px var(--team-color));
+  animation: none;
+}
+.league-team-stock-end {
+  fill: var(--team-color);
+  stroke: #f5f7fa;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px var(--team-color));
+}
+.team-stock-legend {
+  color: #d1d7df;
+}
+.team-stock-legend i {
+  width: 18px;
+  height: 3px;
+  flex-basis: 18px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #58bfff, #b29aff, #39c99b, #ef7898, #ffd166);
+}
+@media (min-width: 1400px) {
+  body[data-layout="monitor"] .touch-app {
+    grid-template-rows: 88px auto minmax(0, 1fr) 32px;
+  }
+  body[data-layout="monitor"] .brand-mark.logo-mark {
+    width: 78px;
+    height: 78px;
+    flex-basis: 78px;
+  }
+  body[data-layout="monitor"] .momentum-chart,
+  body[data-layout="monitor"] .league-team-stock-chart {
+    height: 226px;
+  }
+}
+@media (max-width: 760px) {
+  .touch-header {
+    height: auto;
+    min-height: 58px;
+    align-items: center;
+    padding: 0 2px 5px;
+  }
+  .brand-lockup {
+    min-width: 0;
+    gap: 2px;
+  }
+  .brand-mark.logo-mark {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    margin-right: -2px;
+  }
+  .brand-lockup strong {
+    white-space: normal;
+    line-height: 1.08;
+    font-size: 11px;
+  }
+  .brand-lockup small {
+    display: none;
+  }
+  .connection-lockup {
+    flex: 0 0 auto;
+    gap: 4px;
+  }
+  .momentum-chart,
+  .league-team-stock-chart {
+    height: 174px;
+  }
+  .momentum-scoreline {
+    gap: 12px;
+    padding-top: 10px;
+  }
+  .momentum-scoreline .momentum-score-side small {
+    max-width: 38vw;
+    font-size: 8px;
+  }
+  .momentum-lead small {
+    max-width: 88vw;
+  }
+  .momentum-legend {
+    gap: 6px 14px;
+    font-size: 8px;
+  }
+}
+@media (max-width: 360px) {
+  .brand-mark.logo-mark {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+  .brand-lockup strong {
+    font-size: 10px;
+  }
+  .connection-lockup {
+    gap: 3px;
+    font-size: 5.5px;
+  }
+  .momentum-scoreline {
+    gap: 8px;
+  }
+}
