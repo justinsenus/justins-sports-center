@@ -408,7 +408,8 @@
   }
 
   function espnLiveFields(player, scoringPeriodId, labels = ESPN_STAT_ID_LABELS) {
-    const row = espnStatRows(player, scoringPeriodId).find((candidate) => Number(candidate.statSourceId) === 0);
+    const actualRows = espnStatRows(player, scoringPeriodId).filter((candidate) => Number(candidate.statSourceId) === 0);
+    const row = actualRows.find((candidate) => candidate.stats && Object.keys(candidate.stats).length) || actualRows[0];
     const stats = row && row.stats || {};
     if (!row) return {};
     const value = (key) => finite(stats[key]);
@@ -932,7 +933,7 @@
           total: value
         });
         eventsChanged = true;
-      } else if (seedCurrentScorers && value > 0 && player.event && eventState(player.event).live) {
+      } else if (seedCurrentScorers && value > 0) {
         events.unshift({
           at: Date.now(),
           playerId,
@@ -1107,7 +1108,7 @@
     const unavailable = Math.max(0, catalog - live);
     const oddsStatus = stats.oddsBooks ? `${stats.oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
     const oddsProviders = stats.oddsProviders && stats.oddsProviders.length ? ` • ${stats.oddsProviders.join(" + ")}` : "";
-    return `<section class="source-panel" data-action="refresh" role="button" tabindex="0" aria-label="Refresh projection feeds"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live} LIVE • ${unavailable} NOT ENABLED</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${esc(oddsStatus)}${esc(oddsProviders)}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Tap this panel to refresh. Actual points and projections refresh every 5 seconds; public game lines are supplied by the ESPN scoreboard's sportsbook feed.</p></section>`;
+    return `<section class="source-panel" data-action="refresh" role="button" tabindex="0" aria-label="Refresh projection feeds"><div class="section-kicker">PROJECTION ENGINE</div><div class="source-top"><strong>${esc(status)}</strong><span>${live} LIVE • ${unavailable} NOT ENABLED</span></div><div class="source-bar"><span style="width:${Math.min(100, Math.max(4, live / Math.max(1, catalog) * 100))}%"></span></div><div class="source-meta"><span>UPDATED ${esc(formatAge(consensus.generated_at || state.refreshedAt))}</span><span>${esc(oddsStatus)}${esc(oddsProviders)}</span></div><div class="source-chips">${sourceNames || `<span class="source-chip">PUBLIC ESPN + SLEEPER</span>`}</div><p>Tap this panel to refresh. Sleeper points check every 5 seconds; ESPN points use the synced current-week roster. Public game lines come from the ESPN scoreboard.</p></section>`;
   }
 
   function insightMarkup() {
@@ -1297,7 +1298,7 @@
     const events = state.scoreEvents[state.league] || [];
     const eventMarkup = events.length ? events.slice(0, 6).map((event) => {
       const color = event.teamColor || "#a8b7c9";
-      const delta = event.snapshot ? "LIVE NOW" : `${event.delta > 0 ? "+" : "−"}${number(Math.abs(event.delta))} PTS`;
+      const delta = event.snapshot ? "ON BOARD" : `${event.delta > 0 ? "+" : "−"}${number(Math.abs(event.delta))} PTS`;
       const player = { player_id: event.playerId, full_name: event.name, name: event.name, team: event.team, headshot: event.headshot };
       return `<div class="scoring-feed-row team-event ${event.direction}" style="--team-color:${esc(color)}"><span class="feed-icon">${event.direction === "up" ? "▲" : "▼"}</span><time>${formatAge(event.at)}</time>${playerFace(player, "small")}<span class="feed-player"><strong>${esc(event.name)}</strong><small>${esc(event.team || "NFL")} • <i class="feed-team-swatch" style="background:${esc(color)}"></i>${esc(event.fantasyTeamName || "OWNER UNKNOWN")}</small></span><b class="feed-points"><em class="feed-delta">${delta}</em>${number(event.total)}</b></div>`;
     }).join("") : `<div class="empty-card compact"><strong>WAITING FOR A LEAGUE SCORER</strong><span>Player point changes appear here with the owner team and matching stock-line color.</span></div>`;
