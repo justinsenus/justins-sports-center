@@ -582,3 +582,30 @@ body[data-layout="monitor"] .team-stock-row .league-stock-values small { font-si
   body[data-layout="monitor"] .league-stock-list,
   body[data-layout="monitor"] .league-matchups-list { max-height: none; }
 }
+
+body[data-layout="monitor"] .touch-app { grid-template-rows: auto auto minmax(0,1fr) auto; }
+body[data-layout="monitor"] .touch-header { min-height: 96px; }
+body[data-layout="monitor"] .brand-mark.logo-mark { width: 96px; height: 96px; flex-basis: 96px; }
+body[data-layout="monitor"] .logo-mark img { width: 138%; height: 138%; margin: -19%; filter: drop-shadow(0 4px 6px rgba(0,0,0,.62)); }
+body[data-layout="monitor"] .arcade-roster.own .arcade-player-row {
+  border-color: #30343a;
+  border-left: 2px solid rgba(255,122,0,.72);
+  background: #101214;
+}
+body[data-layout="monitor"] .arcade-roster.own .arcade-player-row:hover,
+body[data-layout="monitor"] .arcade-roster.own .arcade-player-row:focus-visible {
+  border-color: #51565d;
+  border-left-color: var(--orange-neon);
+  background: #191c20;
+}
+body[data-layout="monitor"] .arcade-hero .own .profile-avatar {
+  border: 2px solid #ff9c3a;
+  box-shadow: 0 0 0 2px #141619, 0 0 0 3px rgba(255,122,0,.35);
+}
+body[data-layout="monitor"] .league-stock-panel .team-stock-legend { display: none; }
+
+@media (max-width: 760px) {
+  body[data-layout="monitor"] .touch-header { min-height: 72px; }
+  body[data-layout="monitor"] .brand-mark.logo-mark { width: 70px; height: 70px; flex-basis: 70px; }
+  body[data-layout="monitor"] .logo-mark img { width: 132%; height: 132%; margin: -16%; }
+}
