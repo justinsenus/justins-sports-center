@@ -112,11 +112,13 @@ function normalizePlayer(entry, index, scoringPeriodId, labels) {
   const status = clean(player && (player.injuryStatus || player.injury_status || player.status));
   const allStats = player && Array.isArray(player.stats) ? player.stats : [];
   const periodStats = allStats.filter((row) => Number(row && row.scoringPeriodId) === Number(scoringPeriodId));
-  const actualStats = periodStats.find((row) => Number(row && row.statSourceId) === 0) || {};
+  const actualRows = periodStats.filter((row) => Number(row && row.statSourceId) === 0);
+  const actualStats = actualRows.find((row) => row && row.stats && Object.keys(row.stats).length) || actualRows[0] || {};
+  const actualTotalRow = actualRows.find((row) => numberOrNull(row && (row.appliedTotal ?? row.appliedStatTotal)) != null) || actualStats;
   const projectedStats = periodStats.find((row) => Number(row && row.statSourceId) === 1) || {};
   const pointsValue = firstNumberOrNull(
-    actualStats.appliedTotal,
-    actualStats.appliedStatTotal,
+    actualTotalRow.appliedTotal,
+    actualTotalRow.appliedStatTotal,
     entry && entry.appliedStatTotal,
     entry && entry.playerPoolEntry && entry.playerPoolEntry.appliedStatTotal
   );
