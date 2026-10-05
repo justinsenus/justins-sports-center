@@ -1323,3 +1323,454 @@ body[data-layout="mobile"] .touch-footer { margin-top: 10px; }
 }
 
 .mobile-league-board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 8px; }
+
+/* Orange neon refresh: black and dark gray dashboard with Justin's team always orange. */
+:root {
+  --bg: #050505;
+  --panel: #101010;
+  --panel-2: #171717;
+  --panel-3: #222222;
+  --line: #343434;
+  --text: #fff7ed;
+  --muted: #a3a3a3;
+  --dim: #737373;
+  --red: #ff7a00;
+  --red-soft: #ff9a2f;
+  --blue: #b8b8b8;
+  --cyan: #ffb347;
+  --green: #55ff8a;
+  --amber: #ff7a00;
+  --orange-neon: #ff7a00;
+  --orange-soft: #ffb35c;
+  --dark-card: #111111;
+  --dark-card-2: #1a1a1a;
+}
+
+html, body {
+  background: #050505;
+}
+
+body {
+  background:
+    radial-gradient(circle at 16% -10%, rgba(255,122,0,.24), transparent 29%),
+    radial-gradient(circle at 88% 6%, rgba(255,179,71,.12), transparent 30%),
+    linear-gradient(180deg, #080808 0%, #050505 48%, #0b0b0b 100%);
+}
+
+.touch-header {
+  border-bottom-color: rgba(255,122,0,.42);
+}
+
+.logo-mark {
+  overflow: hidden;
+  border-color: var(--orange-neon);
+  background: #050505;
+  box-shadow: 0 0 18px rgba(255,122,0,.44), inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+.logo-mark img {
+  display: block;
+  width: 94%;
+  height: 94%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 7px rgba(255,122,0,.75));
+}
+
+.brand-lockup strong,
+.arcade-title strong {
+  color: #fff7ed;
+  text-shadow: 0 0 11px rgba(255,122,0,.38);
+}
+
+.brand-lockup small,
+.arcade-title small {
+  color: #d6d3d1;
+}
+
+.control-strip,
+.workspace-panel,
+.source-panel,
+.arcade-panel,
+.player-drawer {
+  border-color: rgba(255,122,0,.28);
+  background: linear-gradient(155deg, rgba(20,20,20,.98), rgba(7,7,7,.99));
+  box-shadow: inset 0 0 0 1px rgba(255,122,0,.05), 0 10px 24px rgba(0,0,0,.28);
+}
+
+.arcade-panel-head {
+  border-bottom-color: rgba(255,122,0,.3);
+  background: linear-gradient(90deg, rgba(255,122,0,.18), rgba(26,26,26,.4));
+}
+
+.top-nav button:hover,
+.top-nav button.active,
+.monitor-tabs button:hover,
+.monitor-tabs button.active {
+  border-color: var(--orange-neon);
+  color: #fff7ed;
+  border-bottom-color: var(--orange-neon);
+  background: linear-gradient(180deg, rgba(255,122,0,.22), transparent);
+  box-shadow: inset 0 -2px 0 var(--orange-neon);
+}
+
+.league-switcher button,
+.week-control .refresh-action,
+.refresh-action,
+.filter,
+.drawer-tabs span,
+.monitor-tabs button {
+  border-color: rgba(255,122,0,.28);
+  background: rgba(20,20,20,.88);
+}
+
+.league-switcher button.active,
+.league-switcher button[data-league="espn"].active,
+.filter.active {
+  border-color: var(--orange-neon);
+  color: var(--orange-soft);
+  background: rgba(255,122,0,.16);
+  box-shadow: inset 0 0 0 1px rgba(255,122,0,.26), 0 0 14px rgba(255,122,0,.16);
+}
+
+.matchup-hero.arcade-hero {
+  border-color: rgba(255,122,0,.74);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,122,0,.28), transparent 43%),
+    linear-gradient(105deg, rgba(24,24,24,.98), rgba(8,8,8,.99) 50%, rgba(30,30,30,.96));
+  box-shadow: inset 0 0 26px rgba(255,122,0,.14), 0 16px 35px rgba(0,0,0,.34);
+}
+
+.matchup-hero::after {
+  background: linear-gradient(90deg, transparent, var(--orange-neon), var(--orange-soft), transparent);
+  box-shadow: 0 0 18px rgba(255,122,0,.8);
+}
+
+.hero-brand-logo {
+  display: block;
+  width: min(190px, 45vw);
+  max-height: 54px;
+  margin: -2px auto 6px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(255,122,0,.85));
+}
+
+.arcade-center-score .hero-vs strong,
+.arcade-center-score .hero-proj,
+.arcade-hero .hero-team-copy small,
+.arcade-row-proj,
+.league-stock-values small,
+.source-meta span:last-child {
+  color: var(--orange-soft);
+}
+
+.win-own {
+  background: linear-gradient(90deg, #ff7a00, #ffb35c);
+  box-shadow: 0 0 14px rgba(255,122,0,.5);
+}
+
+.win-opp {
+  background: linear-gradient(90deg, #6b7280, #a3a3a3);
+}
+
+.profile-avatar,
+.player-face {
+  border-color: #5f5f5f;
+  background: #181818;
+}
+
+.arcade-hero .own .profile-avatar,
+.arcade-roster.own,
+.arcade-roster.own .arcade-player-row,
+.player-card.own {
+  border-color: var(--orange-neon);
+}
+
+.arcade-hero .own .profile-avatar,
+.arcade-player-row.own .player-face,
+.player-card.own .player-face {
+  border-color: var(--orange-neon);
+  box-shadow: 0 0 0 3px rgba(255,122,0,.14), 0 0 18px rgba(255,122,0,.36);
+}
+
+.arcade-roster.own .arcade-panel-head b,
+.red-heading b,
+.momentum-legend-item.own,
+.momentum-legend-item.own em,
+.own-score,
+.table-actual,
+.drawer-heading span {
+  color: var(--orange-soft);
+}
+
+.arcade-roster.opponent,
+.arcade-player-row.opponent,
+.player-card.opponent {
+  border-color: #565656;
+}
+
+.arcade-roster.opponent .arcade-panel-head b,
+.blue-heading b,
+.opp-score,
+.momentum-legend-item.opponent,
+.momentum-legend-item.opponent em {
+  color: #d4d4d4;
+}
+
+.arcade-player-row,
+.player-card,
+.players-table-row,
+.injury-card,
+.next-game-row,
+.injury-watch-row,
+.scoring-feed-row,
+.league-stock-row.team-stock-row {
+  background: linear-gradient(100deg, rgba(28,28,28,.94), rgba(10,10,10,.98));
+  border-color: rgba(255,122,0,.2);
+}
+
+.arcade-player-row:hover,
+.player-card:hover,
+.players-table-row:hover,
+.injury-card:hover,
+.injury-watch-row:hover {
+  border-color: var(--orange-neon);
+  box-shadow: 0 0 14px rgba(255,122,0,.16);
+}
+
+.arcade-pos {
+  border-color: rgba(255,122,0,.52);
+  color: #fff7ed;
+  background: #241409;
+}
+
+.momentum-panel,
+.league-stock-panel,
+.scoring-feed-panel,
+.league-matchups-panel {
+  border-color: rgba(255,122,0,.48);
+}
+
+.chart-grid path,
+.spark-grid,
+.movement-zero {
+  stroke: rgba(255,255,255,.13);
+}
+
+.momentum-line.own,
+.spark-line.own {
+  stroke: var(--orange-neon);
+  filter: drop-shadow(0 0 5px rgba(255,122,0,.75));
+}
+
+.momentum-line.opponent,
+.spark-line.opponent {
+  stroke: #a3a3a3;
+  filter: drop-shadow(0 0 4px rgba(212,212,212,.35));
+}
+
+.league-team-stock-line,
+.league-team-stock-end,
+.team-stock-key {
+  filter: drop-shadow(0 0 5px var(--team-color));
+}
+
+.team-stock-row[style*="#ff7a00"] {
+  box-shadow: inset 0 0 0 1px rgba(255,122,0,.24), 0 0 10px rgba(255,122,0,.12);
+}
+
+.league-matchups-list {
+  display: grid;
+  gap: 7px;
+  max-height: 290px;
+  overflow: auto;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,122,0,.72) transparent;
+}
+
+.league-matchup-card {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(255,122,0,.2);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(24,24,24,.96), rgba(8,8,8,.98));
+}
+
+.league-matchup-card.own-matchup {
+  border-color: var(--orange-neon);
+  box-shadow: 0 0 15px rgba(255,122,0,.16), inset 0 0 0 1px rgba(255,122,0,.14);
+}
+
+.league-matchup-top,
+.league-matchup-side {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.league-matchup-top {
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+.league-matchup-top b {
+  color: var(--orange-soft);
+  font-size: 8px;
+}
+
+.league-matchup-side {
+  grid-template-columns: none;
+  gap: 7px;
+}
+
+.league-matchup-side i {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: var(--team-color);
+  box-shadow: 0 0 9px var(--team-color);
+}
+
+.league-matchup-side span {
+  min-width: 0;
+  flex: 1;
+}
+
+.league-matchup-side strong,
+.league-matchup-side small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.league-matchup-side strong {
+  color: #fff7ed;
+  font-size: 9px;
+  font-weight: 950;
+}
+
+.league-matchup-side small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 6px;
+  font-weight: 900;
+}
+
+.league-matchup-side b {
+  color: #fff7ed;
+  font: 900 18px/.9 var(--num);
+}
+
+.league-matchup-side.winning strong,
+.league-matchup-side.winning b {
+  color: var(--team-color);
+  text-shadow: 0 0 9px var(--team-color);
+}
+
+.league-matchup-meter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #050505;
+}
+
+.league-matchup-meter span {
+  display: block;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--team-color);
+  box-shadow: 0 0 10px var(--team-color);
+}
+
+.scoring-feed-row.team-event {
+  background: linear-gradient(100deg, rgba(20,20,20,.96), rgba(7,7,7,.99));
+}
+
+.scoring-feed-row.team-event .feed-icon {
+  color: #0b0b0b;
+  background: var(--team-color);
+  box-shadow: 0 0 9px var(--team-color);
+}
+
+.feed-team-swatch {
+  border-radius: 50%;
+  box-shadow: 0 0 7px currentColor;
+}
+
+.drawer-context-grid > div,
+.stat-grid > div,
+.focus-stat-grid > div,
+.player-news-card,
+.source-value,
+.empty-card {
+  border-color: rgba(255,122,0,.2);
+  background: #141414;
+}
+
+.stat-grid b,
+.focus-stat-grid b {
+  color: #fff7ed;
+}
+
+.player-stat-grid > div:has(small) small {
+  color: var(--orange-soft);
+}
+
+.live-arcade-head {
+  border-color: rgba(255,122,0,.42);
+  background: linear-gradient(100deg, rgba(35,20,8,.88), rgba(15,15,15,.98) 52%, rgba(30,30,30,.9));
+}
+
+@media (min-width: 900px) {
+  body[data-layout="monitor"] .hero-brand-logo {
+    width: min(230px, 18vw);
+    max-height: 62px;
+  }
+  body[data-layout="monitor"] .league-matchups-list {
+    max-height: 360px;
+    gap: 8px;
+    padding: 10px;
+  }
+  body[data-layout="monitor"] .league-matchup-card {
+    padding: 10px;
+    gap: 7px;
+  }
+  body[data-layout="monitor"] .league-matchup-top,
+  body[data-layout="monitor"] .league-matchup-side small {
+    font-size: 8px;
+  }
+  body[data-layout="monitor"] .league-matchup-top b,
+  body[data-layout="monitor"] .league-matchup-side strong {
+    font-size: 11px;
+  }
+  body[data-layout="monitor"] .league-matchup-side b {
+    font-size: 24px;
+  }
+  body[data-layout="monitor"] .league-matchup-meter {
+    height: 8px;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero-brand-logo {
+    width: min(170px, 54vw);
+    max-height: 46px;
+  }
+  .league-matchups-list {
+    max-height: none;
+  }
+  .league-matchup-side b {
+    font-size: 16px;
+  }
+}
