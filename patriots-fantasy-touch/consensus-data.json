@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-05T00:30:11.923Z",
+  "generated_at": "2026-10-05T06:06:08.761Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,8 +12,8 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T00:30:11.923Z",
-      "count": 15,
+      "updated_at": "2026-10-05T06:06:08.761Z",
+      "count": 16,
       "access": "public fallback"
     },
     {
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T00:30:11.923Z",
+      "updated_at": "2026-10-05T06:06:08.761Z",
       "count": 8
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T00:30:11.923Z",
+      "updated_at": "2026-10-05T06:06:08.761Z",
       "count": 34
     },
     {
@@ -456,16 +456,16 @@
       "name": "Chuba Hubbard",
       "team": "CAR",
       "position": "RB",
-      "consensus": 14.7,
-      "min": 14.7,
-      "max": 14.7,
+      "consensus": 14.9,
+      "min": 14.9,
+      "max": 14.9,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 14.7
+          "value": 14.9
         }
       ],
       "outlier": null,
@@ -711,12 +711,18 @@
       "name": "Brandon Aubrey",
       "team": "DAL",
       "position": "K",
-      "consensus": null,
-      "min": null,
-      "max": null,
-      "range": null,
-      "sourceCount": 0,
-      "sources": [],
+      "consensus": 8,
+      "min": 8,
+      "max": 8,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 8
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
