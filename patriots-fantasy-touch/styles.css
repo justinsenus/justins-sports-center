@@ -1774,3 +1774,24 @@ body {
     font-size: 16px;
   }
 }
+
+/* Give every league opponent a clear identity that matches its stock line. */
+.league-stock-row.team-stock-row {
+  border-color: color-mix(in srgb, var(--team-color) 70%, #151515);
+  box-shadow: inset 3px 0 0 var(--team-color), 0 0 10px color-mix(in srgb, var(--team-color) 14%, transparent);
+}
+
+.league-matchup-side strong,
+.league-matchup-side b {
+  color: var(--team-color);
+}
+
+.scoring-feed-row.team-event {
+  border-color: color-mix(in srgb, var(--team-color) 70%, #151515);
+  box-shadow: inset 3px 0 0 var(--team-color), 0 0 10px color-mix(in srgb, var(--team-color) 12%, transparent);
+}
+
+.scoring-feed-row.team-event .player-face.small {
+  border-color: var(--team-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--team-color) 36%, transparent);
+}
