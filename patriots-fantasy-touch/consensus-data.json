@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-05T14:27:57.879Z",
+  "generated_at": "2026-10-05T21:34:03.046Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T14:27:57.879Z",
+      "updated_at": "2026-10-05T21:34:03.046Z",
       "count": 16,
       "access": "public fallback"
     },
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T14:27:57.879Z",
+      "updated_at": "2026-10-05T21:34:03.046Z",
       "count": 8
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-05T14:27:57.879Z",
+      "updated_at": "2026-10-05T21:34:03.046Z",
       "count": 34
     },
     {
@@ -528,10 +528,10 @@
       "name": "Chris Olave",
       "team": "NO",
       "position": "WR",
-      "consensus": 16.9,
-      "min": 15.5,
+      "consensus": 16.8,
+      "min": 15.4,
       "max": 18.2,
-      "range": 2.7,
+      "range": 2.8,
       "sourceCount": 2,
       "sources": [
         {
@@ -542,12 +542,12 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 15.5
+          "value": 15.4
         }
       ],
       "outlier": {
         "source": "FantasyPros public",
-        "value": 15.5,
+        "value": 15.4,
         "delta": 1.4
       },
       "odds": [],
@@ -923,7 +923,7 @@
       "market": "PROJECTION OUTLIER",
       "source": "FantasyPros public",
       "delta": 1.4,
-      "range": 2.7,
+      "range": 2.8,
       "rank": "01"
     },
     {
