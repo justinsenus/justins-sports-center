@@ -56,4 +56,16 @@ app.dispatch({playerId:'p1'});assert.equal(commands,1);assert.equal(app.model().
 app.applyUI({playerId:null,view:'stock'});assert.equal(commands,1);assert.equal(app.getUI().view,'stock');assert.equal(app.model().player,null);
 app.applyUI({matchupId:'game-1',view:'overview'});assert.equal(app.model().league.remoteMatchupId,'game-1');assert.equal(app.model().opponentActual,22.2);
 app.applyUI({playerId:'p1'});state.espn.myTeam.pointsMap.p1=31.1;app.render();assert.equal(app.model().player.actual,31.1);
-console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, player open/close, and live player refresh.');
+app.applyUI({playerId:null,matchupId:'game-1'});
+state.espn.matchups[0].homeTotal=35.7;
+state.espn.matchups[0].awayTotal=21.8;
+assert.equal(app.model().ownActual,35.7);
+assert.equal(app.model().ownFinish,35.7);
+assert.equal(app.model().opponentFinish,21.8);
+state.espn.myTeam.players.p1.status='LIVE';
+state.espn.myTeam.pointsMap.p1=10;
+assert.equal(app.model().ownFinish,45.7);
+state.espn.myTeam.players.p1.status='FINAL';
+state.espn.myTeam.pointsMap.p1=-2;
+assert.equal(app.model().ownFinish,35.7);
+console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, player open/close, live player refresh, corrected team totals, remaining projections, and negative final scores.');

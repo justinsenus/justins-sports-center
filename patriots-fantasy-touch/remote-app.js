@@ -873,8 +873,8 @@
       const home = byId.get(String(pair.homeTeamId)) || byId.get(String(pair.home && pair.home.teamId || ""));
       const away = byId.get(String(pair.awayTeamId)) || byId.get(String(pair.away && pair.away.teamId || ""));
       if (!home || !away) return null;
-      const homeScore = started ? finite(pair.homeTotal) ?? leagueTeamMetric(home, true) : finite(pair.homeProjected) ?? leagueTeamMetric(home, false);
-      const awayScore = started ? finite(pair.awayTotal) ?? leagueTeamMetric(away, true) : finite(pair.awayProjected) ?? leagueTeamMetric(away, false);
+      const homeScore = started ? finite(pair.homeTotal) ?? finite(pair.homeScore) ?? leagueTeamMetric(home, true) : finite(pair.homeProjected) ?? finite(pair.homeScore) ?? leagueTeamMetric(home, false);
+      const awayScore = started ? finite(pair.awayTotal) ?? finite(pair.awayScore) ?? leagueTeamMetric(away, true) : finite(pair.awayProjected) ?? finite(pair.awayScore) ?? leagueTeamMetric(away, false);
       const ownGame = isOwnFantasyTeam(home) || isOwnFantasyTeam(away);
       return { id: pair.id || `matchup-${index}`, home, away, homeScore, awayScore, ownGame };
     }).filter(Boolean);
@@ -1002,7 +1002,8 @@
       ownRecord: pair.home.record || {}, opponentRecord: pair.away.record || {},
       own: (pair.home.players || []).map(p => ({...p, side:"own"})),
       opponent: (pair.away.players || []).map(p => ({...p, side:"opponent"})),
-      ownActual: finite(pair.home.total) || 0, opponentActual: finite(pair.away.total) || 0,
+      ownActual: finite(pair.homeScore) ?? finite(pair.home.total) ?? 0,
+      opponentActual: finite(pair.awayScore) ?? finite(pair.away.total) ?? 0,
       remoteMatchupId: state.selectedMatchup };
   }
 
@@ -1593,7 +1594,7 @@
   }
 
   function playerFinishEstimate(player) {
-    const actual = Math.max(0, actualForPlayer(player));
+    const actual = actualForPlayer(player);
     const projection = Math.max(actual, projectionForPlayer(player));
     const event = player.event || findPlayerEvent(player);
     const game = event && eventState(event);
@@ -1601,11 +1602,14 @@
     const live = player.status === "LIVE" || Boolean(game && game.live);
     if (final) return { finish: actual, remaining: 0, isLive: false };
     if (live) return { finish: actual + Math.max(0, projection - actual), remaining: Math.max(0, projection - actual), isLive: true };
-    return { finish: Math.max(actual, projection), remaining: projection, isLive: false };
+    return { finish: Math.max(actual, projection), remaining: Math.max(0, projection - actual), isLive: false };
   }
 
   function teamFinishEstimate(league, side) {
-    return (league[side] || []).filter((player) => player.starter !== false).reduce((sum, player) => sum + playerFinishEstimate(player).finish, 0);
+    const remaining = (league[side] || []).filter((player) => player.starter !== false)
+      .reduce((sum, player) => sum + playerFinishEstimate(player).remaining, 0);
+    // League totals include provider corrections that may not yet be in player rows.
+    return leagueActual(league, side) + remaining;
   }
 
   function teamFinishUncertainty(league, side) {
@@ -1633,6 +1637,8 @@
   }
   function renderHero(league) {
     const started = leagueStarted(league);
+    const ownColor = ((league.teams || []).find(team => team.name === league.ownName) || {}).teamColor || OWN_TEAM_COLOR;
+    const opponentColor = ((league.teams || []).find(team => team.name === league.opponentName) || {}).teamColor || '#9ca3af';
     const ownActual = leagueActual(league, "own");
     const opponentActual = leagueActual(league, "opponent");
     const ownHasProj = (league.own || []).some((player) => finite(player.projected) != null || finite(player.consensus && player.consensus.value) != null);
@@ -1645,7 +1651,7 @@
     const opponentDelta = teamDelta(league, "opponent");
     const stats = sourceStats();
     const oddsMeta = stats.oddsBooks ? `${stats.oddsBooks} LIVE ODDS` : "GAME ODDS WAITING";
-    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side" style="--team-color:${OWN_TEAM_COLOR}"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><img class="hero-brand-logo" src="${brandLogo()}" alt="The Big Senus logo"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL READY"}</span><span>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN CHANCE • ${number(ownFinish)}–${number(opponentFinish)} FINISH</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(stats.live)} LIVE FEEDS</span><span>${esc(oddsMeta)}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
+    return `<section class="matchup-hero arcade-hero"><div class="hero-team own arcade-side" style="--team-color:${esc(ownColor)}"><div class="hero-team-copy"><span>YOUR TEAM • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.ownName)}</strong><small>${esc(recordLabel(league.ownRecord))} • WEEK ${esc(league.week || state.week)} • ${started ? "LIVE TOTALS" : "PREGAME PROJECTION"}</small></div>${profileAvatar(league.ownAvatar, league.ownName, "hero-profile") }<div class="hero-score-block"><strong>${number(ownActual)}</strong>${deltaMarkup(ownDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL"}</small></div></div><div class="hero-score arcade-center-score"><img class="hero-brand-logo" src="${brandLogo()}" alt="The Big Senus logo"><span class="live-pill ${started ? "active" : ""}"><i></i>${started ? "LIVE NOW" : "PREGAME"}</span><div class="hero-vs"><strong>VS</strong><span>WEEK ${esc(league.week || state.week)}</span></div><div class="hero-proj"><span>${started ? "EST. FINISH" : "PROJ"} ${ownHasProj ? number(ownFinish) : "MODEL READY"}</span><span>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL READY"}</span></div><div class="win-bar"><span class="win-own" style="width:${ownPct}%"></span><span class="win-label">${ownPct}% PROJECTED WIN CHANCE • ${number(ownFinish)}–${number(opponentFinish)} FINISH</span><span class="win-opp" style="width:${opponentPct}%"></span></div></div><div class="hero-team opponent arcade-side" style="--team-color:${esc(opponentColor)}"><div class="hero-score-block"><strong>${number(opponentActual)}</strong>${deltaMarkup(opponentDelta)}<small>${started ? "EST. FINISH" : "PROJ"} ${oppHasProj ? number(opponentFinish) : "MODEL"}</small></div>${profileAvatar(league.opponentAvatar, league.opponentName, "hero-profile") }<div class="hero-team-copy"><span>OPPONENT • ${state.league === "sleeper" ? "SLEEPER" : "ESPN"}</span><strong>${esc(league.opponentName)}</strong><small>${esc(recordLabel(league.opponentRecord))} • ${started ? "MATCHUP LIVE" : "MATCHUP PREVIEW"}</small></div></div><div class="hero-meta"><span>${esc(stats.live)} LIVE FEEDS</span><span>${esc(oddsMeta)}</span><span>UPDATED ${esc(formatAge(state.refreshedAt))}</span></div></section>`;
   }
 
   function renderMonitorTabs() {
@@ -1981,4 +1987,3 @@
     if (clock) clock.textContent = formatClock(new Date());
   }, 1000);
 })();
-

@@ -8,7 +8,7 @@
   const movement=(key,value)=>{const old=previousScores.get(key);previousScores.set(key,value);return old===undefined||Math.abs(value-old)<.05?'':value>old?'score-up':'score-down';};
   function hero(m) {
     const l=m.league;
-    return `<section class="tv-matchup"><div class="tv-side" style="--side:${esc(sideColor(l,l.ownName))}"><div class="tv-team-title">${l.ownAvatar?`<img src="${esc(l.ownAvatar)}" alt="">`:''}<h1>${esc(l.ownName)}</h1></div><strong class="tv-big-score ${movement(m.ui.league+':'+(m.ui.matchupId||'mine')+':own',m.ownActual)}">${n(m.ownActual)}</strong><div class="tv-estimate">EST. FINISH <b>${n(m.ownFinish)}</b></div></div><div class="tv-versus"><span>WEEK ${esc(l.week)}</span><b>VS</b><small>${m.winChance}% / ${100-m.winChance}%</small></div><div class="tv-side" style="--side:${esc(sideColor(l,l.opponentName))}"><div class="tv-team-title">${l.opponentAvatar?`<img src="${esc(l.opponentAvatar)}" alt="">`:''}<h1>${esc(l.opponentName)}</h1></div><strong class="tv-big-score ${movement(m.ui.league+':'+(m.ui.matchupId||'mine')+':opponent',m.opponentActual)}">${n(m.opponentActual)}</strong><div class="tv-estimate">EST. FINISH <b>${n(m.opponentFinish)}</b></div></div></section>`;
+    return `<section class="tv-matchup"><div class="tv-side" style="--side:${esc(sideColor(l,l.ownName))}"><div class="tv-team-title">${l.ownAvatar?`<img src="${esc(l.ownAvatar)}" alt="" onerror="this.hidden=true">`:''}<h1>${esc(l.ownName)}</h1></div><strong class="tv-big-score ${movement(m.ui.league+':'+(m.ui.matchupId||'mine')+':own',m.ownActual)}">${n(m.ownActual)}</strong><div class="tv-estimate">EST. FINISH <b>${n(m.ownFinish)}</b></div></div><div class="tv-versus"><span>WEEK ${esc(l.week)}</span><b>VS</b><small>${m.winChance}% / ${100-m.winChance}%</small></div><div class="tv-side" style="--side:${esc(sideColor(l,l.opponentName))}"><div class="tv-team-title">${l.opponentAvatar?`<img src="${esc(l.opponentAvatar)}" alt="" onerror="this.hidden=true">`:''}<h1>${esc(l.opponentName)}</h1></div><strong class="tv-big-score ${movement(m.ui.league+':'+(m.ui.matchupId||'mine')+':opponent',m.opponentActual)}">${n(m.opponentActual)}</strong><div class="tv-estimate">EST. FINISH <b>${n(m.opponentFinish)}</b></div></div></section>`;
   }
   function player(m) {
     const p=m.player;
@@ -34,7 +34,7 @@
   if(document.body.dataset.screen==='tv') {
     window.FantasyTV={render:()=>{
       const m=app.model(), l=m.league, stage=document.getElementById('tvStage');
-      document.getElementById('tvContext').textContent=m.ui.league.toUpperCase()+' · '+labels[m.ui.view];
+      document.getElementById('tvContext').textContent=m.ui.league.toUpperCase()+' · '+(m.ui.playerId?'PLAYER DETAIL':labels[m.ui.view]);
       document.getElementById('tvFeedStatus').textContent=m.loading?'DATA FEEDS CONNECTING':m.error?'PROVIDER FEED PARTIAL':'LIVE LEAGUE DATA';
       document.getElementById('tvFeedStatus').className=m.error?'feed-partial':'';
       document.getElementById('tvUpdated').textContent=m.updated?'UPDATED '+new Date(m.updated).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'WAITING FOR PROVIDERS';
