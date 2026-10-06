@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Justin’s live fantasy football command center for Sleeper and ESPN leagues.">
+  <title>Justin’s Command Center · Touch Remote</title>
+  <link rel="stylesheet" href="../patriots-fantasy-touch/styles.css?v=38">
+  <link rel="stylesheet" href="../remote/screens.css?v=1">
+</head>
+<body data-root="../patriots-fantasy-touch/" data-layout="monitor" data-screen="touch">
+  <div class="touch-app">
+    <header class="touch-header">
+      <div class="brand-lockup"><span class="brand-mark logo-mark"><img src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin Senus mascot"></span><div><strong>Justin’s Fantasy Command Center</strong><small>HP TOUCH REMOTE • SLEEPER + ESPN • LIVE</small></div></div>
+      <nav class="top-nav" aria-label="Fantasy views">
+        <button data-view="overview" class="active" type="button">HOME</button>
+        <button data-view="matchups" type="button">MATCHUPS</button>
+        <button data-view="players" type="button">PLAYERS</button>
+        <button data-view="injuries" type="button">INJURIES</button>
+        <button data-view="live" type="button">LIVE GAMES</button>
+      </nav>
+      <div class="connection-lockup"><span id="connectionDot" class="status-dot"></span><span id="connectionText">CONNECTING</span><span id="clock">--:--</span></div>
+    </header>
+
+    <section class="control-strip">
+      <div class="league-switcher"><span class="strip-label">LEAGUE</span><button data-league="sleeper" class="active" type="button">SLEEPER <b>THE BIG SENUS</b></button><button data-league="espn" type="button">ESPN <b>GUMBY'S BIG D</b></button></div>
+      <div class="week-control"><strong id="weekLabel">WEEK —</strong><button class="refresh-action" data-action="refresh" type="button">REFRESH NOW</button></div>
+      <div class="control-status"><span id="sourceStatus">FEEDS SYNCING</span><span id="oddsStatus">ODDS NOT CONNECTED</span></div>
+    </section>
+
+    <section class="remote-dock" aria-label="TV controls">
+      <div class="remote-dock-status"><span id="remoteStatus" role="status">Pair your TV</span><small id="onTV">MATCHUP CENTER · SLEEPER</small></div>
+      <button id="remoteToggle" type="button">PAIR TV</button>
+      <button id="myMatchup" type="button">MY MATCHUP</button>
+      <button data-view="stock" type="button">STOCK BOARD</button>
+      <button data-view="league" type="button">LEAGUE MATCHUPS</button>
+      <button data-view="patriots" type="button">PATRIOTS</button>
+      <button id="closeOnTV" type="button">CLOSE PLAYER</button>
+    </section>
+    <main>
+      <section id="matchupHero"><div class="loading-panel">LOADING MATCHUP CENTER…</div></section>
+      <section id="workspace" class="workspace"><div class="loading-panel">LOADING LIVE FANTASY DATA…</div></section>
+    </main>
+
+    <aside id="playerDrawer" class="player-drawer" aria-live="polite"></aside>
+
+    <footer class="touch-footer"><span><i class="footer-dot"></i>FANTASY DATA ONLY • ACTUAL/LIVE PRIMARY • PROJ ALWAYS VISIBLE</span><span id="lastSync">SYNC --:--</span></footer>
+  </div>
+  <section id="pairPanel" class="pair-panel touch-pair" aria-label="Connect to your TV">
+    <img src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+    <span class="pair-kicker">HP + IPAD TOUCH CONTROLLER</span><h1>Connect to your TV.</h1>
+    <p>Open the TV display on your Samsung first. Enter its 8-character pairing code below.</p>
+    <form id="pairForm"><label for="pairInput">TV pairing code</label><input id="pairInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="ABCD 2345" required aria-describedby="pairError"><button id="pairSubmit" type="submit">CONNECT TO TV</button></form>
+    <p id="pairError" role="status"></p><div class="pair-actions"><button id="pairCancel" class="quiet-button" type="button">Use local controls</button><button id="unpair" class="quiet-button" type="button">Forget pairing</button></div>
+  </section>
+  <script src="../patriots-fantasy-touch/source-catalog.js?v=2"></script>
+  <script src="../remote/config.js?v=1"></script>
+  <script src="../patriots-fantasy-touch/remote-app.js?v=1" defer></script>
+  <script src="../remote/screens.js?v=1" defer></script>
+  <script src="../remote/session.js?v=1" defer></script>
+</body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505"><title>Justin’s Command Center · TV</title>
+  <meta name="description" content="Big-screen fantasy scoreboard controlled from your HP or iPad.">
+  <link rel="stylesheet" href="../patriots-fantasy-touch/styles.css?v=38">
+  <link rel="stylesheet" href="../remote/screens.css?v=1">
+</head>
+<body data-screen="tv" data-root="../patriots-fantasy-touch/" data-layout="monitor">
+  <div class="tv-shell">
+    <header class="tv-header"><div class="tv-brand"><img src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot"><div><strong>Justin’s Fantasy Command Center</strong><span id="tvContext">SLEEPER · MATCHUP CENTER</span></div></div><div class="tv-connection"><span id="remoteStatus" role="status">Starting TV session…</span><small>PAIR <b id="remoteCode">--------</b> · <time id="tvClock">--:--</time></small></div></header>
+    <main id="tvStage" class="tv-stage" aria-live="off"><div class="tv-loading">Connecting the live scoreboard…</div></main>
+    <footer class="tv-footer"><span id="tvFeedStatus">DATA FEEDS CONNECTING</span><span>CONTROL FROM HP / IPAD · LIVE SCORES CONTINUE AUTOMATICALLY</span><span id="tvUpdated">WAITING FOR PROVIDERS</span></footer>
+  </div>
+  <section id="pairPanel" class="pair-panel tv-pair" aria-label="Pair your touch controller">
+    <img src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+    <span class="pair-kicker">YOUR TV. YOUR TOUCHSCREEN.</span><h1>Make your HP the remote.</h1>
+    <p>Open the touch controller on your HP or iPad. Enter this TV code.</p>
+    <strong id="pairDisplay" class="pair-display">STARTING…</strong>
+    <p id="pairAddress" class="pair-address"></p><p id="pairError" role="status"></p>
+    <button id="newRoom" type="button">New pairing code</button><button id="watchLocal" class="quiet-button" type="button">Watch while I pair</button>
+  </section>
+  <script src="../patriots-fantasy-touch/source-catalog.js?v=2"></script>
+  <script src="../remote/config.js?v=1"></script>
+  <script src="../patriots-fantasy-touch/remote-app.js?v=1" defer></script>
+  <script src="../remote/screens.js?v=1" defer></script>
+  <script src="../remote/session.js?v=1" defer></script>
+</body></html>
