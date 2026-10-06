@@ -29,7 +29,7 @@ body[data-screen=touch] .league-matchup-card { cursor:pointer; touch-action:mani
 body[data-screen=touch] .league-matchup-card:focus-visible { outline:2px solid white; outline-offset:3px; }
 body[data-screen=touch] #workspace { touch-action:pan-y; }
 body[data-screen=touch] #closeDrawer { min-width:54px; min-height:54px; }
-body[data-screen=tv] { margin:0; overflow:hidden; background:#050505; color:#fff; font-family:Arial,Helvetica,sans-serif; }
+body[data-screen=tv][data-layout=monitor] { margin:0; overflow:hidden; background:#050505; color:#fff; font-family:Arial,Helvetica,sans-serif; }
 .tv-shell { height:100vh; height:100dvh; box-sizing:border-box; padding:1.6vh 2vw; display:grid; grid-template-rows:auto minmax(0,1fr) auto; gap:1.4vh; }
 .tv-header { display:flex; align-items:center; justify-content:space-between; gap:20px; border-bottom:1px solid #ff7a0060; padding:0 0 1vh; }
 .tv-brand { display:flex; gap:1vw; align-items:center; }
@@ -54,50 +54,50 @@ body[data-screen=tv] { margin:0; overflow:hidden; background:#050505; color:#fff
 .tv-versus b { font-size:clamp(28px,2.8vw,65px); color:#ff8b27; }
 .tv-versus span,.tv-versus small { font-size:clamp(10px,1vw,24px); white-space:nowrap; }
 .tv-overview-bottom { min-height:0; flex:1; display:grid; grid-template-columns:1.65fr 1fr; gap:1.4vw; }
-body[data-screen=tv] .arcade-panel { background:#0e1014; border:1px solid #ff7a0070; border-radius:14px; box-shadow:none; min-height:0; margin:0; overflow:hidden; display:flex; flex-direction:column; }
-body[data-screen=tv] .arcade-panel-head { padding:1.3vh 1.2vw; min-height:0; background:#131519; border-bottom:1px solid #3b2a18; flex-shrink:0; }
-body[data-screen=tv] .arcade-panel-head b { font-size:clamp(16px,1.4vw,30px); color:#ff902f; }
-body[data-screen=tv] .arcade-panel-head small { font-size:clamp(9px,.8vw,18px); margin-top:6px; }
-body[data-screen=tv] .arcade-live-indicator { font-size:clamp(10px,.8vw,18px); }
-body[data-screen=tv] .momentum-score-row { margin:0; padding:.5vh .8vw; flex-shrink:0; }
-body[data-screen=tv] .momentum-score-side > strong { font-size:clamp(28px,2.4vw,56px); }
-body[data-screen=tv] .momentum-score-side > span { font-size:clamp(10px,1vw,23px); }
-body[data-screen=tv] .momentum-lead-banner { margin:.4vh .7vw; padding:.5vh; font-size:clamp(9px,.8vw,18px); flex-shrink:0; }
-body[data-screen=tv] .momentum-chart-wrap { min-height:0; flex:1; display:flex; flex-direction:column; padding:0 .7vw; }
-body[data-screen=tv] .stock-chart { min-height:0; width:calc(100% - 1.4vw); margin:0 .7vw; box-sizing:border-box; flex:1; height:auto !important; max-height:none; }
-body[data-screen=tv] .momentum-labels,body[data-screen=tv] .momentum-team-labels { padding:.5vh .7vw; font-size:clamp(10px,.85vw,19px); flex-shrink:0; }
-body[data-screen=tv] .momentum-team-labels b { font-size:inherit; }
-body[data-screen=tv] .chart-y-label,body[data-screen=tv] .chart-x-label { font-size:9px; fill:#a3acbc; }
-body[data-screen=tv] .stock-chart polyline { vector-effect:non-scaling-stroke; }
-body[data-screen=tv] .league-team-stock-line { stroke-width:3px; }
-body[data-screen=tv] .league-team-stock-outline { stroke:#e6eaf1; stroke-width:5px; opacity:.18; }
-body[data-screen=tv] .scoring-feed-list { padding:.5vh .7vw; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+body[data-screen=tv][data-layout=monitor] .arcade-panel { background:#0e1014; border:1px solid #ff7a0070; border-radius:14px; box-shadow:none; min-height:0; margin:0; overflow:hidden; display:flex; flex-direction:column; }
+body[data-screen=tv][data-layout=monitor] .arcade-panel-head { padding:1.3vh 1.2vw; min-height:0; background:#131519; border-bottom:1px solid #3b2a18; flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .arcade-panel-head b { font-size:clamp(16px,1.4vw,30px); color:#ff902f; }
+body[data-screen=tv][data-layout=monitor] .arcade-panel-head small { font-size:clamp(9px,.8vw,18px); margin-top:6px; }
+body[data-screen=tv][data-layout=monitor] .arcade-live-indicator { font-size:clamp(10px,.8vw,18px); }
+body[data-screen=tv][data-layout=monitor] .momentum-score-row { margin:0; padding:.5vh .8vw; flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .momentum-score-side > strong { font-size:clamp(28px,2.4vw,56px); }
+body[data-screen=tv][data-layout=monitor] .momentum-score-side > span { font-size:clamp(10px,1vw,23px); }
+body[data-screen=tv][data-layout=monitor] .momentum-lead-banner { margin:.4vh .7vw; padding:.5vh; font-size:clamp(9px,.8vw,18px); flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .momentum-chart-wrap { min-height:0; flex:1; display:flex; flex-direction:column; padding:0 .7vw; }
+body[data-screen=tv][data-layout=monitor] .stock-chart { min-height:0; width:calc(100% - 1.4vw); margin:0 .7vw; box-sizing:border-box; flex:1; height:auto !important; max-height:none; }
+body[data-screen=tv][data-layout=monitor] .momentum-labels,body[data-screen=tv][data-layout=monitor] .momentum-team-labels { padding:.5vh .7vw; font-size:clamp(10px,.85vw,19px); flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .momentum-team-labels b { font-size:inherit; }
+body[data-screen=tv][data-layout=monitor] .chart-y-label,body[data-screen=tv][data-layout=monitor] .chart-x-label { font-size:9px; fill:#a3acbc; }
+body[data-screen=tv][data-layout=monitor] .stock-chart polyline { vector-effect:non-scaling-stroke; }
+body[data-screen=tv][data-layout=monitor] .league-team-stock-line { stroke-width:3px; }
+body[data-screen=tv][data-layout=monitor] .league-team-stock-outline { stroke:#e6eaf1; stroke-width:5px; opacity:.18; }
+body[data-screen=tv][data-layout=monitor] .scoring-feed-list { padding:.5vh .7vw; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
 body[data-screen=tv][data-layout=monitor] .scoring-feed-row.team-event { padding:1.1vh .4vw; min-height:0; gap:.6vw; grid-template-columns:18px auto 3.6vw minmax(0,1fr) auto; }
 body[data-screen=tv][data-layout=monitor] .scoring-feed-row time { font-size:clamp(8px,.7vw,16px); }
 body[data-screen=tv][data-layout=monitor] .team-event .feed-player strong { font-size:clamp(15px,1.24vw,28px); }
 body[data-screen=tv][data-layout=monitor] .team-event .feed-player small { font-size:clamp(11px,.86vw,20px); }
 body[data-screen=tv][data-layout=monitor] .scoring-feed-row.team-event .player-face.small { width:clamp(40px,3.4vw,78px); height:clamp(40px,3.4vw,78px); }
 body[data-screen=tv][data-layout=monitor] .scoring-feed-row .feed-points { font-size:clamp(20px,1.5vw,34px); }
-body[data-screen=tv] .feed-delta { font-size:clamp(8px,.7vw,16px); }
-body[data-screen=tv] .player-face { width:clamp(34px,2.8vw,70px); height:clamp(34px,2.8vw,70px); border-color:var(--side,var(--team-color)); }
-body[data-screen=tv] .league-stock-panel { height:100%; }
-body[data-screen=tv] .league-stock-chart-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:1vh 1vw; }
-body[data-screen=tv] .league-stock-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); padding:1vh 1vw; gap:9px; flex-shrink:0; }
-body[data-screen=tv] .league-stock-row { padding:.7vh .6vw; min-height:0; }
-body[data-screen=tv] .league-stock-name strong { font-size:clamp(12px,1vw,24px); white-space:normal; }
-body[data-screen=tv] .league-stock-name small { font-size:clamp(8px,.7vw,16px); }
-body[data-screen=tv] .league-stock-values b { font-size:clamp(22px,2vw,42px); }
-body[data-screen=tv] .league-matchups-panel { height:100%; }
-body[data-screen=tv] .league-matchups-list { min-height:0; flex:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-rows:1fr; gap:1.3vw; padding:1.3vw; overflow:hidden; }
-body[data-screen=tv] .league-matchup-card { margin:0; padding:1vw; display:flex; flex-direction:column; justify-content:center; }
-body[data-screen=tv] .league-matchup-top { font-size:clamp(9px,.85vw,20px); }
-body[data-screen=tv] .league-matchup-side { margin:.5vh 0; }
-body[data-screen=tv] .league-matchup-side strong { font-size:clamp(16px,1.5vw,34px); white-space:normal; }
-body[data-screen=tv] .league-matchup-side > b { font-size:clamp(28px,2.7vw,64px); }
-body[data-screen=tv] .league-matchup-side small { font-size:clamp(10px,.8vw,18px); }
+body[data-screen=tv][data-layout=monitor] .feed-delta { font-size:clamp(8px,.7vw,16px); }
+body[data-screen=tv][data-layout=monitor] .player-face { width:clamp(34px,2.8vw,70px); height:clamp(34px,2.8vw,70px); border-color:var(--side,var(--team-color)); }
+body[data-screen=tv][data-layout=monitor] .league-stock-panel { height:100%; }
+body[data-screen=tv][data-layout=monitor] .league-stock-chart-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:1vh 1vw; }
+body[data-screen=tv][data-layout=monitor] .league-stock-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); padding:1vh 1vw; gap:9px; flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .league-stock-row { padding:.7vh .6vw; min-height:0; }
+body[data-screen=tv][data-layout=monitor] .league-stock-name strong { font-size:clamp(12px,1vw,24px); white-space:normal; }
+body[data-screen=tv][data-layout=monitor] .league-stock-name small { font-size:clamp(8px,.7vw,16px); }
+body[data-screen=tv][data-layout=monitor] .league-stock-values b { font-size:clamp(22px,2vw,42px); }
+body[data-screen=tv][data-layout=monitor] .league-matchups-panel { height:100%; }
+body[data-screen=tv][data-layout=monitor] .league-matchups-list { min-height:0; flex:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-rows:1fr; gap:1.3vw; padding:1.3vw; overflow:hidden; }
+body[data-screen=tv][data-layout=monitor] .league-matchup-card { margin:0; padding:1vw; display:flex; flex-direction:column; justify-content:center; }
+body[data-screen=tv][data-layout=monitor] .league-matchup-top { font-size:clamp(9px,.85vw,20px); }
+body[data-screen=tv][data-layout=monitor] .league-matchup-side { margin:.5vh 0; }
+body[data-screen=tv][data-layout=monitor] .league-matchup-side strong { font-size:clamp(16px,1.5vw,34px); white-space:normal; }
+body[data-screen=tv][data-layout=monitor] .league-matchup-side > b { font-size:clamp(28px,2.7vw,64px); }
+body[data-screen=tv][data-layout=monitor] .league-matchup-side small { font-size:clamp(10px,.8vw,18px); }
 .tv-player { min-height:0; height:100%; display:grid; grid-template-columns:.85fr 1.5fr; gap:2.6vw; padding:1.5vh 1.5vw; border:1px solid var(--side); border-radius:18px; background:#0e1014; }
 .tv-player-identity { display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:0; }
-body[data-screen=tv] .tv-player .player-face.large { width:clamp(150px,15vw,340px); height:clamp(150px,15vw,340px); margin-bottom:2vh; border-width:3px; border-color:var(--side); }
+body[data-screen=tv][data-layout=monitor] .tv-player .player-face.large { width:clamp(150px,15vw,340px); height:clamp(150px,15vw,340px); margin-bottom:2vh; border-width:3px; border-color:var(--side); }
 .tv-player-text span { color:#a4afbf; font-size:clamp(14px,1.3vw,30px); }
 .tv-player-text h1 { margin:1vh 0; font-size:clamp(32px,3.4vw,80px); line-height:1.05; }
 .tv-player-text p { margin:.7vh 0; color:#bdc6d2; font-size:clamp(14px,1.1vw,26px); line-height:1.5; }
@@ -151,18 +151,18 @@ body[data-screen=tv] .tv-player .player-face.large { width:clamp(150px,15vw,340p
   .tv-footer > span:nth-child(2) { display:none; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
-body[data-screen=tv] .momentum-scoreline { padding:.6vh 1vw; flex-shrink:0; }
-body[data-screen=tv] .momentum-scoreline .momentum-score-side strong { font-size:clamp(28px,2.4vw,56px); }
-body[data-screen=tv] .momentum-scoreline .momentum-score-side small { font-size:clamp(10px,1vw,23px); }
-body[data-screen=tv] .momentum-lead { padding:.4vh .8vw; margin:0; font-size:clamp(9px,.8vw,18px); flex-shrink:0; }
-body[data-screen=tv] .momentum-lead b,body[data-screen=tv] .momentum-lead small { font-size:inherit; }
-body[data-screen=tv] .momentum-legend { flex-shrink:0; padding:.5vh .8vw; font-size:clamp(10px,1vw,23px); }
-body[data-screen=tv] .stock-chart { background:#0b0d12; border-color:#303845; }
-body[data-screen=tv] .tv-stat-grid { flex:1; max-height:75vh; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:minmax(0,1fr); }
-body[data-screen=tv] .tv-stat-grid > div { padding:.8vh .6vw; justify-content:center; overflow:hidden; }
-body[data-screen=tv] .tv-stat-grid b { font-size:clamp(24px,2.2vw,52px); }
-body[data-screen=tv] .tv-stat-grid small { font-size:clamp(10px,.85vw,20px); }
-body[data-screen=tv] .tv-stat-grid .player-stats-empty { grid-column:1/-1; color:#a7b3c4; font-size:clamp(18px,1.8vw,42px); }
+body[data-screen=tv][data-layout=monitor] .momentum-scoreline { padding:.6vh 1vw; flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .momentum-scoreline .momentum-score-side strong { font-size:clamp(28px,2.4vw,56px); }
+body[data-screen=tv][data-layout=monitor] .momentum-scoreline .momentum-score-side small { font-size:clamp(10px,1vw,23px); }
+body[data-screen=tv][data-layout=monitor] .momentum-lead { padding:.4vh .8vw; margin:0; font-size:clamp(9px,.8vw,18px); flex-shrink:0; }
+body[data-screen=tv][data-layout=monitor] .momentum-lead b,body[data-screen=tv][data-layout=monitor] .momentum-lead small { font-size:inherit; }
+body[data-screen=tv][data-layout=monitor] .momentum-legend { flex-shrink:0; padding:.5vh .8vw; font-size:clamp(10px,1vw,23px); }
+body[data-screen=tv][data-layout=monitor] .stock-chart { background:#0b0d12; border-color:#303845; }
+body[data-screen=tv][data-layout=monitor] .tv-stat-grid { flex:1; max-height:75vh; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:minmax(0,1fr); }
+body[data-screen=tv][data-layout=monitor] .tv-stat-grid > div { padding:.8vh .6vw; justify-content:center; overflow:hidden; }
+body[data-screen=tv][data-layout=monitor] .tv-stat-grid b { font-size:clamp(24px,2.2vw,52px); }
+body[data-screen=tv][data-layout=monitor] .tv-stat-grid small { font-size:clamp(10px,.85vw,20px); }
+body[data-screen=tv][data-layout=monitor] .tv-stat-grid .player-stats-empty { grid-column:1/-1; color:#a7b3c4; font-size:clamp(18px,1.8vw,42px); }
 .score-up { animation:tv-point-up 1.2s ease-out; }
 .score-down { animation:tv-point-down 1.2s ease-out; }
 @keyframes tv-point-up { 0%,35% { color:#31f0a4; transform:translateY(-4px); text-shadow:0 0 25px #31f0a477; } 100% { transform:none; } }
