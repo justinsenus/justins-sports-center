@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "partial",
-  "generated_at": "2026-10-06T08:11:32.525Z",
+  "generated_at": "2026-10-06T15:10:47.075Z",
   "season": 2026,
   "week": 4,
   "source_catalog_count": 30,
@@ -12,7 +12,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-06T08:11:32.525Z",
+      "updated_at": "2026-10-06T15:10:47.075Z",
       "count": 16,
       "access": "public fallback"
     },
@@ -45,7 +45,7 @@
       "name": "ESPN Fantasy",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-06T08:11:32.525Z",
+      "updated_at": "2026-10-06T15:10:47.075Z",
       "count": 6
     },
     {
@@ -53,7 +53,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-06T08:11:32.525Z",
+      "updated_at": "2026-10-06T15:10:47.075Z",
       "count": 34
     },
     {
@@ -351,16 +351,16 @@
       "name": "Juwan Johnson",
       "team": "NO",
       "position": "TE",
-      "consensus": 9.7,
+      "consensus": 9.8,
       "min": 9.5,
-      "max": 9.8,
-      "range": 0.3,
+      "max": 10.1,
+      "range": 0.6,
       "sourceCount": 2,
       "sources": [
         {
           "source": "espn",
           "label": "ESPN Fantasy",
-          "value": 9.8
+          "value": 10.1
         },
         {
           "source": "fantasypros",
@@ -369,9 +369,9 @@
         }
       ],
       "outlier": {
-        "source": "ESPN Fantasy",
-        "value": 9.8,
-        "delta": 0.2
+        "source": "FantasyPros public",
+        "value": 9.5,
+        "delta": 0.3
       },
       "odds": [],
       "market": null
@@ -922,9 +922,9 @@
     {
       "name": "Juwan Johnson",
       "market": "PROJECTION OUTLIER",
-      "source": "ESPN Fantasy",
-      "delta": 0.2,
-      "range": 0.3,
+      "source": "FantasyPros public",
+      "delta": 0.3,
+      "range": 0.6,
       "rank": "03"
     }
   ],
