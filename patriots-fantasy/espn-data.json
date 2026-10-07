@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-07T04:51:21.698Z",
+  "savedAt": "2026-10-07T11:08:38.429Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 5,
@@ -15084,75 +15084,334 @@
           "starter": false
         },
         {
-          "id": "4702555",
-          "name": "Jonah Coleman",
-          "team": "DEN",
+          "id": "4431545",
+          "name": "Will Shipley",
+          "team": "PHI",
           "position": "RB",
           "points": 0,
           "scoringPeriodId": 5,
-          "projected": 0,
-          "gameStats": [],
-          "projectedGameStats": [],
-          "injuryStatus": "INJURY_RESERVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
-          "id": "4428718",
-          "name": "Tre Tucker",
-          "team": "LV",
-          "position": "WR",
-          "points": 0,
-          "scoringPeriodId": 5,
-          "projected": 9.1,
+          "projected": 10.4,
           "gameStats": [],
           "projectedGameStats": [
             {
+              "id": "23",
+              "label": "PROJ RUSHING ATTEMPTS",
+              "value": 11.17174617,
+              "projected": true
+            },
+            {
+              "id": "24",
+              "label": "PROJ RUSHING YARDS",
+              "value": 43.09347391,
+              "projected": true
+            },
+            {
+              "id": "25",
+              "label": "PROJ RUSHING TOUCHDOWNS",
+              "value": 0.251441593,
+              "projected": true
+            },
+            {
+              "id": "26",
+              "label": "PROJ STAT 26",
+              "value": 0.008142296,
+              "projected": true
+            },
+            {
+              "id": "27",
+              "label": "PROJ STAT 27",
+              "value": 8,
+              "projected": true
+            },
+            {
+              "id": "28",
+              "label": "PROJ STAT 28",
+              "value": 4,
+              "projected": true
+            },
+            {
+              "id": "29",
+              "label": "PROJ STAT 29",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "30",
+              "label": "PROJ STAT 30",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "33",
+              "label": "PROJ STAT 33",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "34",
+              "label": "PROJ STAT 34",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "35",
+              "label": "PROJ STAT 35",
+              "value": 0.022604926,
+              "projected": true
+            },
+            {
+              "id": "36",
+              "label": "PROJ STAT 36",
+              "value": 0.015823448,
+              "projected": true
+            },
+            {
+              "id": "37",
+              "label": "PROJ STAT 37",
+              "value": 0.0811,
+              "projected": true
+            },
+            {
+              "id": "38",
+              "label": "PROJ STAT 38",
+              "value": 0.00277,
+              "projected": true
+            },
+            {
+              "id": "39",
+              "label": "PROJ STAT 39",
+              "value": 3.857362428,
+              "projected": true
+            },
+            {
+              "id": "40",
+              "label": "PROJ STAT 40",
+              "value": 43.09347391,
+              "projected": true
+            },
+            {
               "id": "42",
               "label": "PROJ RECEIVING YARDS",
-              "value": 45.01084867,
+              "value": 17.79636237,
               "projected": true
             },
             {
               "id": "43",
               "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.214939537,
+              "value": 0.057772853,
               "projected": true
             },
             {
               "id": "44",
               "label": "PROJ STAT 44",
-              "value": 0.013659467,
+              "value": 0.002381336,
               "projected": true
             },
             {
               "id": "45",
               "label": "PROJ STAT 45",
-              "value": 0.01303191,
+              "value": 0.003074246,
               "projected": true
             },
             {
               "id": "46",
               "label": "PROJ STAT 46",
-              "value": 0.008516353,
+              "value": 0.00200902,
               "projected": true
             },
             {
               "id": "47",
               "label": "PROJ STAT 47",
-              "value": 9,
+              "value": 3,
               "projected": true
             },
             {
               "id": "48",
               "label": "PROJ STAT 48",
-              "value": 4,
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "53",
+              "label": "PROJ RECEPTIONS",
+              "value": 2.461188586,
+              "projected": true
+            },
+            {
+              "id": "56",
+              "label": "PROJ STAT 56",
+              "value": 0.007481394,
+              "projected": true
+            },
+            {
+              "id": "58",
+              "label": "PROJ TARGETS",
+              "value": 2.998003064,
+              "projected": true
+            },
+            {
+              "id": "60",
+              "label": "PROJ STAT 60",
+              "value": 7.230799976,
+              "projected": true
+            },
+            {
+              "id": "61",
+              "label": "PROJ STAT 61",
+              "value": 17.79636237,
+              "projected": true
+            },
+            {
+              "id": "62",
+              "label": "PROJ STAT 62",
+              "value": 0.010523632,
+              "projected": true
+            },
+            {
+              "id": "66",
+              "label": "PROJ STAT 66",
+              "value": 0.104414828,
+              "projected": true
+            },
+            {
+              "id": "67",
+              "label": "PROJ STAT 67",
+              "value": 0.023003081,
+              "projected": true
+            },
+            {
+              "id": "68",
+              "label": "PROJ STAT 68",
+              "value": 0.12741791,
+              "projected": true
+            },
+            {
+              "id": "70",
+              "label": "PROJ STAT 70",
+              "value": 0.048030821,
+              "projected": true
+            },
+            {
+              "id": "71",
+              "label": "PROJ STAT 71",
+              "value": 0.012881725,
+              "projected": true
+            },
+            {
+              "id": "72",
+              "label": "PROJ FUMBLES LOST",
+              "value": 0.060912546,
+              "projected": true
+            },
+            {
+              "id": "73",
+              "label": "PROJ STAT 73",
+              "value": 0.060912546,
+              "projected": true
+            },
+            {
+              "id": "101",
+              "label": "PROJ STAT 101",
+              "value": 0.007089927,
+              "projected": true
+            },
+            {
+              "id": "114",
+              "label": "PROJ STAT 114",
+              "value": 81.28968525,
+              "projected": true
+            },
+            {
+              "id": "116",
+              "label": "PROJ STAT 116",
+              "value": 8,
+              "projected": true
+            },
+            {
+              "id": "117",
+              "label": "PROJ STAT 117",
+              "value": 3,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "212",
+              "label": "PROJ STAT 212",
+              "value": 2.443116069,
+              "projected": true
+            },
+            {
+              "id": "213",
+              "label": "PROJ STAT 213",
+              "value": 1.007734123,
+              "projected": true
+            }
+          ],
+          "injuryStatus": "ACTIVE",
+          "headshot": "",
+          "starter": false
+        },
+        {
+          "id": "4635008",
+          "name": "Keon Coleman",
+          "team": "BUF",
+          "position": "WR",
+          "points": 0,
+          "scoringPeriodId": 5,
+          "projected": 7.7,
+          "gameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "42",
+              "label": "PROJ RECEIVING YARDS",
+              "value": 35.43046351,
+              "projected": true
+            },
+            {
+              "id": "43",
+              "label": "PROJ RECEIVING TOUCHDOWNS",
+              "value": 0.252467524,
+              "projected": true
+            },
+            {
+              "id": "44",
+              "label": "PROJ STAT 44",
+              "value": 0.017892425,
+              "projected": true
+            },
+            {
+              "id": "45",
+              "label": "PROJ STAT 45",
+              "value": 0.011198994,
+              "projected": true
+            },
+            {
+              "id": "46",
+              "label": "PROJ STAT 46",
+              "value": 0.007318543,
+              "projected": true
+            },
+            {
+              "id": "47",
+              "label": "PROJ STAT 47",
+              "value": 7,
+              "projected": true
+            },
+            {
+              "id": "48",
+              "label": "PROJ STAT 48",
+              "value": 3,
               "projected": true
             },
             {
               "id": "49",
               "label": "PROJ STAT 49",
-              "value": 2,
+              "value": 1,
               "projected": true
             },
             {
@@ -15164,73 +15423,73 @@
             {
               "id": "53",
               "label": "PROJ RECEPTIONS",
-              "value": 3.346405738,
+              "value": 2.66243667,
               "projected": true
             },
             {
               "id": "56",
               "label": "PROJ STAT 56",
-              "value": 0.072356433,
+              "value": 0.037350919,
               "projected": true
             },
             {
               "id": "57",
               "label": "PROJ STAT 57",
-              "value": 0.00224,
+              "value": 0.00116,
               "projected": true
             },
             {
               "id": "58",
               "label": "PROJ TARGETS",
-              "value": 5.387459663,
+              "value": 4.402613236,
               "projected": true
             },
             {
               "id": "60",
               "label": "PROJ STAT 60",
-              "value": 13.45050547,
+              "value": 13.30753287,
               "projected": true
             },
             {
               "id": "61",
               "label": "PROJ STAT 61",
-              "value": 45.01084867,
+              "value": 35.43046351,
               "projected": true
             },
             {
               "id": "62",
               "label": "PROJ STAT 62",
-              "value": 0.013659467,
+              "value": 0.017892425,
               "projected": true
             },
             {
               "id": "67",
               "label": "PROJ STAT 67",
-              "value": 0.042860347,
+              "value": 0.045092151,
               "projected": true
             },
             {
               "id": "68",
               "label": "PROJ STAT 68",
-              "value": 0.042860347,
+              "value": 0.045092151,
               "projected": true
             },
             {
               "id": "71",
               "label": "PROJ STAT 71",
-              "value": 0.024001794,
+              "value": 0.025251605,
               "projected": true
             },
             {
               "id": "72",
               "label": "PROJ FUMBLES LOST",
-              "value": 0.024001794,
+              "value": 0.025251605,
               "projected": true
             },
             {
               "id": "73",
               "label": "PROJ STAT 73",
-              "value": 0.024001794,
+              "value": 0.025251605,
               "projected": true
             },
             {
@@ -15242,7 +15501,7 @@
             {
               "id": "213",
               "label": "PROJ STAT 213",
-              "value": 2.024241006,
+              "value": 1.619498233,
               "projected": true
             }
           ],
@@ -30311,7 +30570,7 @@
         "losses": 3
       },
       "total": 0,
-      "projected": 98.6,
+      "projected": 102,
       "starters": [
         {
           "id": "3117251",
@@ -31295,297 +31554,6 @@
           "starter": true
         },
         {
-          "id": "-16005",
-          "name": "Browns D/ST",
-          "team": "CLE",
-          "position": "DEF",
-          "points": 0,
-          "scoringPeriodId": 5,
-          "projected": 5.9,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "89",
-              "label": "PROJ DEFENSE SACKS",
-              "value": 0.01,
-              "projected": true
-            },
-            {
-              "id": "90",
-              "label": "PROJ DEFENSE INTERCEPTIONS",
-              "value": 0.045,
-              "projected": true
-            },
-            {
-              "id": "91",
-              "label": "PROJ DEFENSE FUMBLES RECOVERED",
-              "value": 0.165,
-              "projected": true
-            },
-            {
-              "id": "92",
-              "label": "PROJ DEFENSE TOUCHDOWNS",
-              "value": 0.16,
-              "projected": true
-            },
-            {
-              "id": "93",
-              "label": "PROJ STAT 93",
-              "value": 0.007296179,
-              "projected": true
-            },
-            {
-              "id": "94",
-              "label": "PROJ STAT 94",
-              "value": 0.091422289,
-              "projected": true
-            },
-            {
-              "id": "95",
-              "label": "PROJ POINTS ALLOWED",
-              "value": 0.602195136,
-              "projected": true
-            },
-            {
-              "id": "96",
-              "label": "PROJ YARDS ALLOWED",
-              "value": 0.462156736,
-              "projected": true
-            },
-            {
-              "id": "97",
-              "label": "PROJ STAT 97",
-              "value": 0.105237051,
-              "projected": true
-            },
-            {
-              "id": "98",
-              "label": "PROJ STAT 98",
-              "value": 0.015064524,
-              "projected": true
-            },
-            {
-              "id": "99",
-              "label": "PROJ STAT 99",
-              "value": 2.884154762,
-              "projected": true
-            },
-            {
-              "id": "100",
-              "label": "PROJ STAT 100",
-              "value": 5.768309524,
-              "projected": true
-            },
-            {
-              "id": "101",
-              "label": "PROJ STAT 101",
-              "value": 0.009539371,
-              "projected": true
-            },
-            {
-              "id": "102",
-              "label": "PROJ STAT 102",
-              "value": 0.014198071,
-              "projected": true
-            },
-            {
-              "id": "103",
-              "label": "PROJ STAT 103",
-              "value": 0.060814475,
-              "projected": true
-            },
-            {
-              "id": "104",
-              "label": "PROJ STAT 104",
-              "value": 0.030607814,
-              "projected": true
-            },
-            {
-              "id": "105",
-              "label": "PROJ STAT 105",
-              "value": 0.12245591,
-              "projected": true
-            },
-            {
-              "id": "106",
-              "label": "PROJ STAT 106",
-              "value": 0.711010363,
-              "projected": true
-            },
-            {
-              "id": "109",
-              "label": "PROJ STAT 109",
-              "value": 58.94043597,
-              "projected": true
-            },
-            {
-              "id": "110",
-              "label": "PROJ STAT 110",
-              "value": 19,
-              "projected": true
-            },
-            {
-              "id": "111",
-              "label": "PROJ STAT 111",
-              "value": 11,
-              "projected": true
-            },
-            {
-              "id": "112",
-              "label": "PROJ STAT 112",
-              "value": 2.309900778,
-              "projected": true
-            },
-            {
-              "id": "113",
-              "label": "PROJ STAT 113",
-              "value": 3.722934634,
-              "projected": true
-            },
-            {
-              "id": "114",
-              "label": "PROJ STAT 114",
-              "value": 91.89794356,
-              "projected": true
-            },
-            {
-              "id": "115",
-              "label": "PROJ STAT 115",
-              "value": 14.19807117,
-              "projected": true
-            },
-            {
-              "id": "116",
-              "label": "PROJ STAT 116",
-              "value": 9,
-              "projected": true
-            },
-            {
-              "id": "117",
-              "label": "PROJ STAT 117",
-              "value": 3,
-              "projected": true
-            },
-            {
-              "id": "118",
-              "label": "PROJ STAT 118",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "120",
-              "label": "PROJ STAT 120",
-              "value": 21.34888171,
-              "projected": true
-            },
-            {
-              "id": "121",
-              "label": "PROJ STAT 121",
-              "value": 0.145,
-              "projected": true
-            },
-            {
-              "id": "122",
-              "label": "PROJ STAT 122",
-              "value": 0.22,
-              "projected": true
-            },
-            {
-              "id": "123",
-              "label": "PROJ STAT 123",
-              "value": 0.165,
-              "projected": true
-            },
-            {
-              "id": "124",
-              "label": "PROJ STAT 124",
-              "value": 0.08,
-              "projected": true
-            },
-            {
-              "id": "125",
-              "label": "PROJ STAT 125",
-              "value": 0.01,
-              "projected": true
-            },
-            {
-              "id": "126",
-              "label": "PROJ STAT 126",
-              "value": 21.34888171,
-              "projected": true
-            },
-            {
-              "id": "127",
-              "label": "PROJ STAT 127",
-              "value": 328.7586048,
-              "projected": true
-            },
-            {
-              "id": "129",
-              "label": "PROJ STAT 129",
-              "value": 0.032524393,
-              "projected": true
-            },
-            {
-              "id": "130",
-              "label": "PROJ STAT 130",
-              "value": 0.270202652,
-              "projected": true
-            },
-            {
-              "id": "131",
-              "label": "PROJ STAT 131",
-              "value": 0.232674506,
-              "projected": true
-            },
-            {
-              "id": "132",
-              "label": "PROJ STAT 132",
-              "value": 0.225168877,
-              "projected": true
-            },
-            {
-              "id": "133",
-              "label": "PROJ STAT 133",
-              "value": 0.142606955,
-              "projected": true
-            },
-            {
-              "id": "134",
-              "label": "PROJ STAT 134",
-              "value": 0.065048787,
-              "projected": true
-            },
-            {
-              "id": "135",
-              "label": "PROJ STAT 135",
-              "value": 0.025018764,
-              "projected": true
-            },
-            {
-              "id": "136",
-              "label": "PROJ STAT 136",
-              "value": 0.006755066,
-              "projected": true
-            },
-            {
-              "id": "137",
-              "label": "PROJ STAT 137",
-              "value": 328.7586048,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 1,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "",
-          "headshot": "",
-          "starter": true
-        },
-        {
           "id": "4034949",
           "name": "Eddy Pineiro",
           "team": "SF",
@@ -31733,55 +31701,55 @@
           "starter": true
         },
         {
-          "id": "3122840",
-          "name": "Deshaun Watson",
-          "team": "CLE",
+          "id": "2578570",
+          "name": "Jacoby Brissett",
+          "team": "ARI",
           "position": "QB",
           "points": 0,
           "scoringPeriodId": 5,
-          "projected": 16.9,
+          "projected": 18.8,
           "gameStats": [],
           "projectedGameStats": [
             {
               "id": "0",
               "label": "PROJ PASSING ATTEMPTS",
-              "value": 32.57451606,
+              "value": 34.26119116,
               "projected": true
             },
             {
               "id": "1",
               "label": "PROJ PASSING COMPLETIONS",
-              "value": 21.86774805,
+              "value": 23.35341242,
               "projected": true
             },
             {
               "id": "2",
               "label": "PROJ INCOMPLETE PASSES",
-              "value": 10.70676801,
+              "value": 10.90777873,
               "projected": true
             },
             {
               "id": "3",
               "label": "PROJ PASSING YARDS",
-              "value": 225.5669928,
+              "value": 239.5598547,
               "projected": true
             },
             {
               "id": "4",
               "label": "PROJ PASSING TOUCHDOWNS",
-              "value": 1.343745,
+              "value": 2.101118253,
               "projected": true
             },
             {
               "id": "5",
               "label": "PROJ STAT 5",
-              "value": 45,
+              "value": 47,
               "projected": true
             },
             {
               "id": "6",
               "label": "PROJ STAT 6",
-              "value": 22,
+              "value": 23,
               "projected": true
             },
             {
@@ -31823,199 +31791,175 @@
             {
               "id": "15",
               "label": "PROJ STAT 15",
-              "value": 0.174107176,
+              "value": 0.1944906,
               "projected": true
             },
             {
               "id": "16",
               "label": "PROJ STAT 16",
-              "value": 0.11377904,
+              "value": 0.127099607,
               "projected": true
             },
             {
               "id": "17",
               "label": "PROJ STAT 17",
-              "value": 0.153036037,
+              "value": 0.190034108,
               "projected": true
             },
             {
               "id": "18",
               "label": "PROJ STAT 18",
-              "value": 0.020671156,
+              "value": 0.025668625,
               "projected": true
             },
             {
               "id": "19",
               "label": "PROJ INTERCEPTIONS",
-              "value": 0.068244551,
+              "value": 0.070480293,
               "projected": true
             },
             {
               "id": "20",
               "label": "PROJ SACKS TAKEN",
-              "value": 0.628250577,
+              "value": 0.647667321,
               "projected": true
             },
             {
               "id": "21",
               "label": "PROJ STAT 21",
-              "value": 0.671314595,
+              "value": 0.681628736,
               "projected": true
             },
             {
               "id": "22",
               "label": "PROJ STAT 22",
-              "value": 225.5669928,
+              "value": 239.5598547,
               "projected": true
             },
             {
               "id": "23",
               "label": "PROJ RUSHING ATTEMPTS",
-              "value": 6.828121628,
+              "value": 3.138239349,
               "projected": true
             },
             {
               "id": "24",
               "label": "PROJ RUSHING YARDS",
-              "value": 32.70110984,
+              "value": 13.51418375,
               "projected": true
             },
             {
               "id": "25",
               "label": "PROJ RUSHING TOUCHDOWNS",
-              "value": 0.151144522,
+              "value": 0.166299339,
               "projected": true
             },
             {
               "id": "26",
               "label": "PROJ STAT 26",
-              "value": 0.008448805,
+              "value": 0.007141573,
               "projected": true
             },
             {
               "id": "27",
               "label": "PROJ STAT 27",
-              "value": 6,
+              "value": 2,
               "projected": true
             },
             {
               "id": "28",
               "label": "PROJ STAT 28",
-              "value": 3,
-              "projected": true
-            },
-            {
-              "id": "29",
-              "label": "PROJ STAT 29",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "30",
-              "label": "PROJ STAT 30",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "33",
-              "label": "PROJ STAT 33",
               "value": 1,
               "projected": true
             },
             {
               "id": "35",
               "label": "PROJ STAT 35",
-              "value": 0.013312955,
+              "value": 0.005922285,
               "projected": true
             },
             {
               "id": "36",
               "label": "PROJ STAT 36",
-              "value": 0.009319069,
+              "value": 0.0041456,
               "projected": true
             },
             {
               "id": "37",
               "label": "PROJ STAT 37",
-              "value": 0.046668805,
-              "projected": true
-            },
-            {
-              "id": "38",
-              "label": "PROJ STAT 38",
-              "value": 0.00159,
+              "value": 0.00791,
               "projected": true
             },
             {
               "id": "39",
               "label": "PROJ STAT 39",
-              "value": 4.789180923,
+              "value": 4.306294788,
               "projected": true
             },
             {
               "id": "40",
               "label": "PROJ STAT 40",
-              "value": 32.70110984,
+              "value": 13.51418375,
               "projected": true
             },
             {
               "id": "62",
               "label": "PROJ STAT 62",
-              "value": 0.076693356,
+              "value": 0.077621866,
               "projected": true
             },
             {
               "id": "63",
               "label": "PROJ STAT 63",
-              "value": 0.00286,
+              "value": 0.00174,
               "projected": true
             },
             {
               "id": "64",
               "label": "PROJ STAT 64",
-              "value": 3.169604656,
+              "value": 2.701371556,
               "projected": true
             },
             {
               "id": "65",
               "label": "PROJ STAT 65",
-              "value": 0.545791713,
+              "value": 0.364663768,
               "projected": true
             },
             {
               "id": "66",
               "label": "PROJ STAT 66",
-              "value": 0.104261404,
+              "value": 0.030961116,
               "projected": true
             },
             {
               "id": "68",
               "label": "PROJ STAT 68",
-              "value": 0.650053117,
+              "value": 0.395624883,
               "projected": true
             },
             {
               "id": "69",
               "label": "PROJ STAT 69",
-              "value": 0.261980022,
+              "value": 0.175038608,
               "projected": true
             },
             {
               "id": "70",
               "label": "PROJ STAT 70",
-              "value": 0.047960246,
+              "value": 0.014242113,
               "projected": true
             },
             {
               "id": "72",
               "label": "PROJ FUMBLES LOST",
-              "value": 0.309940268,
+              "value": 0.189280722,
               "projected": true
             },
             {
               "id": "73",
               "label": "PROJ STAT 73",
-              "value": 0.938190845,
+              "value": 0.836948043,
               "projected": true
             },
             {
@@ -32027,17 +31971,308 @@
             {
               "id": "211",
               "label": "PROJ STAT 211",
-              "value": 11.32320906,
+              "value": 12.3585404,
               "projected": true
             },
             {
               "id": "212",
               "label": "PROJ STAT 212",
-              "value": 1.753553875,
+              "value": 0.892827,
               "projected": true
             }
           ],
           "injuryStatus": "ACTIVE",
+          "headshot": "",
+          "starter": true
+        },
+        {
+          "id": "-16006",
+          "name": "Cowboys D/ST",
+          "team": "DAL",
+          "position": "DEF",
+          "points": 0,
+          "scoringPeriodId": 5,
+          "projected": 7.4,
+          "gameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "89",
+              "label": "PROJ DEFENSE SACKS",
+              "value": 0.016067674,
+              "projected": true
+            },
+            {
+              "id": "90",
+              "label": "PROJ DEFENSE INTERCEPTIONS",
+              "value": 0.072579838,
+              "projected": true
+            },
+            {
+              "id": "91",
+              "label": "PROJ DEFENSE FUMBLES RECOVERED",
+              "value": 0.242266493,
+              "projected": true
+            },
+            {
+              "id": "92",
+              "label": "PROJ DEFENSE TOUCHDOWNS",
+              "value": 0.204224647,
+              "projected": true
+            },
+            {
+              "id": "93",
+              "label": "PROJ STAT 93",
+              "value": 0.007136758,
+              "projected": true
+            },
+            {
+              "id": "94",
+              "label": "PROJ STAT 94",
+              "value": 0.08999419,
+              "projected": true
+            },
+            {
+              "id": "95",
+              "label": "PROJ POINTS ALLOWED",
+              "value": 1.219639228,
+              "projected": true
+            },
+            {
+              "id": "96",
+              "label": "PROJ YARDS ALLOWED",
+              "value": 0.48537163,
+              "projected": true
+            },
+            {
+              "id": "97",
+              "label": "PROJ STAT 97",
+              "value": 0.113718689,
+              "projected": true
+            },
+            {
+              "id": "98",
+              "label": "PROJ STAT 98",
+              "value": 0.015396338,
+              "projected": true
+            },
+            {
+              "id": "99",
+              "label": "PROJ STAT 99",
+              "value": 2.556039758,
+              "projected": true
+            },
+            {
+              "id": "100",
+              "label": "PROJ STAT 100",
+              "value": 5.112079515,
+              "projected": true
+            },
+            {
+              "id": "101",
+              "label": "PROJ STAT 101",
+              "value": 0.012200706,
+              "projected": true
+            },
+            {
+              "id": "102",
+              "label": "PROJ STAT 102",
+              "value": 0.017809958,
+              "projected": true
+            },
+            {
+              "id": "103",
+              "label": "PROJ STAT 103",
+              "value": 0.059714413,
+              "projected": true
+            },
+            {
+              "id": "104",
+              "label": "PROJ STAT 104",
+              "value": 0.030279777,
+              "projected": true
+            },
+            {
+              "id": "105",
+              "label": "PROJ STAT 105",
+              "value": 0.127141613,
+              "projected": true
+            },
+            {
+              "id": "106",
+              "label": "PROJ STAT 106",
+              "value": 0.746725584,
+              "projected": true
+            },
+            {
+              "id": "109",
+              "label": "PROJ STAT 109",
+              "value": 60.05961861,
+              "projected": true
+            },
+            {
+              "id": "110",
+              "label": "PROJ STAT 110",
+              "value": 20,
+              "projected": true
+            },
+            {
+              "id": "111",
+              "label": "PROJ STAT 111",
+              "value": 12,
+              "projected": true
+            },
+            {
+              "id": "112",
+              "label": "PROJ STAT 112",
+              "value": 2.461667154,
+              "projected": true
+            },
+            {
+              "id": "113",
+              "label": "PROJ STAT 113",
+              "value": 3.592453971,
+              "projected": true
+            },
+            {
+              "id": "114",
+              "label": "PROJ STAT 114",
+              "value": 93.20965241,
+              "projected": true
+            },
+            {
+              "id": "115",
+              "label": "PROJ STAT 115",
+              "value": 15.28688021,
+              "projected": true
+            },
+            {
+              "id": "116",
+              "label": "PROJ STAT 116",
+              "value": 9,
+              "projected": true
+            },
+            {
+              "id": "117",
+              "label": "PROJ STAT 117",
+              "value": 3,
+              "projected": true
+            },
+            {
+              "id": "118",
+              "label": "PROJ STAT 118",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "120",
+              "label": "PROJ STAT 120",
+              "value": 18.06413287,
+              "projected": true
+            },
+            {
+              "id": "121",
+              "label": "PROJ STAT 121",
+              "value": 0.145159676,
+              "projected": true
+            },
+            {
+              "id": "122",
+              "label": "PROJ STAT 122",
+              "value": 0.18169987,
+              "projected": true
+            },
+            {
+              "id": "123",
+              "label": "PROJ STAT 123",
+              "value": 0.104615077,
+              "projected": true
+            },
+            {
+              "id": "124",
+              "label": "PROJ STAT 124",
+              "value": 0.030533587,
+              "projected": true
+            },
+            {
+              "id": "125",
+              "label": "PROJ STAT 125",
+              "value": 0.002853138,
+              "projected": true
+            },
+            {
+              "id": "126",
+              "label": "PROJ STAT 126",
+              "value": 18.06413287,
+              "projected": true
+            },
+            {
+              "id": "127",
+              "label": "PROJ STAT 127",
+              "value": 329.6521615,
+              "projected": true
+            },
+            {
+              "id": "129",
+              "label": "PROJ STAT 129",
+              "value": 0.029513281,
+              "projected": true
+            },
+            {
+              "id": "130",
+              "label": "PROJ STAT 130",
+              "value": 0.250112551,
+              "projected": true
+            },
+            {
+              "id": "131",
+              "label": "PROJ STAT 131",
+              "value": 0.225601521,
+              "projected": true
+            },
+            {
+              "id": "132",
+              "label": "PROJ STAT 132",
+              "value": 0.229103096,
+              "projected": true
+            },
+            {
+              "id": "133",
+              "label": "PROJ STAT 133",
+              "value": 0.153569106,
+              "projected": true
+            },
+            {
+              "id": "134",
+              "label": "PROJ STAT 134",
+              "value": 0.075033765,
+              "projected": true
+            },
+            {
+              "id": "135",
+              "label": "PROJ STAT 135",
+              "value": 0.029013056,
+              "projected": true
+            },
+            {
+              "id": "136",
+              "label": "PROJ STAT 136",
+              "value": 0.008053624,
+              "projected": true
+            },
+            {
+              "id": "137",
+              "label": "PROJ STAT 137",
+              "value": 329.6521615,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 1,
+              "projected": true
+            }
+          ],
+          "injuryStatus": "",
           "headshot": "",
           "starter": true
         }
@@ -33406,177 +33641,6 @@
           "starter": false
         },
         {
-          "id": "2973405",
-          "name": "Kalif Raymond",
-          "team": "CHI",
-          "position": "WR",
-          "points": 0,
-          "scoringPeriodId": 5,
-          "projected": 7.9,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "42",
-              "label": "PROJ RECEIVING YARDS",
-              "value": 34.32493196,
-              "projected": true
-            },
-            {
-              "id": "43",
-              "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.13442357,
-              "projected": true
-            },
-            {
-              "id": "44",
-              "label": "PROJ STAT 44",
-              "value": 0.005989325,
-              "projected": true
-            },
-            {
-              "id": "45",
-              "label": "PROJ STAT 45",
-              "value": 0.008792739,
-              "projected": true
-            },
-            {
-              "id": "46",
-              "label": "PROJ STAT 46",
-              "value": 0.005746055,
-              "projected": true
-            },
-            {
-              "id": "47",
-              "label": "PROJ STAT 47",
-              "value": 6,
-              "projected": true
-            },
-            {
-              "id": "48",
-              "label": "PROJ STAT 48",
-              "value": 3,
-              "projected": true
-            },
-            {
-              "id": "49",
-              "label": "PROJ STAT 49",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "50",
-              "label": "PROJ STAT 50",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "53",
-              "label": "PROJ RECEPTIONS",
-              "value": 3.649526753,
-              "projected": true
-            },
-            {
-              "id": "56",
-              "label": "PROJ STAT 56",
-              "value": 0.034241273,
-              "projected": true
-            },
-            {
-              "id": "57",
-              "label": "PROJ STAT 57",
-              "value": 0.00106,
-              "projected": true
-            },
-            {
-              "id": "58",
-              "label": "PROJ TARGETS",
-              "value": 4.520225486,
-              "projected": true
-            },
-            {
-              "id": "60",
-              "label": "PROJ STAT 60",
-              "value": 9.405310411,
-              "projected": true
-            },
-            {
-              "id": "61",
-              "label": "PROJ STAT 61",
-              "value": 34.32493196,
-              "projected": true
-            },
-            {
-              "id": "62",
-              "label": "PROJ STAT 62",
-              "value": 0.005989325,
-              "projected": true
-            },
-            {
-              "id": "67",
-              "label": "PROJ STAT 67",
-              "value": 0.072990535,
-              "projected": true
-            },
-            {
-              "id": "68",
-              "label": "PROJ STAT 68",
-              "value": 0.072990535,
-              "projected": true
-            },
-            {
-              "id": "71",
-              "label": "PROJ STAT 71",
-              "value": 0.0408747,
-              "projected": true
-            },
-            {
-              "id": "72",
-              "label": "PROJ FUMBLES LOST",
-              "value": 0.0408747,
-              "projected": true
-            },
-            {
-              "id": "73",
-              "label": "PROJ STAT 73",
-              "value": 0.0408747,
-              "projected": true
-            },
-            {
-              "id": "102",
-              "label": "PROJ STAT 102",
-              "value": 0.019996837,
-              "projected": true
-            },
-            {
-              "id": "115",
-              "label": "PROJ STAT 115",
-              "value": 18.241301,
-              "projected": true
-            },
-            {
-              "id": "118",
-              "label": "PROJ STAT 118",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "213",
-              "label": "PROJ STAT 213",
-              "value": 1.765732374,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
           "id": "3116406",
           "name": "Tyreek Hill",
           "team": "FA",
@@ -33587,6 +33651,20 @@
           "gameStats": [],
           "projectedGameStats": [],
           "injuryStatus": "OUT",
+          "headshot": "",
+          "starter": false
+        },
+        {
+          "id": "3116385",
+          "name": "Joe Mixon",
+          "team": "FA",
+          "position": "RB",
+          "points": 0,
+          "scoringPeriodId": 5,
+          "projected": null,
+          "gameStats": [],
+          "projectedGameStats": [],
+          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
         }
@@ -41711,243 +41789,6 @@
           "starter": false
         },
         {
-          "id": "4429096",
-          "name": "Blake Corum",
-          "team": "LAR",
-          "position": "RB",
-          "points": 0,
-          "scoringPeriodId": 5,
-          "projected": 8.4,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "23",
-              "label": "PROJ RUSHING ATTEMPTS",
-              "value": 9.455752813,
-              "projected": true
-            },
-            {
-              "id": "24",
-              "label": "PROJ RUSHING YARDS",
-              "value": 42.69589702,
-              "projected": true
-            },
-            {
-              "id": "25",
-              "label": "PROJ RUSHING TOUCHDOWNS",
-              "value": 0.373649256,
-              "projected": true
-            },
-            {
-              "id": "26",
-              "label": "PROJ STAT 26",
-              "value": 0.0137,
-              "projected": true
-            },
-            {
-              "id": "27",
-              "label": "PROJ STAT 27",
-              "value": 8,
-              "projected": true
-            },
-            {
-              "id": "28",
-              "label": "PROJ STAT 28",
-              "value": 4,
-              "projected": true
-            },
-            {
-              "id": "29",
-              "label": "PROJ STAT 29",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "30",
-              "label": "PROJ STAT 30",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "33",
-              "label": "PROJ STAT 33",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "35",
-              "label": "PROJ STAT 35",
-              "value": 0.018857556,
-              "projected": true
-            },
-            {
-              "id": "36",
-              "label": "PROJ STAT 36",
-              "value": 0.0132,
-              "projected": true
-            },
-            {
-              "id": "37",
-              "label": "PROJ STAT 37",
-              "value": 0.0797,
-              "projected": true
-            },
-            {
-              "id": "38",
-              "label": "PROJ STAT 38",
-              "value": 0.00272,
-              "projected": true
-            },
-            {
-              "id": "39",
-              "label": "PROJ STAT 39",
-              "value": 4.51533557,
-              "projected": true
-            },
-            {
-              "id": "40",
-              "label": "PROJ STAT 40",
-              "value": 42.69589702,
-              "projected": true
-            },
-            {
-              "id": "42",
-              "label": "PROJ RECEIVING YARDS",
-              "value": 7.026455422,
-              "projected": true
-            },
-            {
-              "id": "43",
-              "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.03487487,
-              "projected": true
-            },
-            {
-              "id": "44",
-              "label": "PROJ STAT 44",
-              "value": 0.001265446,
-              "projected": true
-            },
-            {
-              "id": "45",
-              "label": "PROJ STAT 45",
-              "value": 0.00198303,
-              "projected": true
-            },
-            {
-              "id": "46",
-              "label": "PROJ STAT 46",
-              "value": 0.00129591,
-              "projected": true
-            },
-            {
-              "id": "47",
-              "label": "PROJ STAT 47",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "53",
-              "label": "PROJ RECEPTIONS",
-              "value": 0.979479787,
-              "projected": true
-            },
-            {
-              "id": "56",
-              "label": "PROJ STAT 56",
-              "value": 0.002901147,
-              "projected": true
-            },
-            {
-              "id": "58",
-              "label": "PROJ TARGETS",
-              "value": 1.397653789,
-              "projected": true
-            },
-            {
-              "id": "60",
-              "label": "PROJ STAT 60",
-              "value": 7.173660462,
-              "projected": true
-            },
-            {
-              "id": "61",
-              "label": "PROJ STAT 61",
-              "value": 7.026455422,
-              "projected": true
-            },
-            {
-              "id": "62",
-              "label": "PROJ STAT 62",
-              "value": 0.014947161,
-              "projected": true
-            },
-            {
-              "id": "66",
-              "label": "PROJ STAT 66",
-              "value": 0.066819041,
-              "projected": true
-            },
-            {
-              "id": "67",
-              "label": "PROJ STAT 67",
-              "value": 0.00692149,
-              "projected": true
-            },
-            {
-              "id": "68",
-              "label": "PROJ STAT 68",
-              "value": 0.073740531,
-              "projected": true
-            },
-            {
-              "id": "70",
-              "label": "PROJ STAT 70",
-              "value": 0.030736759,
-              "projected": true
-            },
-            {
-              "id": "71",
-              "label": "PROJ STAT 71",
-              "value": 0.003876034,
-              "projected": true
-            },
-            {
-              "id": "72",
-              "label": "PROJ FUMBLES LOST",
-              "value": 0.034612793,
-              "projected": true
-            },
-            {
-              "id": "73",
-              "label": "PROJ STAT 73",
-              "value": 0.034612793,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "212",
-              "label": "PROJ STAT 212",
-              "value": 2.416545723,
-              "projected": true
-            },
-            {
-              "id": "213",
-              "label": "PROJ STAT 213",
-              "value": 0.363648692,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
           "id": "4428850",
           "name": "Dontayvion Wicks",
           "team": "PHI",
@@ -42145,6 +41986,153 @@
           "gameStats": [],
           "projectedGameStats": [],
           "injuryStatus": "INJURY_RESERVE",
+          "headshot": "",
+          "starter": false
+        },
+        {
+          "id": "4567104",
+          "name": "Will Reichard",
+          "team": "MIN",
+          "position": "K",
+          "points": 0,
+          "scoringPeriodId": 5,
+          "projected": 9.5,
+          "gameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "74",
+              "label": "PROJ STAT 74",
+              "value": 0.409090729,
+              "projected": true
+            },
+            {
+              "id": "75",
+              "label": "PROJ STAT 75",
+              "value": 0.5474476,
+              "projected": true
+            },
+            {
+              "id": "76",
+              "label": "PROJ STAT 76",
+              "value": 0.138356871,
+              "projected": true
+            },
+            {
+              "id": "77",
+              "label": "PROJ STAT 77",
+              "value": 0.536979901,
+              "projected": true
+            },
+            {
+              "id": "78",
+              "label": "PROJ STAT 78",
+              "value": 0.6256544,
+              "projected": true
+            },
+            {
+              "id": "79",
+              "label": "PROJ STAT 79",
+              "value": 0.088674499,
+              "projected": true
+            },
+            {
+              "id": "80",
+              "label": "PROJ FIELD GOALS MADE",
+              "value": 1.11582702,
+              "projected": true
+            },
+            {
+              "id": "81",
+              "label": "PROJ FIELD GOALS ATTEMPTED",
+              "value": 1.127098,
+              "projected": true
+            },
+            {
+              "id": "82",
+              "label": "PROJ STAT 82",
+              "value": 0.01127098,
+              "projected": true
+            },
+            {
+              "id": "83",
+              "label": "PROJ STAT 83",
+              "value": 2.06189765,
+              "projected": true
+            },
+            {
+              "id": "84",
+              "label": "PROJ STAT 84",
+              "value": 2.3002,
+              "projected": true
+            },
+            {
+              "id": "85",
+              "label": "PROJ EXTRA POINTS MADE",
+              "value": 0.23830235,
+              "projected": true
+            },
+            {
+              "id": "86",
+              "label": "PROJ STAT 86",
+              "value": 2.224397266,
+              "projected": true
+            },
+            {
+              "id": "87",
+              "label": "PROJ STAT 87",
+              "value": 2.269793129,
+              "projected": true
+            },
+            {
+              "id": "88",
+              "label": "PROJ STAT 88",
+              "value": 0.045395863,
+              "projected": true
+            },
+            {
+              "id": "198",
+              "label": "PROJ STAT 198",
+              "value": 0.409090729,
+              "projected": true
+            },
+            {
+              "id": "199",
+              "label": "PROJ STAT 199",
+              "value": 0.5474476,
+              "projected": true
+            },
+            {
+              "id": "200",
+              "label": "PROJ STAT 200",
+              "value": 0.138356871,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "214",
+              "label": "PROJ STAT 214",
+              "value": 79.72980552,
+              "projected": true
+            },
+            {
+              "id": "215",
+              "label": "PROJ STAT 215",
+              "value": 11.79975288,
+              "projected": true
+            },
+            {
+              "id": "216",
+              "label": "PROJ STAT 216",
+              "value": 91.5295584,
+              "projected": true
+            }
+          ],
+          "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
         }
