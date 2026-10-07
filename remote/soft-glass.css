@@ -228,3 +228,35 @@ body:not([data-screen=tv]) .home-center>.home-secondary{order:4;width:100%}
 .score-number>strong{letter-spacing:-.6px;font-weight:700}.score-team h1{letter-spacing:0;font-weight:600}.selected-identity h2{letter-spacing:0}.roster-name>b{font-weight:600;font-size:15px}.chart-legend>span{font-size:12px}.panel-title h2{font-size:18px}.control-tiles button{font-size:18px}.header-mascot{width:132px;height:132px}.player-detail-tabs button{font-size:16px}.detail-stat-grid small{font-size:12px}.player-report-note,.player-headlines{font-size:15px}
 @media(max-width:800px){body:not([data-screen=tv]) .header-mascot{width:100px;height:104px}body:not([data-screen=tv]) .glass-header{grid-template-columns:1fr 110px 1fr;min-height:110px}body:not([data-screen=tv]) .score-team h1{font-size:19px}body:not([data-screen=tv]) .control-tiles button{font-size:16px}body:not([data-screen=tv]) .roster-name>b{font-size:15px}body:not([data-screen=tv]) .roster-name>small{font-size:12px}.bottom-nav button{font-size:12px}}
 .injury-update-list{padding:4px 10px 8px}.injury-update-row{display:flex;flex-direction:column;width:100%;gap:4px;text-align:left;background:transparent;color:inherit;border:0;border-bottom:1px solid #ffffff10;border-left:2px solid var(--team-color);padding:9px 8px;min-height:68px}.injury-update-row>span{display:flex;align-items:center;gap:10px;min-width:0}.injury-update-row b{flex:1;min-width:0;font-weight:600;font-size:16px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.injury-update-row strong{font-weight:500;font-size:13px;color:#efb482}.injury-update-row>small{color:#a1b2c1;font-size:12px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.injury-update-row>small:last-child{color:#8498a9;font-size:11px}.injury-view-all{width:100%;min-height:44px;padding:9px;border:0;border-top:1px solid var(--border);background:#ffffff04;color:#c8d7e3;font-size:15px;font-weight:500}
+
+/* Wider stocks and compact supporting feeds. */
+@media (min-width: 1201px) {
+  body:not([data-screen=tv]) .home-grid {
+    grid-template-columns: minmax(190px,.76fr) minmax(420px,2.5fr) minmax(190px,.76fr);
+  }
+}
+body[data-screen=tv] .home-grid {
+  grid-template-columns: minmax(190px,.76fr) minmax(350px,2.5fr) minmax(190px,.76fr);
+}
+body[data-screen=tv] .home-center {
+  grid-template-rows: minmax(0,1.2fr) minmax(0,1fr) minmax(0,.72fr);
+}
+body[data-screen=tv] .league-chart:not(.expanded-chart) .league-chart-body {
+  grid-template-columns: minmax(0,1fr) minmax(150px,.52fr);
+}
+.home-secondary .injury-update-row { min-height: 54px; padding: 6px 7px; gap: 2px; }
+.home-secondary .injury-update-row b { font-size: 14px; }
+.home-secondary .injury-update-row > small { font-size: 11px; }
+.home-secondary .feed-row { padding-top: 6px; padding-bottom: 6px; }
+.home-secondary .feed-row .player-face { width: 32px; height: 32px; }
+.feed-row .player-face {
+  border: 2px solid var(--team-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb,var(--team-color) 16%,transparent);
+}
+body[data-screen=tv] .home-secondary .injury-updates { display: flex; flex-direction: column; min-height: 0; }
+body[data-screen=tv] .home-secondary .injury-update-list { flex: 1; min-height: 0; overflow: hidden; }
+body[data-screen=tv] .home-secondary .injury-update-row { min-height: 40px; }
+body[data-screen=tv] .home-secondary .injury-update-row b { font-size: clamp(9px,.7vw,14px); }
+body[data-screen=tv] .home-secondary .injury-update-row > small { font-size: clamp(8px,.55vw,11px); }
+body[data-screen=tv] .home-secondary .feed-row .player-face { width: 28px; height: 28px; }
+body[data-screen=tv] .home-secondary .injury-view-all { flex-shrink: 0; min-height: 32px; padding: 4px; font-size: 11px; }
