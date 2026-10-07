@@ -1,43 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#050505">
-  <meta name="description" content="Justin’s live fantasy football command center for Sleeper and ESPN leagues.">
-  <title>Justin’s Fantasy Command Center</title>
-  <link rel="stylesheet" href="styles.css?v=38">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101820"><title>Fantasy Scores · Justin’s Leagues</title>
+  <meta name="description" content="Live Sleeper and ESPN matchups, full rosters, recorded score charts, and a synchronized iPad and iPhone TV controller.">
+  <link rel="stylesheet" href="../remote/soft-glass.css?v=1">
 </head>
-<body data-root="./" data-layout="monitor">
-  <div class="touch-app">
-    <header class="touch-header">
-      <div class="brand-lockup"><span class="brand-mark logo-mark"><img src="assets/justin-mascot-cutout.png" alt="Justin Senus mascot"></span><div><strong>Justin’s Fantasy Command Center</strong><small>TOUCH MONITOR • SLEEPER + ESPN • LIVE</small></div></div>
-      <nav class="top-nav" aria-label="Fantasy views">
-        <button data-view="overview" class="active" type="button">HOME</button>
-        <button data-view="matchups" type="button">MATCHUPS</button>
-        <button data-view="players" type="button">PLAYERS</button>
-        <button data-view="injuries" type="button">INJURIES</button>
-        <button data-view="live" type="button">LIVE GAMES</button>
-      </nav>
-      <div class="connection-lockup"><span id="connectionDot" class="status-dot"></span><span id="connectionText">CONNECTING</span><span id="clock">--:--</span></div>
+<body data-screen="touch" data-root="./" data-design="soft-glass">
+  <div class="glass-shell">
+    <header class="glass-header">
+      <div class="header-left"><div class="league-switch" aria-label="Fantasy league"><button type="button" data-league="sleeper" class="active" aria-pressed="true">Sleeper</button><button type="button" data-league="espn" aria-pressed="false">ESPN</button></div><span id="weekLabel" class="header-week">Week —</span></div>
+      <img id="headerMascot" class="header-mascot" src="./assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+      <div class="header-right"><div class="remote-indicator"><span id="remoteStatus" role="status">Connecting…</span></div><button id="remoteToggle" class="header-tool" type="button">Pair TV</button><button class="header-tool refresh-button" data-action="refresh" type="button" aria-label="Refresh league data">↻</button></div>
     </header>
-
-    <section class="control-strip">
-      <div class="league-switcher"><span class="strip-label">LEAGUE</span><button data-league="sleeper" class="active" type="button">SLEEPER <b>THE BIG SENUS</b></button><button data-league="espn" type="button">ESPN <b>GUMBY'S BIG D</b></button></div>
-      <div class="week-control"><strong id="weekLabel">WEEK —</strong><button class="refresh-action" data-action="refresh" type="button">REFRESH NOW</button></div>
-      <div class="control-status"><span id="sourceStatus">FEEDS SYNCING</span><span id="oddsStatus">ODDS NOT CONNECTED</span></div>
-    </section>
-
-    <main>
-      <section id="matchupHero"><div class="loading-panel">LOADING MATCHUP CENTER…</div></section>
-      <section id="workspace" class="workspace"><div class="loading-panel">LOADING LIVE FANTASY DATA…</div></section>
+    <main class="glass-main">
+      <section id="matchupHero" aria-label="Matchup scores"><div class="glass-panel loading-state">Connecting your leagues…</div></section>
+      <nav class="control-tiles" aria-label="TV views"><button id="myMatchup" class="active" type="button"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M4 20V10h4v10m4 0V4h4v16m4 0V7h3v13"/></svg><span>My matchup</span></button><button type="button" data-view="league"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="18" cy="8" r="2"/><path d="M2 21v-4a6 6 0 0 1 12 0v4m2-7a5 5 0 0 1 6 5v2"/></svg><span>League</span></button><button type="button" data-view="stock"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 18 9 12l4 3 8-11m-6 0h6v6"/></svg><span>Stock board</span></button><button type="button" data-view="patriots"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4c6-3 14 3 15 9S13 25 7 20 0 7 6 4Zm1 5 10 9m-8-7 3-3m0 6 3-3"/></svg><span>Patriots</span></button></nav>
+      <section id="workspace" aria-label="Fantasy scoreboard"></section>
     </main>
-
-    <aside id="playerDrawer" class="player-drawer" aria-live="polite"></aside>
-
-    <footer class="touch-footer"><span><i class="footer-dot"></i>FANTASY DATA ONLY • ACTUAL/LIVE PRIMARY • PROJ ALWAYS VISIBLE</span><span id="lastSync">SYNC --:--</span></footer>
+    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="footer-links"><button type="button" data-view="players">All players</button><button type="button" data-view="injuries">Injuries</button><a href="../tv/" target="_blank" rel="noopener">TV view ↗</a></span><span id="lastSync">Waiting for providers</span></footer>
   </div>
-  <script src="source-catalog.js?v=2"></script>
-  <script src="app-orange-matchups-v38.js?v=38" defer></script>
-</body>
-</html>
+  <aside id="playerDrawer" class="player-drawer" aria-label="Player stats" hidden></aside>
+  <nav class="bottom-nav" aria-label="Mobile views"><button type="button" data-view="overview"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M4 20V10h4v10m4 0V4h4v16m4 0V7h3v13"/></svg><span>Matchup</span></button><button type="button" data-view="players"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4m3-17a3 3 0 0 1 0 6m1 5a5 5 0 0 1 3 5"/></svg><span>Players</span></button><button type="button" data-view="league"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="18" cy="8" r="2"/><path d="M2 21v-4a6 6 0 0 1 12 0v4m2-7a5 5 0 0 1 6 5v2"/></svg><span>League</span></button><button type="button" data-view="stock"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 18 9 12l4 3 8-11m-6 0h6v6"/></svg><span>Stock</span></button><button type="button" data-view="patriots"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4c6-3 14 3 15 9S13 25 7 20 0 7 6 4Zm1 5 10 9m-8-7 3-3m0 6 3-3"/></svg><span>Patriots</span></button></nav>
+  <section id="pairPanel" class="pair-panel touch-pair hidden" aria-label="Pair your TV controller">
+    <img src="./assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+    <h1>Connect to your TV.</h1><p>Open the TV view on your Samsung and enter its pairing code.</p><form id="pairForm"><label for="pairInput">TV pairing code</label><input id="pairInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="ABCD 2345" required aria-describedby="pairError"><button id="pairSubmit" type="submit">Connect to TV</button></form><p id="pairError" role="status"></p><div class="pair-actions"><button id="pairCancel" class="quiet-button" type="button">Use local controls</button><button id="unpair" class="quiet-button" type="button">Forget pairing</button></div>
+  </section>
+  <script src="./source-catalog.js?v=2"></script>
+  <script src="../remote/config.js?v=1"></script>
+  <script src="./remote-app.js?v=3" defer></script>
+  <script src="../remote/soft-glass.js?v=1" defer></script>
+  <script src="../remote/session.js?v=1" defer></script>
+</body></html>

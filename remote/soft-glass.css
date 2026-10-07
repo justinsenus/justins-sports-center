@@ -1,0 +1,211 @@
+:root{color-scheme:dark;--bg:#0b0f13;--surface:rgba(31,39,47,.78);--border:rgba(193,212,228,.18);--text:#f3f5f8;--muted:#9aa8b6;--orange:#f47b35;--green:#40db91}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg);scroll-behavior:smooth}body{margin:0;color:var(--text);background:radial-gradient(ellipse at 50% 0,#19222b 0,transparent 65%),var(--bg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.35;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}button{color:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--orange);outline-offset:3px}button:disabled{opacity:.55;cursor:wait}button,a{-webkit-tap-highlight-color:transparent}a{color:#d9e4ee}img{display:block;max-width:100%}h1,h2,p,figure{margin:0}button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.hidden,[hidden]{display:none!important}
+.glass-shell{max-width:1920px;margin:auto;padding:16px 22px 20px}.glass-header{position:relative;display:grid;grid-template-columns:1fr 140px 1fr;align-items:center;min-height:122px;margin-bottom:4px}.header-left,.header-right{display:flex;align-items:center;gap:16px;min-width:0}.header-left{justify-content:flex-start}.header-right{justify-content:flex-end}.header-mascot{position:relative;z-index:2;width:116px;height:122px;object-fit:contain;justify-self:center;filter:drop-shadow(0 4px 4px #0004);transform-origin:50% 78%;pointer-events:none}.league-switch{display:flex;background:#202a32b3;border:1px solid var(--border);border-radius:13px;padding:4px;flex-shrink:0}.league-switch button{min-height:46px;min-width:98px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);font-size:14px;font-weight:600}.league-switch button.active{border-color:#7c91a263;background:#3d4b58b3;color:#fff;box-shadow:inset 0 1px #d8e6f322}.header-week{color:#c7d2dc;font-weight:600;white-space:nowrap;font-size:14px}.remote-indicator{display:flex;align-items:center;gap:8px;min-width:0}.remote-indicator:before{content:"";width:8px;height:8px;border-radius:50%;background:#6a7784;flex-shrink:0}.remote-indicator:has([data-connected=true]):before{background:var(--green)}#remoteStatus{color:var(--muted);font-size:12px;max-width:230px}#remoteStatus[data-connected=true]{color:#d4e4dc}.header-tool{min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#26313c99;color:#d9e1e8;font-size:12px;white-space:nowrap}.refresh-button{font-size:22px;line-height:1}.tv-pair-code{color:var(--muted);font-size:12px;text-align:right}.tv-pair-code b{font-family:ui-monospace,monospace;color:#e7eef6;letter-spacing:2px}.glass-panel{min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:inset 0 1px 0 #eaf4ff08,0 5px 14px #0002;overflow:hidden} @supports(backdrop-filter:blur(8px)){body:not([data-screen=tv]) .glass-panel{backdrop-filter:blur(12px)}}
+.score-band{display:grid;grid-template-columns:1fr 34px 1fr;gap:16px;align-items:center;padding:20px 28px;margin-bottom:16px}.score-side{display:flex;align-items:center;justify-content:space-between;gap:18px;min-width:0}.score-side.opponent .score-team{order:2}.score-team{display:grid;grid-template-columns:14px 1fr;align-items:center;gap:4px 12px;min-width:0}.score-team h1{font-size:clamp(17px,1.65vw,30px);font-weight:650;letter-spacing:-.45px;overflow-wrap:anywhere;line-height:1.12}.score-team small{grid-column:2;color:var(--muted);font-size:13px}.team-dot{display:inline-block;width:10px;height:10px;flex:none;border-radius:50%;background:var(--team-color,#aca0e5);box-shadow:0 0 0 1px #fff2}.score-team .team-dot{width:13px;height:13px}.score-number{display:flex;flex-direction:column;align-items:center;flex-shrink:0}.score-number>strong{font-size:clamp(40px,4.25vw,82px);font-weight:700;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}.score-number>span{font-size:14px;margin-top:9px;color:var(--muted)}.score-number>span b{color:#dce4ed;font-weight:600}.score-vs{color:var(--muted);text-align:center;font-size:16px}
+.control-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.control-tiles button{display:flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:10px 16px;border:1px solid var(--border);background:#212b3499;border-radius:12px;color:#dce4ee;font-size:15px;font-weight:600}.control-tiles button.active{color:var(--orange);border-color:#f47b3577;background:#282820d9}.bottom-nav{display:none}
+.home-grid{display:grid;grid-template-columns:minmax(240px,.85fr) minmax(360px,1.65fr) minmax(240px,.85fr);gap:14px;align-items:start}.home-center{display:flex;flex-direction:column;gap:14px;min-width:0}.panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;min-height:50px;border-bottom:1px solid #d4e4f00c}.panel-title h2{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;min-width:0}.panel-title>span{color:var(--muted);font-size:11px;white-space:nowrap}.full-roster .panel-title h2{overflow-wrap:anywhere;font-size:15px}.roster-scroll{padding:0 8px 7px;scrollbar-width:thin;scrollbar-color:#53606d transparent}.roster-divider{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 7px 5px;color:#91a0ae;font-size:11px}.bench-divider{border-top:1px solid #d4e4f010;margin-top:4px}.roster-row{display:flex;align-items:center;gap:9px;width:100%;min-height:53px;padding:6px;border:0;border-top:1px solid #d4e4f00a;background:transparent;border-radius:7px;text-align:left}.roster-row:hover{background:#b6cfdf0a}.player-face{display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:none;overflow:hidden;border:1px solid #afc2d21a;border-radius:9px;background:#34404f;color:#c9d7e4}.player-face img{width:100%;height:100%;object-fit:cover;object-position:50% 8%}.roster-name{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}.roster-name>b{font-size:13px;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:550}.roster-name>small{display:flex;align-items:center;gap:6px;color:#92a2b0;font-size:10px}.player-status{margin-left:auto;color:#a9b7c4;font-size:9px;white-space:nowrap}.player-status.live{color:var(--green)}.roster-points{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none;font-variant-numeric:tabular-nums}.roster-points>b{font-size:19px;line-height:1;font-weight:650}.roster-points>small{font-size:10px;color:var(--muted)}.full-roster.own .roster-row{border-left:2px solid #f47b3540}.full-roster.opponent .roster-row{border-left:2px solid var(--team-color);border-left-color:color-mix(in srgb,var(--team-color),transparent 70%)}
+.matchup-chart .panel-title{flex-wrap:wrap;gap:6px}.chart-legend{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-width:0}.chart-legend>span{display:flex;align-items:center;gap:6px;font-size:10px;color:#bec9d4;min-width:0}.chart-legend>span>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.glass-chart-wrap{min-width:0;padding:9px 10px 0}.glass-chart{display:block;width:100%;height:auto;min-height:155px;font-family:inherit;overflow:visible}.glass-chart-grid path{stroke:#becbdd13;stroke-width:.75;fill:none}.glass-chart-grid text,.glass-chart-times text{fill:#97a7b7;font-size:10px}.glass-series{color:var(--series)}.glass-series>path{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.glass-series>circle{fill:currentColor;stroke:#f3f7ff55;stroke-width:.6;vector-effect:non-scaling-stroke}.glass-series .chart-end{stroke:#f3f7ffad;stroke-width:1}.chart-end-label{fill:currentColor;font-weight:650;font-size:13px}.chart-caption{display:flex;justify-content:space-between;gap:12px;font-size:9px;color:#8293a2;padding:3px 14px 10px}.league-chart-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(138px,.5fr);gap:4px}.league-chart-body>.chart-legend{align-self:center;display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:9px 12px 10px 0}.league-chart-body .chart-legend>span{font-size:10px;gap:5px}.league-chart-body .chart-legend>span>span{flex:1}.league-chart-body .chart-legend b{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}.league-chart-body .glass-chart-wrap{grid-row:1;padding-top:10px}.league-chart-body .chart-caption{grid-row:2;font-size:8px;padding:0 0 10px 14px}.league-chart-body>.chart-legend{grid-column:2;grid-row:1/3}.league-chart .glass-chart{min-height:110px}.home-secondary{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:0}.home-secondary .panel-title{padding:10px 12px;min-height:40px}.home-secondary .panel-title h2{font-size:12px}.home-secondary .panel-title>span{font-size:9px}.matchup-list,.feed-list{padding:4px 10px 8px;scrollbar-width:thin;scrollbar-color:#526375 transparent}.league-pair{display:block;width:100%;border:0;border-bottom:1px solid #d4e4f010;padding:9px 0;background:transparent;text-align:left}.league-pair-side{display:flex;align-items:center;gap:6px;margin:3px 0}.league-pair-side>b{font-size:10px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.league-pair-side>strong{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}.league-pair>small{display:block;font-size:8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#99a9b7;margin-top:4px}.league-pair .team-dot{width:7px;height:7px}.feed-row{display:flex;align-items:center;gap:7px;min-height:52px;padding:7px 0;border:0;border-bottom:1px solid #d4e4f010;background:transparent;width:100%;text-align:left}.feed-row .player-face{width:30px;height:30px;border-color:var(--team-color)}.feed-row>span{flex:1;min-width:0}.feed-row>span>b{display:block;font-size:10px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.feed-row>span>small{display:flex;align-items:center;gap:4px;font-size:8px;color:#a8b5c2;overflow:hidden;white-space:nowrap}.feed-row>strong{display:flex;align-items:flex-end;flex-direction:column;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}.feed-row>strong>small{font-size:8px;font-weight:500;color:#90a4b3}.feed-row>strong>.positive{color:#72d7a6}.feed-row>strong>.negative{color:#ef8c96}.feed-row .team-dot{width:6px;height:6px}
+.glass-footer{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:13px 4px 0;font-size:10px;color:#7f929f}.glass-footer a{text-decoration:none;color:#aab9c6}.loading-state,.empty-state{padding:24px;color:var(--muted);font-size:13px;line-height:1.5}.empty-state button{border:1px solid var(--border);border-radius:8px;background:#263340;padding:10px 18px;margin:8px}.expanded-chart .glass-chart{min-height:400px}.expanded-chart .league-chart-body{grid-template-columns:1fr 270px}.expanded-chart .chart-legend{gap:14px}.expanded-chart .chart-legend>span,.expanded-chart .chart-legend b{font-size:17px}.expanded-matchups .matchup-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:18px}.expanded-matchups .league-pair{padding:15px;border:1px solid var(--border);border-radius:10px}.expanded-matchups .league-pair-side>b{font-size:15px}.expanded-matchups .league-pair-side>strong{font-size:28px}.expanded-matchups .league-pair>small{font-size:11px}.all-team-rosters{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.team-players{padding-bottom:8px}.team-players .roster-row{padding:7px 15px}
+.player-drawer{position:fixed;right:20px;top:145px;bottom:24px;width:min(520px,calc(100vw - 32px));z-index:50;border:1px solid #afc8de40;border-radius:18px;background:rgba(26,35,44,.96);box-shadow:0 24px 90px #0009;overflow:hidden;backdrop-filter:blur(22px)}.glass-selected{height:100%;display:flex;flex-direction:column;min-height:0;padding:22px}.detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;color:#b6c4d0;font-size:13px}.detail-heading button{height:44px;width:44px;border:1px solid var(--border);border-radius:10px;background:#3644504d;color:#e8edf3}.selected-identity{display:flex;align-items:center;flex-wrap:wrap;gap:14px}.selected-identity .player-face{width:92px;height:100px;border-color:var(--team-color);border-radius:12px}.selected-identity>div{flex:1;min-width:130px}.selected-identity h2{font-size:24px;font-weight:650;line-height:1.1;letter-spacing:-.3px}.selected-identity p{font-size:12px;color:var(--muted);margin:7px 0}.selected-identity>div>span{display:flex;align-items:center;gap:7px;color:#b6c3d0;font-size:11px}.selected-identity>strong{font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}.selected-identity>strong>small{display:block;color:var(--muted);font-size:10px;font-weight:400;margin-top:6px}.selected-game{font-size:12px;color:var(--muted);padding:14px 0 18px}.detail-stats-scroll{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#536575 transparent}.detail-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.detail-stat-grid>div{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:14px 8px;background:#46596926;border:1px solid #c8dbea13;border-radius:10px;text-align:center}.detail-stat-grid b{font-size:27px;font-variant-numeric:tabular-nums;font-weight:600}.detail-stat-grid small{font-size:10px;color:#a9bac8;overflow-wrap:anywhere}.detail-stat-grid .player-stats-empty{grid-column:1/-1;font-size:13px;color:#b8c6d3;line-height:1.5}.selected-actions{display:flex;gap:10px;padding-top:18px}.selected-actions button{flex:1;min-height:52px;background:#37444f99;border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:600}.selected-actions .primary-action{background:var(--orange);border-color:#ffb27b55;color:#151719}.player-news{font-size:13px;color:var(--muted);padding:20px 8px}.tv-player-detail{max-width:1400px;margin:auto;width:100%;height:100%;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:30px}.tv-player-detail .selected-identity .player-face{height:170px;width:160px}.tv-player-detail .selected-identity h2{font-size:48px}.tv-player-detail .selected-identity>strong{font-size:76px}.tv-player-detail .detail-stat-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.tv-player-detail .detail-stat-grid b{font-size:36px}.tv-player-detail .detail-stat-grid small{font-size:14px}
+.glass-games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.game-card{padding:18px;text-align:left;background:var(--surface)}.game-card>span{display:block;font-size:13px;color:#bdd0df;margin-bottom:15px}.game-card>div{display:flex;align-items:center;gap:12px;margin:10px 0}.game-card img{width:45px;height:45px;object-fit:contain}.game-card>div>b{flex:1;font-size:18px;font-weight:550}.game-card>div>strong{font-size:34px;font-weight:600}.game-card>small{font-size:11px;color:var(--muted)}
+.pair-panel{position:fixed;z-index:100;left:50%;top:50%;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 28px));max-height:calc(100dvh - 30px);overflow:auto;background:#19232dee;border:1px solid #a9c1d240;box-shadow:0 0 0 200vmax #06090dc9,0 30px 90px #0009;backdrop-filter:blur(20px);border-radius:22px;text-align:center;padding:28px}.pair-panel>img{width:112px;height:116px;object-fit:contain;margin:0 auto 14px}.pair-panel h1{font-size:26px;letter-spacing:-.6px;font-weight:600}.pair-panel p{font-size:14px;color:#a6b6c4;line-height:1.5;margin:13px 0}.pair-panel button{min-height:50px;padding:12px 20px;border:1px solid #ffb68d40;border-radius:10px;background:var(--orange);color:#17191b;font-size:14px;font-weight:600}.pair-panel label{display:block;text-align:left;font-size:12px;color:var(--muted);margin:20px 0 8px}.pair-panel input{width:100%;padding:14px;min-height:56px;background:#34424e;border:1px solid #b9cadd3b;border-radius:10px;color:#fff;text-align:center;font-family:ui-monospace,monospace;font-size:25px;letter-spacing:4px;text-transform:uppercase}.pair-panel form button{width:100%;margin-top:12px}.pair-panel .quiet-button{background:#34434e66;color:#d9e3ed;border-color:var(--border);margin:5px}.pair-kicker{display:none}.pair-display{display:block;color:#f3f6fb;font:600 40px/1.3 ui-monospace,monospace;letter-spacing:4px;padding:14px}.pair-address{overflow-wrap:anywhere}#pairError{color:#ffb7a2;min-height:1em}.pair-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:12px}
+.score-wiggle{animation:mascot-score-wiggle .4s ease-in-out}
+@keyframes mascot-score-wiggle{0%,100%{transform:rotate(0) translateX(0)}20%{transform:rotate(-3deg) translateX(-1px)}45%{transform:rotate(3deg) translateX(1px)}70%{transform:rotate(-1.5deg)}}
+body[data-screen=tv]{height:100vh;height:100dvh;overflow:hidden;background:#0c1218}
+body[data-screen=tv] .glass-shell{height:100%;max-width:none;display:flex;flex-direction:column;padding:10px 20px}
+body[data-screen=tv] .glass-header{min-height:clamp(66px,9.5vh,118px);height:clamp(66px,9.5vh,118px);flex-shrink:0;margin:0}
+body[data-screen=tv] .header-mascot{height:clamp(72px,10.5vh,126px);width:clamp(72px,10.5vh,126px)}
+body[data-screen=tv] .glass-main{display:flex;flex-direction:column;flex:1;min-height:0}
+body[data-screen=tv] .score-band{padding:1.3vh 1.5vw;margin-bottom:12px;min-height:95px}
+body[data-screen=tv] .score-team h1{font-size:clamp(18px,1.5vw,32px)}
+body[data-screen=tv] .score-number>strong{font-size:clamp(40px,4.5vw,96px)}
+body[data-screen=tv] #workspace{flex:1;min-height:0}
+body[data-screen=tv] .home-grid{height:100%;align-items:stretch;grid-template-columns:minmax(200px,1fr) minmax(350px,1.85fr) minmax(200px,1fr);gap:12px}
+body[data-screen=tv] .full-roster{display:flex;flex-direction:column;min-height:0}
+body[data-screen=tv] .roster-scroll{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+body[data-screen=tv] .roster-row{flex:1;min-height:0;max-height:62px;padding:3px 5px;gap:7px;cursor:default}
+body[data-screen=tv] .roster-name>b{font-size:clamp(10px,.9vw,19px)}
+body[data-screen=tv] .roster-name>small,body[data-screen=tv] .roster-points>small{font-size:clamp(8px,.59vw,13px)}
+body[data-screen=tv] .roster-points>b{font-size:clamp(14px,1.25vw,27px)}
+body[data-screen=tv] .player-status{font-size:clamp(7px,.52vw,11px)}
+body[data-screen=tv] .roster-row .player-face{width:clamp(23px,3.1vh,42px);height:clamp(23px,3.1vh,42px)}
+body[data-screen=tv] .roster-divider{padding:5px 7px 3px;font-size:10px;min-height:19px;flex-shrink:0}
+body[data-screen=tv] .panel-title{padding:9px 12px;min-height:39px}
+body[data-screen=tv] .panel-title h2{font-size:clamp(12px,.9vw,18px)}
+body[data-screen=tv] .panel-title>span{font-size:10px}
+body[data-screen=tv] .home-center{min-height:0;gap:11px;display:grid;grid-template-rows:minmax(0,1.12fr) minmax(0,.67fr) minmax(0,1fr)}
+body[data-screen=tv] .matchup-chart{display:flex;flex-direction:column;min-height:0}
+body[data-screen=tv] .matchup-chart .glass-chart-wrap{flex:1;min-height:0}
+body[data-screen=tv] .glass-chart{height:100%;min-height:0}
+body[data-screen=tv] .league-chart{display:flex;flex-direction:column;min-height:0}
+body[data-screen=tv] .league-chart-body{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) minmax(120px,.45fr);grid-template-rows:minmax(0,1fr) 18px}
+body[data-screen=tv] .league-chart-body .chart-legend{gap:3px;padding-top:5px;padding-bottom:5px}
+body[data-screen=tv] .league-chart-body .chart-legend>span{font-size:clamp(8px,.65vw,14px)}
+body[data-screen=tv] .league-chart-body .chart-legend b{font-size:clamp(9px,.72vw,15px)}
+body[data-screen=tv] .home-secondary{min-height:0}
+body[data-screen=tv] .league-matchups,body[data-screen=tv] .league-feed{display:flex;flex-direction:column;min-height:0}
+body[data-screen=tv] .matchup-list,body[data-screen=tv] .feed-list{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+body[data-screen=tv] .league-pair{flex:1;min-height:0;padding:3px 0}
+body[data-screen=tv] .league-pair-side{margin:1px 0}
+body[data-screen=tv] .league-pair>small{font-size:7px}
+body[data-screen=tv] .league-pair-side>b{font-size:clamp(8px,.65vw,14px)}
+body[data-screen=tv] .league-pair-side>strong{font-size:clamp(12px,.92vw,20px)}
+body[data-screen=tv] .feed-row{flex:1;min-height:0;padding:4px 0}
+body[data-screen=tv] .feed-row .player-face{height:clamp(20px,2.5vh,36px);width:clamp(20px,2.5vh,36px)}
+body[data-screen=tv] .feed-row>span>b{font-size:clamp(8px,.66vw,15px)}
+body[data-screen=tv] .feed-row>strong{font-size:clamp(12px,1vw,21px)}
+body[data-screen=tv] .glass-footer{padding-top:9px;min-height:24px;flex-shrink:0;font-size:10px}
+body[data-screen=tv] .expanded-chart{height:100%;display:flex;flex-direction:column}
+body[data-screen=tv] .expanded-chart .league-chart-body{grid-template-columns:1fr 25%;grid-template-rows:1fr 22px}
+body[data-screen=tv] .expanded-chart .chart-legend{gap:12px}
+body[data-screen=tv] .expanded-chart .chart-legend>span,body[data-screen=tv] .expanded-chart .chart-legend b{font-size:clamp(16px,1.5vw,30px)}
+body[data-screen=tv] .expanded-matchups{height:100%;display:flex;flex-direction:column}
+body[data-screen=tv] .expanded-matchups .matchup-list{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr}
+body[data-screen=tv] .expanded-matchups .league-pair{padding:18px}
+body[data-screen=tv] .expanded-matchups .league-pair-side>b{font-size:clamp(15px,1.3vw,28px)}
+body[data-screen=tv] .expanded-matchups .league-pair-side>strong{font-size:clamp(25px,2.5vw,55px)}
+body[data-screen=tv] .all-team-rosters{height:100%;overflow:auto}
+body[data-screen=tv] .glass-games{height:100%;grid-template-rows:repeat(3,minmax(0,1fr));overflow:hidden}
+@media(max-width:1200px){
+body:not([data-screen=tv]) .home-grid{grid-template-columns:1fr 1fr;gap:12px}
+body:not([data-screen=tv]) .home-center{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+body:not([data-screen=tv]) .home-secondary{grid-column:1/-1}
+body:not([data-screen=tv]) .full-roster{grid-row:2}
+body:not([data-screen=tv]) .roster-row{min-height:60px}
+body:not([data-screen=tv]) .roster-name>b{font-size:15px}
+body:not([data-screen=tv]) .roster-name>small,body:not([data-screen=tv]) .roster-points>small{font-size:11px}
+body:not([data-screen=tv]) .home-secondary .matchup-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+body:not([data-screen=tv]) .home-secondary .feed-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+body:not([data-screen=tv]) .chart-legend{gap:8px}
+body:not([data-screen=tv]) .header-right .remote-indicator{max-width:120px}
+body:not([data-screen=tv]) .score-side{gap:12px}
+body:not([data-screen=tv]) .score-band{padding:16px 18px}
+body:not([data-screen=tv]) .score-number>strong{font-size:48px}
+}
+@media(max-width:800px){
+body:not([data-screen=tv]) .glass-shell{padding:10px 12px calc(90px + env(safe-area-inset-bottom))}
+body:not([data-screen=tv]) .glass-header{grid-template-columns:1fr 96px 1fr;min-height:105px}
+body:not([data-screen=tv]) .header-mascot{width:88px;height:96px}
+body:not([data-screen=tv]) .header-left{flex-wrap:wrap;gap:6px}
+body:not([data-screen=tv]) .header-week{font-size:11px}
+body:not([data-screen=tv]) .league-switch button{min-width:65px;min-height:44px;font-size:12px}
+body:not([data-screen=tv]) .header-right{flex-wrap:wrap;gap:7px}
+body:not([data-screen=tv]) .remote-indicator{flex-basis:100%;justify-content:flex-end}
+body:not([data-screen=tv]) #remoteStatus{font-size:10px}
+body:not([data-screen=tv]) .header-tool{padding:6px 9px;min-width:44px}
+body:not([data-screen=tv]) .refresh-button{display:none}
+body:not([data-screen=tv]) .score-band{gap:8px;padding:15px 13px;grid-template-columns:1fr 22px 1fr}
+body:not([data-screen=tv]) .score-side{flex-direction:column;align-items:stretch;gap:10px}
+body:not([data-screen=tv]) .score-side.opponent .score-team{order:0}
+body:not([data-screen=tv]) .score-team{gap:4px 7px;grid-template-columns:10px 1fr}
+body:not([data-screen=tv]) .score-team h1{font-size:16px;line-height:1.2}
+body:not([data-screen=tv]) .score-team small{font-size:10px}
+body:not([data-screen=tv]) .score-team .team-dot{width:9px;height:9px}
+body:not([data-screen=tv]) .score-number{align-items:flex-start;padding-left:17px}
+body:not([data-screen=tv]) .score-number>strong{font-size:43px}
+body:not([data-screen=tv]) .score-number>span{font-size:12px;margin-top:6px}
+body:not([data-screen=tv]) .score-vs{font-size:12px}
+body:not([data-screen=tv]) .control-tiles{gap:8px}
+body:not([data-screen=tv]) .control-tiles button{font-size:13px;min-height:62px;padding:8px;gap:7px;flex-direction:column}
+body:not([data-screen=tv]) .home-center{grid-template-columns:1fr}
+body:not([data-screen=tv]) .home-center .home-secondary{grid-column:auto}
+body:not([data-screen=tv]) .full-roster .panel-title h2{font-size:14px}
+body:not([data-screen=tv]) .roster-row{gap:7px}
+body:not([data-screen=tv]) .roster-name>b{font-size:13px}
+body:not([data-screen=tv]) .player-status{display:none}
+body:not([data-screen=tv]) .glass-chart{min-height:170px}
+body:not([data-screen=tv]) .league-chart .glass-chart{min-height:125px}
+body:not([data-screen=tv]) .bottom-nav{position:fixed;left:12px;right:12px;bottom:max(8px,env(safe-area-inset-bottom));z-index:40;display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #c1d5e42b;background:#202c36ee;backdrop-filter:blur(20px);border-radius:16px;box-shadow:0 10px 40px #0006;padding:6px;gap:3px}
+.bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:54px;background:transparent;border:0;border-radius:10px;color:#aab9c7;font-size:10px}.bottom-nav button.active{color:var(--orange);background:#ffffff05}.bottom-nav svg{width:23px;height:23px}
+body:not([data-screen=tv]) .all-team-rosters{grid-template-columns:1fr 1fr}
+body:not([data-screen=tv]) .expanded-matchups .matchup-list{grid-template-columns:1fr 1fr}
+body:not([data-screen=tv]) .expanded-chart .league-chart-body{grid-template-columns:1fr 180px}
+body:not([data-screen=tv]) .expanded-chart .glass-chart{min-height:260px}
+body:not([data-screen=tv]) .expanded-chart .chart-legend>span,body:not([data-screen=tv]) .expanded-chart .chart-legend b{font-size:12px}
+body:not([data-screen=tv]) .glass-games{grid-template-columns:1fr 1fr}
+}
+@media(max-width:540px){
+body:not([data-screen=tv]) .glass-shell{padding:6px 10px calc(92px + env(safe-area-inset-bottom))}
+body:not([data-screen=tv]) .glass-header{grid-template-columns:1fr 85px 1fr;min-height:97px}
+body:not([data-screen=tv]) .header-mascot{width:80px;height:86px}
+body:not([data-screen=tv]) .league-switch{padding:3px;border-radius:10px}
+body:not([data-screen=tv]) .league-switch button{min-width:52px;min-height:44px;font-size:11px;border-radius:7px}
+body:not([data-screen=tv]) .header-week{margin-left:4px}
+body:not([data-screen=tv]) .header-tool{min-height:44px;font-size:10px}
+body:not([data-screen=tv]) .remote-indicator:before{width:6px;height:6px}
+body:not([data-screen=tv]) .remote-indicator{gap:4px}
+body:not([data-screen=tv]) #remoteStatus{font-size:9px;max-width:105px;text-align:right}
+body:not([data-screen=tv]) .score-band{margin-bottom:10px;padding:13px 10px;gap:5px}
+body:not([data-screen=tv]) .score-team h1{font-size:13px;letter-spacing:-.15px}
+body:not([data-screen=tv]) .score-number>strong{font-size:40px}
+body:not([data-screen=tv]) .score-number>span{font-size:11px}
+body:not([data-screen=tv]) .control-tiles{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+body:not([data-screen=tv]) .control-tiles button{flex-direction:row;justify-content:flex-start;min-height:54px;padding:9px 14px;font-size:13px;gap:11px}
+body:not([data-screen=tv]) .home-grid{display:flex;flex-direction:column;gap:12px}
+body:not([data-screen=tv]) .home-center{display:flex;width:100%}
+body:not([data-screen=tv]) .full-roster{width:100%}
+body:not([data-screen=tv]) .full-roster.own{order:0}
+body:not([data-screen=tv]) .home-center{order:1}
+body:not([data-screen=tv]) .full-roster.opponent{order:2}
+body:not([data-screen=tv]) .roster-row{min-height:59px}
+body:not([data-screen=tv]) .roster-name>b{font-size:15px}
+body:not([data-screen=tv]) .roster-name>small,body:not([data-screen=tv]) .roster-points>small{font-size:11px}
+body:not([data-screen=tv]) .roster-points>b{font-size:22px}
+body:not([data-screen=tv]) .roster-row .player-face{width:40px;height:40px}
+body:not([data-screen=tv]) .player-status{display:inline}
+body:not([data-screen=tv]) .home-secondary{grid-template-columns:1fr}
+body:not([data-screen=tv]) .home-secondary .matchup-list{display:block}
+body:not([data-screen=tv]) .home-secondary .feed-list{display:block}
+body:not([data-screen=tv]) .home-secondary .league-pair-side>b{font-size:13px}
+body:not([data-screen=tv]) .home-secondary .league-pair-side>strong{font-size:18px}
+body:not([data-screen=tv]) .home-secondary .league-pair>small{font-size:10px}
+body:not([data-screen=tv]) .feed-row{min-height:62px}
+body:not([data-screen=tv]) .feed-row>span>b{font-size:13px}
+body:not([data-screen=tv]) .feed-row>span>small{font-size:10px}
+body:not([data-screen=tv]) .feed-row>strong{font-size:19px}
+body:not([data-screen=tv]) .feed-row>strong>small{font-size:9px}
+body:not([data-screen=tv]) .feed-row .player-face{width:38px;height:38px}
+body:not([data-screen=tv]) .panel-title h2{font-size:14px}
+body:not([data-screen=tv]) .chart-legend>span{font-size:9px}
+body:not([data-screen=tv]) .glass-chart{min-height:140px}
+body:not([data-screen=tv]) .league-chart-body{grid-template-columns:1fr 130px}
+body:not([data-screen=tv]) .league-chart-body>.chart-legend{padding-right:8px;gap:5px}
+body:not([data-screen=tv]) .league-chart-body .chart-legend>span{font-size:9px}
+body:not([data-screen=tv]) .league-chart-body .chart-legend b{font-size:10px}
+body:not([data-screen=tv]) .chart-caption{font-size:8px}
+body:not([data-screen=tv]) .glass-footer{flex-wrap:wrap;font-size:9px}
+body:not([data-screen=tv]) .all-team-rosters{grid-template-columns:1fr}
+body:not([data-screen=tv]) .expanded-matchups .matchup-list{grid-template-columns:1fr}
+body:not([data-screen=tv]) .expanded-chart .league-chart-body{grid-template-columns:1fr}
+body:not([data-screen=tv]) .expanded-chart .chart-legend{grid-row:auto;grid-column:1;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body:not([data-screen=tv]) .expanded-chart .glass-chart{min-height:190px}
+body:not([data-screen=tv]) .glass-games{grid-template-columns:1fr}
+.player-drawer{left:8px;right:8px;top:auto;bottom:max(8px,env(safe-area-inset-bottom));width:auto;height:min(78dvh,760px);border-radius:22px;z-index:60}.glass-selected{padding:16px}.detail-heading{padding-bottom:8px}.selected-identity{gap:10px}.selected-identity .player-face{width:70px;height:82px}.selected-identity>div{min-width:90px}.selected-identity h2{font-size:21px}.selected-identity>strong{font-size:31px}.detail-stat-grid{gap:7px}.detail-stat-grid>div{padding:12px 6px}.detail-stat-grid b{font-size:24px}.selected-actions{padding-top:12px}.selected-actions button{min-height:54px;font-size:13px}
+.pair-panel{padding:24px 18px}.pair-panel h1{font-size:24px}.pair-display{font-size:30px;letter-spacing:3px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.score-wiggle{animation:none!important}}
+
+
+.footer-links{display:flex;align-items:center;gap:14px}.footer-links button{border:0;padding:7px 0;background:transparent;color:#aab9c6;font-size:11px;min-height:32px}
+body[data-screen=tv] .home-center{grid-template-rows:minmax(0,1.15fr) minmax(0,.85fr) minmax(0,.95fr)}
+body[data-screen=tv] .league-chart:not(.expanded-chart) .league-chart-body>.chart-legend{display:grid;grid-template-columns:1fr 1fr;align-content:center;column-gap:10px;row-gap:4px}
+body[data-screen=tv] .league-chart:not(.expanded-chart) .league-chart-body{grid-template-columns:minmax(0,1fr) minmax(170px,.8fr)}
+@media(max-width:1200px){
+body:not([data-screen=tv]) .home-center{display:contents}
+body:not([data-screen=tv]) .home-grid>.full-roster{grid-row:2}
+body:not([data-screen=tv]) .home-center>.matchup-chart{grid-column:1/-1;grid-row:1}
+body:not([data-screen=tv]) .home-center>.league-chart{grid-column:1/-1;grid-row:3}
+body:not([data-screen=tv]) .home-center>.home-secondary{grid-column:1/-1;grid-row:4}
+body:not([data-screen=tv]) .matchup-chart .glass-chart{max-height:240px}
+}
+@media(max-width:540px){
+body:not([data-screen=tv]) .home-center{display:contents}
+body:not([data-screen=tv]) .home-center>.matchup-chart{order:0;width:100%}
+body:not([data-screen=tv]) .full-roster.own{order:1}
+body:not([data-screen=tv]) .full-roster.opponent{order:2}
+body:not([data-screen=tv]) .home-center>.league-chart{order:3;width:100%}
+body:not([data-screen=tv]) .home-center>.home-secondary{order:4;width:100%}
+.footer-links{gap:10px}.footer-links button{min-height:44px}
+}
+
