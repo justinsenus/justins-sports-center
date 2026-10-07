@@ -61,7 +61,7 @@
     const entries=players.map(p=>({p,report:details?.injurySummary(p) || {status:p.injury_status || p.injuryStatus,source:'League roster'}}))
       .filter(({report})=>report.status && /OUT|IR|DOUBTFUL|QUESTIONABLE|PUP|INJUR/i.test(report.status))
       .sort((a,b)=>Number(Boolean(flags[m.ui.league+':'+b.p.player_id]))-Number(Boolean(flags[m.ui.league+':'+a.p.player_id])));
-    const visible=page(entries,window.innerHeight<650?2:window.innerHeight<1050?3:4);
+    const visible=page(entries,window.innerHeight<650?2:window.innerHeight<1250?3:4);
     return '<section class="glass-panel tv-injuries"><div class="tv-panel-title"><h2>Injury updates</h2><span>'+(entries.length?entries.length+' reports'+(visible.pages>1?' · '+visible.current+'/'+visible.pages:''):'Checking reports')+'</span></div><div class="tv-injury-list">'+
       (entries.length?visible.items.map(({p,report:r})=>'<article class="tv-injury-row" style="--team-color:'+esc(p.fantasyTeamColor || '#aca0e5')+'"><div><b>'+esc(p.full_name || p.name)+'</b><strong>'+esc(r.status)+'</strong></div><p>'+esc([r.injury,r.practice || 'Practice not reported'].filter(Boolean).join(' · '))+'</p><small>'+esc(r.source)+(r.week?' · W'+esc(r.week):'')+(r.date?' · '+esc(r.date):' · Undated')+'</small></article>').join(''):
         '<p class="empty-state">'+(details?.injurySummary(players[0] || {}).loading?'Checking dated injury reports…':'No injury designations reported. Use the player’s News & injury tab for more detail.')+'</p>')+'</div></section>';

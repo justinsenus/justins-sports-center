@@ -281,3 +281,21 @@ body[data-screen=tv] .tv-stock-body .team-dot{width:5px;height:5px}
 body[data-screen=tv] .tv-stock-chart .chart-caption{font-size:6px;gap:4px;padding-left:5px;padding-right:4px}
 body[data-screen=tv] .tv-stock-chart .chart-caption span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
+/* Scale ribbons and supporting text without clipping at 1080p. */
+.tv-center{grid-template-rows:minmax(0,1.2fr) minmax(0,.85fr) minmax(0,1.55fr)}
+.tv-fantasy-strip{height:clamp(64px,4.3vw,86px)}
+.tv-nfl-strip{height:clamp(72px,4.8vw,96px)}
+.tv-strip-matchup>div,.tv-nfl-game>div{line-height:1.1}
+.tv-stock-body>.tv-chart-legend{grid-template-columns:repeat(3,minmax(0,1fr));padding:4px 8px 4px 0;row-gap:1px;column-gap:7px}
+.tv-stock-body .tv-chart-legend b{font-size:clamp(10px,.74vw,15px);line-height:1}
+.tv-stock-body .tv-chart-legend strong{font-size:clamp(12px,.9vw,17px);line-height:1}
+.tv-injury-row{padding-top:3px;padding-bottom:3px;gap:1px}
+.tv-injury-row b{font-size:clamp(13px,.9vw,18px)}
+.tv-injury-row p{font-size:clamp(10px,.68vw,13px)}
+.tv-injury-row>small{font-size:clamp(9px,.6vw,12px)}
+.tv-feed-row{padding:2px 0}.tv-feed-name>b{font-size:clamp(13px,.9vw,18px)}.tv-feed-name>small{font-size:clamp(9px,.65vw,12px)}
+.tv-feed-row>strong{font-size:clamp(19px,1.3vw,24px);line-height:1;gap:1px}.tv-feed-row>strong>small{font-size:clamp(9px,.6vw,12px);line-height:1}
+@media(max-height:650px){
+body[data-screen=tv] .tv-center{grid-template-rows:minmax(0,1.15fr) minmax(0,1.05fr) minmax(0,1.25fr)}
+body[data-screen=tv] .tv-injury-row{padding-top:2px;padding-bottom:2px}
+}
