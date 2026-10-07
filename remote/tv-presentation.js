@@ -46,7 +46,7 @@
     }).join('')+'</div></section>';
   }
   function feed(m) {
-    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<650?3:window.innerHeight<800?4:5;
+    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<650?2:window.innerHeight<800?4:5;
     const visible=page(events.slice(0,12),size);
     return '<section class="glass-panel tv-feed"><div class="tv-panel-title"><h2>League scoring</h2><span>All teams</span></div><div class="tv-feed-list">'+(events.length?visible.items.map(e=>{
       const p=players.find(p=>String(p.player_id)===String(e.playerId)) || {player_id:e.playerId,full_name:e.name,headshot:e.headshot,team:e.team};
