@@ -303,3 +303,30 @@ body[data-screen=tv] .tv-injury-row p{font-size:9px}
 body[data-screen=tv] .tv-injury-row>small{font-size:8px}
 body[data-screen=tv] .tv-strip-matchup b{line-height:1}
 }
+
+/* Prioritize full-width stock plots and reduce supporting report panels. */
+body[data-screen=tv] .tv-overview {
+  grid-template-columns: minmax(0,.8fr) minmax(0,2.8fr) minmax(0,.8fr);
+}
+body[data-screen=tv] .tv-center {
+  grid-template-rows: minmax(0,1.18fr) minmax(0,1.18fr) minmax(0,.96fr);
+}
+body[data-screen=tv] .tv-stock-body {
+  grid-template-columns: minmax(0,1.5fr) minmax(0,1fr);
+}
+body[data-screen=tv] .tv-stock-body > .tv-chart-legend {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  column-gap: 6px;
+  row-gap: 2px;
+  padding: 2px 8px 3px 0;
+}
+body[data-screen=tv] .tv-secondary .tv-panel-title { min-height: 28px; padding: 5px 9px; }
+body[data-screen=tv] .tv-secondary .tv-panel-title h2 { font-size: clamp(11px,.75vw,15px); }
+body[data-screen=tv] .tv-injury-row b { font-size: clamp(11px,.8vw,15px); }
+body[data-screen=tv] .tv-feed-row .player-face {
+  width: clamp(25px,3vh,34px);
+  height: clamp(25px,3vh,34px);
+  border: 2px solid var(--team-color);
+}
+body[data-screen=tv] .tv-feed-name > b { font-size: clamp(11px,.8vw,16px); }
+body[data-screen=tv] .tv-feed-name > small { font-size: clamp(8px,.55vw,11px); }
