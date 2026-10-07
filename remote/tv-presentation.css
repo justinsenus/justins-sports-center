@@ -271,3 +271,13 @@ body[data-screen=tv] .tv-roster-opponent .tv-starter-row .tv-player-score{flex-d
 .tv-starter-row .tv-player-score>small{font-size:9px;white-space:nowrap}
 .tv-player-name{gap:2px}.tv-player-name>small{font-size:clamp(9px,.68vw,13px);line-height:1}
 .tv-injury-row>div,.tv-injury-row>p,.tv-injury-row>small{flex-shrink:0;line-height:1.1}
+@media(max-height:650px){
+body[data-screen=tv] .tv-center{grid-template-rows:minmax(0,1.15fr) minmax(0,1.05fr) minmax(0,1.25fr)}
+body[data-screen=tv] .tv-stock-body{grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr)}
+body[data-screen=tv] .tv-stock-body>.tv-chart-legend{grid-template-columns:repeat(3,minmax(0,1fr));padding:4px 6px 4px 0;column-gap:5px;row-gap:1px}
+body[data-screen=tv] .tv-stock-body .tv-chart-legend b{font-size:10px;line-height:1}
+body[data-screen=tv] .tv-stock-body .tv-chart-legend strong{font-size:12px;line-height:1}
+body[data-screen=tv] .tv-stock-body .team-dot{width:5px;height:5px}
+body[data-screen=tv] .tv-stock-chart .chart-caption{font-size:6px;gap:4px;padding-left:5px;padding-right:4px}
+body[data-screen=tv] .tv-stock-chart .chart-caption span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
