@@ -265,13 +265,14 @@
     const id = player && (player.player_id || player.playerId || player.id);
     const fallback = player && (player.headshot || player.imageUrl || player.image || "");
     const sleeper = id ? `https://sleepercdn.com/content/nfl/players/thumb/${encodeURIComponent(id)}.jpg` : "";
+    if(player && player.scoringPeriodId)return {src:fallback || `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`,fallback:""};
     return { src: sleeper || fallback, fallback: fallback && fallback !== sleeper ? fallback : "" };
   }
 
   function playerFace(player, size = "") {
     const image = playerImage(player);
     const name = player && (player.full_name || player.name) || "Player";
-    return `<span class="player-face ${size}" data-initials="${esc(initials(name))}"><img src="${esc(image.src)}" ${image.fallback ? `data-fallback="${esc(image.fallback)}"` : ""} alt="${esc(name)}" onerror="this.style.opacity='.16'"></span>`;
+    return `<span class="player-face ${size}" data-initials="${esc(initials(name))}"><img src="${esc(image.src)}" ${image.fallback ? `data-fallback="${esc(image.fallback)}"` : ""} alt="${esc(name)}" onload="this.style.opacity='1'" onerror="this.style.opacity='.16'"></span>`;
   }
 
   function sleeperPlayerIds(roster) {
@@ -363,16 +364,20 @@
   }
 
   function consensusFor(player, consensusData = state.consensus) {
-    const map = consensusData && consensusData.players || {};
+    const targetWeek=Number(player && player.scoringPeriodId || state.week);
+    const map = consensusData && (!consensusData.week || Number(consensusData.week)===targetWeek) ? consensusData.players || {} : {};
     const id = String(player && (player.player_id || player.id) || "");
     const fallbackConsensus = () => {
       const key = nameKey(player && (player.full_name || player.name));
-      const publicFallback = PUBLIC_ESPN_FALLBACK_PROJECTIONS[key];
-      const direct = finite(player && player.projected);
-      const value = direct != null ? direct : publicFallback && finite(publicFallback.projected) != null ? finite(publicFallback.projected) : POSITION_PROJECTION_BACKSTOP[String(player && player.position || "UTIL").toUpperCase()] || POSITION_PROJECTION_BACKSTOP.UTIL;
-      const sourceLabel = direct != null ? "SLEEPER" : publicFallback ? publicFallback.source : "MODEL BACKSTOP";
-      return { value, min: null, max: null, range: null, sourceCount: direct != null || publicFallback ? 1 : 0, sources: [{ source: sourceLabel, value }], outlier: null, odds: [], fallback: true, sourceLabel };
+      const publicRows=Number(state.espn && state.espn.scoringPeriodId)===targetWeek?state.espn.projectionPlayers || {}:{};
+      const publicRow=publicRows[key];
+      const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
+      const sourceLabel = direct == null ? "NOT REPORTED" : player && player.scoringPeriodId ? "ESPN" : "SLEEPER";
+      return { value:direct, min: null, max: null, range: null, sourceCount:direct == null?0:1, sources:direct == null?[]:[{ source:sourceLabel,value:direct }], outlier:null,odds:[],fallback:true,sourceLabel };
     };
+    // ESPN's weekly projection already reflects this league's scoring rules.
+    // A Sleeper projection from another week or scoring format cannot replace it.
+    if(player && player.scoringPeriodId)return fallbackConsensus();
     let row = map[id];
     if (!row && player && player.full_name) row = Object.values(map).find((candidate) => nameKey(candidate.name || candidate.full_name) === nameKey(player.full_name) && (!candidate.team || String(candidate.team).toUpperCase() === String(player.team || "").toUpperCase()));
     if (!row) {
