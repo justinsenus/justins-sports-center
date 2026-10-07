@@ -120,5 +120,9 @@ body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-name>b{fo
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-name>small{font-size:7px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-score>b{font-size:14px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row{gap:4px;padding:1px 3px}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup{gap:1px;padding:2px 0}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup-team>b{font-size:10px;line-height:1}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup-team>strong{font-size:14px;line-height:1}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup>small{font-size:7px;line-height:1}
 body[data-screen=tv][data-tv-density=compact] .tv-chart-legend{padding-top:6px}
 body[data-screen=tv][data-tv-density=compact] .chart-caption{padding-bottom:4px;min-height:14px}
