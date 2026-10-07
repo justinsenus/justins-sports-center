@@ -65,7 +65,7 @@
       '<p class="player-report-note">Projected player statistics</p>'+statGrid(p,true)+coverage();
   }
   function statGrid(p,projected=false) {
-    const rows=(app.data.stats?.(p) || []).filter(s=>Boolean(s.projected || /^PROJ /i.test(s.label))===projected);
+    const rows=(app.data.stats?.(p) || []).filter(s=>Boolean(s.projected || /^PROJ /i.test(s.label))===projected && !/^(?:PROJ )?STAT \d+$/i.test(s.label));
     return '<div class="detail-stat-grid">'+(rows.length?rows.map(s=>'<div><b>'+fmt(s.value,Number.isInteger(Number(s.value))?0:1)+'</b><small>'+esc(s.label.replace(/^PROJ /i,''))+'</small></div>').join(''):'<div class="player-stats-empty">'+(projected?'No projected stat line reported.':'No actual player stats reported for this scoring week yet.')+'</div>')+'</div>';
   }
   function render(m,full=false) {

@@ -6,12 +6,13 @@ const model={player,league:{week:5,teams:[]},ui:{league:'sleeper',playerTab:'sta
 const intel={week:5,source_count:30,sources:[{id:'nfl',name:'NFL.com',url:'https://www.nfl.com',status:'available',matched_count:1}],players:{'drakemaye:NE':{reports:[{source:'NFL.com',week:5,status:'Questionable',practice:'Limited Participation',url:'https://www.nfl.com/injuries'}],news:[{source:'nfl',source_name:'NFL.com',title:'Drake Maye returns to practice',url:'https://www.nfl.com/news',published_at:'2026-10-06T15:00:00Z'}]}}};
 const source=(source,value,week=5)=>({source,label:source,value,week,season:2026,scoring:'PPR'});
 const consensus={week:5,players:{123:{sources:[source('one',10),source('two',30),source('stale',99,4),source('missing',null)]}}};
-const commands=[],listeners={};const app={getUI:()=>model.ui,model:()=>model,render(){},dispatch:p=>commands.push(p),escape:v=>String(v??'').replaceAll('<','&lt;').replaceAll('"','&quot;'),format:(v,d=1,empty='—')=>v==null?empty:Number(v).toFixed(d),data:{actual:p=>p.actual,stats:()=>[{label:'Passing yards',value:269},{label:'PROJ Rushing touchdowns',value:.2,projected:true}]},markup:{face:()=>'<span></span>',gameLabel:()=> 'NE vs BUF'}};
+const commands=[],listeners={};const app={getUI:()=>model.ui,model:()=>model,render(){},dispatch:p=>commands.push(p),escape:v=>String(v??'').replaceAll('<','&lt;').replaceAll('"','&quot;'),format:(v,d=1,empty='—')=>v==null?empty:Number(v).toFixed(d),data:{actual:p=>p.actual,stats:()=>[{label:'Passing yards',value:269},{label:'STAT 999',value:20},{label:'PROJ Rushing touchdowns',value:.2,projected:true}]},markup:{face:()=>'<span></span>',gameLabel:()=> 'NE vs BUF'}};
 const context={window:{FantasyCenter:app},document:{body:{dataset:{screen:'touch',root:'../patriots-fantasy-touch/'}},addEventListener:(name,fn)=>listeners[name]=fn},fetch:async url=>({ok:true,json:async()=>url.includes('player-intel')?intel:consensus}),URL,Date,Set,console};
 vm.runInNewContext(await readFile(new URL('../player-details.js',import.meta.url),'utf8'),context);
 const detail=context.window.FantasyPlayerDetails;
 assert.ok(detail.render(model).includes('<b>269</b><small>Passing yards'));
 assert.ok(!detail.render(model).includes('Rushing touchdowns'),'Projected statistics do not appear as actual game stats');
+assert.ok(!detail.render(model).includes('STAT 999'),'Unidentified provider IDs are not presented as explained player statistics');
 await new Promise(resolve=>setImmediate(resolve));
 model.ui.playerTab='news';let html=detail.render(model);
 assert.ok(html.includes('Questionable') && html.includes('Limited Participation'));

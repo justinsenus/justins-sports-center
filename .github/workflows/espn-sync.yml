@@ -9,6 +9,7 @@ on:
       - ".github/workflows/espn-sync.yml"
       - "scripts/espn-sync.mjs"
       - "patriots-fantasy-touch/app.js"
+      - "patriots-fantasy-touch/remote-app.js"
   schedule:
     - cron: "*/5 * * * *"
 
@@ -36,7 +37,6 @@ jobs:
 
       - name: Sync private ESPN roster
         if: ${{ env.ESPN_S2 != '' && env.ESPN_SWID != '' }}
-        continue-on-error: true
         env:
           ESPN_LEAGUE_ID: "919590140"
           ESPN_SEASON: "2026"
@@ -58,4 +58,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add patriots-fantasy/espn-data.json
           git commit -m "Refresh ESPN fantasy sync"
-          git push
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push; then exit 0; fi
+          done
+          exit 1
