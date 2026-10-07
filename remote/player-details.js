@@ -76,10 +76,10 @@
     const tab=['stats','news','projections'].includes(m.ui.playerTab)?m.ui.playerTab:'stats';
     const tabs=[['stats','Stats'],['news','News & injury'],['projections','Projections']];
     return '<section class="glass-selected '+(full?'tv-player-detail':'')+'" style="--team-color:'+esc(color)+'"><div class="detail-heading"><span>Player details</span><div class="player-detail-tools">'+
-      (!tv?'<button class="player-flag-control '+(flagged?'flagged':'')+'" type="button" data-flag-player="'+esc(flagKey)+'" aria-pressed="'+flagged+'" aria-label="'+(flagged?'Unflag':'Flag')+' '+esc(p.full_name || p.name)+'">'+(flagged?'★ Flagged':'☆ Flag')+'</button><button type="button" data-close-player="true" aria-label="Close player stats">✕</button>':flagged?'<span class="player-flag-mark">★ Flagged</span>':'')+'</div></div>'+
+      (!tv?'<button class="player-flag-control '+(flagged?'flagged':'')+'" type="button" data-detail-player="'+esc(p.player_id)+'" data-flag-player="'+esc(flagKey)+'" aria-pressed="'+flagged+'" aria-label="'+(flagged?'Unflag':'Flag')+' '+esc(p.full_name || p.name)+'">'+(flagged?'★ Flagged':'☆ Flag')+'</button><button type="button" data-close-player="true" aria-label="Close player stats">✕</button>':flagged?'<span class="player-flag-mark">★ Flagged</span>':'')+'</div></div>'+
       '<div class="selected-identity">'+app.markup.face(p,'large')+'<div><h2>'+esc(p.full_name || p.name)+'</h2><p>'+esc(p.position)+' · '+esc(p.team)+' · '+esc(p.status || 'Upcoming')+'</p><span>'+dot(color)+esc(owner)+'</span></div><strong>'+fmt(app.data.actual(p))+'<small>Fantasy points</small></strong></div>'+
       '<p class="selected-game">'+esc(app.markup.gameLabel(p))+' · Week '+esc(m.league.week)+' · Proj '+fmt(p.projected,1,'—')+'</p>'+
-      '<div class="player-detail-tabs" '+(!tv?'role="tablist" aria-label="Player information"':'')+'>'+tabs.map(([id,label])=>tv?'<span class="'+(tab===id?'active':'')+'">'+label+'</span>':'<button type="button" role="tab" aria-selected="'+(tab===id)+'" class="'+(tab===id?'active':'')+'" data-player-tab="'+id+'">'+label+'</button>').join('')+'</div>'+
+      '<div class="player-detail-tabs" '+(!tv?'role="tablist" aria-label="Player information"':'')+'>'+tabs.map(([id,label])=>tv?'<span class="'+(tab===id?'active':'')+'">'+label+'</span>':'<button type="button" role="tab" aria-selected="'+(tab===id)+'" class="'+(tab===id?'active':'')+'" data-detail-player="'+esc(p.player_id)+'" data-player-tab="'+id+'">'+label+'</button>').join('')+'</div>'+
       '<div class="detail-stats-scroll" data-scroll-key="player-'+tab+'" '+(!tv?'role="tabpanel"':'')+'>'+(tab==='news'?news(p):tab==='projections'?projections(p,m):statGrid(p))+'</div>'+
       (!tv?'<div class="selected-actions"><button type="button" class="primary-action" data-player-id="'+esc(p.player_id)+'">Show on TV</button><button type="button" data-close-player="true">Close player</button></div>':'')+'</section>';
   }
@@ -94,8 +94,9 @@
   document.addEventListener('click',e=>{
     if(tv)return;
     const b=e.target.closest('[data-player-tab],[data-flag-player]');if(!b)return;
-    if(b.dataset.playerTab)app.dispatch({playerTab:b.dataset.playerTab});
-    else app.dispatch({playerFlag:{[b.dataset.flagPlayer]:!app.getUI().flaggedPlayers?.[b.dataset.flagPlayer]}});
+    const playerId=b.dataset.detailPlayer || app.getUI().playerId;
+    if(b.dataset.playerTab)app.dispatch({playerId,playerTab:b.dataset.playerTab});
+    else app.dispatch({playerId,playerTab:app.getUI().playerTab || 'stats',playerFlag:{[b.dataset.flagPlayer]:!app.getUI().flaggedPlayers?.[b.dataset.flagPlayer]}});
   });
   window.FantasyPlayerDetails={render,average,playerData,injurySummary,fetchData};
   app.render();

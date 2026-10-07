@@ -263,3 +263,11 @@ body[data-screen=tv] .tv-feed-name>b{font-size:12px}.tv-feed-name>small{font-siz
 body[data-screen=tv] .tv-injury-row{gap:1px;padding:2px 0 2px 5px}.tv-injury-row b{font-size:12px}.tv-injury-row strong{font-size:9px}.tv-injury-row p{font-size:9px}.tv-injury-row>small{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.score-wiggle{animation:none}}
+/* Keep the thin chart readable and every report line visible. */
+.tv-center{grid-template-rows:minmax(0,1.2fr) minmax(0,.85fr) minmax(0,1.3fr)}
+body[data-screen=tv] .tv-starter-row .tv-player-score{flex-direction:row;align-items:baseline;gap:6px}
+body[data-screen=tv] .tv-roster-opponent .tv-starter-row .tv-player-score{flex-direction:row-reverse}
+.tv-starter-row .tv-player-score>b{font-size:clamp(21px,1.55vw,31px)}
+.tv-starter-row .tv-player-score>small{font-size:9px;white-space:nowrap}
+.tv-player-name{gap:2px}.tv-player-name>small{font-size:clamp(9px,.68vw,13px);line-height:1}
+.tv-injury-row>div,.tv-injury-row>p,.tv-injury-row>small{flex-shrink:0;line-height:1.1}
