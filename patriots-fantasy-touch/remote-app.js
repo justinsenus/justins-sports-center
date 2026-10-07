@@ -1968,10 +1968,16 @@
     getUI:uiState, applyUI, dispatch, render,
     model:() => {
       const league = currentLeague();
+      // A saved snapshot describes the current total, unlike a historical
+      // scoring play. Drop snapshots that disagree with the provider's roster.
+      const started = leagueGamesStarted(league);
+      const events = started ? (state.scoreEvents[state.league] || []).filter(event => !event.snapshot ||
+        (league.allPlayers || []).some(player => String(player.player_id) === String(event.playerId) &&
+          Math.abs(actualForPlayer(player) - Number(event.total)) < .001)) : [];
       return {league, ui:uiState(), loading:state.loading, error:state.error, updated:state.refreshedAt,
         games:state.scoreboards[league.week] || state.scoreboard, player:state.selectedPlayer,
         started:leagueStarted(league), leagueStarted:leagueGamesStarted(league), history:state.scoreHistory[state.league] || [],
-        teamHistory:state.teamScoreHistory[state.league] || [], events:state.scoreEvents[state.league] || [],
+        teamHistory:state.teamScoreHistory[state.league] || [], events,
         providerUpdated:state.league === "espn" ? state.espn && state.espn.savedAt : state.refreshedAt,
         stale:state.league === "espn" && Boolean(state.espn && state.espn.staleFallback),
         ownActual:leagueActual(league,"own"), opponentActual:leagueActual(league,"opponent"),

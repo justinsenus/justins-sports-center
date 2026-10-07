@@ -82,4 +82,11 @@ assert.equal(sandbox.window.testFns.findPlayerEvent({team:'NE',scoringPeriodId:5
 state.consensus={week:4,players:{test:{consensus:99}}};
 assert.equal(sandbox.window.testFns.consensusFor({player_id:'test',scoringPeriodId:5,projected:20.5}).value,20.5,'ESPN keeps its weekly league-scored projection');
 assert.equal(sandbox.window.testFns.consensusFor({player_id:'missing',scoringPeriodId:5}).value,null,'Missing projections are not invented');
+state.scoreEvents.espn=[{playerId:'p1',snapshot:true,total:99},{playerId:'p1',snapshot:true,total:-2},{playerId:'p1',total:-3,delta:1}];
+assert.equal(app.model().events.length,2,'Stale cached snapshots are removed while true historical scoring plays stay');
+state.espn.matchups[0].homeTotal=0;state.espn.matchups[0].awayTotal=0;
+state.espn.myTeam.pointsMap.p1=0;state.espn.opponent.pointsMap.p2=0;
+state.espn.myTeam.players.p1.status='UPCOMING';state.espn.opponent.players.p2.status='UPCOMING';
+state.scoreboard=[];state.scoreboards={};
+assert.equal(app.model().events.length,0,'An upcoming scoring week does not display old cached scoring events');
 console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, player open/close, live player refresh, corrected team totals, remaining projections, and negative final scores.');

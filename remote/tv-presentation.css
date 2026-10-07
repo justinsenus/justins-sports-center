@@ -26,16 +26,16 @@ body[data-screen=tv] .glass-footer{min-height:22px;padding:6px 2px 0;font-size:c
 .tv-roster-label{display:flex;align-items:center;justify-content:space-between;padding:3px 5px;font-size:clamp(9px,.68vw,13px);color:#929fae;gap:6px}
 .tv-roster-label b{font-weight:500;color:#b1bcc8}
 .tv-starters{display:grid;grid-template-rows:repeat(var(--starter-count),minmax(0,1fr));min-height:0}
-.tv-roster-row{display:flex;gap:8px;align-items:center;padding:3px 5px;min-height:0;min-width:0;border-top:1px solid #ffffff08;background:transparent;overflow:hidden}
-.tv-roster-row .player-face{width:clamp(28px,4.1vh,49px);height:clamp(28px,4.1vh,49px);max-height:100%;flex:0 0 auto;border-radius:8px;background:#39414b;border-color:#ffffff25}
+.tv-roster-row{display:flex;gap:8px;align-items:center;padding:2px 5px;min-height:0;min-width:0;border-top:1px solid #ffffff08;background:transparent;overflow:hidden}
+.tv-roster-row .player-face{width:clamp(26px,3.5vh,42px);height:clamp(26px,3.5vh,42px);max-height:100%;flex:0 0 auto;border-radius:8px;background:#39414b;border-color:#ffffff25}
 .tv-player-name{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
 .tv-player-name>b{font-size:clamp(13px,1.07vw,21px);font-weight:550;line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.15px}
 .tv-player-name>small{display:flex;align-items:center;gap:6px;font-size:clamp(9px,.68vw,13px);color:#9aa7b6;line-height:1}
 .tv-player-status{margin-left:auto;color:#8996a4;font-size:clamp(8px,.6vw,12px);white-space:nowrap}
 .tv-player-status.live{color:#79ddb0}
-.tv-player-score{flex:none;text-align:right;display:flex;flex-direction:column;gap:3px;font-variant-numeric:tabular-nums}
-.tv-player-score>b{font-size:clamp(21px,1.6vw,32px);font-weight:650;line-height:1;letter-spacing:-.6px}
-.tv-player-score>small{font-size:clamp(9px,.68vw,13px);line-height:1;color:#9ba7b5}
+.tv-player-score{flex:none;text-align:right;display:flex;flex-direction:column;gap:2px;font-variant-numeric:tabular-nums}
+.tv-player-score>b{font-size:clamp(20px,1.45vw,28px);font-weight:650;line-height:1;letter-spacing:-.6px}
+.tv-player-score>small{font-size:clamp(8px,.6vw,11px);line-height:1;color:#9ba7b5}
 .tv-bench{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(var(--bench-rows),minmax(0,1fr));min-height:0;gap:3px 6px}
 .tv-bench-row{border:1px solid #ffffff0a;border-radius:7px;background:#ffffff03;padding:3px;gap:5px}
 .tv-bench-row .player-face{width:clamp(22px,3.2vh,36px);height:clamp(22px,3.2vh,36px);border-radius:6px}
@@ -107,15 +107,18 @@ body[data-screen=tv][data-tv-density=compact] .tv-overview,body[data-screen=tv][
 body[data-screen=tv][data-tv-density=compact] .tv-panel-title{min-height:30px;padding:6px 10px}
 body[data-screen=tv][data-tv-density=compact] .tv-roster-body{grid-template-rows:18px minmax(0,var(--starter-space)) 20px minmax(0,var(--bench-space));padding-bottom:5px}
 body[data-screen=tv][data-tv-density=compact] .tv-roster-body.no-bench{grid-template-rows:18px minmax(0,1fr)}
-body[data-screen=tv][data-tv-density=compact] .tv-roster-row{gap:6px;padding:2px 3px}
-body[data-screen=tv][data-tv-density=compact] .tv-roster-row .player-face{width:25px;height:25px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster-row{gap:6px;padding:1px 3px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster-row .player-face{width:22px;height:22px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-name{gap:1px}
 body[data-screen=tv][data-tv-density=compact] .tv-player-name>b{font-size:12px}
 body[data-screen=tv][data-tv-density=compact] .tv-player-name>small{font-size:8px}
 body[data-screen=tv][data-tv-density=compact] .tv-player-score>b{font-size:19px}
 body[data-screen=tv][data-tv-density=compact] .tv-player-score>small{font-size:8px}
+body[data-screen=tv][data-tv-density=compact] .tv-starter-row .tv-player-score{flex-direction:row;align-items:baseline;gap:6px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .player-face{width:19px;height:19px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-name>b{font-size:10px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-name>small{font-size:7px}
 body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-score>b{font-size:14px}
+body[data-screen=tv][data-tv-density=compact] .tv-bench-row{gap:4px;padding:1px 3px}
 body[data-screen=tv][data-tv-density=compact] .tv-chart-legend{padding-top:6px}
 body[data-screen=tv][data-tv-density=compact] .chart-caption{padding-bottom:4px;min-height:14px}

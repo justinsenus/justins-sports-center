@@ -56,6 +56,8 @@
     const indices=[0,...new Set([Math.round(lastIndex/3),Math.round(lastIndex*2/3)].filter(i=>i>0 && i<lastIndex)),lastIndex];
     const seenLabels=new Set();
     indices.forEach((index,i)=>{
+      const xx=g.x(index);
+      if(options.timeline && index!==0 && index!==lastIndex && (xx<g.left+100 || xx>g.right-100))return;
       let label=index===0?'Start':index===lastIndex?'Now':time(history[index]?.at);
       if(!label || seenLabels.has(label))return;
       seenLabels.add(label);

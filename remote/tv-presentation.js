@@ -56,7 +56,7 @@
   }
   function viewport() {
     document.documentElement.style.setProperty('--tv-height',window.innerHeight+'px');
-    document.body.dataset.tvDensity=window.innerHeight<680?'compact':'normal';
+    document.body.dataset.tvDensity=window.innerHeight<800?'compact':'normal';
   }
   viewport();window.addEventListener('resize',()=>{viewport();app.render()});
   glass.render=()=>{
