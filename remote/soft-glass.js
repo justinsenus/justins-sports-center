@@ -17,11 +17,17 @@
     patriots:'<path d="M6 4c6-3 14 3 15 9S13 25 7 20 0 7 6 4Zm1 5 10 9m-8-7 3-3m0 6 3-3"/>'
   };
   const icon = key => '<svg viewBox="0 0 26 26" aria-hidden="true">'+icons[key]+'</svg>';
-  const time = value => value ? new Date(value).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) : '';
+  const time = value => value ? new Date(value).toLocaleString([], {timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit'}) : '';
+  let activeWindows=[];
+  const rankSeries=series=>series.slice().sort((a,b)=>b.value-a.value || String(a.name).localeCompare(String(b.name)));
+  function rangeControls() {
+    const range=app.getUI().chartRange || 'week';
+    return tv?'<span class="chart-range-label">'+(range==='hour'?'Live hour':'Full week · compressed')+'</span>':'<div class="chart-range-controls" role="group" aria-label="Chart time range"><button type="button" data-chart-range="week" aria-pressed="'+(range==='week')+'">Full week</button><button type="button" data-chart-range="hour" aria-pressed="'+(range==='hour')+'">Live hour</button></div>';
+  }
   let latestScope = '', scoreSnapshots = new Map(), lastStage = '', lastPlayer = '';
   function normalizeHistory(raw, series) {
     let history = (raw || []).filter(p => p && Array.isArray(p.values)).map(p => ({at:p.at || null,values:p.values.map(v=>finite(v) ?? 0)}));
-    const zero = {at:null,values:series.map(()=>0),baseline:true};
+    const zero = {at:null,values:series.map(()=>0),baseline:true,synthetic:true};
     if (!history.length || history[0].values.some(v=>Math.abs(v)>.001)) history.unshift(zero);
     else history[0] = {...history[0],baseline:true};
     const current = series.map(s=>s.value);
@@ -36,16 +42,16 @@
     const step = [1,2,2.5,5,10].find(s=>s*magnitude>=rough)*magnitude;
     const min = Math.floor(lowest/step)*step, max = Math.ceil(highest/step)*step;
     const left=42,right=600,top=18,bottom=169;
-    const dates=history.map(h=>h.at?new Date(h.at).getTime():null), observed=dates.filter(Number.isFinite);
-    const start=observed[0], finish=observed[observed.length-1], span=finish-start;
-    const x = i=>timeline && span>0 ? i===0?left:left+4+Math.max(0,Math.min(1,((dates[i] ?? finish)-start)/span))*(right-left-4) : left+i/Math.max(1,history.length-1)*(right-left);
+    const x = i=>left+(history[i].index ?? i)/Math.max(1,history.length-1)*(right-left);
     const y = v=>bottom-(v-min)/(max-min)*(bottom-top);
     return {min,max,step,left,right,top,bottom,x,y};
   }
   function chart(series, raw, options={}) {
     const tracked=normalizeHistory(raw,series);
-    const history=options.timeline?tracked.concat({at:new Date().toISOString(),values:series.map(s=>s.value),displayOnly:true}):tracked;
-    const g=geometry(history,options.timeline), endLabels=!options.league;
+    const range=app.getUI().chartRange || 'week';
+    const history=window.FantasyTimeline?window.FantasyTimeline.select(tracked,{range,windows:activeWindows}):tracked;
+    if(history.length===1)history.push({...history[0],index:1,displayOnly:true});
+    const g=geometry(history), endLabels=!options.league;
     let grid='', axes='', lines='';
     for(let tick=g.min;tick<=g.max+.001;tick+=g.step) {
       const yy=g.y(tick);
@@ -57,8 +63,7 @@
     const seenLabels=new Set();
     indices.forEach((index,i)=>{
       const xx=g.x(index);
-      if(options.timeline && index!==0 && index!==lastIndex && (xx<g.left+100 || xx>g.right-100))return;
-      let label=index===0?'Start':index===lastIndex?'Now':time(history[index]?.at);
+      let label=index===0?(range==='hour'?'Window start':'Start'):index===lastIndex?'Latest':time(history[index]?.at);
       if(!label || seenLabels.has(label))return;
       seenLabels.add(label);
       axes+='<text x="'+g.x(index)+'" y="196" text-anchor="'+(index===0?'start':index===lastIndex?'end':'middle')+'">'+esc(label)+'</text>';
@@ -72,15 +77,15 @@
     series.forEach((s,index)=>{
       const points=history.map((h,i)=>[g.x(i),g.y(h.values[index] || 0)]);
       let path='M'+points[0].join(' ');
-      points.slice(1).forEach(p=>{path+='H'+p[0]+'V'+p[1];});
+      points.slice(1).forEach((p,i)=>{path+=i===0 && history[0].synthetic?'L'+p.join(' '):'H'+p[0]+'V'+p[1];});
       const stride=Math.max(1,Math.ceil(points.length/35));
       const dots=points.filter((_,i)=>i>0 && i%stride===0).map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.6"/>').join('');
       lines+='<g class="glass-series" style="--series:'+esc(s.color)+'"><path d="'+path+'"/>'+dots+'<circle class="chart-end" cx="'+g.right+'" cy="'+g.y(s.value)+'" r="3.8"/>'+
         (endLabels?'<text class="chart-end-label" x="616" y="'+(yLabels[index]+4)+'">'+fmt(s.value)+'</text>':'')+'</g>';
     });
-    const recordNote=observed.length?'Recorded since '+time(observed[0].at):'History begins when this screen starts tracking';
+    const recordNote=range==='hour'?(activeWindows.length?'Live hour · last 60 recorded active minutes':'Live hour · waiting for observed games'):observed.length?'Full week · recorded since '+time(observed[0].at):'Full week · history starts on this screen';
     return '<div class="glass-chart-wrap"><svg class="glass-chart" viewBox="0 0 '+(endLabels?680:624)+' 208" role="img" aria-label="'+esc(options.title || 'Fantasy points history')+'"><g class="glass-chart-grid">'+grid+'</g><g class="glass-chart-times">'+axes+'</g>'+lines+'</svg></div>'+
-      '<div class="chart-caption"><span>'+esc(options.projected?'Projection updates':recordNote)+'</span><span>'+Math.max(0,tracked.length-1)+' updates</span></div>';
+      '<div class="chart-caption"><span>'+esc(recordNote)+'</span><span>'+Math.max(0,history.filter(h=>!h.displayOnly).length-1)+' updates</span></div>';
   }
   function dataFor(m, all=false) {
     const l=m.league, teams=l.teams || [];
@@ -98,19 +103,20 @@
   function momentum(m) {
     const data=dataFor(m);
     return '<section class="glass-panel matchup-chart"><div class="panel-title"><h2>'+ (m.started?'Matchup scoring':'Matchup projections')+'</h2>'+legend(data.series)+'</div>'+
-      chart(data.series,data.raw,{projected:!m.started,title:'Recorded matchup points for '+m.league.ownName+' and '+m.league.opponentName})+'</section>';
+      rangeControls()+chart(data.series,data.raw,{projected:!m.started,title:'Recorded matchup points for '+m.league.ownName+' and '+m.league.opponentName})+'</section>';
   }
   function leagueStock(m, large=false) {
     const data=dataFor(m,true);
     return '<section class="glass-panel league-chart '+(large?'expanded-chart':'')+'"><div class="panel-title"><h2>League stock</h2><span>'+data.series.length+' teams · '+(m.leagueStarted?'points':'projections')+'</span></div>'+
-      '<div class="league-chart-body">'+chart(data.series,data.raw,{league:true,projected:!m.leagueStarted,title:'All league teams on one shared points scale'})+
-      legend(data.series.slice().sort((a,b)=>b.value-a.value),true)+'</div></section>';
+      rangeControls()+'<div class="league-chart-body">'+chart(data.series,data.raw,{league:true,projected:!m.leagueStarted,title:'All league teams on one shared points scale'})+
+      legend(rankSeries(data.series),true)+'</div></section>';
   }
   function row(p, side, compact=false) {
+    const flagged=app.getUI().flaggedPlayers?.[app.getUI().league+':'+p.player_id];
     const c=p.fantasyTeamColor || (side==='own'?ownColor:'#aca0e5'), status=p.status || 'Upcoming';
     const projected=finite(p.projected) ?? finite(p.consensus?.value);
     return '<button class="roster-row '+(compact?'compact-row':'')+'" data-player-id="'+esc(p.player_id)+'" data-side="'+side+'" style="--team-color:'+esc(c)+'" type="button" aria-label="Open '+esc(p.full_name || p.name)+' stats">'+app.markup.face(p,'small')+
-      '<span class="roster-name"><b>'+esc(p.full_name || p.name)+'</b><small>'+esc(p.position || 'UTIL')+' · '+esc(p.team || 'FA')+'<span class="player-status '+(status==='LIVE'?'live':'')+'">'+esc(status)+'</span></small></span>'+
+      '<span class="roster-name"><b>'+(flagged?'<i class="player-flag-mark" aria-label="Flagged player">★</i> ':'')+esc(p.full_name || p.name)+'</b><small>'+esc(p.position || 'UTIL')+' · '+esc(p.team || 'FA')+'<span class="player-status '+(status==='LIVE'?'live':'')+'">'+esc(status)+'</span></small></span>'+
       '<span class="roster-points"><b>'+fmt(actual(p))+'</b><small>Proj '+fmt(projected,1,'—')+'</small></span></button>';
   }
   function roster(m,side) {
@@ -124,8 +130,8 @@
   function matchups(m, large=false) {
     return '<section class="glass-panel league-matchups '+(large?'expanded-matchups':'')+'"><div class="panel-title"><h2>League matchups</h2><span>Week '+esc(m.league.week)+'</span></div><div class="matchup-list" data-scroll-key="league-matchups">'+(m.matchups || []).map(r=>{
       const gap=r.homeScore-r.awayScore, name=gap>0?r.home.name:r.away.name, state=Math.abs(gap)<.05?'Tied':(m.started?'Leads by ':'Projected +')+fmt(Math.abs(gap));
-      return '<'+(tv?'article':'button')+' class="league-pair" '+(tv?'':'type="button" data-matchup-id="'+esc(r.id)+'"')+'><span class="league-pair-side">'+dot(r.home.teamColor)+'<b>'+esc(r.home.name)+'</b><strong>'+fmt(r.homeScore)+'</strong></span>'+
-        '<span class="league-pair-side">'+dot(r.away.teamColor)+'<b>'+esc(r.away.name)+'</b><strong>'+fmt(r.awayScore)+'</strong></span><small>'+esc(Math.abs(gap)<.05?'Tied':name)+' · '+esc(state)+'</small></'+(tv?'article':'button')+'>';
+      return '<'+(tv?'article':'button')+' class="league-pair" style="--home-color:'+esc(r.home.teamColor)+';--away-color:'+esc(r.away.teamColor)+'" '+(tv?'':'type="button" data-matchup-id="'+esc(r.id)+'"')+'><span class="league-pair-side">'+dot(r.home.teamColor)+'<b>'+esc(r.home.name)+'</b><strong>'+fmt(r.homeScore)+'</strong></span>'+
+        '<span class="league-pair-side away">'+dot(r.away.teamColor)+'<b>'+esc(r.away.name)+'</b><strong>'+fmt(r.awayScore)+'</strong></span><small>'+esc(Math.abs(gap)<.05?'Tied':name)+' · '+esc(state)+'</small></'+(tv?'article':'button')+'>';
     }).join('')+'</div></section>';
   }
   function feed(m) {
@@ -138,6 +144,7 @@
     }).join(''):'<p class="empty-state">Scoring updates will appear with the player’s fantasy team.</p>')+'</div></section>';
   }
   function selected(m, full=false) {
+    if(window.FantasyPlayerDetails)return window.FantasyPlayerDetails.render(m,full);
     const p=m.player;if(!p)return '';
     const owner=p.fantasyTeamName || (m.league.teams || []).find(t=>(t.players || []).some(x=>String(x.player_id)===String(p.player_id)))?.name || '';
     return '<section class="glass-selected '+(full?'tv-player-detail':'')+'" style="--team-color:'+esc(p.fantasyTeamColor || color(m.league,owner))+'"><div class="detail-heading"><span>Player stats</span>'+
@@ -190,6 +197,7 @@
   }
   function render() {
     const m=app.model(),l=m.league, ui=m.ui;
+    if(window.FantasyTimeline)activeWindows=window.FantasyTimeline.observe(ui.league+':'+l.week,m.games || []);
     const scrolls=new Map([...document.querySelectorAll('[data-scroll-key]')].map(e=>[e.dataset.scrollKey,e.scrollTop]));
     const stage=$('workspace'), drawer=$('playerDrawer'), active=document.activeElement;
     const activePlayer=active?.dataset?.playerId;
@@ -224,10 +232,12 @@
     if(selectedChanged && !tv && m.player)drawer.querySelector('[data-close-player]')?.focus({preventScroll:true});
     lastStage=stageKey;lastPlayer=String(ui.playerId || '');
   }
-  window.FantasyGlassCharts={normalizeHistory,geometry,chart};
+  window.FantasyGlassCharts={normalizeHistory,geometry,chart,rankSeries,rangeControls};
   window.FantasyGlass={render,dataFor};
   $('headerMascot').addEventListener('animationend',e=>e.currentTarget.classList.remove('score-wiggle'));
   document.addEventListener('click',event=>{
+    const range=event.target.closest('[data-chart-range]');
+    if(range && !tv)app.dispatch({chartRange:range.dataset.chartRange});
     if(event.target.closest('#myMatchup'))app.dispatch({view:'overview',matchupId:null,playerId:null,gameId:null});
   });
   document.addEventListener('fantasy:session',()=>{if($('onTV'))$('onTV').textContent=app.getUI().playerId?'Player stats':labels[app.getUI().view] || 'Matchup';});

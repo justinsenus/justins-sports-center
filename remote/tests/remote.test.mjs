@@ -4,6 +4,8 @@ import vm from 'node:vm';
 import {validatePatch,makeHandler} from '../backend/index.js';
 
 assert.deepEqual(validatePatch({view:'stock',playerId:null}),{view:'stock',playerId:null});
+assert.deepEqual(validatePatch({playerTab:'news',chartRange:'hour',playerFlag:{'sleeper:123':true}}),{playerTab:'news',chartRange:'hour',playerFlag:{'sleeper:123':true}});
+for(const invalid of [{playerTab:'admin'},{chartRange:'forever'},{playerFlag:{'sleeper:1':1}},{playerFlag:{'bad:1':true}},{playerFlag:{'sleeper:1':true,'sleeper:2':true}}])assert.throws(()=>validatePatch(invalid));
 for(const invalid of [{view:'admin'},{league:'anything'},{playerId:'<script>'},{token:'overwrite'},{refresh:2},[]])assert.throws(()=>validatePatch(invalid));
 const stored={id:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',control_token:'a'.repeat(64),pair_code:'ABCD2345',topic:'fcc-test',revision:0,state:{league:'sleeper',view:'overview',playerId:null}};
 let calls=[];
@@ -54,6 +56,10 @@ state.espn={ready:true,myTeam:own,opponent:opp,leagueTeams:[own,opp],matchups:[{
 app.applyUI({league:'espn'});assert.equal(commands,0);assert.equal(app.model().ownActual,29.4);
 app.dispatch({playerId:'p1'});assert.equal(commands,1);assert.equal(app.model().player.full_name,'Drake Maye');
 app.applyUI({playerId:null,view:'stock'});assert.equal(commands,1);assert.equal(app.getUI().view,'stock');assert.equal(app.model().player,null);
+app.applyUI({playerFlag:{'espn:p1':true},playerTab:'news',chartRange:'hour'});
+assert.equal(app.getUI().flaggedPlayers['espn:p1'],true);assert.equal(app.getUI().chartRange,'hour');
+app.applyUI({playerId:'p2'});assert.equal(app.getUI().playerTab,'stats','Another player opens on stats');
+app.applyUI({playerId:null,chartRange:'week'});
 app.applyUI({matchupId:'game-1',view:'overview'});assert.equal(app.model().league.remoteMatchupId,'game-1');assert.equal(app.model().opponentActual,22.2);
 app.applyUI({playerId:'p1'});state.espn.myTeam.pointsMap.p1=31.1;app.render();assert.equal(app.model().player.actual,31.1);
 app.applyUI({playerId:null,matchupId:'game-1'});

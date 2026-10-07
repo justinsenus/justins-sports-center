@@ -210,3 +210,7 @@ body:not([data-screen=tv]) .home-center>.league-chart{order:3;width:100%}
 body:not([data-screen=tv]) .home-center>.home-secondary{order:4;width:100%}
 .footer-links{gap:10px}.footer-links button{min-height:44px}
 }
+
+.chart-range-controls{display:flex;gap:4px;padding:0 14px 8px;flex-shrink:0}.chart-range-controls button{border:1px solid #ffffff12;border-radius:7px;background:#ffffff05;color:#a7b8c8;min-height:44px;min-width:88px;padding:7px 13px;font-size:11px}.chart-range-controls button[aria-pressed=true]{background:#cadced16;border-color:#cadced30;color:#f0f5f9}.chart-range-label{display:block;padding:0 14px 5px;color:#879bae;font-size:10px;flex-shrink:0}.tv-momentum>.chart-range-label,.tv-stock>.chart-range-label{display:none}.expanded-chart>.chart-range-label{position:absolute;right:20px;top:48px}.glass-chart-times text{font-size:10px}
+
+.league-pair{border:1px solid #ffffff18;background:#ffffff03;padding:12px 10px;border-radius:10px}.league-pair-side{border-left:3px solid var(--home-color);padding-left:8px}.league-pair-side.away{flex-direction:row-reverse;border-left:0;border-right:3px solid var(--away-color);padding-left:0;padding-right:8px}.league-pair-side.away>b{text-align:right}.league-pair-side .team-dot{display:none}.league-pair-side>b{color:var(--home-color)}.league-pair-side.away>b{color:var(--away-color)}

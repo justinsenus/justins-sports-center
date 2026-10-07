@@ -10,6 +10,10 @@ export function validatePatch(value) {
     else if (key === 'view' && VIEWS.has(v)) patch[key] = v;
     else if (['playerId', 'matchupId', 'gameId'].includes(key) && (v === null || typeof v === 'string' && /^[\w:.-]{1,80}$/.test(v))) patch[key] = v;
     else if (key === 'playerFilter' && ['all', 'starters', 'bench', 'own', 'opponent', 'live'].includes(v)) patch[key] = v;
+    else if (key === 'playerTab' && ['stats', 'news', 'projections'].includes(v)) patch[key] = v;
+    else if (key === 'chartRange' && ['week', 'hour'].includes(v)) patch[key] = v;
+    else if (key === 'playerFlag' && v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 1 &&
+      Object.entries(v).every(([id, flag]) => /^(sleeper|espn):[\w.-]{1,60}$/.test(id) && typeof flag === 'boolean')) patch[key] = v;
     else if (key === 'refresh' && v === true) patch[key] = true;
     else throw new Error('Unsupported scoreboard control.');
   }

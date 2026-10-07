@@ -126,3 +126,55 @@ body[data-screen=tv][data-tv-density=compact] .tv-matchup-team>strong{font-size:
 body[data-screen=tv][data-tv-density=compact] .tv-matchup>small{font-size:7px;line-height:1}
 body[data-screen=tv][data-tv-density=compact] .tv-chart-legend{padding-top:6px}
 body[data-screen=tv][data-tv-density=compact] .chart-caption{padding-bottom:4px;min-height:14px}
+/* Center mascot, mirrored opponent lineup, and a live projection footer. */
+body[data-screen=tv] .glass-header{height:clamp(86px,10vh,112px);min-height:clamp(86px,10vh,112px)}
+body[data-screen=tv] .header-mascot{height:clamp(118px,13vh,150px);width:clamp(118px,13vh,150px);margin-top:-7px}
+body[data-screen=tv] .tv-score-band{height:clamp(122px,14vh,156px);grid-template-rows:minmax(0,1fr) auto;row-gap:9px;padding:12px 22px 11px}
+.tv-score-band .score-side.opponent .score-team{grid-template-columns:1fr 14px;text-align:right;gap:4px 10px}
+.tv-score-band .score-side.opponent .score-team .team-dot{grid-column:2;grid-row:1}
+.tv-score-band .score-side.opponent .score-team h1{grid-column:1;grid-row:1}
+.tv-score-band .score-side.opponent .score-team small{grid-column:1}
+.tv-projections{grid-column:1/-1;min-width:0}
+.tv-projection-labels{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
+.tv-projection-labels>span{display:flex;align-items:center;gap:7px;color:#9eabb8;font-size:clamp(10px,.85vw,17px)}
+.tv-projection-labels>span b{font-size:clamp(13px,1.05vw,21px);color:var(--home-color);font-weight:600;font-variant-numeric:tabular-nums}
+.tv-projection-labels>span:last-child b{color:var(--away-color)}
+.tv-projection-labels>small{color:#81909f;font-size:clamp(9px,.7vw,13px)}
+.tv-projection-line{display:flex;gap:4px;height:4px;border-radius:4px;overflow:hidden}
+.tv-projection-line>i{width:var(--home-share);background:var(--home-color);border-radius:3px}
+.tv-projection-line>i:last-child{flex:1;background:var(--away-color)}
+.tv-roster-opponent .tv-roster-row{flex-direction:row-reverse}
+.tv-roster-opponent .tv-player-name{text-align:right;align-items:flex-end}
+.tv-roster-opponent .tv-player-name>small{width:100%;justify-content:flex-end}
+.tv-roster-opponent .tv-player-status{margin-left:0;margin-right:auto;order:-1}
+.tv-roster-opponent .tv-player-score{align-items:flex-start;text-align:left}
+.tv-roster-opponent .tv-starter-row .tv-player-score{flex-direction:column}
+.tv-matchup-list{gap:7px;padding:8px}
+.tv-matchup{border:1px solid #ffffff15;border-radius:8px;background:linear-gradient(110deg,#ffffff03,#ffffff01);padding:6px 8px;gap:5px}
+.tv-matchup-team{border-left:3px solid var(--team-color);padding-left:7px}
+.tv-matchup-team .team-dot{display:none}
+.tv-matchup-team.away{flex-direction:row-reverse;border-left:0;border-right:3px solid var(--team-color);padding-left:0;padding-right:7px}
+.tv-matchup-team.away>b{text-align:right}
+.tv-matchup>small{padding:0;color:#9aabba;text-align:center}
+.tv-matchup:last-child{border-bottom:1px solid #ffffff15}
+.tv-league-full .tv-matchup{padding:20px;gap:16px}
+body[data-screen=tv][data-tv-density=compact] .glass-header{height:64px;min-height:64px}
+body[data-screen=tv][data-tv-density=compact] .header-mascot{width:94px;height:94px;margin-top:-4px}
+body[data-screen=tv][data-tv-density=compact] .tv-score-band{height:110px;padding:8px 17px 9px;row-gap:5px}
+body[data-screen=tv][data-tv-density=compact] .score-number>strong{font-size:49px}
+body[data-screen=tv][data-tv-density=compact] .tv-projection-labels{margin-bottom:5px}
+body[data-screen=tv][data-tv-density=compact] .tv-projection-labels>span{font-size:9px;gap:5px}
+body[data-screen=tv][data-tv-density=compact] .tv-projection-labels>span b{font-size:12px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster-opponent .tv-starter-row .tv-player-score{flex-direction:row-reverse;align-items:baseline}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup{padding:5px 7px;gap:4px}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup-team>strong{font-size:16px}
+body[data-screen=tv][data-tv-density=compact] .tv-matchup-team>b{font-size:11px}
+@media(max-height:650px){
+body[data-screen=tv] .tv-roster-row .tv-player-name>small{display:none}
+body[data-screen=tv] .tv-roster-row .player-face{width:18px;height:18px}
+body[data-screen=tv] .tv-bench-row .player-face{width:15px;height:15px}
+body[data-screen=tv] .tv-roster-row .tv-player-name>b{font-size:12px;line-height:1}
+body[data-screen=tv] .tv-bench-row .tv-player-name>b{font-size:10px}
+body[data-screen=tv] .tv-roster-row .tv-player-score>b{font-size:17px}
+body[data-screen=tv] .tv-bench-row .tv-player-score>b{font-size:13px}
+}

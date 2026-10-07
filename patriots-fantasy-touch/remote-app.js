@@ -51,6 +51,9 @@
     selectedMatchup: null,
     selectedGame: null,
     selectedPlayerId: null,
+    playerTab: "stats",
+    chartRange: "week",
+    flaggedPlayers: {},
     refreshNonce: 0,
     league: "sleeper",
     week: 1,
@@ -77,6 +80,12 @@
     refreshedAt: null
   };
   let refreshInFlight = false;
+  try {
+    const flags = JSON.parse(localStorage.getItem("fcc-player-flags-v1") || "{}");
+    if (flags && typeof flags === "object" && !Array.isArray(flags)) state.flaggedPlayers = flags;
+    const range = localStorage.getItem("fcc-chart-range-v1");
+    if (["week","hour"].includes(range)) state.chartRange = range;
+  } catch (_) { /* Storage may be unavailable on a TV browser. */ }
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -262,6 +271,7 @@
   }
 
   function playerImage(player) {
+    if (/^(DEF|DST|D\/ST)$/i.test(player && player.position || "")) return {src:teamLogo(player.team),fallback:""};
     const id = player && (player.player_id || player.playerId || player.id);
     const fallback = player && (player.headshot || player.imageUrl || player.image || "");
     const sleeper = id ? `https://sleepercdn.com/content/nfl/players/thumb/${encodeURIComponent(id)}.jpg` : "";
@@ -335,7 +345,7 @@
     const gameStats = statRowsFromMap(liveStats, SLEEPER_STAT_LABELS, { strictLabels: true });
     const projectedGameStats = statRowsFromMap(projectionStats, SLEEPER_STAT_LABELS, { projected: true, strictLabels: true });
     const starterSet = new Set((roster && roster.starters || []).map(String));
-    const projected = consensus.value != null ? consensus.value : finite(player.projected);
+    const projected = finite(player.projected) ?? consensus.value;
     return {
       ...player,
       full_name: player.full_name || player.name,
@@ -381,7 +391,7 @@
     let row = map[id];
     if (!row && player && player.full_name) row = Object.values(map).find((candidate) => nameKey(candidate.name || candidate.full_name) === nameKey(player.full_name) && (!candidate.team || String(candidate.team).toUpperCase() === String(player.team || "").toUpperCase()));
     if (!row) {
-      const publicRows = state.espn && state.espn.projectionPlayers || {};
+      const publicRows = Number(state.espn && state.espn.scoringPeriodId) === targetWeek ? state.espn.projectionPlayers || {} : {};
       const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
       const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
       if (direct != null) {
@@ -392,7 +402,7 @@
     }
     const value = finite(row.consensus != null ? row.consensus : row.projectionMedian != null ? row.projectionMedian : row.projected);
     if (value == null) {
-      const publicRows = state.espn && state.espn.projectionPlayers || {};
+      const publicRows = Number(state.espn && state.espn.scoringPeriodId) === targetWeek ? state.espn.projectionPlayers || {} : {};
       const publicRow = publicRows[nameKey(player && player.full_name)] || publicRows[nameKey(player && player.name)];
       const direct = finite(player && player.projected) ?? finite(publicRow && publicRow.projected);
       if (direct != null) {
@@ -1942,12 +1952,26 @@
 
 
   const uiState = () => ({league:state.league, view:state.view, playerId:state.selectedPlayerId,
-    matchupId:state.selectedMatchup, gameId:state.selectedGame, playerFilter:state.playerFilter, refresh:state.refreshNonce});
+    matchupId:state.selectedMatchup, gameId:state.selectedGame, playerFilter:state.playerFilter, refresh:state.refreshNonce,
+    playerTab:state.playerTab, chartRange:state.chartRange, flaggedPlayers:{...state.flaggedPlayers}});
   const applyUI = (ui) => {
     const oldLeague = state.league, oldMatchup = state.selectedMatchup, oldRefresh = state.refreshNonce;
     if (["sleeper", "espn"].includes(ui.league)) state.league = ui.league;
     if (["overview","matchups","players","injuries","live","stock","league","patriots","games"].includes(ui.view)) state.view = ui.view;
-    if ("playerId" in ui) state.selectedPlayerId = ui.playerId;
+    if ("playerId" in ui) {
+      if (ui.playerId !== state.selectedPlayerId && !("playerTab" in ui)) state.playerTab = "stats";
+      state.selectedPlayerId = ui.playerId;
+    }
+    if (["stats","news","projections"].includes(ui.playerTab)) state.playerTab = ui.playerTab;
+    if (["week","hour"].includes(ui.chartRange)) {
+      state.chartRange = ui.chartRange;
+      try { localStorage.setItem("fcc-chart-range-v1", ui.chartRange); } catch (_) {}
+    }
+    if (ui.flaggedPlayers && typeof ui.flaggedPlayers === "object" && !Array.isArray(ui.flaggedPlayers)) state.flaggedPlayers = {...ui.flaggedPlayers};
+    if (ui.playerFlag && typeof ui.playerFlag === "object" && !Array.isArray(ui.playerFlag)) Object.assign(state.flaggedPlayers, ui.playerFlag);
+    if (ui.flaggedPlayers || ui.playerFlag) {
+      try { localStorage.setItem("fcc-player-flags-v1", JSON.stringify(state.flaggedPlayers)); } catch (_) {}
+    }
     if ("matchupId" in ui) state.selectedMatchup = ui.matchupId;
     if ("gameId" in ui) state.selectedGame = ui.gameId;
     if (ui.playerFilter) state.playerFilter = ui.playerFilter;
@@ -1960,6 +1984,7 @@
     if (state.refreshNonce !== oldRefresh) refresh();
   };
   const dispatch = (patch) => {
+    if ("playerId" in patch && patch.playerId !== state.selectedPlayerId && !("playerTab" in patch)) patch = {...patch,playerTab:"stats"};
     applyUI(patch);
     if (patch.refresh === true) refresh();
     document.dispatchEvent(new CustomEvent("fantasy:command", {detail:patch}));

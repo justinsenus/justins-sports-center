@@ -6,8 +6,9 @@ const outputPath='patriots-fantasy-touch/player-intel-data.json';
 async function request(url,json=false,headers={}) {
   const r=await fetch(url,{headers:{Accept:json?'application/json':'application/rss+xml, application/atom+xml, text/html','User-Agent':'Justin Fantasy Command Center / personal news links',...headers},signal:AbortSignal.timeout(18000)});
   if(!r.ok)throw new Error('HTTP '+r.status);
-  if(Number(r.headers.get('content-length'))>4*1024*1024)throw new Error('Response too large');
-  const body=await r.text();if(body.length>4*1024*1024)throw new Error('Response too large');
+  const limit=json?24*1024*1024:4*1024*1024;
+  if(Number(r.headers.get('content-length'))>limit)throw new Error('Response too large');
+  const body=await r.text();if(body.length>limit)throw new Error('Response too large');
   // Respect publisher verification walls; no alternate route is probed.
   if(/<title[^>]*>\s*(Just a moment|Access Denied|Verify)/i.test(body))throw new Error('Publisher verification required');
   return json?JSON.parse(body):body;

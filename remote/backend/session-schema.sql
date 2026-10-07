@@ -41,8 +41,10 @@ returns jsonb language plpgsql security invoker set search_path = '' as $$
 declare room public.fcc_remote_rooms%rowtype;
 begin
   update public.fcc_remote_rooms set
-    state = state || (p_patch - 'refresh') || case when p_patch ? 'refresh'
-      then jsonb_build_object('refresh', coalesce((state->>'refresh')::bigint, 0) + 1) else '{}'::jsonb end,
+    state = state || (p_patch - 'refresh' - 'playerFlag') || case when p_patch ? 'refresh'
+      then jsonb_build_object('refresh', coalesce((state->>'refresh')::bigint, 0) + 1) else '{}'::jsonb end
+      || case when p_patch ? 'playerFlag' then jsonb_build_object('flaggedPlayers',
+        coalesce(state->'flaggedPlayers', '{}'::jsonb) || (p_patch->'playerFlag')) else '{}'::jsonb end,
     revision = revision + 1,
     expires_at = now() + interval '7 days'
   where id = p_id and control_token = p_token and expires_at > now()
