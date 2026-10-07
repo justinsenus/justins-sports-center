@@ -1,0 +1,40 @@
+name: Player news and injury reports
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/player-intel-sync.mjs
+      - scripts/player-intel-lib.mjs
+      - .github/workflows/player-intel-sync.yml
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: player-intel-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      FANTASYPROS_API_KEY: ${{ secrets.FANTASYPROS_API_KEY }}
+      SLEEPER_LEAGUE_ID: '1387635903379300352'
+      SEASON: '2026'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Read public player news and reports
+        run: node scripts/player-intel-sync.mjs
+      - name: Save verified source coverage
+        run: |
+          if git diff --quiet -- patriots-fantasy-touch/player-intel-data.json && test -f patriots-fantasy-touch/player-intel-data.json && git ls-files --error-unmatch patriots-fantasy-touch/player-intel-data.json >/dev/null 2>&1; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add patriots-fantasy-touch/player-intel-data.json
+          git commit -m 'Refresh player headlines and injury reports'
+          git pull --rebase origin main
+          git push

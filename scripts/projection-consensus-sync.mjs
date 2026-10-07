@@ -13,6 +13,7 @@ const sgoKey = String(process.env.SPORTSGAMEODDS_API_KEY || "").trim();
 const oddsKey = String(process.env.THE_ODDS_API_KEY || "").trim();
 const outputPath = resolve(process.cwd(), "patriots-fantasy-touch", "consensus-data.json");
 const generatedAt = new Date().toISOString();
+let projectionWeek = null;
 
 const CATALOG = [
   ["fantasypros", "FantasyPros", "projection"], ["rotowire", "RotoWire", "projection"],
@@ -47,11 +48,9 @@ const firstNum = (...values) => {
   return null;
 };
 const rounded = (value) => num(value) == null ? null : Number(Number(value).toFixed(1));
-const median = (values) => {
-  const sorted = values.filter((value) => num(value) != null).map(Number).sort((a, b) => a - b);
-  if (!sorted.length) return null;
-  const middle = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+const mean = (values) => {
+  const valid = values.filter((value) => num(value) != null).map(Number);
+  return valid.length ? valid.reduce((sum,value)=>sum+value,0) / valid.length : null;
 };
 
 async function json(url, options) {
@@ -130,7 +129,7 @@ function addProjection(player, source, value, label) {
   if (!player || parsed == null) return;
   const existing = player.projectionSources.find((item) => item.source === source);
   if (existing) existing.value = rounded(parsed);
-  else player.projectionSources.push({ source, label: label || source, value: rounded(parsed) });
+  else player.projectionSources.push({ source, label: label || source, value: rounded(parsed),season,week:projectionWeek,scoring:'PPR' });
 }
 function addOdd(player, row) {
   if (!player || !row || num(row.line) == null || !row.book) return;
@@ -180,8 +179,13 @@ async function addFantasyProsPublic(players, week) {
   let count = 0;
   const pages = ["qb", "rb", "wr", "te", "k", "dst"];
   for (const page of pages) {
-    const result = await safeText("https://www.fantasypros.com/nfl/projections/" + page + ".php?week=" + encodeURIComponent(week));
-    if (result.ok) count += addFantasyProsHTML(players, result.data);
+    const result = await safeText("https://www.fantasypros.com/nfl/projections/" + page + ".php?week=" + encodeURIComponent(week) + '&scoring=PPR');
+    if (result.ok) {
+      const title = clean(result.data.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]);
+      const selectedWeek = result.data.match(/<option[^>]*value=["'](\d+)["'][^>]*selected[^>]*>/i)?.[1];
+      const verifiedWeek = new RegExp('Week\\s*'+week+'\\b','i').test(title) || Number(selectedWeek) === Number(week);
+      if (title.includes(String(season)) && verifiedWeek) count += addFantasyProsHTML(players, result.data);
+    }
   }
   return count;
 }
@@ -262,7 +266,8 @@ async function loadSleeper() {
   if (!league.ok || !rosters.ok || !nflState.ok || !playersResult.ok) throw new Error([league, rosters, nflState, playersResult].find((item) => !item.ok).error);
   const week = Number(nflState.data.display_week || nflState.data.week || 1);
   const matchupsResult = await safeJSON(base + "/league/" + leagueId + "/matchups/" + week);
-  const projectionsResult = await safeJSON(base + "/projections/nfl/" + season + "/" + week + "?season_type=regular");
+  projectionWeek = week;
+  const projectionsResult = await safeJSON(base + "/projections/nfl/regular/" + season + "/" + week);
   const usersList = Array.isArray(users.data) ? users.data : [];
   const rostersList = Array.isArray(rosters.data) ? rosters.data : [];
   const named = usersList.find((user) => clean(user && user.metadata && user.metadata.team_name).toLowerCase() === "the big senus");
@@ -276,12 +281,12 @@ async function loadSleeper() {
   const projected = new Map();
   for (const row of projectionRows) {
     const id = String(row && (row.player_id || row.playerId || row.id) || "");
-    const value = firstNum(row && row.pts_ppr, row && row.pts_half_ppr, row && row.pts_std, row && row.fantasy_points, row && row.projected_points);
+    const value = firstNum(row && row.pts_ppr, row && row.stats && row.stats.pts_ppr);
     if (id && value != null) projected.set(id, value);
   }
   const nflPlayers = playersResult.data || {};
   const rowMap = new Map();
-  for (const sourceRoster of [roster, opponentRoster]) {
+  for (const sourceRoster of rostersList) {
     for (const id of (sourceRoster && sourceRoster.players || []).map(String)) {
       const raw = nflPlayers[id] || { player_id: id, full_name: id, team: "FA", position: "—" };
       const row = rowMap.get(id) || { id, name: rowName(raw) || id, team: rowTeam(raw), position: rowPosition(raw), projectionSources: [], odds: [] };
@@ -294,7 +299,7 @@ async function loadSleeper() {
 
 function finalRow(player) {
   const values = player.projectionSources.map((item) => num(item.value)).filter((value) => value != null);
-  const value = median(values);
+  const value = mean(values);
   const min = values.length ? Math.min(...values) : null;
   const max = values.length ? Math.max(...values) : null;
   const range = min == null || max == null ? null : max - min;
@@ -312,7 +317,7 @@ function finalRow(player) {
   const books = [...new Set(player.odds.map((item) => item.book).filter(Boolean))];
   return {
     player_id: player.id, name: player.name, team: player.team, position: player.position,
-    consensus: rounded(value), min: rounded(min), max: rounded(max), range: rounded(range),
+    consensus: rounded(value), method:'mean', season, week:projectionWeek, scoring:'PPR', min: rounded(min), max: rounded(max), range: rounded(range),
     sourceCount: player.projectionSources.length, sources: player.projectionSources, outlier,
     odds: player.odds, market: oddsMin == null ? null : { min: rounded(oddsMin), max: rounded(oddsMax), range: rounded(oddsMax - oddsMin), books }
   };
@@ -321,20 +326,20 @@ function finalRow(player) {
 async function main() {
   const sources = sourceRows();
   let sleeper;
-  try { sleeper = await loadSleeper(); mark(sources, "sleeper", { count: sleeper.rows.length }); }
+  try { sleeper = await loadSleeper(); mark(sources, "sleeper", { count: sleeper.rows.filter(p=>p.projectionSources.some(s=>s.source === "sleeper")).length }); }
   catch (error) {
     console.error("Sleeper load failed: " + error.message);
     writeStable({ schema_version: 1, status: "unavailable", generated_at: generatedAt, season, week: null, source_catalog_count: CATALOG.length, odds_books: 0, sources, players: {}, insights: [], notes: ["Sleeper was unavailable; the browser will retry the direct feed.", "Provider credentials are never written to this file."] });
     return;
   }
   const players = sleeper.rows;
-  const espnCount = addESPN(players, readESPN());
-  if (espnCount) mark(sources, "espn", { count: espnCount });
+  // ESPN's league-scored projections cannot be mixed into this PPR average.
+  Object.assign(sources.find(source=>source.id==='espn'),{status:'separate_scoring',count:0});
 
   if (fpKey) {
     let count = 0;
     for (const position of ["QB", "RB", "WR", "TE", "K", "DST"]) {
-      const result = await safeJSON("https://api.fantasypros.com/public/v2/json/nfl/" + season + "/projections?position=" + position + "&week=" + sleeper.week, { headers: { "x-api-key": fpKey, Authorization: "Bearer " + fpKey } });
+      const result = await safeJSON("https://api.fantasypros.com/public/v2/json/nfl/" + season + "/projections?position=" + position + "&week=" + sleeper.week + '&scoring=PPR', { headers: { "x-api-key": fpKey, Authorization: "Bearer " + fpKey } });
       if (result.ok) count += addFantasyPros(players, result.data);
       else markError(sources, "fantasypros", result.error);
     }
@@ -373,9 +378,9 @@ async function main() {
   const liveSources = sources.filter((source) => source.status === "live").length;
   const oddsBooks = new Set(rows.flatMap((row) => row.odds.map((odd) => odd.book))).size;
   const output = {
-    schema_version: 1, status: fpKey || sgoKey || oddsKey ? "ready" : "partial", generated_at: generatedAt, season, week: sleeper.week,
+    schema_version: 2, method:'mean', scoring:'PPR', status: fpKey || sgoKey || oddsKey ? "ready" : "partial", generated_at: generatedAt, season, week: sleeper.week,
     source_catalog_count: CATALOG.length, odds_books: oddsBooks, sources, players: Object.fromEntries(rows.map((row) => [row.player_id, row])), insights: insights.slice(0, 12),
-    notes: ["Projection consensus is the median of enabled source values.", "Projection and odds ranges are max minus min; missing sources are excluded, not treated as zero.", fpKey || sgoKey || oddsKey ? "Provider keys were available; inspect source status and count for coverage." : "Add provider keys to GitHub Actions secrets to expand beyond the direct Sleeper/ESPN fallback.", "This file contains no provider credentials."]
+    notes: ["Projection average is the arithmetic mean of enabled same-week PPR source values.", "Projection and odds ranges are max minus min; missing sources are excluded, not treated as zero.", fpKey || sgoKey || oddsKey ? "Provider keys were available; inspect source status and count for coverage." : "Add provider keys to GitHub Actions secrets to expand beyond the direct Sleeper/ESPN fallback.", "This file contains no provider credentials."]
   };
   writeStable(output);
   console.log("Consensus sync saved " + rows.length + " players, " + liveSources + "/" + CATALOG.length + " live sources, and " + oddsBooks + " odds books.");
