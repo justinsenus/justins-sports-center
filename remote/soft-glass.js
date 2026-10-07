@@ -29,25 +29,29 @@
     if (history.length===1) history.push({at:null,values:current});
     return history;
   }
-  function geometry(history) {
+  function geometry(history, timeline=false) {
     const values = history.flatMap(h=>h.values);
     const highest = Math.max(50,...values), lowest = Math.min(0,...values);
     const rough = (highest-lowest)/4, magnitude = Math.pow(10,Math.floor(Math.log10(rough)));
     const step = [1,2,2.5,5,10].find(s=>s*magnitude>=rough)*magnitude;
     const min = Math.floor(lowest/step)*step, max = Math.ceil(highest/step)*step;
     const left=42,right=600,top=18,bottom=169;
-    const x = i=>left+i/Math.max(1,history.length-1)*(right-left);
+    const dates=history.map(h=>h.at?new Date(h.at).getTime():null), observed=dates.filter(Number.isFinite);
+    const start=observed[0], finish=observed[observed.length-1], span=finish-start;
+    const x = i=>timeline && span>0 ? i===0?left:left+4+Math.max(0,Math.min(1,((dates[i] ?? finish)-start)/span))*(right-left-4) : left+i/Math.max(1,history.length-1)*(right-left);
     const y = v=>bottom-(v-min)/(max-min)*(bottom-top);
     return {min,max,step,left,right,top,bottom,x,y};
   }
   function chart(series, raw, options={}) {
-    const history=normalizeHistory(raw,series), g=geometry(history), endLabels=!options.league;
+    const tracked=normalizeHistory(raw,series);
+    const history=options.timeline?tracked.concat({at:new Date().toISOString(),values:series.map(s=>s.value),displayOnly:true}):tracked;
+    const g=geometry(history,options.timeline), endLabels=!options.league;
     let grid='', axes='', lines='';
     for(let tick=g.min;tick<=g.max+.001;tick+=g.step) {
       const yy=g.y(tick);
       grid+='<path d="M'+g.left+' '+yy+'H'+g.right+'"/><text x="32" y="'+(yy+4)+'" text-anchor="end">'+fmt(tick,0)+'</text>';
     }
-    const observed=history.filter(h=>h.at && !h.baseline);
+    const observed=history.filter(h=>h.at && !h.baseline && !h.displayOnly);
     const lastIndex=history.length-1;
     const indices=[0,...new Set([Math.round(lastIndex/3),Math.round(lastIndex*2/3)].filter(i=>i>0 && i<lastIndex)),lastIndex];
     const seenLabels=new Set();
@@ -74,7 +78,7 @@
     });
     const recordNote=observed.length?'Recorded since '+time(observed[0].at):'History begins when this screen starts tracking';
     return '<div class="glass-chart-wrap"><svg class="glass-chart" viewBox="0 0 '+(endLabels?680:624)+' 208" role="img" aria-label="'+esc(options.title || 'Fantasy points history')+'"><g class="glass-chart-grid">'+grid+'</g><g class="glass-chart-times">'+axes+'</g>'+lines+'</svg></div>'+
-      '<div class="chart-caption"><span>'+esc(options.projected?'Projection updates':recordNote)+'</span><span>'+Math.max(0,history.length-1)+' updates</span></div>';
+      '<div class="chart-caption"><span>'+esc(options.projected?'Projection updates':recordNote)+'</span><span>'+Math.max(0,tracked.length-1)+' updates</span></div>';
   }
   function dataFor(m, all=false) {
     const l=m.league, teams=l.teams || [];
@@ -219,7 +223,7 @@
     lastStage=stageKey;lastPlayer=String(ui.playerId || '');
   }
   window.FantasyGlassCharts={normalizeHistory,geometry,chart};
-  window.FantasyGlass={render};
+  window.FantasyGlass={render,dataFor};
   $('headerMascot').addEventListener('animationend',e=>e.currentTarget.classList.remove('score-wiggle'));
   document.addEventListener('click',event=>{
     if(event.target.closest('#myMatchup'))app.dispatch({view:'overview',matchupId:null,playerId:null,gameId:null});
