@@ -39,15 +39,16 @@
     return {items:items.slice(current*size,(current+1)*size),current:current+1,pages};
   }
   function matchups(m,large=false) {
-    const list=m.matchups || [], size=window.innerHeight<650?1:window.innerHeight<900?2:3, visible=large?{items:list,current:1,pages:1}:page(list,size);
+    const list=m.matchups || [], size=window.innerHeight<650?1:window.innerHeight<1050?2:3, visible=large?{items:list,current:1,pages:1}:page(list,size);
     return '<section class="glass-panel tv-league '+(large?'tv-league-full':'')+'"><div class="tv-panel-title"><h2>League matchups</h2><span>'+ (visible.pages>1?visible.current+' / '+visible.pages:'Week '+esc(m.league.week))+'</span></div><div class="tv-matchup-list">'+visible.items.map(r=>{
       const gap=r.homeScore-r.awayScore, status=Math.abs(gap)<.05?'Tied':(m.leagueStarted?'Leads by ':'Projected +')+fmt(Math.abs(gap));
       return '<article class="tv-matchup" style="--home-color:'+esc(r.home.teamColor)+';--away-color:'+esc(r.away.teamColor)+'"><div class="tv-matchup-team '+(gap>0?'leading':'')+'" style="--team-color:'+esc(r.home.teamColor)+'">'+dot(r.home.teamColor)+'<b>'+esc(r.home.name)+'</b><strong>'+fmt(r.homeScore)+'</strong></div><div class="tv-matchup-team away '+(gap<0?'leading':'')+'" style="--team-color:'+esc(r.away.teamColor)+'">'+dot(r.away.teamColor)+'<b>'+esc(r.away.name)+'</b><strong>'+fmt(r.awayScore)+'</strong></div><small>'+esc(status)+'</small></article>';
     }).join('')+'</div></section>';
   }
   function feed(m) {
-    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<900?2:3;
-    return '<section class="glass-panel tv-feed"><div class="tv-panel-title"><h2>League scoring</h2><span>All teams</span></div><div class="tv-feed-list">'+(events.length?events.slice(0,size).map(e=>{
+    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<650?1:window.innerHeight<1050?2:3;
+    const visible=page(events.slice(0,12),size);
+    return '<section class="glass-panel tv-feed"><div class="tv-panel-title"><h2>League scoring</h2><span>All teams</span></div><div class="tv-feed-list">'+(events.length?visible.items.map(e=>{
       const p=players.find(p=>String(p.player_id)===String(e.playerId)) || {player_id:e.playerId,full_name:e.name,headshot:e.headshot,team:e.team};
       return '<article class="tv-feed-row" style="--team-color:'+esc(e.teamColor)+'">'+app.markup.face(p,'small')+'<span class="tv-feed-name"><b>'+esc(e.name)+'</b><small>'+dot(e.teamColor)+esc(e.fantasyTeamName || p.fantasyTeamName || 'League player')+'</small></span><strong>'+fmt(e.total)+'<small class="'+(e.delta<0?'negative':'positive')+'">'+(e.snapshot?'Snapshot':(e.delta>0?'+':'')+fmt(e.delta))+'</small></strong></article>';
     }).join(''):'<p class="empty-state">New scoring plays will appear here with their fantasy team.</p>')+'</div></section>';

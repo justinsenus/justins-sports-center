@@ -1,12 +1,12 @@
 import {readFile,writeFile} from 'node:fs/promises';
-import {SOURCES,nameKey,articles,discoveredFeed,matchNews,dedupeNews,officialInjuries,playProbability,num} from './player-intel-lib.mjs';
+import {SOURCES,nameKey,articles,discoveredFeed,matchNews,dedupeNews,officialInjuries,dailyInjuries,playProbability} from './player-intel-lib.mjs';
 const season=Number(process.env.SEASON || 2026),league=process.env.SLEEPER_LEAGUE_ID || '1387635903379300352';
 const now=new Date().toISOString(),fpKey=process.env.FANTASYPROS_API_KEY || '';
 const outputPath='patriots-fantasy-touch/player-intel-data.json';
 async function request(url,json=false,headers={}) {
   const r=await fetch(url,{headers:{Accept:json?'application/json':'application/rss+xml, application/atom+xml, text/html','User-Agent':'Justin Fantasy Command Center / personal news links',...headers},signal:AbortSignal.timeout(18000)});
   if(!r.ok)throw new Error('HTTP '+r.status);
-  const limit=json?24*1024*1024:4*1024*1024;
+  const limit=json?24*1024*1024:12*1024*1024;
   if(Number(r.headers.get('content-length'))>limit)throw new Error('Response too large');
   const body=await r.text();if(body.length>limit)throw new Error('Response too large');
   // Respect publisher verification walls; no alternate route is probed.
@@ -42,7 +42,12 @@ async function loadPlayers() {
 async function sourceNews(source,players) {
   const result={...source,status:'unavailable',checked_at:now,article_count:0,matched_count:0};
   try {
-    let body=await request(source.url),rows=articles(body,source.url);
+    let body,rows;
+    if(source.id==='espn') {
+      const data=await request('https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=100',true);
+      rows=(data.articles || []).map(a=>({title:a.headline,url:a.links?.web?.href,published_at:a.published || null})).filter(r=>r.title && r.url);
+      body='';
+    } else {body=await request(source.url);rows=articles(body,source.url);}
     const feed=discoveredFeed(body,source.url);
     if(feed) {body=await request(feed);rows=articles(body,feed);result.feed=feed;}
     const matched=matchNews(rows,players,source);
@@ -57,6 +62,8 @@ async function main() {
   const url='https://www.nfl.com/injuries/league/'+season+'/reg'+week;
   let official=[],reportStatus='unavailable';
   try {official=officialInjuries(await request(url),season,week,players,url);reportStatus=official.length?'available':'No verified report for this week';}catch(_){}
+  const cbsURL='https://www.cbssports.com/nfl/injuries/daily/';let cbs=[],cbsStatus='unavailable';
+  try {cbs=dailyInjuries(await request(cbsURL),season,week,players,cbsURL);cbsStatus=cbs.length?'available':'no_verified_same_week_reports';}catch(_){}
   let fpReports=[],fpStatus='not_configured';
   if(fpKey) {
     try {
@@ -75,9 +82,9 @@ async function main() {
   }
   const news=dedupeNews(results.flatMap(r=>r.news));
   const output={schema_version:1,season,week,checked_at:now,source_count:SOURCES.length,sources:results.map(r=>r.source),
-    injury_sources:[{name:'NFL.com',status:reportStatus,url},{name:'FantasyPros injury API',status:fpStatus}],
+    injury_sources:[{name:'NFL.com',status:reportStatus,url},{name:'CBS Sports daily report',status:cbsStatus,url:cbsURL},{name:'FantasyPros injury API',status:fpStatus}],
     players:Object.fromEntries(players.map(p=>[p.key,{...p,news:news.filter(n=>n.player_key===p.key).slice(0,30),
-      reports:[...official.filter(r=>r.player_key===p.key).map(r=>({...r,reported_at:null,checked_at:now})),...fpReports.filter(r=>r.player_key===p.key),...p.provider_reports]}])),
+      reports:[...official.filter(r=>r.player_key===p.key).map(r=>({...r,reported_at:null,checked_at:now})),...cbs.filter(r=>r.player_key===p.key).map(r=>({...r,checked_at:now})),...fpReports.filter(r=>r.player_key===p.key),...p.provider_reports]}])),
     notes:['Thirty news publishers are checked; source availability is reported separately from projection coverage.',
       'Headlines without publication dates are labeled as undated. Missing practice reports or play probabilities remain unknown.',
       'Injury status is not a modeled probability. A confirmed Out designation is 0% for that report week.',

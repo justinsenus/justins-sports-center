@@ -1,10 +1,10 @@
 // Public headlines and factual reports only; article bodies stay with publishers.
 export const SOURCES = [
   ['nfl','NFL.com','https://www.nfl.com/news/'],
-  ['espn','ESPN','https://www.espn.com/espn/rss/nfl/news'],
+  ['espn','ESPN','https://www.espn.com/nfl/'],
   ['cbs','CBS Sports','https://www.cbssports.com/fantasy/football/players/news/all/'],
   ['yahoo','Yahoo Sports','https://sports.yahoo.com/nfl/rss.xml'],
-  ['nbc','NBC Sports','https://www.nbcsports.com/nfl/player-news'],
+  ['nbc','NBC Sports','https://www.nbcsports.com/fantasy/football/player-news'],
   ['fox','FOX Sports','https://www.foxsports.com/nfl'],
   ['usatoday','USA TODAY','https://www.usatoday.com/sports/nfl/'],
   ['ap','Associated Press','https://apnews.com/hub/nfl'],
@@ -17,13 +17,13 @@ export const SOURCES = [
   ['rotowire','RotoWire','https://www.rotowire.com/rss/news.php?sport=NFL'],
   ['footballguys','Footballguys','https://www.footballguys.com/news'],
   ['4for4','4for4','https://www.4for4.com/news'],
-  ['fantasylife','Fantasy Life','https://www.fantasylife.com/nfl'],
+  ['fantasylife','Fantasy Life','https://www.fantasylife.com/articles/nfl'],
   ['fantasyalarm','Fantasy Alarm','https://www.fantasyalarm.com/articles/nfl'],
   ['fftoday','FFToday','https://www.fftoday.com/news/'],
   ['draftsharks','Draft Sharks','https://www.draftsharks.com/fantasy-football-news'],
   ['etr','Establish The Run','https://establishtherun.com/feed/'],
   ['fantasypoints','Fantasy Points','https://www.fantasypoints.com/nfl/articles'],
-  ['pff','PFF','https://www.pff.com/news/nfl'],
+  ['pff','PFF','https://www.pff.com/news'],
   ['playerprofiler','PlayerProfiler','https://www.playerprofiler.com/news/'],
   ['sixpack','Fantasy Six Pack','https://fantasysixpack.net/feed/'],
   ['razzball','Razzball','https://football.razzball.com/feed/'],
@@ -114,4 +114,24 @@ export function officialInjuries(html,season,week,players,url) {
     const p=players.find(p=>nameKey(p.name)===nameKey(cells[0]));if(!p)continue;
     reports.push({player_key:p.key,season,week,injury:cells[2]||null,practice:cells[3]||null,status:cells[4]||null,source:'NFL.com',url,play_probability:/^out$/i.test(cells[4])?0:null,probability_type:/^out$/i.test(cells[4])?'confirmed_out':null});
   }return reports;
+}
+export function dailyInjuries(html,season,week,players,url,now=Date.now()) {
+  const out=[];
+  for(const match of html.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)) {
+    const cells=[...match[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map(m=>text(m[1]));
+    if(cells.length<5)continue;
+    const p=players.find(p=>nameKey(cells[1]).includes(nameKey(p.name)));if(!p)continue;
+    const description=cells[cells.length-1],reportedWeek=Number(description.match(/\bfor Week\s+(\d+)/i)?.[1]);
+    if(reportedWeek!==Number(week))continue; // Return-week forecasts do not describe this week's availability.
+    const preceding=text(html.slice(0,match.index));
+    const dates=[...preceding.matchAll(/(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+([A-Z][a-z]+\s+\d{1,2},\s+20\d{2})/g)];
+    const day=dates[dates.length-1]?.[1];if(!day || !day.includes(String(season)))continue;
+    const dayStamp=Date.parse(day+' 12:00:00 GMT');
+    if(dayStamp>now+86400000 || dayStamp<now-7*86400000)continue;
+    const reported_date=new Date(dayStamp).toISOString().slice(0,10);
+    const status=description.match(/\b(Questionable|Doubtful|Out|Inactive|IR)\b/i)?.[1] || null;
+    const practice=description.match(/\b(Did Not Practice|Limited Practice|Full Practice|Full Participation|Limited Participation|DNP)\b/i)?.[1] || null;
+    out.push({player_key:p.key,season,week,source:'CBS Sports',url,status,practice,injury:cells[3] || null,reported_date,reported_at:null,
+      play_probability:/^out$/i.test(status || '')?0:null,probability_type:/^out$/i.test(status || '')?'confirmed_out':null});
+  }return out;
 }

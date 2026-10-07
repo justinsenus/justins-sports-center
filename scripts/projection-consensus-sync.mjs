@@ -140,7 +140,7 @@ function addOdd(player, row) {
 function payloadRows(payload) {
   if (Array.isArray(payload)) return payload;
   for (const key of ["projections", "players", "data", "results", "items"]) if (Array.isArray(payload && payload[key])) return payload[key];
-  return payload && typeof payload === "object" ? Object.values(payload).filter((value) => value && typeof value === "object") : [];
+  return payload && typeof payload === "object" ? Object.entries(payload).filter(([,value]) => value && typeof value === "object").map(([id,value])=>({...value,player_id:value.player_id || id})) : [];
 }
 function projectionValue(row) {
   return firstNum(row && row.fantasy_points, row && row.fantasyPoints, row && row.projected_points, row && row.projectedPoints,
@@ -150,6 +150,7 @@ function projectionValue(row) {
 function addFantasyPros(players, payload) {
   let count = 0;
   for (const row of payloadRows(payload)) {
+    if (row.week != null && Number(row.week)!==projectionWeek || row.season != null && Number(row.season)!==season || row.scoring && String(row.scoring).toUpperCase()!=='PPR') continue;
     const raw = row && (row.player || row);
     const target = findPlayer(players, rowName(raw), rowTeam(raw));
     const value = projectionValue(row);
@@ -182,9 +183,13 @@ async function addFantasyProsPublic(players, week) {
     const result = await safeText("https://www.fantasypros.com/nfl/projections/" + page + ".php?week=" + encodeURIComponent(week) + '&scoring=PPR');
     if (result.ok) {
       const title = clean(result.data.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]);
+      const plain = clean(result.data.replace(/<[^>]+>/g,' '));
+      const updatedYear = plain.match(/Consensus\s+last\s+updated.{0,100}?\b(20\d{2})\b/i)?.[1];
       const selectedWeek = result.data.match(/<option[^>]*value=["'](\d+)["'][^>]*selected[^>]*>/i)?.[1];
       const verifiedWeek = new RegExp('Week\\s*'+week+'\\b','i').test(title) || Number(selectedWeek) === Number(week);
-      if (title.includes(String(season)) && verifiedWeek) count += addFantasyProsHTML(players, result.data);
+      const verifiedYear=title.includes(String(season)) || Number(updatedYear)===season;
+      const verifiedFormat=['qb','k','dst'].includes(page) || /\bPPR\b/.test(title);
+      if (verifiedYear && verifiedWeek && verifiedFormat) count += addFantasyProsHTML(players, result.data);
     }
   }
   return count;
@@ -267,7 +272,7 @@ async function loadSleeper() {
   const week = Number(nflState.data.display_week || nflState.data.week || 1);
   const matchupsResult = await safeJSON(base + "/league/" + leagueId + "/matchups/" + week);
   projectionWeek = week;
-  const projectionsResult = await safeJSON(base + "/projections/nfl/regular/" + season + "/" + week);
+  const projectionsResult = await safeJSON('https://api.sleeper.com/projections/nfl/' + season + '/' + week + '?season_type=regular');
   const usersList = Array.isArray(users.data) ? users.data : [];
   const rostersList = Array.isArray(rosters.data) ? rosters.data : [];
   const named = usersList.find((user) => clean(user && user.metadata && user.metadata.team_name).toLowerCase() === "the big senus");
@@ -371,6 +376,26 @@ async function main() {
   }
 
   const rows = players.map(finalRow);
+  const periods = { [sleeper.week]: {season, week:sleeper.week, method:'mean', scoring:'PPR', players:Object.fromEntries(rows.map(row=>[row.player_id,row]))} };
+  const espnWeek = Number(readESPN()?.scoringPeriodId);
+  if (espnWeek && espnWeek !== sleeper.week) {
+    projectionWeek = espnWeek;
+    const nextPlayers = players.map(p=>({...p,projectionSources:[],odds:[]}));
+    const nextSleeper = await safeJSON('https://api.sleeper.com/projections/nfl/'+season+'/'+espnWeek+'?season_type=regular');
+    for (const projection of payloadRows(nextSleeper.ok ? nextSleeper.data : null)) {
+      const player = nextPlayers.find(p=>p.id===String(projection.player_id));
+      if (player) addProjection(player,'sleeper',firstNum(projection.pts_ppr,projection.stats?.pts_ppr),'Sleeper');
+    }
+    if (fpKey) {
+      for (const position of ['QB','RB','WR','TE','K','DST']) {
+        const result = await safeJSON('https://api.fantasypros.com/public/v2/json/nfl/'+season+'/projections?position='+position+'&week='+espnWeek+'&scoring=PPR',{headers:{'x-api-key':fpKey}});
+        if (result.ok) addFantasyPros(nextPlayers,result.data);
+      }
+    } else await addFantasyProsPublic(nextPlayers,espnWeek);
+    const nextRows=nextPlayers.map(finalRow);
+    periods[espnWeek]={season,week:espnWeek,method:'mean',scoring:'PPR',players:Object.fromEntries(nextRows.map(row=>[row.player_id,row]))};
+    projectionWeek=sleeper.week;
+  }
   const insights = [];
   rows.filter((row) => row.outlier && row.outlier.delta > 0).sort((a, b) => b.outlier.delta - a.outlier.delta).slice(0, 12).forEach((row) => insights.push({ name: row.name, market: "PROJECTION OUTLIER", source: row.outlier.source, delta: row.outlier.delta, range: row.range }));
   rows.filter((row) => row.market && row.market.range > 0).sort((a, b) => b.market.range - a.market.range).slice(0, 12).forEach((row) => insights.push({ name: row.name, market: "ODDS LINE RANGE", source: row.market.books.join(" / "), delta: row.market.range, range: row.market.range }));
@@ -379,7 +404,7 @@ async function main() {
   const oddsBooks = new Set(rows.flatMap((row) => row.odds.map((odd) => odd.book))).size;
   const output = {
     schema_version: 2, method:'mean', scoring:'PPR', status: fpKey || sgoKey || oddsKey ? "ready" : "partial", generated_at: generatedAt, season, week: sleeper.week,
-    source_catalog_count: CATALOG.length, odds_books: oddsBooks, sources, players: Object.fromEntries(rows.map((row) => [row.player_id, row])), insights: insights.slice(0, 12),
+    source_catalog_count: CATALOG.length, odds_books: oddsBooks, sources, periods, players: Object.fromEntries(rows.map((row) => [row.player_id, row])), insights: insights.slice(0, 12),
     notes: ["Projection average is the arithmetic mean of enabled same-week PPR source values.", "Projection and odds ranges are max minus min; missing sources are excluded, not treated as zero.", fpKey || sgoKey || oddsKey ? "Provider keys were available; inspect source status and count for coverage." : "Add provider keys to GitHub Actions secrets to expand beyond the direct Sleeper/ESPN fallback.", "This file contains no provider credentials."]
   };
   writeStable(output);

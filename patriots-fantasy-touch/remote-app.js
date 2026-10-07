@@ -450,7 +450,7 @@
     const week = Number(nflState.display_week || nflState.week || 1);
     const [matchups, projections, weeklyStats] = await Promise.all([
       getJSON(`${base}/league/${leagueId}/matchups/${week}`),
-      getJSON(`${base}/projections/nfl/regular/${CONFIG.season}/${week}`).catch(() => []),
+      getJSON(`https://api.sleeper.com/projections/nfl/${CONFIG.season}/${week}?season_type=regular`).catch(() => []),
       getJSON(`${base}/stats/nfl/regular/${CONFIG.season}/${week}`).catch(() => ({}))
     ]);
     const named = users.find((user) => String(user.metadata && user.metadata.team_name || "").trim().toLowerCase() === CONFIG.sleeperTeamName.toLowerCase());
@@ -2035,6 +2035,7 @@
     }
   });
   document.addEventListener("keydown", event => {
+    if (document.body.dataset.screen === "tv") return;
     if (event.key === "Escape" && state.selectedPlayerId) dispatch({playerId:null});
     if (["Enter", " "].includes(event.key) && event.target.matches("[data-matchup-id],[data-game-id]")) { event.preventDefault(); event.target.click(); }
   });

@@ -77,7 +77,7 @@
     series.forEach((s,index)=>{
       const points=history.map((h,i)=>[g.x(i),g.y(h.values[index] || 0)]);
       let path='M'+points[0].join(' ');
-      points.slice(1).forEach((p,i)=>{path+=i===0 && history[0].synthetic?'L'+p.join(' '):'H'+p[0]+'V'+p[1];});
+      points.slice(1).forEach((p,i)=>{path+=i===0 && history[0].baseline?'L'+p.join(' '):'H'+p[0]+'V'+p[1];});
       const stride=Math.max(1,Math.ceil(points.length/35));
       const dots=points.filter((_,i)=>i>0 && i%stride===0).map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.6"/>').join('');
       lines+='<g class="glass-series" style="--series:'+esc(s.color)+'"><path d="'+path+'"/>'+dots+'<circle class="chart-end" cx="'+g.right+'" cy="'+g.y(s.value)+'" r="3.8"/>'+

@@ -1,5 +1,5 @@
 import {strict as assert} from 'node:assert';
-import {SOURCES,articles,matchNews,dedupeNews,playProbability,projectionMean,officialInjuries} from './player-intel-lib.mjs';
+import {SOURCES,articles,matchNews,dedupeNews,playProbability,projectionMean,officialInjuries,dailyInjuries} from './player-intel-lib.mjs';
 assert.equal(SOURCES.length,30);assert.equal(new Set(SOURCES.map(s=>s.id)).size,30);
 const rss='<rss><item><title><![CDATA[Drake Maye &amp; Patriots practice report]]></title><link>https://example.com/maye</link><pubDate>Tue, 06 Oct 2026 14:00:00 GMT</pubDate></item></rss>';
 const rows=articles(rss,'https://example.com');assert.equal(rows[0].title,'Drake Maye & Patriots practice report');
@@ -19,4 +19,8 @@ const players=[{name:'Drake Maye',key:'maye'}];
 assert.equal(officialInjuries(html,2026,4,players,'https://nfl.com').length,0);
 assert.equal(officialInjuries(html,2026,5,players,'https://nfl.com')[0].play_probability,null);
 assert.equal(officialInjuries(html.replace('Questionable','Out'),2026,5,players,'https://nfl.com')[0].play_probability,0);
+const daily='<h4>Tuesday, October 6, 2026</h4><tr><td>NE</td><td>D. MayeDrake Maye</td><td>QB</td><td>Shoulder</td><td>Limited Practice on Tuesday. Questionable for Week 5 vs. Las Vegas</td></tr>';
+const cbs=dailyInjuries(daily,2026,5,players,'https://www.cbssports.com/nfl/injuries/daily/',Date.parse('2026-10-07'));
+assert.equal(cbs[0].practice,'Limited Practice');assert.equal(cbs[0].reported_date,'2026-10-06');assert.equal(cbs[0].play_probability,null);
+assert.equal(dailyInjuries(daily,2026,4,players,'https://www.cbssports.com',Date.parse('2026-10-07')).length,0);
 console.log('Passed: 30 distinct sources, XML headlines, dates, deduplication, honest injury probabilities, same-week same-format arithmetic means, and verified report weeks.');
