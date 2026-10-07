@@ -35,13 +35,13 @@
     if (history.length===1) history.push({at:null,values:current});
     return history;
   }
-  function geometry(history, timeline=false) {
+  function geometry(history, timeline=false, slim=false) {
     const values = history.flatMap(h=>h.values);
     const highest = Math.max(50,...values), lowest = Math.min(0,...values);
     const rough = (highest-lowest)/4, magnitude = Math.pow(10,Math.floor(Math.log10(rough)));
     const step = [1,2,2.5,5,10].find(s=>s*magnitude>=rough)*magnitude;
     const min = Math.floor(lowest/step)*step, max = Math.ceil(highest/step)*step;
-    const left=42,right=600,top=18,bottom=169;
+    const left=42,right=600,top=slim?8:18,bottom=slim?87:169;
     const x = i=>left+(history[i].index ?? i)/Math.max(1,history.length-1)*(right-left);
     const y = v=>bottom-(v-min)/(max-min)*(bottom-top);
     return {min,max,step,left,right,top,bottom,x,y};
@@ -51,7 +51,7 @@
     const range=app.getUI().chartRange || 'week';
     const history=window.FantasyTimeline?window.FantasyTimeline.select(tracked,{range,windows:activeWindows}):tracked;
     if(history.length===1)history.push({...history[0],index:1,displayOnly:true});
-    const g=geometry(history), endLabels=!options.league;
+    const g=geometry(history,false,options.slim), endLabels=!options.league;
     let grid='', axes='', lines='';
     for(let tick=g.min;tick<=g.max+.001;tick+=g.step) {
       const yy=g.y(tick);
@@ -66,13 +66,13 @@
       let label=index===0?(range==='hour'?'Window start':'Start'):index===lastIndex?'Latest':time(history[index]?.at);
       if(!label || seenLabels.has(label))return;
       seenLabels.add(label);
-      axes+='<text x="'+g.x(index)+'" y="196" text-anchor="'+(index===0?'start':index===lastIndex?'end':'middle')+'">'+esc(label)+'</text>';
+      axes+='<text x="'+g.x(index)+'" y="'+(options.slim?114:196)+'" text-anchor="'+(index===0?'start':index===lastIndex?'end':'middle')+'">'+esc(label)+'</text>';
     });
     const yLabels=series.map(s=>g.y(s.value));
     if(endLabels && yLabels.length===2 && Math.abs(yLabels[0]-yLabels[1])<15) {
       const mid=(yLabels[0]+yLabels[1])/2;
       const first=yLabels[0]<=yLabels[1]?0:1;
-      yLabels[first]=Math.max(18,mid-8);yLabels[1-first]=Math.min(172,mid+8);
+      yLabels[first]=Math.max(g.top,mid-8);yLabels[1-first]=Math.min(g.bottom+3,mid+8);
     }
     series.forEach((s,index)=>{
       const points=history.map((h,i)=>[g.x(i),g.y(h.values[index] || 0)]);
@@ -84,7 +84,7 @@
         (endLabels?'<text class="chart-end-label" x="616" y="'+(yLabels[index]+4)+'">'+fmt(s.value)+'</text>':'')+'</g>';
     });
     const recordNote=range==='hour'?(activeWindows.length?'Live hour · last 60 recorded active minutes':'Live hour · waiting for observed games'):observed.length?'Full week · recorded since '+time(observed[0].at):'Full week · history starts on this screen';
-    return '<div class="glass-chart-wrap"><svg class="glass-chart" viewBox="0 0 '+(endLabels?680:624)+' 208" role="img" aria-label="'+esc(options.title || 'Fantasy points history')+'"><g class="glass-chart-grid">'+grid+'</g><g class="glass-chart-times">'+axes+'</g>'+lines+'</svg></div>'+
+    return '<div class="glass-chart-wrap"><svg class="glass-chart" viewBox="0 0 '+(endLabels?680:624)+' '+(options.slim?126:208)+'" preserveAspectRatio="none" role="img" aria-label="'+esc(options.title || 'Fantasy points history')+'"><g class="glass-chart-grid">'+grid+'</g><g class="glass-chart-times">'+axes+'</g>'+lines+'</svg></div>'+
       '<div class="chart-caption"><span>'+esc(recordNote)+'</span><span>'+Math.max(0,history.filter(h=>!h.displayOnly).length-1)+' updates</span></div>';
   }
   function dataFor(m, all=false) {
@@ -163,15 +163,18 @@
   }
   function overview(m) {
     return '<div class="home-grid">'+roster(m,'own')+'<div class="home-center">'+momentum(m)+leagueStock(m)+
-      '<div class="home-secondary">'+matchups(m)+feed(m)+'</div></div>'+roster(m,'opponent')+'</div>';
+      '<div class="home-secondary">'+injuries(m,true)+feed(m)+'</div></div>'+roster(m,'opponent')+'</div>';
   }
   function playerList(m) {
     const teams=m.league.teams || [];
     return '<div class="all-team-rosters">'+teams.map(t=>'<section class="glass-panel team-players"><div class="panel-title"><h2>'+dot(t.teamColor)+esc(t.name)+'</h2><span>'+t.players.length+' players</span></div>'+t.players.map(p=>row(p,'league')).join('')+'</section>').join('')+'</div>';
   }
-  function injuries(m) {
-    const players=(m.league.allPlayers || []).filter(p=>/OUT|IR|DOUBTFUL|QUESTIONABLE|INJURY/i.test(p.injury_status || p.injuryStatus || p.status || ''));
-    return '<section class="glass-panel"><div class="panel-title"><h2>Injury updates</h2><span>'+players.length+' players</span></div>'+(players.length?players.map(p=>row(p,'league')).join(''):'<p class="empty-state">No injury flags reported by the league feed.</p>')+'</section>';
+  function injuries(m,compact=false) {
+    const details=window.FantasyPlayerDetails;details?.fetchData();
+    const seen=new Set(),ordered=[...(m.league.own || []),...(m.league.opponent || []),...(m.league.allPlayers || [])].filter(p=>!seen.has(String(p.player_id)) && seen.add(String(p.player_id)));
+    const players=ordered.map(p=>({p,report:details?.injurySummary(p) || {status:p.injury_status || p.injuryStatus,source:'League roster'}})).filter(({report:r})=>/OUT|IR|DOUBTFUL|QUESTIONABLE|PUP|INJURY/i.test(r.status || ''));
+    return '<section class="glass-panel injury-updates"><div class="panel-title"><h2>Injury updates</h2><span>'+players.length+' reports</span></div><div class="injury-update-list">'+(players.length?(compact?players.slice(0,4):players).map(({p,report:r})=>
+      '<'+(tv?'article':'button')+' class="injury-update-row" '+(tv?'':'type="button" data-player-id="'+esc(p.player_id)+'"')+' style="--team-color:'+esc(p.fantasyTeamColor || '#aca0e5')+'"><span><b>'+esc(p.full_name || p.name)+'</b><strong>'+esc(r.status)+'</strong></span><small>'+esc([r.injury,r.practice || 'Practice not reported'].filter(Boolean).join(' · '))+'</small><small>'+esc(r.source)+(r.week?' · W'+esc(r.week):'')+(r.date?' · '+esc(r.date):' · Undated')+'</small></'+(tv?'article':'button')+'>').join(''):'<p class="empty-state">'+(details?.injurySummary({}).loading?'Checking dated injury reports…':'No injury designations reported in the current feeds.')+'</p>')+'</div>'+(compact?'<button class="injury-view-all" type="button" data-view="injuries">All injury reports →</button>':'')+'</section>';
   }
   function games(m) {
     let events=m.games || [];

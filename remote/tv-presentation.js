@@ -27,7 +27,7 @@
   function momentum(m) {
     const d=glass.dataFor(m);
     return '<section class="glass-panel tv-momentum"><div class="tv-panel-title"><h2>'+ (m.started?'Matchup scoring':'Matchup projections')+'</h2><span>'+(m.started?'Fantasy points':'Upcoming week')+'</span></div>'+legend(d.series)+
-      charts.rangeControls()+charts.chart(d.series,d.raw,{projected:!m.started,title:'Recorded matchup points for '+m.league.ownName+' and '+m.league.opponentName})+'</section>';
+      charts.rangeControls()+charts.chart(d.series,d.raw,{slim:true,projected:!m.started,title:'Recorded matchup points for '+m.league.ownName+' and '+m.league.opponentName})+'</section>';
   }
   function stock(m) {
     const d=glass.dataFor(m,true), ranked=charts.rankSeries(d.series);
@@ -46,15 +46,54 @@
     }).join('')+'</div></section>';
   }
   function feed(m) {
-    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<650?1:window.innerHeight<1050?2:3;
+    const players=m.league.allPlayers || [], events=(m.events || []), size=window.innerHeight<650?3:window.innerHeight<800?4:5;
     const visible=page(events.slice(0,12),size);
     return '<section class="glass-panel tv-feed"><div class="tv-panel-title"><h2>League scoring</h2><span>All teams</span></div><div class="tv-feed-list">'+(events.length?visible.items.map(e=>{
       const p=players.find(p=>String(p.player_id)===String(e.playerId)) || {player_id:e.playerId,full_name:e.name,headshot:e.headshot,team:e.team};
       return '<article class="tv-feed-row" style="--team-color:'+esc(e.teamColor)+'">'+app.markup.face(p,'small')+'<span class="tv-feed-name"><b>'+esc(e.name)+'</b><small>'+dot(e.teamColor)+esc(e.fantasyTeamName || p.fantasyTeamName || 'League player')+'</small></span><strong>'+fmt(e.total)+'<small class="'+(e.delta<0?'negative':'positive')+'">'+(e.snapshot?'Snapshot':(e.delta>0?'+':'')+fmt(e.delta))+'</small></strong></article>';
     }).join(''):'<p class="empty-state">New scoring plays will appear here with their fantasy team.</p>')+'</div></section>';
   }
+  function injuries(m) {
+    const details=window.FantasyPlayerDetails;
+    details?.fetchData();
+    const seen=new Set(),flags=m.ui.flaggedPlayers || {},players=[...(m.league.own || []),...(m.league.opponent || []),...(m.league.allPlayers || [])]
+      .filter(p=>!seen.has(String(p.player_id)) && seen.add(String(p.player_id)));
+    const entries=players.map(p=>({p,report:details?.injurySummary(p) || {status:p.injury_status || p.injuryStatus,source:'League roster'}}))
+      .filter(({report})=>report.status && /OUT|IR|DOUBTFUL|QUESTIONABLE|PUP|INJUR/i.test(report.status))
+      .sort((a,b)=>Number(Boolean(flags[m.ui.league+':'+b.p.player_id]))-Number(Boolean(flags[m.ui.league+':'+a.p.player_id])));
+    const visible=page(entries,window.innerHeight<650?2:window.innerHeight<800?3:4);
+    return '<section class="glass-panel tv-injuries"><div class="tv-panel-title"><h2>Injury updates</h2><span>'+(entries.length?entries.length+' reports'+(visible.pages>1?' · '+visible.current+'/'+visible.pages:''):'Checking reports')+'</span></div><div class="tv-injury-list">'+
+      (entries.length?visible.items.map(({p,report:r})=>'<article class="tv-injury-row" style="--team-color:'+esc(p.fantasyTeamColor || '#aca0e5')+'"><div><b>'+esc(p.full_name || p.name)+'</b><strong>'+esc(r.status)+'</strong></div><p>'+esc([r.injury,r.practice || 'Practice not reported'].filter(Boolean).join(' · '))+'</p><small>'+esc(r.source)+(r.week?' · W'+esc(r.week):'')+(r.date?' · '+esc(r.date):' · Undated')+'</small></article>').join(''):
+        '<p class="empty-state">'+(details?.injurySummary(players[0] || {}).loading?'Checking dated injury reports…':'No injury designations reported. Use the player’s News & injury tab for more detail.')+'</p>')+'</div></section>';
+  }
+  function fantasyStrip(m) {
+    const visible=page(m.matchups || [],3);
+    return '<section class="glass-panel tv-score-strip tv-fantasy-strip" aria-label="All fantasy matchup scores"><div class="tv-strip-label"><h2>Fantasy scores</h2><span>Week '+esc(m.league.week)+(visible.pages>1?' · '+visible.current+'/'+visible.pages:'')+'</span></div><div class="tv-strip-cards">'+visible.items.map(r=>
+      '<article class="tv-strip-matchup" style="--home-color:'+esc(r.home.teamColor)+';--away-color:'+esc(r.away.teamColor)+'">'+[r.home,r.away].map((t,i)=>'<div style="--team-color:'+esc(t.teamColor)+'">'+dot(t.teamColor)+'<b>'+esc(t.name)+'</b><strong>'+fmt(m.leagueStarted?(i?r.awayScore:r.homeScore):(finite(t.total) ?? 0))+'</strong></div>').join('')+'</article>').join('')+'</div></section>';
+  }
+  function nflStrip(m) {
+    const games=[...(m.nflGames || m.games || [])].sort((a,b)=>{
+      const rank=e=>({in:0,pre:1,post:2}[e.status?.type?.state || e.competitions?.[0]?.status?.type?.state] ?? 3);
+      return rank(a)-rank(b) || Date.parse(a.date || 0)-Date.parse(b.date || 0);
+    });
+    const visible=page(games,window.innerWidth<1600?6:8);
+    const safeLogo=v=>{try{const u=new URL(v);return u.protocol==='https:'?u.href:null;}catch(_){return null}};
+    return '<section class="glass-panel tv-score-strip tv-nfl-strip" aria-label="All NFL scores"><div class="tv-strip-label"><h2>NFL scores</h2><span>Week '+esc(m.nflWeek || m.league.week)+(visible.pages>1?' · '+visible.current+'/'+visible.pages:'')+'</span></div><div class="tv-nfl-cards" style="--nfl-count:'+Math.max(1,visible.items.length)+'">'+
+      (games.length?visible.items.map(e=>{
+        const comp=e.competitions?.[0],type=e.status?.type || comp?.status?.type || {},list=comp?.competitors || [],away=list.find(c=>c.homeAway==='away') || list[0],home=list.find(c=>c.homeAway==='home') || list[1];
+        const when=Number.isFinite(Date.parse(e.date))?new Date(e.date).toLocaleString('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit'}):'Scheduled';
+        const status=type.state==='in'?(type.shortDetail || 'Live'):type.state==='post'?'Final':when;
+        return '<article class="tv-nfl-game '+(type.state==='in'?'is-live':'')+'"><small>'+esc(status)+'</small>'+[away,home].filter(Boolean).map(c=>{
+          const logo=safeLogo(c.team?.logo),score=type.state==='pre'?'—':fmt(finite(c.score),0,'—');
+          return '<div>'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(c.team?.displayName || c.team?.abbreviation || 'NFL team')+'" loading="eager">':'')+'<b>'+esc(c.team?.abbreviation || 'NFL')+'</b><strong>'+score+'</strong></div>';
+        }).join('')+'</article>';
+      }).join(''):'<p class="empty-state">NFL scoreboard is connecting.</p>')+'</div></section>';
+  }
+  function strips(m) {
+    return '<div class="tv-score-strips">'+fantasyStrip(m)+nflStrip(m)+'</div>';
+  }
   function overview(m) {
-    return '<div class="tv-overview">'+roster(m,'own')+'<div class="tv-center">'+momentum(m)+stock(m)+'<div class="tv-secondary">'+matchups(m)+feed(m)+'</div></div>'+roster(m,'opponent')+'</div>';
+    return '<div class="tv-overview">'+roster(m,'own')+'<div class="tv-center">'+momentum(m)+stock(m)+'<div class="tv-secondary">'+injuries(m)+feed(m)+'</div></div>'+roster(m,'opponent')+'</div>';
   }
   function hero(m) {
     const l=m.league, home=teamColor(l,l.ownName), away=teamColor(l,l.opponentName);
@@ -73,10 +112,12 @@
     baseRender();
     const m=app.model();
     if(!m.loading && m.league.ready)document.getElementById('matchupHero').innerHTML=hero(m);
+    const ticker=document.getElementById('scoreStrips');
+    if(ticker && !m.loading && m.league.ready)ticker.innerHTML=strips(m);
     if(m.loading || !m.league.ready || m.ui.playerId)return;
     if(['overview','matchups'].includes(m.ui.view))document.getElementById('workspace').innerHTML=overview(m);
     else if(m.ui.view==='league')document.getElementById('workspace').innerHTML=matchups(m,true);
   };
-  window.FantasyTV={overview,roster,matchups,feed,page,hero};
+  window.FantasyTV={overview,roster,matchups,feed,page,hero,injuries,fantasyStrip,nflStrip,strips};
   app.render();
 })();

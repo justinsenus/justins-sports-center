@@ -857,7 +857,9 @@
       getJSON(todayUrl).catch(() => ({ events: [] }))
     ]);
     const seen = new Set();
-    const events = [...(weekResult.events || []), ...(todayResult.events || [])].filter((event) => {
+    const todayMatchesWeek = Number(todayResult.week && todayResult.week.number) === week &&
+      Number(todayResult.season && todayResult.season.year) === CONFIG.season;
+    const events = [...(weekResult.events || []), ...(todayMatchesWeek ? todayResult.events || [] : [])].filter((event) => {
       const key = String(event && (event.id || event.uid || event.date) || "");
       if (seen.has(key)) return false;
       seen.add(key);
@@ -2001,6 +2003,8 @@
           Math.abs(actualForPlayer(player) - Number(event.total)) < .001)) : [];
       return {league, ui:uiState(), loading:state.loading, error:state.error, updated:state.refreshedAt,
         games:state.scoreboards[league.week] || state.scoreboard, player:state.selectedPlayer,
+        nflGames:state.scoreboards[Number(state.espn && state.espn.scoringPeriodId)] || state.scoreboard,
+        nflWeek:Number(state.espn && state.espn.scoringPeriodId) || Number(state.week),
         started:leagueStarted(league), leagueStarted:leagueGamesStarted(league), history:state.scoreHistory[state.league] || [],
         teamHistory:state.teamScoreHistory[state.league] || [], events,
         providerUpdated:state.league === "espn" ? state.espn && state.espn.savedAt : state.refreshedAt,

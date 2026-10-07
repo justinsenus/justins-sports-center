@@ -54,7 +54,9 @@ const team=(id,name,points,player)=>({id,teamId:id,name,total:points,players:{[p
 const own=team('1',"Gumby's Big D",29.4,'p1'),opp=team('2','Opponent',22.2,'p2');
 state.espn={ready:true,myTeam:own,opponent:opp,leagueTeams:[own,opp],matchups:[{id:'game-1',homeTeamId:'1',awayTeamId:'2'}],matchupPeriodId:4};state.loading=false;
 app.applyUI({league:'espn'});assert.equal(commands,0);assert.equal(app.model().ownActual,29.4);
-app.dispatch({playerId:'p1'});assert.equal(commands,1);assert.equal(app.model().player.full_name,'Drake Maye');
+app.dispatch({playerId:'p1'});assert.equal(commands,1);
+listeners.get('keydown').forEach(fn=>fn({key:'Escape'}));
+assert.equal(app.getUI().playerId,'p1','A TV key cannot send a close command to the controller');assert.equal(app.model().player.full_name,'Drake Maye');
 app.applyUI({playerId:null,view:'stock'});assert.equal(commands,1);assert.equal(app.getUI().view,'stock');assert.equal(app.model().player,null);
 app.applyUI({playerFlag:{'espn:p1':true},playerTab:'news',chartRange:'hour'});
 assert.equal(app.getUI().flaggedPlayers['espn:p1'],true);assert.equal(app.getUI().chartRange,'hour');

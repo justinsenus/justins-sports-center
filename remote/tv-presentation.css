@@ -178,3 +178,88 @@ body[data-screen=tv] .tv-bench-row .tv-player-name>b{font-size:10px}
 body[data-screen=tv] .tv-roster-row .tv-player-score>b{font-size:17px}
 body[data-screen=tv] .tv-bench-row .tv-player-score>b{font-size:13px}
 }
+/* Broadcast layout: a wide scoring chart, useful reports, and two score ribbons. */
+body[data-screen=tv] .glass-header{height:clamp(94px,10.4vh,112px);min-height:clamp(94px,10.4vh,112px);grid-template-columns:1fr 156px 1fr}
+body[data-screen=tv] .header-mascot{width:144px;height:144px;align-self:start;margin-top:-2px}
+body[data-screen=tv] .score-number>strong{letter-spacing:-.5px;font-weight:700}
+body[data-screen=tv] .score-team h1{font-size:clamp(24px,1.8vw,38px);letter-spacing:0;font-weight:600}
+body[data-screen=tv] .tv-score-band{grid-template-columns:1fr 70px 1fr}
+body[data-screen=tv] .score-vs{align-self:end;margin-bottom:8px;font-size:15px}
+.tv-overview{grid-template-columns:minmax(0,.95fr) minmax(0,2.25fr) minmax(0,.95fr)}
+.tv-center{grid-template-rows:minmax(0,.8fr) minmax(0,.85fr) minmax(0,1.3fr)}
+.tv-secondary{grid-template-columns:minmax(0,.92fr) minmax(0,1.2fr)}
+.tv-panel-title{min-height:31px;padding:6px 12px}
+.tv-panel-title h2{font-size:clamp(16px,1.1vw,23px);font-weight:600;letter-spacing:0}
+.tv-panel-title>span{font-size:clamp(11px,.75vw,15px)}
+.tv-chart-legend{padding:5px 12px 0;gap:14px}
+.tv-chart-legend b{font-size:clamp(13px,.95vw,19px);font-weight:500}
+.tv-chart-legend strong{font-size:clamp(19px,1.4vw,28px)}
+.tv-momentum .glass-chart-wrap{padding:0 10px}
+body[data-screen=tv] .glass-series>path{stroke-width:2;filter:drop-shadow(0 0 .3px #ffffff70)}
+body[data-screen=tv] .glass-chart-grid text,body[data-screen=tv] .glass-chart-times text{font-size:15px;font-weight:500}
+.tv-stock-body{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.tv-stock-body .tv-chart-legend b{font-size:clamp(11px,.8vw,16px)}
+.tv-stock-body .tv-chart-legend strong{font-size:clamp(13px,.95vw,19px)}
+.tv-player-name>b{font-size:clamp(16px,1.2vw,25px);font-weight:600;letter-spacing:0}
+.tv-player-name>small{font-size:clamp(11px,.76vw,16px)}
+.tv-player-score>b{font-size:clamp(23px,1.7vw,34px);letter-spacing:0}
+.tv-bench-row .tv-player-name>b{font-size:clamp(12px,.9vw,18px)}
+.tv-bench-row .tv-player-score>b{font-size:clamp(18px,1.25vw,25px)}
+.tv-feed-row{gap:8px;padding:3px 0}
+.tv-feed-row .player-face{width:clamp(27px,3.1vh,36px);height:clamp(27px,3.1vh,36px)}
+.tv-feed-name{gap:2px}.tv-feed-name>b{font-size:clamp(14px,1vw,20px);font-weight:600}.tv-feed-name>small{font-size:clamp(11px,.76vw,15px)}
+.tv-feed-row>strong{font-size:clamp(21px,1.5vw,30px);gap:2px}.tv-feed-row>strong>small{font-size:clamp(10px,.7vw,14px)}
+.tv-injuries{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.tv-injury-list{display:flex;flex-direction:column;flex:1;min-height:0;padding:3px 10px}
+.tv-injury-row{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2px;border-bottom:1px solid #ffffff0c;padding:4px 0 4px 7px;border-left:2px solid var(--team-color);overflow:hidden}
+.tv-injury-row:last-child{border-bottom:0}.tv-injury-row>div{display:flex;align-items:center;gap:7px;min-width:0}.tv-injury-row b{font-size:clamp(13px,.92vw,19px);font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tv-injury-row strong{font-size:clamp(10px,.76vw,15px);font-weight:500;color:#efb482;flex:none}.tv-injury-row p{font-size:clamp(10px,.75vw,15px);color:#b8c3ce;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tv-injury-row>small{font-size:clamp(9px,.68vw,13px);color:#8295a6;white-space:nowrap}
+body[data-screen=tv] #scoreStrips{flex:none;margin-top:10px;min-height:0}
+.tv-score-strips{display:grid;gap:7px}
+.tv-score-strip{display:flex;gap:13px;align-items:stretch;min-height:0;padding:6px 12px}
+.tv-strip-label{width:110px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid #ffffff16;gap:3px;flex:none}
+.tv-strip-label h2{font-size:clamp(15px,1.05vw,21px);font-weight:600}.tv-strip-label>span{font-size:clamp(11px,.76vw,15px);color:#9ba7b5}
+.tv-fantasy-strip{height:64px}.tv-strip-cards{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.tv-strip-matchup{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 8px;border-left:2px solid var(--home-color);border-right:2px solid var(--away-color);border-radius:4px}
+.tv-strip-matchup>div{display:flex;gap:7px;align-items:center;min-width:0}.tv-strip-matchup b{flex:1;font-size:clamp(14px,1.05vw,21px);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tv-strip-matchup strong{font-size:clamp(21px,1.45vw,29px);font-variant-numeric:tabular-nums;color:var(--team-color);font-weight:600;line-height:1}
+.tv-nfl-strip{height:72px}.tv-nfl-cards{flex:1;min-width:0;display:grid;grid-template-columns:repeat(var(--nfl-count),minmax(0,1fr));gap:14px}.tv-nfl-game{min-width:0;border-right:1px solid #ffffff10;padding-right:10px;display:flex;flex-direction:column;justify-content:center;gap:1px}.tv-nfl-game:last-child{border-right:0}.tv-nfl-game>small{font-size:clamp(10px,.75vw,15px);color:#92a3b3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1;margin-bottom:2px}.tv-nfl-game.is-live>small{color:#6ce2aa}.tv-nfl-game>div{display:flex;align-items:center;gap:6px;min-width:0}.tv-nfl-game img{width:22px;height:20px;object-fit:contain;flex:none}.tv-nfl-game b{font-size:clamp(13px,.95vw,19px);font-weight:500;flex:1}.tv-nfl-game strong{font-size:clamp(17px,1.15vw,23px);font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+body[data-screen=tv][data-tv-density=compact] .glass-header{height:62px;min-height:62px;grid-template-columns:1fr 112px 1fr}
+body[data-screen=tv][data-tv-density=compact] .header-mascot{width:106px;height:106px;align-self:start;margin-top:0}
+body[data-screen=tv][data-tv-density=compact] .tv-score-band{height:94px;padding:7px 17px;row-gap:4px}
+body[data-screen=tv][data-tv-density=compact] .score-number>strong{font-size:49px}
+body[data-screen=tv][data-tv-density=compact] .tv-panel-title{min-height:25px;padding:4px 9px}
+body[data-screen=tv][data-tv-density=compact] .tv-panel-title h2{font-size:15px}
+body[data-screen=tv][data-tv-density=compact] .tv-panel-title>span{font-size:10px}
+body[data-screen=tv][data-tv-density=compact] .tv-chart-legend{padding-top:2px}
+body[data-screen=tv][data-tv-density=compact] .tv-chart-legend strong{font-size:18px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-name>b{font-size:14px}
+body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-name>b{font-size:11px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-score>b{font-size:20px}
+body[data-screen=tv][data-tv-density=compact] .tv-bench-row .tv-player-score>b{font-size:16px}
+body[data-screen=tv][data-tv-density=compact] #scoreStrips{margin-top:7px}
+body[data-screen=tv][data-tv-density=compact] .tv-score-strips{gap:5px}
+body[data-screen=tv][data-tv-density=compact] .tv-score-strip{padding:4px 9px;gap:9px}
+body[data-screen=tv][data-tv-density=compact] .tv-fantasy-strip{height:48px}
+body[data-screen=tv][data-tv-density=compact] .tv-nfl-strip{height:57px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-label{width:94px;gap:1px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-label h2{font-size:14px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-label>span{font-size:10px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-cards{gap:10px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-matchup b{font-size:13px}
+body[data-screen=tv][data-tv-density=compact] .tv-strip-matchup strong{font-size:18px}
+body[data-screen=tv][data-tv-density=compact] .tv-nfl-game img{width:17px;height:16px}
+body[data-screen=tv][data-tv-density=compact] .tv-nfl-game>small{font-size:9px}
+body[data-screen=tv][data-tv-density=compact] .tv-nfl-game b{font-size:12px}
+body[data-screen=tv][data-tv-density=compact] .tv-nfl-game strong{font-size:15px}
+@media(max-height:650px){
+body[data-screen=tv] .tv-momentum .tv-chart-legend{display:none}
+body[data-screen=tv] .tv-roster-body{grid-template-rows:15px minmax(0,var(--starter-space)) 17px minmax(0,var(--bench-space));padding:0 5px 4px}
+body[data-screen=tv] .tv-roster-row .player-face{width:16px;height:16px}
+body[data-screen=tv] .tv-bench-row .player-face{width:13px;height:13px}
+body[data-screen=tv] .tv-player-name>b{font-size:13px;line-height:1}
+body[data-screen=tv] .tv-bench-row .tv-player-name>b{font-size:11px}
+body[data-screen=tv] .tv-player-score>small{font-size:7px}
+body[data-screen=tv] .tv-feed-row .player-face{width:20px;height:20px}
+body[data-screen=tv] .tv-feed-name>b{font-size:12px}.tv-feed-name>small{font-size:9px}.tv-feed-row>strong{font-size:17px}.tv-feed-row>strong>small{font-size:8px}
+body[data-screen=tv] .tv-injury-row{gap:1px;padding:2px 0 2px 5px}.tv-injury-row b{font-size:12px}.tv-injury-row strong{font-size:9px}.tv-injury-row p{font-size:9px}.tv-injury-row>small{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.score-wiggle{animation:none}}

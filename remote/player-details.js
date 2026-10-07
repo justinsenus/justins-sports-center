@@ -22,6 +22,14 @@
     const values=sources.map(r=>Number(r.value));
     return {sources,value:values.length?values.reduce((a,b)=>a+b,0)/values.length:null,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null};
   }
+  function injurySummary(p) {
+    const data=playerData(p),reports=data?.reports || [];
+    const report=reports.find(r=>r.source==='NFL.com') || reports.find(r=>r.source==='CBS Sports') || reports.find(r=>r.source==='FantasyPros') || reports[0];
+    const status=report?.status || p.injury_status || p.injuryStatus || (/OUT|IR|DOUBTFUL|QUESTIONABLE|PUP/i.test(p.status || '')?p.status:null);
+    return {status,practice:report?.practice || p.practice_participation || null,injury:report?.injury || null,week:report?.week || intel?.week || null,
+      source:report?.source || 'League roster',date:reportDay(report?.reported_date) || date(report?.reported_at) || null,url:url(report?.url),
+      reported:Boolean(report),loading:loading || !intel};
+  }
   function coverage() {
     const sources=intel?.sources || [],available=sources.filter(s=>s.status==='available').length;
     return '<details class="player-source-coverage"><summary>'+available+' / '+(intel?.source_count || 30)+' news sources accessible'+(date(intel?.checked_at)?' · Checked '+esc(date(intel.checked_at)):'')+'</summary><p>News coverage and numeric projection contributors are counted separately.</p>'+
@@ -89,6 +97,6 @@
     if(b.dataset.playerTab)app.dispatch({playerTab:b.dataset.playerTab});
     else app.dispatch({playerFlag:{[b.dataset.flagPlayer]:!app.getUI().flaggedPlayers?.[b.dataset.flagPlayer]}});
   });
-  window.FantasyPlayerDetails={render,average,playerData};
+  window.FantasyPlayerDetails={render,average,playerData,injurySummary,fetchData};
   app.render();
 })();

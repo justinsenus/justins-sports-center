@@ -17,6 +17,8 @@ model.ui.playerTab='news';let html=detail.render(model);
 assert.ok(html.includes('Questionable') && html.includes('Limited Participation'));
 assert.ok(html.includes('Not published') && !html.includes('50%'),'Questionable does not invent a playing probability');
 assert.ok(html.includes('Drake Maye returns to practice') && html.includes('1 / 30 news sources accessible'));
+assert.equal(detail.injurySummary(player).practice,'Limited Participation');
+assert.equal(detail.injurySummary(player).week,5,'Summary panels retain the injury report week independently of the stats week');
 model.ui.playerTab='projections';html=detail.render(model);
 assert.ok(html.includes('20.0') && html.includes('2 contributing sources'));
 listeners.click({target:{closest:()=>({dataset:{flagPlayer:'sleeper:123'}})}});
