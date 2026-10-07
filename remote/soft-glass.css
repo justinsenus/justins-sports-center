@@ -188,6 +188,8 @@ body:not([data-screen=tv]) .glass-games{grid-template-columns:1fr}
 
 
 .footer-links{display:flex;align-items:center;gap:14px}.footer-links button{border:0;padding:7px 0;background:transparent;color:#aab9c6;font-size:11px;min-height:32px}
+.glass-chart-grid text,.glass-chart-times text{font-size:13px}.chart-end-label{font-size:16px}
+@media(max-width:540px){body:not([data-screen=tv]) .glass-chart-grid text,body:not([data-screen=tv]) .glass-chart-times text{font-size:17px}body:not([data-screen=tv]) .chart-end-label{font-size:20px}body:not([data-screen=tv]) .chart-caption{font-size:10px}}
 body[data-screen=tv] .home-center{grid-template-rows:minmax(0,1.15fr) minmax(0,.85fr) minmax(0,.95fr)}
 body[data-screen=tv] .league-chart:not(.expanded-chart) .league-chart-body>.chart-legend{display:grid;grid-template-columns:1fr 1fr;align-content:center;column-gap:10px;row-gap:4px}
 body[data-screen=tv] .league-chart:not(.expanded-chart) .league-chart-body{grid-template-columns:minmax(0,1fr) minmax(170px,.8fr)}
@@ -208,4 +210,3 @@ body:not([data-screen=tv]) .home-center>.league-chart{order:3;width:100%}
 body:not([data-screen=tv]) .home-center>.home-secondary{order:4;width:100%}
 .footer-links{gap:10px}.footer-links button{min-height:44px}
 }
-

@@ -44,7 +44,7 @@ const document={body:{dataset:{screen:'tv',root:'../patriots-fantasy-touch/'}},q
 class CustomEvent{constructor(type,init={}){this.type=type;this.detail=init.detail;}}
 const sandbox={document,CustomEvent,window:{addEventListener:()=>{}},localStorage:{getItem:()=>null,setItem:()=>{}},setTimeout,clearTimeout,setInterval:()=>0,console,URL,Date};
 let source=await readFile(new URL('../../patriots-fantasy-touch/remote-app.js',import.meta.url),'utf8');
-source=source.replace('  const uiState =','  window.testState=state;\n  const uiState =');
+source=source.replace('  const uiState =','  window.testState=state; window.testFns={normalizeESPNEntry,normalizeStoredESPNData,findPlayerEvent};\n  const uiState =');
 source=source.replace(/\n  refresh\(\);\n  setInterval\(refresh, CONFIG.refreshMs\);[\s\S]*?\}\)\(\);$/,'\n})();');
 vm.runInNewContext(source,sandbox);
 const app=sandbox.window.FantasyCenter, state=sandbox.window.testState;
@@ -73,4 +73,10 @@ assert.ok(reported.some(s=>s.label==='RECEPTIONS'&&s.value===0));
 assert.ok(reported.some(s=>s.label==='RECEIVING TOUCHDOWNS'&&s.value===0));
 assert.ok(reported.some(s=>s.label==='TARGETS'&&s.value===5));
 assert.ok(!reported.some(s=>s.label==='RUSHING YARDS'),'Missing stats are not invented');
+const unscoped={playerId:'test',lineupSlotId:0,appliedStatTotal:26.2,playerPoolEntry:{player:{id:'test',fullName:'Test QB',defaultPositionId:1,proTeamId:17,stats:[{scoringPeriodId:4,statSourceId:0,appliedTotal:26.2,stats:{3:269}}]}}};
+assert.equal(sandbox.window.testFns.normalizeESPNEntry(unscoped,null,5,'own').actual,0,'A previous week roster score is not carried into the current week');
+const scoped={...unscoped,appliedStatTotal:18.3};
+assert.equal(sandbox.window.testFns.normalizeESPNEntry(unscoped,scoped,5,'own').actual,18.3,'An entry explicitly scoped to the current matchup remains authoritative');
+state.week=4;state.scoreboard=[{competitions:[{competitors:[{team:{abbreviation:'NE'}}],status:{type:{state:'post'}}}]}];
+assert.equal(sandbox.window.testFns.findPlayerEvent({team:'NE',scoringPeriodId:5}),null,'An ESPN week 5 player does not attach to a Sleeper week 4 game');
 console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, player open/close, live player refresh, corrected team totals, remaining projections, and negative final scores.');

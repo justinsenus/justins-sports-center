@@ -58,6 +58,7 @@
     espn: null,
     consensus: null,
     scoreboard: [],
+    scoreboards: {},
     selectedPlayer: null,
     playerFilter: "all",
     scoreSnapshot: {},
@@ -181,7 +182,9 @@
 
   function findPlayerEvent(player) {
     const team = teamCode(player && (player.team || player.proTeam || ""));
-    return state.scoreboard.find((event) => eventCompetitors(event).some((c) => teamCode(c.team && c.team.abbreviation) === team)) || null;
+    const period=Number(player && player.scoringPeriodId);
+    const board=period && period!==Number(state.week)?state.scoreboards[period] || []:state.scoreboard;
+    return board.find((event) => eventCompetitors(event).some((c) => teamCode(c.team && c.team.abbreviation) === team)) || null;
   }
 
   // ESPN's public NFL scoreboard includes the currently published game line
@@ -543,7 +546,7 @@
     const name = player.fullName || [player.firstName, player.lastName].filter(Boolean).join(" ") || id || "Player";
     const position = ESPN_POSITION_BY_ID[player.defaultPositionId] || "UTIL";
     const team = ESPN_TEAM_BY_PRO_ID[player.proTeamId] || "FA";
-    const event = findPlayerEvent({ team }) || null;
+    const event = findPlayerEvent({ team, scoringPeriodId }) || null;
     const eventStatus = event && eventState(event);
     const rows = espnStatRows(player, scoringPeriodId);
     const actualRow = rows.find((row) => Number(row.statSourceId) === 0);
@@ -552,8 +555,7 @@
       actualRow && actualRow.appliedStatTotal,
       currentEntry && currentEntry.appliedStatTotal,
       currentPool.appliedStatTotal,
-      entry && entry.appliedStatTotal,
-      pool.appliedStatTotal
+      Number(entry && entry.scoringPeriodId) === Number(scoringPeriodId) ? entry.appliedStatTotal : null
     ].map(finite).find((value) => value != null);
     const actual = actualValue ?? 0;
     const rowProjection = espnProjection(player, scoringPeriodId);
@@ -582,6 +584,7 @@
       lineupSlotId,
       starter: !ESPN_BENCH_SLOTS.has(lineupSlotId),
       actual,
+      scoringPeriodId,
       projected,
       seasonAvg: espnSeasonAverage(player),
       status,
@@ -624,7 +627,7 @@
     const starterRows = ids.map((id) => players[id]).filter((row) => row && row.starter);
     const actualSum = starterRows.reduce((sum, row) => sum + (finite(row.actual) || 0), 0);
     const sideTotal = finite(currentSide && currentSide.totalPoints);
-    const actual = actualSum > 0 ? actualSum : sideTotal ?? actualSum;
+    const actual = sideTotal ?? actualSum;
     const projected = starterRows.reduce((sum, row) => sum + (finite(row.projected) || 0), 0);
     const imageTeam = (starterRows[0] || players[ids[0]] || {}).team;
     const overall = rawTeam.record && (rawTeam.record.overall || rawTeam.record.current) || {};
@@ -664,8 +667,12 @@
     return espnProjectionPoolPromise;
   }
 
-  async function loadESPNPublic() {
-    const data = await getJSON(`${ESPN_PUBLIC_URL}&scoringPeriodId=${encodeURIComponent(state.week || 1)}&ts=${Date.now()}`);
+  async function loadESPNPublic(requestedPeriod = null) {
+    let data = await getJSON(`${ESPN_PUBLIC_URL}${requestedPeriod ? '&scoringPeriodId='+encodeURIComponent(requestedPeriod):''}&ts=${Date.now()}`);
+    if(!requestedPeriod){
+      const currentPeriod=Number(data.status && (data.status.currentScoringPeriod || data.status.latestScoringPeriod) || data.scoringPeriodId);
+      if(currentPeriod)data=await getJSON(`${ESPN_PUBLIC_URL}&scoringPeriodId=${currentPeriod}&ts=${Date.now()}`);
+    }
     const statLabels = espnStatLabels(data);
     const status = data.status || {};
     const matchupPeriodId = Number(status.currentMatchupPeriod || status.latestScoringPeriod || 1);
@@ -712,7 +719,7 @@
     return result;
   }
 
-  function normalizeStoredESPNTeam(team) {
+  function normalizeStoredESPNTeam(team, scoringPeriodId = null) {
     if (!team) return null;
     const snapshotTotal = finite(team.total);
     const oldRows = [
@@ -728,7 +735,7 @@
       const id = String(row.id || row.player_id || row.playerId || "");
       if (!id) return;
       const projected = finite(row.projected) ?? finite(row.projectedPoints);
-      const event = findPlayerEvent(row) || null;
+      const event = findPlayerEvent({...row,scoringPeriodId}) || null;
       const eventStatus = event && eventState(event);
       // The sync file is normalized for scoringPeriodId before publish.
       // Trust its weekly row even while the separate NFL scoreboard lags.
@@ -746,6 +753,7 @@
         team: row.team || "FA",
         position: row.position || "UTIL",
         actual,
+        scoringPeriodId,
         projected,
         gameStats: Array.isArray(row.gameStats) ? row.gameStats : [],
         status,
@@ -768,7 +776,7 @@
       roster: { players: ids, starters },
       players,
       pointsMap: Object.fromEntries(ids.map((id) => [id, players[id].actual])),
-      total: rows.length ? total : snapshotTotal || 0,
+      total: snapshotTotal ?? total,
       projected: rows.length ? projected : finite(team.projected),
       record: team.record || { wins: null, losses: null }
     };
@@ -776,7 +784,7 @@
 
   function normalizeStoredESPNData(data) {
     const sourceTeams = data.leagueTeams && data.leagueTeams.length ? data.leagueTeams : [data.myTeam, data.opponent].filter(Boolean);
-    const teams = sourceTeams.map(normalizeStoredESPNTeam).filter(Boolean);
+    const teams = sourceTeams.map(team=>normalizeStoredESPNTeam(team,data.scoringPeriodId)).filter(Boolean);
     const findTeam = (target) => teams.find((team) => String(team.teamId || team.id) === String(target && (target.teamId || target.id)) || nameKey(team.name) === nameKey(target && target.name)) || null;
     const savedAtMs = data && data.savedAt ? new Date(data.savedAt).getTime() : NaN;
     const syncAgeMs = Number.isFinite(savedAtMs) ? Math.max(0, Date.now() - savedAtMs) : Infinity;
@@ -801,9 +809,9 @@
         // the authoritative lineup totals. Keep using it while fresh so the
         // public and private endpoints cannot make the score board jump.
         if (!synced.staleFallback) {
-          loadESPNPublic().then((publicData) => {
+          loadESPNPublic(synced.scoringPeriodId).then((publicData) => {
             if (state.espn && !state.espn.public && publicData && publicData.matchups && publicData.matchups.length) {
-              state.espn.matchups = publicData.matchups;
+              // Keep private scores and matchup totals from the same snapshot.
               state.espn.projectionPlayers = { ...(state.espn.projectionPlayers || {}), ...(publicData.projectionPlayers || {}) };
               render();
             }
@@ -813,7 +821,7 @@
       }
     } catch (_) { /* Try the public endpoint when the synced snapshot is unavailable. */ }
     try {
-      return await loadESPNPublic();
+      return await loadESPNPublic(synced && synced.scoringPeriodId);
     } catch (publicError) {
       if (synced && synced.ready) return synced;
       return { ready: false, error: publicError && publicError.message || "ESPN feed unavailable" };
@@ -823,11 +831,11 @@
     try { return await getJSON(new URL(`${root}consensus-data.json?ts=${Date.now()}`, location.href)); } catch (_) { return { status: "unavailable", players: {}, sources: [], insights: [] }; }
   }
 
-  async function loadScoreboard() {
+  async function loadScoreboard(requestedWeek = null) {
     const date = new Date();
     const stamp = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
-    const week = Number(state.week) || 1;
-    const weekUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&seasontype=2&week=${week}`;
+    const week = Number(requestedWeek || state.week) || 1;
+    const weekUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&seasontype=2&year=${CONFIG.season}&week=${week}`;
     const todayUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${stamp}`;
     const [weekResult, todayResult] = await Promise.all([
       getJSON(weekUrl).catch(() => ({ events: [] })),
@@ -1902,9 +1910,13 @@
       loadConsensus().then((value) => ({ value })).catch((error) => ({ error }))
     ]);
     const failures = [];
-    if (scoreboardResult.value) state.scoreboard = scoreboardResult.value.events || [];
+    if (scoreboardResult.value) {state.scoreboard = scoreboardResult.value.events || [];state.scoreboards[state.week]=state.scoreboard;}
     if (sleeperResult.value) state.sleeper = sleeperResult.value; else failures.push("SLEEPER");
     if (espnResult.value) state.espn = espnResult.value;
+    const espnWeek=Number(state.espn && state.espn.scoringPeriodId);
+    if(espnWeek && espnWeek!==Number(state.week)){
+      try{state.scoreboards[espnWeek]=(await loadScoreboard(espnWeek)).events || [];}catch(_){/* Do not attach a different week's game. */}
+    }
     if (!espnResult.value || !espnResult.value.ready || espnResult.value.staleFallback) failures.push("ESPN");
     if (consensusResult.value) state.consensus = consensusResult.value; else if (!state.consensus) state.consensus = { status: "unavailable", players: {}, sources: [], insights: [] };
     updateScoreMoves(currentLeague());
@@ -1952,7 +1964,7 @@
     model:() => {
       const league = currentLeague();
       return {league, ui:uiState(), loading:state.loading, error:state.error, updated:state.refreshedAt,
-        games:state.scoreboard, player:state.selectedPlayer,
+        games:state.scoreboards[league.week] || state.scoreboard, player:state.selectedPlayer,
         started:leagueStarted(league), leagueStarted:leagueGamesStarted(league), history:state.scoreHistory[state.league] || [],
         teamHistory:state.teamScoreHistory[state.league] || [], events:state.scoreEvents[state.league] || [],
         providerUpdated:state.league === "espn" ? state.espn && state.espn.savedAt : state.refreshedAt,

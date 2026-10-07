@@ -48,13 +48,14 @@
       grid+='<path d="M'+g.left+' '+yy+'H'+g.right+'"/><text x="32" y="'+(yy+4)+'" text-anchor="end">'+fmt(tick,0)+'</text>';
     }
     const observed=history.filter(h=>h.at && !h.baseline);
-    const indices=[0,Math.round((history.length-1)/3),Math.round((history.length-1)*2/3),history.length-1];
+    const lastIndex=history.length-1;
+    const indices=[0,...new Set([Math.round(lastIndex/3),Math.round(lastIndex*2/3)].filter(i=>i>0 && i<lastIndex)),lastIndex];
     const seenLabels=new Set();
     indices.forEach((index,i)=>{
-      let label=i===0?'Start':i===3?'Now':time(history[index]?.at);
+      let label=index===0?'Start':index===lastIndex?'Now':time(history[index]?.at);
       if(!label || seenLabels.has(label))return;
       seenLabels.add(label);
-      axes+='<text x="'+g.x(index)+'" y="196" text-anchor="'+(i===0?'start':i===3?'end':'middle')+'">'+esc(label)+'</text>';
+      axes+='<text x="'+g.x(index)+'" y="196" text-anchor="'+(index===0?'start':index===lastIndex?'end':'middle')+'">'+esc(label)+'</text>';
     });
     const yLabels=series.map(s=>g.y(s.value));
     if(endLabels && yLabels.length===2 && Math.abs(yLabels[0]-yLabels[1])<15) {
