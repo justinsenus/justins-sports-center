@@ -1129,14 +1129,13 @@
       state.scoreEventScope[state.league] = eventScope;
       try {
         const savedEvents = JSON.parse(localStorage.getItem(eventScope) || "null");
-        state.scoreEvents[state.league] = Array.isArray(savedEvents) ? savedEvents.filter((event) => event && event.playerId && Number.isFinite(Number(event.at))).slice(0, 12) : [];
+        state.scoreEvents[state.league] = Array.isArray(savedEvents) ? savedEvents.filter((event) => event && !event.snapshot && event.playerId && Number.isFinite(Number(event.at))).slice(0, 12) : [];
       } catch (_) { state.scoreEvents[state.league] = []; }
     }
     const events = state.scoreEvents[state.league] || [];
     let eventsChanged = false;
     const playerHistories = state.playerHistories[state.league] || {};
     const players = league.allPlayers && league.allPlayers.length ? league.allPlayers : [...(league.own || []), ...(league.opponent || [])];
-    const seedCurrentScorers = events.length === 0;
     players.forEach((player) => {
       const key = `${state.league}:${String(player.player_id)}`;
       const value = actualForPlayer(player);
@@ -1161,22 +1160,6 @@
           direction: delta > 0 ? "up" : "down",
           delta,
           total: value
-        });
-        eventsChanged = true;
-      } else if (seedCurrentScorers && value > 0) {
-        events.unshift({
-          at: Date.now(),
-          playerId,
-          name: player.full_name || player.name || "PLAYER",
-          team: player.team || "FA",
-          fantasyTeamId: player.fantasyTeamId || "",
-          fantasyTeamName: player.fantasyTeamName || "OWNER UNKNOWN",
-          teamColor: player.fantasyTeamColor || "#a8b7c9",
-          headshot: player.headshot || player.imageUrl || "",
-          direction: "up",
-          delta: value,
-          total: value,
-          snapshot: true
         });
         eventsChanged = true;
       }
