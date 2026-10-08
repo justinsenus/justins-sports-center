@@ -38,4 +38,11 @@ assert.ok(api.snapshot().error,'A batch changed during pagination is rejected');
 assert.equal(api.get({full_name:'Chuba Hubbard'},{season:2026,week:5}).calculated_average,15.25,'Last successful data is retained');
 clock += 6*3600000+1;
 assert.equal(api.get({full_name:'Chuba Hubbard'},{season:2026,week:5}),null,'Expired projections fall back to direct feeds');
-console.log('Passed: atomic cloud snapshots, same-week isolation, source counts, name normalization, concurrency, polling, and stale fallback.');
+const delayedWindow = {FANTASY_REMOTE_CONFIG:window.FANTASY_REMOTE_CONFIG};
+vm.runInNewContext(await readFile(new URL('../projections.js',import.meta.url),'utf8'),
+  {window:delayedWindow,Date:Clock,setTimeout,clearTimeout,AbortController,Map,Set,console});
+assert.equal((await delayedWindow.FantasyProjectionCloud.refresh()).rows,0,'A missing optional SDK does not throw during startup');
+delayedWindow.supabase = window.supabase;
+torn=false;
+assert.equal((await delayedWindow.FantasyProjectionCloud.refresh()).rows,2,'An SDK that arrives after startup is used immediately');
+console.log('Passed: atomic cloud snapshots, same-week isolation, source counts, name normalization, concurrency, polling, stale fallback, and delayed SDK recovery.');

@@ -22,7 +22,7 @@
       <nav class="control-tiles" aria-label="TV views"><button id="myMatchup" class="active" type="button"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M4 20V10h4v10m4 0V4h4v16m4 0V7h3v13"/></svg><span>My matchup</span></button><button type="button" data-view="league"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="18" cy="8" r="2"/><path d="M2 21v-4a6 6 0 0 1 12 0v4m2-7a5 5 0 0 1 6 5v2"/></svg><span>League</span></button><button type="button" data-view="stock"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 18 9 12l4 3 8-11m-6 0h6v6"/></svg><span>Stock board</span></button><button type="button" data-view="patriots"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4c6-3 14 3 15 9S13 25 7 20 0 7 6 4Zm1 5 10 9m-8-7 3-3m0 6 3-3"/></svg><span>Patriots</span></button></nav>
       <section id="workspace" aria-label="Fantasy scoreboard"></section>
     </main>
-    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="footer-links"><button type="button" data-view="players">All players</button><button type="button" data-view="injuries">Injuries</button><a href="../projections/">Projections</a><a href="../tv/" target="_blank" rel="noopener">TV view ↗</a></span><span id="lastSync">Waiting for providers</span></footer>
+    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="footer-links"><button type="button" data-view="players">All players</button><button type="button" data-view="injuries">Injuries</button><a href="../tv/" target="_blank" rel="noopener">TV view ↗</a></span><span id="lastSync">Waiting for providers</span></footer>
   </div>
   <aside id="playerDrawer" class="player-drawer" aria-label="Player stats" hidden></aside>
   <nav class="bottom-nav" aria-label="Mobile views"><button type="button" data-view="overview"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M4 20V10h4v10m4 0V4h4v16m4 0V7h3v13"/></svg><span>Matchup</span></button><button type="button" data-view="players"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4m3-17a3 3 0 0 1 0 6m1 5a5 5 0 0 1 3 5"/></svg><span>Players</span></button><button type="button" data-view="league"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="18" cy="8" r="2"/><path d="M2 21v-4a6 6 0 0 1 12 0v4m2-7a5 5 0 0 1 6 5v2"/></svg><span>League</span></button><button type="button" data-view="stock"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 18 9 12l4 3 8-11m-6 0h6v6"/></svg><span>Stock</span></button><button type="button" data-view="patriots"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4c6-3 14 3 15 9S13 25 7 20 0 7 6 4Zm1 5 10 9m-8-7 3-3m0 6 3-3"/></svg><span>Patriots</span></button></nav>
@@ -32,9 +32,9 @@
   </section>
   <script src="../patriots-fantasy-touch/source-catalog.js?v=2"></script>
   <script src="../remote/config.js?v=1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.js"></script>
-  <script src="../remote/projections.js?v=1" defer></script>
-  <script src="../patriots-fantasy-touch/remote-app.js?v=11" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.js" async></script>
+  <script src="../remote/projections.js?v=2" defer></script>
+  <script src="../patriots-fantasy-touch/remote-app.js?v=12" defer></script>
   <script src="../remote/chart-timeline.js?v=1" defer></script>
   <script src="../remote/soft-glass.js?v=7" defer></script>
   <script src="../remote/player-details.js?v=6" defer></script>

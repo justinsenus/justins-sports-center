@@ -8,8 +8,7 @@
     typeof row.calculated_average === "number" && Number.isFinite(row.calculated_average) &&
     Number.isInteger(row.sources_counted) && row.sources_counted > 0;
   const state = { rows: new Map(), feed: null, checkedAt: 0, requestedAt: 0, error: "", pending: null };
-  const client = config && window.supabase ? window.supabase.createClient(config.url, config.key,
-    { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }) : null;
+  let client = null;
 
   function isFresh(feed = state.feed) {
     const age = Date.now() - Date.parse(feed?.updated_at);
@@ -22,8 +21,15 @@
   async function refresh(force = false) {
     if (state.pending) return state.pending;
     if (!force && Date.now() - state.requestedAt < 60000) return snapshot();
-    state.requestedAt = Date.now();
+    // The optional SDK loads asynchronously so league startup never waits on a CDN.
+    if (!client) {
+      try {
+        if (config && window.supabase) client = window.supabase.createClient(config.url, config.key,
+          { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+      } catch { /* Keep direct league feeds available if SDK setup fails. */ }
+    }
     if (!client) { state.error = "Cloud SDK unavailable"; return snapshot(); }
+    state.requestedAt = Date.now();
     state.pending = (async () => {
       const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 20000);
       try {
