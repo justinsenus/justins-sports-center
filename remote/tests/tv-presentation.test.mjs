@@ -43,4 +43,15 @@ assert.ok(nflHtml.includes('Week 5') && nflHtml.includes('Q2 5:12') && nflHtml.i
 assert.ok(nflHtml.includes('<strong>—</strong>') && !nflHtml.includes('<strong>99</strong>'),'Upcoming scores are blank and old fantasy-week games do not leak into the current NFL ribbon');
 context.window.FantasyPlayerDetails={fetchData(){},injurySummary:p=>({status:p.player_id==='own-0'?'Questionable':null,practice:null,source:'CBS Sports',date:'Oct 5',week:5})};
 assert.ok(tv.injuries(model).includes('Practice not reported') && tv.injuries(model).includes('CBS Sports · W5 · Oct 5'),'Injury panel identifies report week and date without inventing a practice result');
-console.log('Passed: complete TV rosters, rotating matchups and NFL scores, current-week isolation, sourced injury reports, synced player scene, and retained chart corrections.');
+const upcoming={...own[0],status:'NEXT',injury_status:'Questionable',event:{date:'2026-10-11T13:30:00Z',competitions:[{status:{type:{state:'pre'}},competitors:[{team:{abbreviation:'NE'},homeAway:'away'},{team:{abbreviation:'PHI'},homeAway:'home'}]}]}};
+const playerRow=tv.row(upcoming,false,model);
+assert.ok(playerRow.includes('Sun 9:30 AM @ PHI'),'Every row has an Eastern kickoff time and opponent');
+assert.ok(playerRow.includes('tv-injury-badge') && playerRow.includes('Injury: Questionable'),'Questionable players carry an accessible injury marker');
+assert.ok(playerRow.includes('tv-player-projection') && playerRow.includes('--team-color:#f47b35'),'Projection values use the same fantasy-team color as the stock chart');
+assert.ok(tv.row(upcoming,true,model).includes('tv-player-projection'),'Reserve players also retain projections and game times');
+upcoming.event.competitions[0].status.type={state:'in',shortDetail:'Q2 5:12'};
+assert.ok(tv.row(upcoming,false,model).includes('LIVE · Q2 5:12'),'Live game progress replaces the pregame time');
+assert.equal(tv.injuryInfo({...upcoming,injury_status:'ACTIVE'}),null,'Active players are not flagged as injured');
+assert.equal(tv.injuryInfo({...upcoming,injury_status:'INJURY_RESERVE'}).label,'IR');
+assert.equal(tv.gameInfo({team:'CAR',status:'NO GAME'},{league:{week:5},games:Array(14).fill({})}).phase,'bye','A complete weekly slate distinguishes a bye from a missing feed');
+console.log('Passed: complete TV rosters, rotating matchups and reserves, current-week isolation, colored projections, kickoff/live labels, yellow injury markers, player scenes, and retained chart corrections.');

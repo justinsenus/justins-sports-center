@@ -8,6 +8,7 @@
   let room = null, socket = null, subscribed = false, revision = -1, ref = 0, joinRef = '', retries = 0;
   let reconnectTimer, heartbeats, joinTimer, peerSeen = 0, peerRevision = -1, stopped = false, queue = Promise.resolve();
   let currentError = '', lastCommand = 0;
+  const pendingCommands = [];
   const device = role + '-' + Array.from(crypto.getRandomValues(new Uint8Array(8)), n => n.toString(16).padStart(2,'0')).join('');
   const save = () => { try { if (room) localStorage.setItem(storageKey, JSON.stringify(room)); else localStorage.removeItem(storageKey); } catch (_) {} };
   const api = async (action, extra = {}) => {
@@ -32,10 +33,20 @@
     if ($('remoteToggle')) $('remoteToggle').textContent = room ? 'PAIR ' + room.code : 'PAIR TV';
   }
   function apply(data) {
-    if (!data || !data.state || !Number.isFinite(Number(data.revision)) || Number(data.revision) < revision) return;
+    if (!data || !data.state || !Number.isFinite(Number(data.revision)) || Number(data.revision) <= revision) return;
     revision = Number(data.revision);
     if (room) { room.state = data.state; room.revision = revision; save(); }
-    app.applyUI(data.state);
+    // Keep the newest local selection while earlier command replies arrive.
+    // Canonical revisions still order every TV update and reconnect.
+    const next = {...data.state};
+    if (role === 'touch') for (const command of pendingCommands) {
+      if (command.roomId !== room?.id) continue;
+      for (const [key,value] of Object.entries(command.patch)) {
+        if (key === 'playerFlag') next.flaggedPlayers = {...(next.flaggedPlayers || {}),...value};
+        else if (key !== 'refresh') next[key] = value;
+      }
+    }
+    app.applyUI(next);
     presence(); status();
     document.dispatchEvent(new CustomEvent('fantasy:session', {detail:{paired:!!room,connected:subscribed,revision,role}}));
   }
@@ -105,8 +116,22 @@
     if (!room) { status(); return; }
     const patch = event.detail;
     lastCommand=Date.now(); currentError='';
+    const command = {patch:{...patch},roomId:room.id};
+    pendingCommands.push(command);
     // Serialize local commands; server revisions order commands across remotes.
-    queue=queue.catch(()=>{}).then(()=>api('command',{patch})).then(data=>{apply(data);status();}).catch(e=>{currentError=e.message+' Tap the control again.';status();});
+    queue=queue.catch(()=>{}).then(async()=>{
+      if (room?.id !== command.roomId) { pendingCommands.splice(pendingCommands.indexOf(command),1); return; }
+      try {
+        const data=await api('command',{patch:command.patch});
+        pendingCommands.splice(pendingCommands.indexOf(command),1);
+        if (room?.id === command.roomId) { apply(data); status(); }
+      } catch(e) {
+        if (room?.id === command.roomId) { currentError=e.message+' Tap the control again.'; status(); }
+      } finally {
+        const index=pendingCommands.indexOf(command);
+        if(index>=0)pendingCommands.splice(index,1);
+      }
+    });
   });
   if ($('pairForm')) $('pairForm').addEventListener('submit',async event => {
     event.preventDefault(); const button=$('pairSubmit'); button.disabled=true; currentError='';

@@ -330,3 +330,53 @@ body[data-screen=tv] .tv-feed-row .player-face {
 }
 body[data-screen=tv] .tv-feed-name > b { font-size: clamp(11px,.8vw,16px); }
 body[data-screen=tv] .tv-feed-name > small { font-size: clamp(8px,.55vw,11px); }
+
+/* Consistent two-line player rows: identity and game, then points and projection. */
+body[data-screen=tv] .tv-player-detail .detail-projection,body[data-screen=tv] .tv-player-detail .player-projection-summary b,body[data-screen=tv] .tv-player-detail .player-projection-sources b,body[data-screen=tv] .tv-player-detail .projected-stats b{color:var(--team-color)}
+body[data-screen=tv] .tv-player-photo.is-defense .player-face img{object-fit:contain!important;object-position:center!important}
+body[data-screen=tv] .tv-overview{grid-template-columns:minmax(0,.95fr) minmax(0,2.8fr) minmax(0,.95fr)}
+body[data-screen=tv] .tv-roster .tv-panel-title{padding:8px 10px}
+body[data-screen=tv] .tv-roster .tv-panel-title>span{font-size:clamp(9px,.65vw,12px)}
+body[data-screen=tv] .tv-roster-body{grid-template-rows:18px minmax(0,var(--starter-space)) 20px minmax(0,var(--bench-space));padding:0 7px 6px}
+body[data-screen=tv] .tv-roster-body.no-bench{grid-template-rows:18px minmax(0,1fr)}
+body[data-screen=tv] .tv-roster .tv-roster-row{display:grid;grid-template-columns:34px minmax(0,1fr) 58px;gap:7px;align-items:center;padding:2px 3px;border-top:1px solid #ffffff0b;overflow:hidden;min-width:0;min-height:0}
+body[data-screen=tv] .tv-roster .tv-roster-row[hidden]{display:none!important}
+body[data-screen=tv] .tv-player-photo{position:relative;display:block;width:34px;height:34px;max-height:100%;border-radius:9px;background:#2b3541;overflow:hidden;align-self:center}
+body[data-screen=tv] .tv-roster-row .tv-player-photo .player-face{display:block;width:100%;height:100%;max-height:none;border:1px solid #ffffff29;border-radius:inherit;background:#2b3541}
+body[data-screen=tv] .tv-player-photo .player-face img{object-fit:cover;object-position:center 20%;width:100%;height:100%}
+body[data-screen=tv] .tv-player-photo>small{position:absolute;left:0;right:0;bottom:0;text-align:center;font:600 7px/10px system-ui,sans-serif;letter-spacing:.5px;color:#e5ebf1;background:#14202ddd;pointer-events:none}
+body[data-screen=tv] .tv-roster .tv-player-name{display:flex;flex-direction:column;gap:2px;align-items:stretch;text-align:left;min-width:0}
+body[data-screen=tv] .tv-player-name-line{display:flex;align-items:center;gap:5px;min-width:0}
+body[data-screen=tv] .tv-player-name-line>b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(14px,1.05vw,21px);font-weight:600;line-height:1.1;letter-spacing:0;color:#f0f3f7}
+body[data-screen=tv] .tv-roster .tv-player-name>.tv-player-game{display:flex;align-items:center;justify-content:flex-start;gap:4px;width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(10px,.73vw,14px);line-height:1.15;color:#a9b9c9}
+body[data-screen=tv] .tv-roster .tv-player-name>.tv-player-game.live{color:#69e0ab;font-weight:600}
+body[data-screen=tv] .tv-roster .tv-player-name>.tv-player-game.final{color:#8f9fad}
+body[data-screen=tv] .tv-live-dot{width:5px;height:5px;flex:none;border-radius:50%;background:#69e0ab}
+body[data-screen=tv] .tv-injury-badge{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:none;border:1px solid #ffd45a60;border-radius:4px;padding:2px 3px;color:#ffd45a;background:#ffd45a12;font:700 clamp(8px,.55vw,10px)/1 system-ui,sans-serif;white-space:nowrap}
+body[data-screen=tv] .tv-injury-badge svg{width:9px;height:9px;fill:currentColor;flex:none}
+body[data-screen=tv] .tv-roster .tv-roster-row .tv-player-score{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:3px;min-width:0;line-height:1;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums}
+body[data-screen=tv] .tv-roster .tv-roster-row .tv-player-score>b{font-size:clamp(20px,1.4vw,29px);font-weight:650;line-height:1;letter-spacing:-.7px;color:#f4f6fa}
+body[data-screen=tv] .tv-roster .tv-roster-row .tv-player-score>.tv-player-projection{display:flex;align-items:baseline;gap:4px;color:var(--team-color);font-size:clamp(11px,.8vw,16px);line-height:1;white-space:nowrap}
+body[data-screen=tv] .tv-player-projection>span{font-size:clamp(7px,.48vw,10px);font-weight:500;letter-spacing:.2px;opacity:.85}
+body[data-screen=tv] .tv-player-projection>strong{font-weight:600;line-height:1;letter-spacing:-.2px}
+body[data-screen=tv] .tv-bench{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(var(--bench-rows),minmax(0,1fr));gap:2px;min-height:0}
+body[data-screen=tv] .tv-roster .tv-bench-row{border:1px solid #ffffff0b;background:#ffffff03;border-radius:6px;padding:2px 3px}
+body[data-screen=tv] .tv-roster .tv-bench-row .tv-player-name-line>b{font-size:clamp(13px,.95vw,19px)}
+body[data-screen=tv] .tv-roster .tv-bench-row .tv-player-score>b{font-size:clamp(18px,1.2vw,25px)}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-roster-row{grid-template-columns:27px minmax(0,1fr) 49px;gap:5px;padding:1px 2px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-photo{width:27px;height:27px;border-radius:7px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-photo>small{font-size:6px;line-height:8px}
+body[data-screen=tv][data-tv-density=compact] .tv-player-name-line>b{font-size:13px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-player-name>.tv-player-game{font-size:9px;line-height:1.1}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-roster-row .tv-player-score>b{font-size:19px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-roster-row .tv-player-score>.tv-player-projection{font-size:11px;gap:3px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-bench-row .tv-player-name-line>b{font-size:12px}
+body[data-screen=tv][data-tv-density=compact] .tv-roster .tv-bench-row .tv-player-score>b{font-size:17px}
+body[data-screen=tv][data-tv-density=compact] .tv-injury-badge{font-size:7px;padding:2px;gap:2px}
+body[data-screen=tv][data-tv-density=compact] .tv-injury-badge svg{width:7px;height:7px}
+@media(max-height:650px){
+body[data-screen=tv] .tv-roster-body{grid-template-rows:15px minmax(0,var(--starter-space)) 17px minmax(0,var(--bench-space));padding:0 5px 3px}
+body[data-screen=tv] .tv-roster-body.no-bench{grid-template-rows:15px minmax(0,1fr)}
+body[data-screen=tv] .tv-roster .tv-player-name>.tv-player-game{display:flex}
+body[data-screen=tv] .tv-player-photo{width:24px;height:24px}
+}

@@ -69,7 +69,7 @@
   }
   function statGrid(p,projected=false) {
     const rows=(app.data.stats?.(p) || []).filter(s=>Boolean(s.projected || /^PROJ /i.test(s.label))===projected && !/^(?:PROJ )?STAT \d+$/i.test(s.label));
-    return '<div class="detail-stat-grid">'+(rows.length?rows.map(s=>'<div><b>'+fmt(s.value,Number.isInteger(Number(s.value))?0:1)+'</b><small>'+esc(s.label.replace(/^PROJ /i,''))+'</small></div>').join(''):'<div class="player-stats-empty">'+(projected?'No projected stat line reported.':'No actual player stats reported for this scoring week yet.')+'</div>')+'</div>';
+    return '<div class="detail-stat-grid '+(projected?'projected-stats':'')+'">'+(rows.length?rows.map(s=>'<div><b>'+fmt(s.value,Number.isInteger(Number(s.value))?0:1)+'</b><small>'+esc(s.label.replace(/^PROJ /i,''))+'</small></div>').join(''):'<div class="player-stats-empty">'+(projected?'No projected stat line reported.':'No actual player stats reported for this scoring week yet.')+'</div>')+'</div>';
   }
   function render(m,full=false) {
     const p=m.player;if(!p)return '';
@@ -78,10 +78,10 @@
     const color=p.fantasyTeamColor || '#aca0e5',flagKey=m.ui.league+':'+p.player_id,flagged=Boolean(m.ui.flaggedPlayers?.[flagKey]);
     const tab=['stats','news','projections'].includes(m.ui.playerTab)?m.ui.playerTab:'stats';
     const tabs=[['stats','Stats'],['news','News & injury'],['projections','Projections']];
-    return '<section class="glass-selected '+(full?'tv-player-detail':'')+'" style="--team-color:'+esc(color)+'"><div class="detail-heading"><span>Player details</span><div class="player-detail-tools">'+
+    return '<section class="glass-selected '+(full?'tv-player-detail':'')+'" data-node-key="'+esc(m.ui.league+':'+p.player_id)+'" style="--team-color:'+esc(color)+'"><div class="detail-heading"><span>Player details</span><div class="player-detail-tools">'+
       (!tv?'<button class="player-flag-control '+(flagged?'flagged':'')+'" type="button" data-detail-player="'+esc(p.player_id)+'" data-detail-tab="'+tab+'" data-flag-player="'+esc(flagKey)+'" aria-pressed="'+flagged+'" aria-label="'+(flagged?'Unflag':'Flag')+' '+esc(p.full_name || p.name)+'">'+(flagged?'★ Flagged':'☆ Flag')+'</button><button type="button" data-close-player="true" aria-label="Close player stats">✕</button>':flagged?'<span class="player-flag-mark">★ Flagged</span>':'')+'</div></div>'+
       '<div class="selected-identity">'+app.markup.face(p,'large')+'<div><h2>'+esc(p.full_name || p.name)+'</h2><p>'+esc(p.position)+' · '+esc(p.team)+' · '+esc(p.status || 'Upcoming')+'</p><span>'+dot(color)+esc(owner)+'</span></div><strong>'+fmt(app.data.actual(p))+'<small>Fantasy points</small></strong></div>'+
-      '<p class="selected-game">'+esc(app.markup.gameLabel(p))+' · Week '+esc(m.league.week)+' · Proj '+fmt(p.projected,1,'—')+'</p>'+
+      '<p class="selected-game">'+esc(app.markup.gameLabel(p))+' · Week '+esc(m.league.week)+' · <span class="detail-projection">Proj '+fmt(p.projected,1,'—')+'</span></p>'+
       '<div class="player-detail-tabs" '+(!tv?'role="tablist" aria-label="Player information"':'')+'>'+tabs.map(([id,label])=>tv?'<span class="'+(tab===id?'active':'')+'">'+label+'</span>':'<button type="button" role="tab" aria-selected="'+(tab===id)+'" class="'+(tab===id?'active':'')+'" data-detail-player="'+esc(p.player_id)+'" data-player-tab="'+id+'">'+label+'</button>').join('')+'</div>'+
       '<div class="detail-stats-scroll" data-scroll-key="player-'+tab+'" '+(!tv?'role="tabpanel"':'')+'>'+(tab==='news'?news(p):tab==='projections'?projections(p,m):statGrid(p))+'</div>'+
       (!tv?'<div class="selected-actions"><button type="button" class="primary-action" data-player-id="'+esc(p.player_id)+'">Show on TV</button><button type="button" data-close-player="true">Close player</button></div>':'')+'</section>';

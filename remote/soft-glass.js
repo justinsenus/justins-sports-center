@@ -3,6 +3,7 @@
   const app = window.FantasyCenter, esc = app.escape, fmt = app.format;
   const tv = document.body.dataset.screen === 'tv';
   const $ = id => document.getElementById(id);
+  const patch=(element,markup)=>window.FantasyDOM?window.FantasyDOM.patch(element,markup):element.innerHTML=markup;
   const actual = p => app.data.actual(p);
   const ownColor = '#f47b35';
   const finite = value => value !== null && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
@@ -198,7 +199,7 @@
     }
     latestScope=scope;scoreSnapshots.set(scope,signature);
   }
-  function render() {
+  function render(options={}) {
     const m=app.model(),l=m.league, ui=m.ui;
     if(window.FantasyTimeline)activeWindows=window.FantasyTimeline.observe(ui.league+':'+l.week,m.games || []);
     const scrolls=new Map([...document.querySelectorAll('[data-scroll-key]')].map(e=>[e.dataset.scrollKey,e.scrollTop]));
@@ -214,18 +215,20 @@
     const providerLabel=m.loading?'Connecting feeds':!l.ready?ui.league.toUpperCase()+' unavailable':m.stale?'Saved ESPN snapshot':ui.league==='espn'?'ESPN league data':'Sleeper league data';
     $('sourceStatus').textContent=providerLabel;
     $('lastSync').textContent=(m.stale?'Saved ':'Updated ')+time(m.providerUpdated || m.updated);
-    $('matchupHero').innerHTML=m.loading?'<div class="glass-panel loading-state">Connecting your leagues…</div>':l.ready?hero(m):'<div class="glass-panel empty-state">The '+ui.league.toUpperCase()+' feed is reconnecting. <button data-action="refresh" type="button">Retry feed</button></div>';
+    if(!options.skipHero)patch($('matchupHero'),m.loading?'<div class="glass-panel loading-state">Connecting your leagues…</div>':l.ready?hero(m):'<div class="glass-panel empty-state">The '+ui.league.toUpperCase()+' feed is reconnecting. <button data-action="refresh" type="button">Retry feed</button></div>');
     const stageKey=ui.league+':'+ui.view+':'+(ui.matchupId || 'mine');
-    if(!l.ready || m.loading)stage.innerHTML='';
-    else if(tv && ui.playerId)stage.innerHTML=selected(m,true);
-    else if(['patriots','live','games'].includes(ui.view))stage.innerHTML=games(m);
-    else if(ui.view==='stock')stage.innerHTML=leagueStock(m,true);
-    else if(ui.view==='league')stage.innerHTML=matchups(m,true);
-    else if(ui.view==='players')stage.innerHTML=playerList(m);
-    else if(ui.view==='injuries')stage.innerHTML=injuries(m);
-    else stage.innerHTML=overview(m);
+    if(!options.skipWorkspace) {
+      if(!l.ready || m.loading)patch(stage,'');
+      else if(tv && ui.playerId)patch(stage,selected(m,true));
+      else if(['patriots','live','games'].includes(ui.view))patch(stage,games(m));
+      else if(ui.view==='stock')patch(stage,leagueStock(m,true));
+      else if(ui.view==='league')patch(stage,matchups(m,true));
+      else if(ui.view==='players')patch(stage,playerList(m));
+      else if(ui.view==='injuries')patch(stage,injuries(m));
+      else patch(stage,overview(m));
+    }
     const selectedChanged=lastPlayer!==String(ui.playerId || '');
-    drawer.innerHTML=!tv?selected(m):'';
+    patch(drawer,!tv?selected(m):'');
     drawer.classList.toggle('open',Boolean(!tv && m.player));drawer.hidden=!(!tv && m.player);
     if($('onTV'))$('onTV').textContent=ui.playerId?'Player stats':labels[ui.view] || 'Matchup';
     document.querySelectorAll('[data-scroll-key]').forEach(e=>{
