@@ -210,7 +210,7 @@
     $('weekLabel').textContent='Week '+(l.week || '—');
     if($('tvContext'))$('tvContext').textContent=ui.league==='espn'?'ESPN':'Sleeper';
     document.querySelectorAll('[data-league]').forEach(b=>{b.classList.toggle('active',b.dataset.league===ui.league);b.setAttribute('aria-pressed',String(b.dataset.league===ui.league));});
-    document.querySelectorAll('[data-view]').forEach(b=>{const current=b.dataset.view===ui.view;b.classList.toggle('active',current);b.setAttribute('aria-current',current?'page':'false');});
+    document.querySelectorAll('button[data-view]').forEach(b=>{const current=b.dataset.view===ui.view;b.classList.toggle('active',current);b.setAttribute('aria-current',current?'page':'false');});
     if($('myMatchup'))$('myMatchup').classList.toggle('active',ui.view==='overview' && !ui.matchupId);
     const providerLabel=m.loading?'Connecting feeds':!l.ready?ui.league.toUpperCase()+' unavailable':m.stale?'Saved ESPN snapshot':ui.league==='espn'?'ESPN league data':'Sleeper league data';
     $('sourceStatus').textContent=providerLabel;

@@ -2042,7 +2042,8 @@
   document.addEventListener("click", event => {
     if (document.body.dataset.screen === "tv") return;
     const button = event.target.closest("[data-view],[data-league],[data-player-id],[data-player-name],[data-matchup-id],[data-game-id],[data-filter],[data-close-player],.focus-close,[data-action=refresh]");
-    if (!button) return;
+    // The body carries data-view for styling; it is never a navigation control.
+    if (!button || button === document.body || button === document.documentElement) return;
     if (button.dataset.view) dispatch({view:button.dataset.view,playerId:null,gameId:null});
     else if (button.dataset.league) dispatch({league:button.dataset.league,matchupId:null,playerId:null,gameId:null});
     else if (button.dataset.matchupId) dispatch({matchupId:button.dataset.matchupId,playerId:null,view:"overview"});

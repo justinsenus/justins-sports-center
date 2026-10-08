@@ -97,4 +97,18 @@ state.espn.myTeam.pointsMap.p1=0;state.espn.opponent.pointsMap.p2=0;
 state.espn.myTeam.players.p1.status='UPCOMING';state.espn.opponent.players.p2.status='UPCOMING';
 state.scoreboard=[];state.scoreboards={};
 assert.equal(app.model().events.length,0,'An upcoming scoring week does not display old cached scoring events');
-console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, player open/close, live player refresh, corrected team totals, remaining projections, and negative final scores.');
+document.body.dataset.screen='touch';document.body.dataset.view='overview';
+sandbox.window.FantasyGlass={render(){}};
+app.applyUI({playerId:'p1',playerTab:'projections',view:'overview'});
+const beforePanelClicks=commands;
+for(const name of ['player tab','source disclosure','player name','injury text','flag control']) {
+  listeners.get('click').forEach(fn=>fn({target:{closest:()=>document.body}}));
+  assert.equal(app.getUI().playerId,'p1',name+' cannot use the styling attribute on body as a home command');
+  assert.equal(app.getUI().playerTab,'projections');
+}
+assert.equal(commands,beforePanelClicks,'Nested panel clicks emit no intermediate home command');
+const stockButton={dataset:{view:'stock'},classList:{contains:()=>false}};
+listeners.get('click').forEach(fn=>fn({target:{closest:()=>stockButton}}));
+assert.equal(app.getUI().view,'stock');assert.equal(app.getUI().playerId,null,'An explicit navigation control still closes the player');
+assert.equal(commands,beforePanelClicks+1);
+console.log('Passed: command validation, origin restriction, pairing failures, room token checks, server revision order, no secret exposure, silent remote state application, matchup switching, stable nested player-panel clicks, player open/close, live player refresh, corrected team totals, remaining projections, and negative final scores.');
