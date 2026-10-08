@@ -136,6 +136,14 @@
     document.documentElement.style.setProperty('--tv-height',window.innerHeight+'px');
     document.body.dataset.tvDensity=window.innerHeight<800?'compact':'normal';
   }
+  function fitRosters() {
+    // Size both text lines to the space each TV actually gives its roster.
+    const layouts=[...document.querySelectorAll('.tv-roster')].map(roster=>{
+      const heights=[...roster.querySelectorAll('.tv-roster-row:not([hidden])')].map(row=>row.getBoundingClientRect().height).filter(height=>height>0);
+      return {roster,height:heights.length?Math.max(18,Math.floor(Math.min(...heights)-2)):null};
+    });
+    for(const {roster,height} of layouts)if(height!==null)roster.style.setProperty('--tv-row-height',height+'px');
+  }
   viewport();window.addEventListener('resize',()=>{viewport();app.render()});
   glass.render=()=>{
     const m=app.model();
@@ -145,7 +153,7 @@
     const ticker=document.getElementById('scoreStrips');
     if(ticker && ready)patch(ticker,strips(m));
     if(m.loading || !m.league.ready || m.ui.playerId)return;
-    if(overviewScene)patch(document.getElementById('workspace'),overview(m));
+    if(overviewScene){patch(document.getElementById('workspace'),overview(m));fitRosters();}
     else if(leagueScene)patch(document.getElementById('workspace'),matchups(m,true));
   };
   window.FantasyTV={overview,roster,row,gameInfo,injuryInfo,matchups,feed,page,hero,injuries,fantasyStrip,nflStrip,strips};
