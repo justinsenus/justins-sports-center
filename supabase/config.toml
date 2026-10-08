@@ -1,0 +1,4 @@
+[functions.projection-ingest]
+# The function verifies GitHub's signed OIDC JWT and restricts repository,
+# owner, workflow, branch, audience, issuer, and expiry in its own handler.
+verify_jwt = false

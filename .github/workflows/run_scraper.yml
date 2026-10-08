@@ -1,0 +1,75 @@
+name: Refresh NFL projection cloud
+
+on:
+  schedule:
+    - cron: '17 */4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - fetch_stats.py
+      - requirements-projections.lock
+      - .github/workflows/run_scraper.yml
+      - supabase/functions/projection-ingest/**
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: nfl-projection-cloud
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up Node for existing provider feeds
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache daily Sleeper player metadata
+        uses: actions/cache@v4
+        with:
+          path: .cache/sleeper-players.json
+          key: sleeper-players-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            sleeper-players-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: python -m pip install --require-hashes --only-binary=:all: -r requirements-projections.lock
+
+      - name: Refresh current same-week provider observations
+        env:
+          FANTASYPROS_API_KEY: ${{ secrets.FANTASYPROS_API_KEY }}
+          SPORTSGAMEODDS_API_KEY: ${{ secrets.SPORTSGAMEODDS_API_KEY }}
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          SLEEPER_LEAGUE_ID: '1387635903379300352'
+          SLEEPER_OWNER_ID: '1137609122398482432'
+          SEASON: '2026'
+        run: node scripts/projection-consensus-sync.mjs
+
+      - name: Aggregate and write cloud projections
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://nphrdqabpyaabsrahkja.supabase.co' }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PROJECTION_INGEST_URL: 'https://nphrdqabpyaabsrahkja.supabase.co/functions/v1/projection-ingest'
+          CONSENSUS_ARTIFACT: patriots-fantasy-touch/consensus-data.json
+          ESPN_LEAGUE_ID: ${{ vars.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          EXTERNAL_SOURCES_JSON: ${{ secrets.EXTERNAL_SOURCES_JSON }}
+          NFL_SEASON: ${{ vars.NFL_SEASON }}
+          NFL_WEEK: ${{ vars.NFL_WEEK }}
+          PYTHONUNBUFFERED: '1'
+        run: python fetch_stats.py
