@@ -47,7 +47,8 @@ jobs:
             sleeper-players-${{ runner.os }}-
 
       - name: Install dependencies
-        run: python -m pip install --require-hashes --only-binary=:all: -r requirements-projections.lock
+        run: >-
+          python -m pip install --require-hashes --only-binary=:all: -r requirements-projections.lock
 
       - name: Refresh current same-week provider observations
         env:
