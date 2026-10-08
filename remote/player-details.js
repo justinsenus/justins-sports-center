@@ -16,11 +16,14 @@
     return intel?.players?.[wanted] || Object.values(intel?.players || {}).find(r=>key(r.name)===key(p.full_name || p.name) && team(r.team)===team(p.team));
   }
   function average(p,week) {
+    let cloud=null;
+    try { cloud=window.FantasyProjectionCloud?.get(p,{season:2026,week:Number(week)}); } catch (_) { /* Keep local provider averages available. */ }
+    if(cloud && num(cloud.calculated_average)!==null)return {sources:[],value:cloud.calculated_average,sourceCount:cloud.sources_counted,min:null,max:null,cloud:true,updatedAt:cloud.updated_at};
     const pool=consensus?.periods?.[week]?.players || (Number(consensus?.week)===Number(week)?consensus?.players || {}:{});
     const row=pool[p.player_id] || Object.values(pool).find(r=>key(r.name)===key(p.full_name || p.name) && team(r.team)===team(p.team));
     const seen=new Set(),sources=(row?.sources || []).filter(r=>num(r.value)!==null && Number(r.season)===2026 && Number(r.week)===Number(week) && r.scoring==='PPR' && !seen.has(r.source) && seen.add(r.source));
     const values=sources.map(r=>Number(r.value));
-    return {sources,value:values.length?values.reduce((a,b)=>a+b,0)/values.length:null,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null};
+    return {sources,sourceCount:sources.length,value:values.length?values.reduce((a,b)=>a+b,0)/values.length:null,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null};
   }
   function injurySummary(p) {
     const data=playerData(p),reports=data?.reports || [];
@@ -57,11 +60,11 @@
       }).join(''):'<p class="empty-state">'+(loading?'Checking player reports…':'No matching public headlines found in the latest source check.')+'</p>')+'</div>'+coverage();
   }
   function projections(p,m) {
-    const a=average(p,m.league.week),native=num(p.projected);
-    return '<div class="player-projection-summary"><div><small>'+esc(m.ui.league==='espn'?'ESPN league projection':'Sleeper projection')+' · Week '+esc(m.league.week)+'</small><b>'+fmt(native,1,'—')+'</b></div><div><small>Source average · PPR</small><b>'+fmt(a.value,1,'—')+'</b><span>'+a.sources.length+' contributing '+(a.sources.length===1?'source':'sources')+'</span></div></div>'+
+    const a=average(p,m.league.week),native=num(p.consensus?.cloud?p.providerProjected:p.projected);
+    return '<div class="player-projection-summary"><div><small>'+esc(m.ui.league==='espn'?'ESPN league projection':'Sleeper projection')+' · Week '+esc(m.league.week)+'</small><b>'+fmt(native,1,'—')+'</b></div><div><small>'+(a.cloud?'Cloud average':'Source average')+' · PPR</small><b>'+fmt(a.value,1,'—')+'</b><span>'+a.sourceCount+' contributing '+(a.sourceCount===1?'source':'sources')+'</span></div></div>'+
       '<p class="player-report-note">Arithmetic mean of available '+esc(2026)+' Week '+esc(m.league.week)+' PPR values. Missing sources, other weeks, and other scoring formats are excluded.</p>'+
       (m.ui.league==='espn'?'<p class="player-report-note">ESPN’s league scoring controls your matchup totals. The PPR average is shown separately.</p>':'')+
-      (a.sources.length?'<div class="player-projection-sources">'+a.sources.map(s=>'<div><span>'+esc(s.label || s.source)+'</span><b>'+fmt(s.value)+'</b></div>').join('')+'</div><p class="player-report-note">Source range '+fmt(a.min)+'–'+fmt(a.max)+' points.</p>':'<p class="empty-state">No verified same-week numeric average is available for this player yet.</p>')+
+      (a.cloud?'<p class="player-report-note">Cloud average updated '+esc(date(a.updatedAt) || 'recently')+'. Source range not reported.</p>':a.sources.length?'<div class="player-projection-sources">'+a.sources.map(s=>'<div><span>'+esc(s.label || s.source)+'</span><b>'+fmt(s.value)+'</b></div>').join('')+'</div><p class="player-report-note">Source range '+fmt(a.min)+'–'+fmt(a.max)+' points.</p>':'<p class="empty-state">No verified same-week numeric average is available for this player yet.</p>')+
       '<p class="player-report-note">Projected player statistics</p>'+statGrid(p,true)+coverage();
   }
   function statGrid(p,projected=false) {

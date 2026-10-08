@@ -355,6 +355,7 @@
       position: player.position || "UTIL",
       team: player.team || "FA",
       actual,
+      providerProjected: finite(player.projected),
       projected,
       status,
       event,

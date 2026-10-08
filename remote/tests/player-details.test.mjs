@@ -30,4 +30,11 @@ listeners.click({target:{closest:()=>({dataset:{playerTab:'news',detailPlayer:'1
 assert.equal(commands[1].playerTab,'news');
 assert.equal(commands[1].playerId,'123','News tab commands select the intended player atomically');
 assert.ok(!html.includes('99.0'),'A stale week is excluded from the average');
-console.log('Passed: original stats, player flags, synced tabs, practice reports, news source counts, honest probability, and same-week means.');
+context.window.FantasyProjectionCloud={get:(p,c)=>c.week===5?{calculated_average:24,sources_counted:3,updated_at:'2026-10-08T01:38:26Z'}:null};
+player.consensus={cloud:true};player.providerProjected=22;player.projected=24;
+html=detail.render(model);
+assert.ok(html.includes('Sleeper projection') && html.includes('<b>22.0</b>'),'The provider label retains its own projection');
+assert.ok(html.includes('Cloud average') && html.includes('<b>24.0</b>') && html.includes('3 contributing sources'),'The existing panel displays the current cloud average and contributor count');
+assert.ok(!html.includes('Source range 10.0'),'An older provider range is not attributed to the cloud average');
+assert.equal(detail.average(player,4).value,null,'A cloud batch from another week is not displayed');
+console.log('Passed: original stats, player flags, synced tabs, practice reports, news source counts, honest probability, same-week means, and accurate cloud/provider projection labels.');
