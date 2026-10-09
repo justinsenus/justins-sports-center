@@ -602,7 +602,7 @@
     const projected = rowProjection ?? entryProjection ?? null;
     const liveFields = espnLiveFields(player, scoringPeriodId, statLabels);
     const headshot = `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`;
-    const lineupSlotId = Number(entry && entry.lineupSlotId);
+    const lineupSlotId = Number(currentEntry?.lineupSlotId ?? entry?.lineupSlotId);
     const injury = entry && entry.injuryStatus && entry.injuryStatus !== "NORMAL" ? entry.injuryStatus : player.injuryStatus;
     const status = eventStatus && eventStatus.final ? "FINAL" : eventStatus && eventStatus.live ? "LIVE" : actual > 0 ? "LIVE" : injury && injury !== "ACTIVE" ? String(injury).toUpperCase() : "UPCOMING";
     return {
@@ -641,6 +641,17 @@
     return (positionOrder[position] == null ? 20 : positionOrder[position]) * 1000 + index;
   }
 
+  function espnMatchupTotal(side, scoringPeriodId = null) {
+    return [
+      side?.totalPointsLive,
+      scoringPeriodId == null ? null : side?.pointsByScoringPeriod?.[String(scoringPeriodId)],
+      side?.totalPoints,
+      side?.points,
+      side?.score,
+      side?.total
+    ].map(finite).find((value) => value != null) ?? null;
+  }
+
   function normalizeESPNTeam(rawTeam, currentSide, scoringPeriodId, side, statLabels = ESPN_STAT_ID_LABELS) {
     if (!rawTeam) return null;
     const entries = rawTeam.roster && rawTeam.roster.entries || [];
@@ -660,7 +671,7 @@
     });
     const starterRows = ids.map((id) => players[id]).filter((row) => row && row.starter);
     const actualSum = starterRows.reduce((sum, row) => sum + (finite(row.actual) || 0), 0);
-    const sideTotal = finite(currentSide && currentSide.totalPoints);
+    const sideTotal = espnMatchupTotal(currentSide, scoringPeriodId);
     const actual = sideTotal ?? actualSum;
     const projected = starterRows.reduce((sum, row) => sum + (finite(row.projected) || 0), 0);
     const imageTeam = (starterRows[0] || players[ids[0]] || {}).team;
@@ -721,17 +732,17 @@
       if (row.home && row.home.teamId != null) leagueSides.set(String(row.home.teamId), row.home);
       if (row.away && row.away.teamId != null) leagueSides.set(String(row.away.teamId), row.away);
     });
-    const leagueTeams = colorLeagueTeams(teams.map((rawTeam) => {
+    const leagueTeams = teams.map((rawTeam) => {
       const teamId = String(rawTeam.id);
       const side = teamId === String(ownRaw.id) ? "own" : teamId === String(opponentId) ? "opponent" : "league";
       return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side, statLabels), id: `espn:${teamId}`, teamId };
-    }));
+    });
     const matchups = (data.schedule || []).filter((row) => Number(row && row.matchupPeriodId) === matchupPeriodId).map((row, index) => ({
       id: String(row.id || row.matchupId || `espn-${matchupPeriodId}-${index}`),
       homeTeamId: String(row.home && row.home.teamId || ""),
       awayTeamId: String(row.away && row.away.teamId || ""),
-      homeTotal: finite(row.home && (row.home.totalPoints ?? row.home.points ?? row.home.score)),
-      awayTotal: finite(row.away && (row.away.totalPoints ?? row.away.points ?? row.away.score)),
+      homeTotal: espnMatchupTotal(row.home, scoringPeriodId),
+      awayTotal: espnMatchupTotal(row.away, scoringPeriodId),
       homeProjected: finite(row.home && (row.home.projectedTotal ?? row.home.projectedPoints ?? row.home.projectedScore)),
       awayProjected: finite(row.away && (row.away.projectedTotal ?? row.away.projectedPoints ?? row.away.projectedScore))
     })).filter((row) => row.homeTeamId && row.awayTeamId);
@@ -839,21 +850,10 @@
       const local = await getJSON(new URL("../patriots-fantasy/espn-data.json?ts=" + Date.now(), location.href));
       if (local && local.ready) {
         synced = normalizeStoredESPNData(local);
-        // The private sync is scoped to ESPN's current scoring period and has
-        // the authoritative lineup totals. Keep using it while fresh so the
-        // public and private endpoints cannot make the score board jump.
-        if (!synced.staleFallback) {
-          loadESPNPublic(synced.scoringPeriodId).then((publicData) => {
-            if (state.espn && !state.espn.public && publicData && publicData.matchups && publicData.matchups.length) {
-              // Keep private scores and matchup totals from the same snapshot.
-              state.espn.projectionPlayers = { ...(state.espn.projectionPlayers || {}), ...(publicData.projectionPlayers || {}) };
-              render();
-            }
-          }).catch(() => { /* Keep the private synced ESPN scores even if public matchup rows are unavailable. */ });
-          return synced;
-        }
       }
-    } catch (_) { /* Try the public endpoint when the synced snapshot is unavailable. */ }
+    } catch (_) { /* A missing sync must not interrupt the direct scoring feed. */ }
+    // Read live points on every dashboard refresh. The private snapshot is a
+    // fallback for endpoint failures, rather than a delay on new scoring plays.
     try {
       return await loadESPNPublic(synced && synced.scoringPeriodId);
     } catch (publicError) {

@@ -34,7 +34,7 @@ const STAT_ID_LABELS = {
   72: "Fumbles Lost", 80: "Field Goals Made", 81: "Field Goals Attempted", 85: "Extra Points Made",
   89: "Defense Sacks", 90: "Defense Interceptions", 91: "Defense Fumbles Recovered", 92: "Defense Touchdowns", 95: "Points Allowed", 96: "Yards Allowed"
 };
-const BENCH_SLOTS = new Set([20, 21, 22, 23]);
+const BENCH_SLOTS = new Set([20, 21, 22]);
 const outputPath = resolve(process.cwd(), "patriots-fantasy", "espn-data.json");
 
 function clean(value) {
@@ -65,6 +65,17 @@ function firstNumberOrNull(...values) {
     if (number != null) return number;
   }
   return null;
+}
+
+function matchupTotal(side, scoringPeriodId = null) {
+  return firstNumberOrNull(
+    side?.totalPointsLive,
+    scoringPeriodId == null ? null : side?.pointsByScoringPeriod?.[String(scoringPeriodId)],
+    side?.totalPoints,
+    side?.points,
+    side?.score,
+    side?.total
+  );
 }
 
 function statLabelMap(data) {
@@ -141,7 +152,7 @@ function normalizePlayer(entry, index, scoringPeriodId, labels, currentEntry = n
     entry && entry.playerPoolEntry && (entry.playerPoolEntry.projectedTotal ?? entry.playerPoolEntry.projectedPoints),
     player && (player.projectedTotal ?? player.projectedPoints)
   );
-  const lineupSlotId = numberOrNull(entry && (entry.lineupSlotId || entry.lineupSlot && (entry.lineupSlot.id || entry.lineupSlot.lineupSlotId)));
+  const lineupSlotId = firstNumberOrNull(currentEntry?.lineupSlotId, entry?.lineupSlotId, entry?.lineupSlot?.id, entry?.lineupSlot?.lineupSlotId);
   return {
     id,
     name,
@@ -223,23 +234,23 @@ function currentMatchup(data, ownId) {
   return containing.find((row) => current != null && Number(row.matchupPeriodId) === current) || containing.slice().sort((a, b) => Number(b.matchupPeriodId || 0) - Number(a.matchupPeriodId || 0))[0];
 }
 
-function normalizeMatchups(data, matchupPeriodId) {
+function normalizeMatchups(data, matchupPeriodId, scoringPeriodId = null) {
   return scheduleRows(data).filter((row) => Number(row && row.matchupPeriodId) === Number(matchupPeriodId)).map((row, index) => ({
     id: String(row.id || row.matchupId || `espn-${matchupPeriodId}-${index}`),
     homeTeamId: row && row.home && row.home.teamId != null ? String(row.home.teamId) : "",
     awayTeamId: row && row.away && row.away.teamId != null ? String(row.away.teamId) : "",
-    homeTotal: firstNumberOrNull(row && row.home && (row.home.totalPoints ?? row.home.points ?? row.home.score ?? row.home.total)),
-    awayTotal: firstNumberOrNull(row && row.away && (row.away.totalPoints ?? row.away.points ?? row.away.score ?? row.away.total)),
+    homeTotal: matchupTotal(row.home, scoringPeriodId),
+    awayTotal: matchupTotal(row.away, scoringPeriodId),
     homeProjected: firstNumberOrNull(row && row.home && (row.home.projectedTotal ?? row.home.projectedPoints ?? row.home.projectedScore ?? row.home.projected)),
     awayProjected: firstNumberOrNull(row && row.away && (row.away.projectedTotal ?? row.away.projectedPoints ?? row.away.projectedScore ?? row.away.projected))
   })).filter((row) => row.homeTeamId && row.awayTeamId);
 }
 
-function applyMatchupTotal(team, side) {
+function applyMatchupTotal(team, side, scoringPeriodId = null) {
   if (!team) return team;
   const hasPlayerActual = (team.starters || []).some((player) => Math.abs(numberOrNull(player.points) || 0) > 0.001);
   const rosterTotal = (team.starters || []).reduce((sum, player) => sum + (numberOrNull(player.points) || 0), 0);
-  const reportedTotal = firstNumberOrNull(side && side.totalPoints, side && side.points, side && side.score, side && side.total);
+  const reportedTotal = matchupTotal(side, scoringPeriodId);
   team.total = Number((reportedTotal ?? rosterTotal).toFixed(1));
   const hasPlayerProjection = (team.starters || []).some((player) => numberOrNull(player.projected) != null);
   const reportedProjection = firstNumberOrNull(side && side.projectedTotal, side && side.projectedPoints, side && side.projectedScore, side && side.projected);
@@ -295,14 +306,14 @@ async function main() {
 
   const leagueTeams = rawTeams.map((rawTeam) => {
     const team = normalizeTeam(rawTeam, scoringPeriodId, labels, leagueSides.get(String(rawTeam.id)));
-    return applyMatchupTotal(team, leagueSides.get(team.id));
+    return applyMatchupTotal(team, leagueSides.get(team.id), scoringPeriodId);
   });
   const own = leagueTeams.find((team) => team.id === ownId);
   const ownSide = ownMatchup && (String(ownMatchup.home && ownMatchup.home.teamId) === ownId ? ownMatchup.home : ownMatchup.away);
   const opponentSide = ownMatchup && (ownSide === ownMatchup.home ? ownMatchup.away : ownMatchup.home);
   const opponentId = opponentSide && opponentSide.teamId != null ? String(opponentSide.teamId) : "";
   const opponent = leagueTeams.find((team) => team.id === opponentId) || null;
-  const matchups = normalizeMatchups(data, matchupPeriodId);
+  const matchups = normalizeMatchups(data, matchupPeriodId, scoringPeriodId);
 
   if (!own) throw new Error("Configured ESPN team was not normalized");
   const output = {
