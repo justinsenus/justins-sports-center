@@ -38,7 +38,7 @@
     return '<details class="player-source-coverage"><summary>'+available+' / '+(intel?.source_count || 30)+' news sources accessible'+(date(intel?.checked_at)?' · Checked '+esc(date(intel.checked_at)):'')+'</summary><p>News coverage and numeric projection contributors are counted separately.</p>'+
       (sources.length?'<ul>'+sources.map(s=>'<li>'+pointLink(s.url,s.name)+'<span>'+esc(s.status==='available'?s.matched_count+' player headlines':s.reason || s.status.replaceAll('_',' '))+'</span></li>').join('')+'</ul>':'<p>Source checks are loading. Unavailable reports are excluded.</p>')+'</details>';
   }
-  function news(p) {
+  function news(p,wide=false) {
     const data=playerData(p),reports=data?.reports || [];
     const report=reports.find(r=>r.source==='NFL.com') || reports.find(r=>r.source==='CBS Sports') || reports.find(r=>r.source==='FantasyPros') || reports[0];
     const rawStatus=p.injury_status || p.injuryStatus || (/OUT|IR|DOUBTFUL|QUESTIONABLE|PUP/i.test(p.status || '')?p.status:null);
@@ -50,14 +50,16 @@
     const period=report?.week || intel?.week;
     const reportLine=(report?.source || (tv?'League roster':app.getUI().league==='espn'?'ESPN roster':'Sleeper roster'))+(period?' · Injury report week '+period:' · Current roster status');
     const seen=new Set(),items=(data?.news || []).filter(n=>!seen.has(n.source) && seen.add(n.source)).slice(0,tv?7:8);
-    return '<div class="player-health"><div><small>Injury status</small><b>'+esc(status)+'</b></div><div><small>Latest practice</small><b>'+esc(practice)+'</b></div><div><small>Chance of playing'+(chance?.week?' · Week '+chance.week:'')+'</small><b>'+esc(probability)+'</b></div></div>'+
+    const health='<div class="player-health"><div><small>Injury status</small><b>'+esc(status)+'</b></div><div><small>Latest practice</small><b>'+esc(practice)+'</b></div><div><small>Chance of playing'+(chance?.week?' · Week '+chance.week:'')+'</small><b>'+esc(probability)+'</b></div></div>';
+    const notes=
       '<p class="player-report-note">'+pointLink(report?.url,reportLine)+(reportDay(report?.reported_date)?' · Report dated '+esc(reportDay(report.reported_date)):date(report?.reported_at)?' · Reported '+esc(date(report.reported_at)):' · Publication time not supplied')+'</p>'+
       (report?.injury?'<p class="player-report-note">Reported issue: '+esc(report.injury)+'</p>':'')+
-      '<p class="player-report-note">Injury reports describe current availability; the stats above are for Week '+esc(app.model().league.week)+'.</p>'+
-      '<div class="player-headlines">'+(items.length?items.map(n=>{
+      '<p class="player-report-note">Injury reports describe current availability; the stats above are for Week '+esc(app.model().league.week)+'.</p>';
+    const headlines='<div class="player-headlines">'+(items.length?items.map(n=>{
         const words=n.title.split(/\s+/),headline=words.slice(0,22).join(' ')+(words.length>22?'…':'');
         return '<article><small>'+esc(n.source_name)+' · '+esc(date(n.published_at) || 'Publication date unavailable')+'</small>'+pointLink(n.url,headline)+'</article>';
-      }).join(''):'<p class="empty-state">'+(loading?'Checking player reports…':'No matching public headlines found in the latest source check.')+'</p>')+'</div>'+coverage();
+      }).join(''):'<p class="empty-state">'+(loading?'Checking player reports…':'No matching public headlines found in the latest source check.')+'</p>')+'</div>';
+    return wide?'<div class="tv-detail-news"><aside class="tv-news-status">'+health+notes+'</aside><section class="tv-news-stories"><h3>Latest player news</h3>'+headlines+'</section></div>':health+notes+headlines+coverage();
   }
   function projections(p,m) {
     const a=average(p,m.league.week),native=num(p.consensus?.cloud?p.providerProjected:p.projected);
@@ -71,6 +73,36 @@
     const rows=(app.data.stats?.(p) || []).filter(s=>Boolean(s.projected || /^PROJ /i.test(s.label))===projected && !/^(?:PROJ )?STAT \d+$/i.test(s.label));
     return '<div class="detail-stat-grid '+(projected?'projected-stats':'')+'">'+(rows.length?rows.map(s=>'<div><b>'+fmt(s.value,Number.isInteger(Number(s.value))?0:1)+'</b><small>'+esc(s.label.replace(/^PROJ /i,''))+'</small></div>').join(''):'<div class="player-stats-empty">'+(projected?'No projected stat line reported.':'No actual player stats reported for this scoring week yet.')+'</div>')+'</div>';
   }
+  function tvProjections(p,m) {
+    const a=average(p,m.league.week),native=num(p.consensus?.cloud?p.providerProjected:p.projected);
+    const sources=a.sources.length?'<div class="player-projection-sources">'+a.sources.map(s=>'<div><span>'+esc(s.label || s.source)+'</span><b>'+fmt(s.value)+'</b></div>').join('')+'</div>':'';
+    const stamp=a.cloud?'Updated '+(date(a.updatedAt) || 'recently'):a.sources.length?'Source range '+fmt(a.min)+'–'+fmt(a.max):'Average not available yet';
+    return '<div class="tv-detail-projections"><aside class="tv-projection-totals"><div class="player-projection-summary"><div><small>'+esc(m.ui.league==='espn'?'ESPN league projection':'Sleeper projection')+' · Week '+esc(m.league.week)+'</small><b>'+fmt(native,1,'—')+'</b></div><div><small>'+(a.cloud?'Cloud average':'Source average')+' · PPR</small><b>'+fmt(a.value,1,'—')+'</b><span>'+a.sourceCount+' contributing '+(a.sourceCount===1?'source':'sources')+'</span></div></div>'+sources+
+      '<div class="tv-projection-notes"><p>'+esc(stamp)+'</p><p>2026 · Week '+esc(m.league.week)+' · Mean of available PPR projections.</p>'+(m.ui.league==='espn'?'<p>ESPN projection uses your league scoring.</p>':'')+'</div></aside><section class="tv-stat-section"><h3>Projected player statistics</h3>'+statGrid(p,true)+'</section></div>';
+  }
+  function tvProfile(p,m,owner,color,flagged,tab,tabs) {
+    const game=window.FantasyTV?.gameInfo(p,m),report=injurySummary(p);
+    const injured=/^(OUT|IR|INJURY_RESERVE|DOUBTFUL|QUESTIONABLE|PUP|INJURED)/i.test(report.status || '');
+    const availability=injured?'✚ '+report.status:game?.phase==='live'?'● LIVE':game?.phase==='final'?'FINAL':game?.phase==='bye'?'Bye':'Scheduled';
+    const body=tab==='projections'?tvProjections(p,m):tab==='news'?news(p,true):'<section class="tv-stat-section tv-actual-stats"><h3>Actual player statistics · Week '+esc(m.league.week)+'</h3>'+statGrid(p)+'</section>';
+    return '<section class="glass-selected tv-player-detail tv-profile" data-node-key="'+esc(m.ui.league+':'+p.player_id)+'" data-profile-tab="'+tab+'" style="--team-color:'+esc(color)+'"><header class="tv-profile-header">'+app.markup.face(p,'large')+
+      '<div class="tv-profile-identity"><small>Player profile · Week '+esc(m.league.week)+'</small><h2>'+esc(p.full_name || p.name)+(flagged?' <i class="player-flag-mark">★</i>':'')+'</h2><p>'+dot(color)+esc(owner)+'<span>'+esc(p.position)+' · '+esc(p.team)+'</span><span class="tv-profile-availability '+(injured?'injured':game?.phase==='live'?'live':'')+'">'+esc(availability)+'</span></p><p class="tv-profile-game">'+esc(game?.label || app.markup.gameLabel(p))+' · <span class="detail-projection">Proj '+fmt(p.projected,1,'—')+'</span></p></div>'+
+      '<div class="tv-profile-points"><b>'+fmt(app.data.actual(p))+'</b><small>Fantasy points</small></div></header><div class="player-detail-tabs">'+tabs.map(([id,label])=>'<span class="'+(tab===id?'active':'')+'">'+label+'</span>').join('')+'</div><div class="tv-profile-content">'+body+'</div></section>';
+  }
+  function fitTV() {
+    if(!tv || !document.querySelectorAll)return;
+    const layouts=[...document.querySelectorAll('.tv-profile .detail-stat-grid')].map(grid=>{
+      const bounds=grid.getBoundingClientRect(),count=grid.children.length;
+      const columns=grid.querySelector('.player-stats-empty')?1:Math.min(8,Math.max(3,Math.floor(bounds.width/145)));
+      const rows=Math.max(1,Math.ceil(count/columns));
+      return {grid,columns,rows,height:Math.max(24,Math.floor((bounds.height-6*(rows-1))/rows))};
+    });
+    for(const {grid,columns,rows,height} of layouts){grid.style.setProperty('--tv-stat-columns',columns);grid.style.setProperty('--tv-stat-rows',rows);grid.style.setProperty('--tv-stat-row-height',height+'px');}
+    for(const grid of document.querySelectorAll('.tv-profile .player-headlines')){
+      const bounds=grid.getBoundingClientRect(),columns=bounds.width<620?1:2,rows=Math.max(1,Math.ceil(grid.children.length/columns));
+      grid.style.setProperty('--tv-news-columns',columns);grid.style.setProperty('--tv-news-rows',rows);grid.style.setProperty('--tv-news-row-height',Math.max(36,Math.floor((bounds.height-8*(rows-1))/rows))+'px');
+    }
+  }
   function render(m,full=false) {
     const p=m.player;if(!p)return '';
     fetchData();
@@ -78,6 +110,7 @@
     const color=p.fantasyTeamColor || '#aca0e5',flagKey=m.ui.league+':'+p.player_id,flagged=Boolean(m.ui.flaggedPlayers?.[flagKey]);
     const tab=['stats','news','projections'].includes(m.ui.playerTab)?m.ui.playerTab:'stats';
     const tabs=[['stats','Stats'],['news','News & injury'],['projections','Projections']];
+    if(tv)return tvProfile(p,m,owner,color,flagged,tab,tabs);
     return '<section class="glass-selected '+(full?'tv-player-detail':'')+'" data-node-key="'+esc(m.ui.league+':'+p.player_id)+'" style="--team-color:'+esc(color)+'"><div class="detail-heading"><span>Player details</span><div class="player-detail-tools">'+
       (!tv?'<button class="player-flag-control '+(flagged?'flagged':'')+'" type="button" data-detail-player="'+esc(p.player_id)+'" data-detail-tab="'+tab+'" data-flag-player="'+esc(flagKey)+'" aria-pressed="'+flagged+'" aria-label="'+(flagged?'Unflag':'Flag')+' '+esc(p.full_name || p.name)+'">'+(flagged?'★ Flagged':'☆ Flag')+'</button><button type="button" data-close-player="true" aria-label="Close player stats">✕</button>':flagged?'<span class="player-flag-mark">★ Flagged</span>':'')+'</div></div>'+
       '<div class="selected-identity">'+app.markup.face(p,'large')+'<div><h2>'+esc(p.full_name || p.name)+'</h2><p>'+esc(p.position)+' · '+esc(p.team)+' · '+esc(p.status || 'Upcoming')+'</p><span>'+dot(color)+esc(owner)+'</span></div><strong>'+fmt(app.data.actual(p))+'<small>Fantasy points</small></strong></div>'+
@@ -101,6 +134,6 @@
     if(b.dataset.playerTab)app.dispatch({playerId,playerTab:b.dataset.playerTab});
     else app.dispatch({playerId,playerTab:b.dataset.detailTab || app.getUI().playerTab || 'stats',playerFlag:{[b.dataset.flagPlayer]:!app.getUI().flaggedPlayers?.[b.dataset.flagPlayer]}});
   });
-  window.FantasyPlayerDetails={render,average,playerData,injurySummary,fetchData};
+  window.FantasyPlayerDetails={render,average,playerData,injurySummary,fetchData,fitTV};
   app.render();
 })();

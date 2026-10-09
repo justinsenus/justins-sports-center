@@ -152,7 +152,8 @@
     if(ready)patch(document.getElementById('matchupHero'),hero(m));
     const ticker=document.getElementById('scoreStrips');
     if(ticker && ready)patch(ticker,strips(m));
-    if(m.loading || !m.league.ready || m.ui.playerId)return;
+    if(m.loading || !m.league.ready)return;
+    if(m.ui.playerId){window.FantasyPlayerDetails?.fitTV?.();return;}
     if(overviewScene){patch(document.getElementById('workspace'),overview(m));fitRosters();}
     else if(leagueScene)patch(document.getElementById('workspace'),matchups(m,true));
   };

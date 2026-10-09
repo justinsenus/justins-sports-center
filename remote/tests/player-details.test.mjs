@@ -37,4 +37,17 @@ assert.ok(html.includes('Sleeper projection') && html.includes('<b>22.0</b>'),'T
 assert.ok(html.includes('Cloud average') && html.includes('<b>24.0</b>') && html.includes('3 contributing sources'),'The existing panel displays the current cloud average and contributor count');
 assert.ok(!html.includes('Source range 10.0'),'An older provider range is not attributed to the cloud average');
 assert.equal(detail.average(player,4).value,null,'A cloud batch from another week is not displayed');
-console.log('Passed: original stats, player flags, synced tabs, practice reports, news source counts, honest probability, same-week means, and accurate cloud/provider projection labels.');
+const projectedLabels=['Passing yards','Passing touchdowns','Interceptions','Completions','Passing attempts','Rushing yards','Rushing attempts','Rushing touchdowns','Fumbles','Fumbles lost','Rushing first downs','Sacks taken','Receptions','Receiving yards','Receiving touchdowns','Targets','Field goals','Extra points','Sacks','Tackles','Defensive interceptions','Defensive touchdowns'];
+const tvApp={...app,data:{...app.data,stats:()=>projectedLabels.map((label,i)=>({label:'PROJ '+label,value:i+.1,projected:true}))}};
+const tvContext={...context,window:{FantasyCenter:tvApp,FantasyProjectionCloud:context.window.FantasyProjectionCloud},document:{body:{dataset:{screen:'tv',root:'../patriots-fantasy-touch/'}},addEventListener(){}}};
+vm.runInNewContext(await readFile(new URL('../player-details.js',import.meta.url),'utf8'),tvContext);
+const tvDetail=tvContext.window.FantasyPlayerDetails;
+model.ui.playerTab='projections';const wide=tvDetail.render(model,true);
+for(const label of projectedLabels)assert.ok(wide.includes('<small>'+label+'</small>'),'Every reported projection is retained, including '+label);
+assert.ok(wide.includes('Sleeper projection') && wide.includes('<b>22.0</b>') && wide.includes('Cloud average') && wide.includes('<b>24.0</b>'),'Both independently sourced projection totals remain visible');
+assert.ok(wide.includes('3 contributing sources') && wide.includes('data-node-key="sleeper:123"'));
+assert.ok(!wide.includes('detail-stats-scroll'),'The TV projection view does not put its stat breakdown in a scroll drawer');
+assert.ok(html.includes('detail-stats-scroll'),'The touch controller retains its normal player drawer');
+await new Promise(resolve=>setImmediate(resolve));model.ui.playerTab='news';const wideNews=tvDetail.render(model,true);
+assert.ok(wideNews.includes('Questionable') && wideNews.includes('Limited Participation') && wideNews.includes('Drake Maye returns to practice'));
+console.log('Passed: original stats, player flags, synced tabs, practice reports, news source counts, honest probability, same-week means, accurate cloud/provider projection labels, and complete TV projection grids.');
