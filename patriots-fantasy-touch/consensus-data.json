@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-10T22:02:30.712Z",
+  "generated_at": "2026-10-11T00:50:31.220Z",
   "season": 2026,
   "week": 5,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-10T22:02:30.712Z",
+      "updated_at": "2026-10-11T00:50:31.220Z",
       "count": 56,
       "access": "public fallback"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-10T22:02:30.712Z",
+      "updated_at": "2026-10-11T00:50:31.220Z",
       "count": 166
     },
     {
@@ -2561,8 +2561,8 @@
           "week": 5,
           "scoring": "PPR",
           "min": 11.7,
-          "max": 12.1,
-          "range": 0.4,
+          "max": 12.2,
+          "range": 0.5,
           "sourceCount": 2,
           "sources": [
             {
@@ -2576,16 +2576,16 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 12.1,
+              "value": 12.2,
               "season": 2026,
               "week": 5,
               "scoring": "PPR"
             }
           ],
           "outlier": {
-            "source": "FantasyPros public",
-            "value": 12.1,
-            "delta": 0.2
+            "source": "Sleeper",
+            "value": 11.7,
+            "delta": 0.3
           },
           "odds": [],
           "market": null
@@ -5048,14 +5048,14 @@
           "name": "Tyler Warren",
           "team": "IND",
           "position": "TE",
-          "consensus": 11.8,
+          "consensus": 11.9,
           "method": "mean",
           "season": 2026,
           "week": 5,
           "scoring": "PPR",
           "min": 10.9,
-          "max": 12.7,
-          "range": 1.8,
+          "max": 12.8,
+          "range": 1.9,
           "sourceCount": 2,
           "sources": [
             {
@@ -5069,7 +5069,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 12.7,
+              "value": 12.8,
               "season": 2026,
               "week": 5,
               "scoring": "PPR"
@@ -5078,7 +5078,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 10.9,
-            "delta": 0.9
+            "delta": 1
           },
           "odds": [],
           "market": null
@@ -8546,8 +8546,8 @@
       "week": 5,
       "scoring": "PPR",
       "min": 11.7,
-      "max": 12.1,
-      "range": 0.4,
+      "max": 12.2,
+      "range": 0.5,
       "sourceCount": 2,
       "sources": [
         {
@@ -8561,16 +8561,16 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 12.1,
+          "value": 12.2,
           "season": 2026,
           "week": 5,
           "scoring": "PPR"
         }
       ],
       "outlier": {
-        "source": "FantasyPros public",
-        "value": 12.1,
-        "delta": 0.2
+        "source": "Sleeper",
+        "value": 11.7,
+        "delta": 0.3
       },
       "odds": [],
       "market": null
@@ -11033,14 +11033,14 @@
       "name": "Tyler Warren",
       "team": "IND",
       "position": "TE",
-      "consensus": 11.8,
+      "consensus": 11.9,
       "method": "mean",
       "season": 2026,
       "week": 5,
       "scoring": "PPR",
       "min": 10.9,
-      "max": 12.7,
-      "range": 1.8,
+      "max": 12.8,
+      "range": 1.9,
       "sourceCount": 2,
       "sources": [
         {
@@ -11054,7 +11054,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 12.7,
+          "value": 12.8,
           "season": 2026,
           "week": 5,
           "scoring": "PPR"
@@ -11063,7 +11063,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 10.9,
-        "delta": 0.9
+        "delta": 1
       },
       "odds": [],
       "market": null
@@ -12235,19 +12235,19 @@
       "rank": "01"
     },
     {
+      "name": "Tyler Warren",
+      "market": "PROJECTION OUTLIER",
+      "source": "Sleeper",
+      "delta": 1,
+      "range": 1.9,
+      "rank": "02"
+    },
+    {
       "name": "Houston Texans",
       "market": "PROJECTION OUTLIER",
       "source": "Sleeper",
       "delta": 1,
       "range": 2,
-      "rank": "02"
-    },
-    {
-      "name": "Tyler Warren",
-      "market": "PROJECTION OUTLIER",
-      "source": "Sleeper",
-      "delta": 0.9,
-      "range": 1.8,
       "rank": "03"
     },
     {
