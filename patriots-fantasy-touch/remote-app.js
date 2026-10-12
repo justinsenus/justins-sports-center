@@ -298,6 +298,33 @@
     return [...starters, ...players.filter((id) => !starterSet.has(id))];
   }
 
+  // The real first name is available only when the provider supplies one.
+  // Never turn an arbitrary username or fantasy team name into an invented
+  // person's first name. Keep the display handle as a labelled fallback.
+  function ownerIdentity(raw, provider = "sleeper") {
+    if (!raw) return { ownerFirstName: "", ownerDisplayName: "", ownerLabel: "", ownerLabelSource: "" };
+    const metadata = raw.metadata || {};
+    const properName = String(raw.firstName || raw.first_name || metadata.first_name || "").trim();
+    const fullName = String(raw.fullName || raw.full_name || metadata.real_name || "").trim();
+    const display = String(raw.displayName || raw.display_name || raw.username || raw.name || "").trim();
+    const firstName = properName || (fullName ? fullName.split(/\s+/)[0] : "");
+    // A verified name stays distinguishable from a handle (especially important
+    // if the display name contains fantasy jokes rather than a real name).
+    const label = firstName || display;
+    return {
+      ownerFirstName: firstName,
+      ownerDisplayName: display || fullName || firstName,
+      ownerLabel: label,
+      ownerLabelSource: firstName ? "first-name" : display ? "display-name" : ""
+    };
+  }
+  function espnTeamOwner(rawTeam, leagueMembers) {
+    const ids = Array.isArray(rawTeam?.owners) ? rawTeam.owners : (rawTeam?.primaryOwner ? [rawTeam.primaryOwner] : []);
+    const members = Array.isArray(leagueMembers) ? leagueMembers : [];
+    const owner = ids.map(id => members.find(m => String(m.id || m.memberId || m.userId || "") === String(id))).find(Boolean);
+    return ownerIdentity(owner, "espn");
+  }
+
   function rosterName(roster, users, fallback) {
     const owner = users && users.find((user) => String(user.user_id) === String(roster && roster.owner_id));
     return owner && owner.metadata && owner.metadata.team_name || owner && owner.display_name || fallback;
@@ -324,6 +351,7 @@
           ...player,
           fantasyTeamId: id,
           fantasyTeamName: team.name || "LEAGUE TEAM",
+          fantasyTeamOwner: team.ownerLabel || "",
           fantasyTeamColor: color
         }))
       };
@@ -735,7 +763,8 @@
     const leagueTeams = teams.map((rawTeam) => {
       const teamId = String(rawTeam.id);
       const side = teamId === String(ownRaw.id) ? "own" : teamId === String(opponentId) ? "opponent" : "league";
-      return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side, statLabels), id: `espn:${teamId}`, teamId };
+      return { ...normalizeESPNTeam(rawTeam, leagueSides.get(teamId), scoringPeriodId, side, statLabels),
+        ...espnTeamOwner(rawTeam, data.members), id: `espn:${teamId}`, teamId };
     });
     const matchups = (data.schedule || []).filter((row) => Number(row && row.matchupPeriodId) === matchupPeriodId).map((row, index) => ({
       id: String(row.id || row.matchupId || `espn-${matchupPeriodId}-${index}`),
@@ -945,7 +974,10 @@
       const eventStatus = event && eventState(event).live ? "LIVE" : event && eventState(event).final ? "FINAL" : null;
       return { ...player, actual, projected, seasonAvg: finite(player.seasonAvg), status: eventStatus || player.status || (player.injury_status ? String(player.injury_status).toUpperCase() : "UPCOMING"), starter: player.starter != null ? player.starter : starters.has(id), side, event, consensus };
     });
-    return { name: team.name || (side === "own" ? CONFIG.espnTeamName : "OPPONENT"), abbrev: team.abbrev || "TEAM", avatar: team.avatar || teamLogo(players.find((player) => player.team) && players.find((player) => player.team).team), record: team.record || { wins: null, losses: null }, players, roster, total: finite(team.total) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.actual) || 0), 0), projected: finite(team.projected) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.projected) || 0), 0) };
+    return { name: team.name || (side === "own" ? CONFIG.espnTeamName : "OPPONENT"),
+      ownerFirstName: team.ownerFirstName || "", ownerDisplayName: team.ownerDisplayName || "",
+      ownerLabel: team.ownerLabel || "", ownerLabelSource: team.ownerLabelSource || "",
+      abbrev: team.abbrev || "TEAM", avatar: team.avatar || teamLogo(players.find((player) => player.team) && players.find((player) => player.team).team), record: team.record || { wins: null, losses: null }, players, roster, total: finite(team.total) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.actual) || 0), 0), projected: finite(team.projected) ?? players.filter((player) => player.starter).reduce((sum, player) => sum + (finite(player.projected) || 0), 0) };
   }
 
   function baseCurrentLeague() {
@@ -965,6 +997,7 @@
           id: `sleeper:${teamRoster.roster_id}`,
           teamId: String(teamRoster.roster_id),
           name: rosterName(teamRoster, data.users, "LEAGUE TEAM"),
+          ...ownerIdentity(owner, "sleeper"),
           avatar: sleeperAvatar(owner),
           record: { wins: finite(settings.wins), losses: finite(settings.losses) },
           players,
@@ -982,6 +1015,7 @@
         name: CONFIG.sleeperTeamName,
         ownName: ownTeam && ownTeam.name || CONFIG.sleeperTeamName,
         opponentName: opponentTeam && opponentTeam.name || "OPPONENT",
+        ownOwner: ownTeam?.ownerLabel || "", opponentOwner: opponentTeam?.ownerLabel || "",
         ownAvatar: ownTeam && ownTeam.avatar || "",
         opponentAvatar: opponentTeam && opponentTeam.avatar || "",
         ownRecord: ownTeam && ownTeam.record || {},
@@ -1018,6 +1052,7 @@
         name: CONFIG.espnTeamName,
         ownName: ownTeam && ownTeam.name || CONFIG.espnTeamName,
         opponentName: opponentTeam && opponentTeam.name || "MATCHUP PENDING",
+        ownOwner: ownTeam?.ownerLabel || "", opponentOwner: opponentTeam?.ownerLabel || "",
         ownAvatar: ownTeam && ownTeam.avatar || "",
         opponentAvatar: opponentTeam && opponentTeam.avatar || "",
         ownRecord: ownTeam && ownTeam.record || { wins: null, losses: null },
@@ -1042,6 +1077,7 @@
     const pair = buildLeagueMatchups(league, league.matchups || []).find(row => String(row.id) === state.selectedMatchup);
     if (!pair) return league;
     return { ...league, ownName: pair.home.name, opponentName: pair.away.name,
+      ownOwner: pair.home.ownerLabel || "", opponentOwner: pair.away.ownerLabel || "",
       ownAvatar: pair.home.avatar || "", opponentAvatar: pair.away.avatar || "",
       ownRecord: pair.home.record || {}, opponentRecord: pair.away.record || {},
       own: (pair.home.players || []).map(p => ({...p, side:"own"})),
@@ -1174,6 +1210,7 @@
           team: player.team || "FA",
           fantasyTeamId: player.fantasyTeamId || "",
           fantasyTeamName: player.fantasyTeamName || "OWNER UNKNOWN",
+          fantasyTeamOwner: player.fantasyTeamOwner || "",
           teamColor: player.fantasyTeamColor || "#a8b7c9",
           headshot: player.headshot || player.imageUrl || "",
           direction: delta > 0 ? "up" : "down",
