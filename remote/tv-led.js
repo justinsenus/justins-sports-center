@@ -59,6 +59,29 @@
     document.body.dataset.ledScene = home ? 'home' : 'detail';
   };
 
+  // Optional P2.5 pixel-grid guide. The LED wall's real resolution depends
+  // on its physical dimensions; the sample assumes a 3.2 m × 1.8 m wall.
+  const pitchButton = document.getElementById('ledPitchPreview');
+  const pitchReadout = document.getElementById('ledPitchReadout');
+  function showPitchGuide(enabled) {
+    document.body.classList.toggle('pitch-preview', enabled);
+    if (pitchButton) {
+      pitchButton.setAttribute('aria-pressed', String(enabled));
+      pitchButton.textContent = enabled ? 'P2.5 On' : 'P2.5 Preview';
+    }
+    if (pitchReadout) pitchReadout.hidden = !enabled;
+    try {
+      const url = new URL(window.location.href);
+      if (enabled) url.searchParams.set('pitch', '2.5');
+      else url.searchParams.delete('pitch');
+      history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+    } catch (_) { /* Preview still works on older TV browsers. */ }
+  }
+  pitchButton?.addEventListener('click', () => showPitchGuide(!document.body.classList.contains('pitch-preview')));
+  let previewFromLink = false;
+  try { previewFromLink = new URL(window.location.href).searchParams.get('pitch') === '2.5'; } catch (_) {}
+  if (previewFromLink) showPitchGuide(true);
+
   document.getElementById('ledFullscreen')?.addEventListener('click', async () => {
     const button = document.getElementById('ledFullscreen');
     try {
