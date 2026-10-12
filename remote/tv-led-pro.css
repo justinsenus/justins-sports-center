@@ -1,0 +1,347 @@
+/* LED Pro — designed around 1920x1080 living-room viewing and future real LED walls.
+   Only /tv-led/: the original /tv/ and /touch/ views remain untouched. */
+body[data-screen="tv"][data-tv-style="led"] {
+  --led-blue: #50a8ff;
+  --led-cyan: #9beaff;
+  --led-gap: clamp(8px,.75vw,15px);
+  --led-ui: Inter, "Segoe UI", Arial, sans-serif;
+  background: #050a12;
+  color:#eff6ff;
+  font-family:var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .glass-shell{
+  padding:clamp(10px,1vw,18px);
+  background:#050a12;
+  background-image:radial-gradient(ellipse at 50% -24%,#10305088,transparent 57%);
+  border:0;
+  box-shadow:none;
+}
+body[data-screen="tv"][data-tv-style="led"] .glass-header{
+  grid-template-columns:minmax(0,1fr) clamp(145px,10vw,192px) minmax(0,1fr);
+  height:clamp(82px,9vh,104px);
+  min-height:clamp(82px,9vh,104px);
+  padding:0 10px;
+  overflow:visible;
+  z-index:6;
+}
+body[data-screen="tv"][data-tv-style="led"] .header-mascot {
+  width:clamp(118px,12.8vh,156px);
+  height:clamp(118px,12.8vh,156px);
+  max-width:none;
+  max-height:none;
+  margin:0;
+  justify-self:center;
+  align-self:start;
+  position:relative;
+  z-index:7;
+  -webkit-mask-image:none;
+  mask-image:none;
+  filter:drop-shadow(0 6px 10px #0008);
+  object-fit:contain;
+}
+body[data-screen="tv"][data-tv-style="led"] .header-week,
+body[data-screen="tv"][data-tv-style="led"] #tvContext {
+  color:#95b9db;
+  font:700 clamp(16px,1.15vw,21px)/1.2 var(--led-ui);
+  letter-spacing:.08em;
+}
+body[data-screen="tv"][data-tv-style="led"] #weekLabel{color:#bceaff}
+body[data-screen="tv"][data-tv-style="led"] .header-right {gap:9px}
+body[data-screen="tv"][data-tv-style="led"] #ledPitchPreview {display:none}
+body[data-screen="tv"][data-tv-style="led"] #ledPreview,
+body[data-screen="tv"][data-tv-style="led"] #remoteToggle,
+body[data-screen="tv"][data-tv-style="led"] #ledFullscreen{
+  background:#101f31;
+  color:#d1e9ff;
+  border:1px solid #32516e;
+  border-radius:8px;
+  min-height:34px;
+  font:600 clamp(11px,.76vw,15px)/1 var(--led-ui);
+  padding:8px 12px;
+}
+body[data-screen="tv"][data-tv-style="led"] #ledFullscreen{font-size:21px}
+body[data-screen="tv"][data-tv-style="led"] .glass-main {gap:var(--led-gap)}
+body[data-screen="tv"][data-tv-style="led"] .glass-panel {
+  background:#0b1523;
+  background-image:none;
+  border:1px solid #24415c;
+  border-radius:10px;
+  box-shadow:inset 0 1px #ffffff0c;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band {
+  position:relative;
+  height:clamp(134px,15.2vh,170px);
+  grid-template-columns:minmax(0,1fr) clamp(160px,13vw,230px) minmax(0,1fr);
+  column-gap:clamp(14px,1.7vw,34px);
+  padding:13px clamp(19px,2vw,40px) 14px;
+  background:linear-gradient(100deg,#181d27,#0b1628 46%,#0b1727 54%,#102539);
+  border-top:1px solid #376991;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band .score-vs {
+  visibility:hidden;
+}
+body[data-screen="tv"][data-tv-style="led"] .score-team h1 {
+  color:#f4f8ff;
+  font:700 clamp(25px,1.95vw,39px)/1.08 var(--led-ui);
+  letter-spacing:-.025em;
+}
+body[data-screen="tv"][data-tv-style="led"] .score-team small {
+  color:#8ea8c6;
+  font:600 clamp(11px,.85vw,16px)/1.2 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .score-number > strong {
+  font:500 clamp(67px,5.7vw,116px)/.91 var(--led-font);
+  letter-spacing:-1px;
+  color:#effaff;
+  text-shadow:0 0 18px #5ddaff24;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-projection-labels > span {
+  font:600 clamp(11px,.76vw,15px)/1.1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-projection-labels > span b{
+  font:700 clamp(17px,1.1vw,24px)/1.0 var(--led-ui)
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-projection-line{height:5px}
+body[data-screen="tv"][data-tv-style="led"] .tv-panel-title {
+  min-height:clamp(32px,3.2vh,40px);
+  padding:7px 12px;
+  border-bottom:1px solid #20354a;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-panel-title h2 {
+  color:#c9e6ff;
+  font:800 clamp(16px,1.0vw,21px)/1.12 var(--led-ui);
+  letter-spacing:.025em;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-panel-title > span {
+  color:#8db3d1;
+  font:500 clamp(10px,.72vw,14px)/1.1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-overview {
+  grid-template-columns:minmax(0,1.13fr) minmax(0,2.56fr) minmax(0,1.13fr);
+  grid-template-rows:minmax(0,1fr) clamp(152px,18.1vh,202px);
+  gap:var(--led-gap);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-plots{
+  grid-template-rows:minmax(0,1.55fr) minmax(0,.96fr);
+  gap:var(--led-gap);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster{
+  border-top:3px solid var(--team-color);
+  background:#0b1523;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-panel-title h2{
+  font:800 clamp(15px,1.03vw,22px)/1.1 var(--led-ui);
+  color:#f1f6ff;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-panel-title>span{display:none}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster-body{
+  grid-template-rows:clamp(22px,2.5vh,28px) minmax(0,var(--starter-space)) clamp(22px,2.5vh,28px) minmax(0,var(--bench-space));
+  padding:0 7px 7px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster-label{
+  color:#8daecb;
+  font:700 clamp(10px,.68vw,14px)/1.1 var(--led-ui);
+  text-transform:uppercase;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster-label b{color:#a9c3df}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row{
+  grid-template-columns:clamp(34px,2.5vw,45px) minmax(0,1fr) clamp(57px,4vw,77px);
+  gap:clamp(6px,.65vw,12px);
+  padding:3px 2px;
+  min-height:0;
+  border-top:1px solid #203247;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-player-photo,
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-photo {
+  height:min(var(--tv-row-height,48px),46px);
+  width:min(100%,var(--tv-row-height,48px),46px);
+  border-radius:7px;
+  background:#1d2d41;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line > b,
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-bench-row .tv-player-name-line > b{
+  color:#f7faff;
+  font:750 clamp(15px,1.07vw,23px)/1.1 var(--led-ui);
+  letter-spacing:-.03em;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-game {
+  font:600 clamp(10px,.67vw,14px)/1.15 var(--led-ui);
+  color:#9cbbd8;
+  margin-top:3px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-score > b{
+  color:#ecf9ff;
+  font:800 clamp(20px,1.56vw,33px)/1 var(--led-ui);
+  letter-spacing:-.03em;
+  text-shadow:none;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-projection {
+  font:600 clamp(10px,.69vw,14px)/1.1 var(--led-ui);
+  color:#ffa96a;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-projection span{color:#92a8bf}
+body[data-screen="tv"][data-tv-style="led"] .tv-bench-row{background:transparent}
+body[data-screen="tv"][data-tv-style="led"] .tv-injury-badge{border-radius:5px}
+body[data-screen="tv"][data-tv-style="led"] .tv-momentum .tv-chart-legend{
+  display:flex;
+  padding:7px 13px 0;
+  gap:15px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-momentum .tv-chart-legend b{
+  color:#bddef6;
+  font:650 clamp(12px,.86vw,17px)/1.1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-momentum .tv-chart-legend strong{
+  font:800 clamp(22px,1.6vw,32px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .glass-chart-grid text,
+body[data-screen="tv"][data-tv-style="led"] .glass-chart-times text {
+  fill:#99b4c8;
+  font:11px var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .chart-range-controls{padding:5px 13px}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock .tv-chart-legend {
+  padding:5px 13px 0;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body {
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  gap:0;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-chart{
+  flex:1;
+  min-height:0;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body > .tv-chart-legend{
+  flex:none;
+  min-height:34px;
+  height:clamp(34px,4.0vh,46px);
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-rows:1fr;
+  gap:8px;
+  align-items:center;
+  padding:2px 11px 5px;
+  border-top:1px solid #1c354b;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend > span{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  align-items:flex-start;
+  justify-content:center;
+  gap:2px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend b {
+  color:#aacce2;
+  max-width:100%;
+  font:650 clamp(10px,.7vw,14px)/1.04 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend strong{
+  font:800 clamp(14px,1.1vw,22px)/1 var(--led-ui);
+  color:#f2f8ff;
+  margin:0;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .team-dot{display:none}
+body[data-screen="tv"][data-tv-style="led"] .led-support{
+  grid-template-columns:minmax(0,.43fr) minmax(0,1.57fr);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-panel-title h2{
+  font-size:clamp(14px,.88vw,19px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-list{padding:6px 10px}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row{
+  padding:8px 2px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row b{
+  font:650 clamp(12px,.86vw,17px)/1.2 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row strong{
+  font:800 clamp(11px,.75vw,16px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed{
+  background:linear-gradient(135deg,#0c1d2c,#0b1523);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-panel-title h2{
+  color:#f0f6ff;
+  font:800 clamp(17px,1.18vw,24px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(0,1fr);
+  gap:2px 18px;
+  padding:5px 14px 8px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row{
+  min-height:0;
+  padding:4px 1px;
+  border-bottom:1px solid #20364b;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row .player-face{
+  width:clamp(32px,3.6vh,43px);
+  height:clamp(32px,3.6vh,43px);
+  border-radius:7px;
+  border-color:var(--team-color);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-name > b{
+  font:800 clamp(15px,1.03vw,22px)/1.1 var(--led-ui);
+  color:#eff8ff;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-name > small{
+  font:600 clamp(10px,.69vw,14px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row > strong{
+  font:800 clamp(22px,1.6vw,34px)/1 var(--led-ui);
+  color:#e1faff;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row > strong > small{
+  font:800 clamp(12px,.8vw,16px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] #scoreStrips{margin-top:0}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores{gap:7px}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-fantasy-strip{
+  height:clamp(56px,5.9vh,70px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-nfl-strip{
+  height:clamp(63px,6.5vh,76px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-strip-label h2{
+  font:800 clamp(14px,.9vw,18px)/1.08 var(--led-ui);
+  color:#bcd9f1;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-strip-matchup b,
+body[data-screen="tv"][data-tv-style="led"] .tv-nfl-game b{
+  font:700 clamp(12px,.87vw,18px)/1.08 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-strip-matchup strong,
+body[data-screen="tv"][data-tv-style="led"] .tv-nfl-game strong{
+  font:800 clamp(16px,1.2vw,26px)/1 var(--led-ui);
+}
+body[data-screen="tv"][data-tv-style="led"] .glass-footer{
+  font:500 clamp(9px,.69vw,12px) var(--led-ui);
+  color:#718daa;
+}
+@media(max-width:1450px){
+  body[data-screen="tv"][data-tv-style="led"] .led-overview{
+    grid-template-columns:minmax(0,1.21fr) minmax(0,2.35fr) minmax(0,1.21fr);
+  }
+  body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-strip-label{width:105px}
+}
+@media(max-height:760px){
+  body[data-screen="tv"][data-tv-style="led"] .glass-header{height:70px;min-height:70px}
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot{width:116px;height:116px}
+  body[data-screen="tv"][data-tv-style="led"] .tv-score-band{height:108px}
+  body[data-screen="tv"][data-tv-style="led"] .led-overview{grid-template-rows:minmax(0,1fr) 119px}
+  body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-name > b{font-size:13px}
+  body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-fantasy-strip{height:48px}
+  body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-nfl-strip{height:54px}
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot.led-own-scored{animation:none}
+}
