@@ -1,0 +1,25 @@
+/* Independent P2.5 pixel-native simulator. Never affects /tv/ or /tv-led/. */
+body[data-native-led="1"] {margin:0;min-height:100vh;background:#050911;color:#e4f2ff;font-family:Inter,"Segoe UI",Arial,sans-serif}
+body[data-native-led="1"] .glass-shell,body[data-native-led="1"] #playerDrawer{display:none!important}
+body[data-native-led="1"] #nativeApp{max-width:1440px;margin:0 auto;padding:20px 22px 36px;box-sizing:border-box}
+body[data-native-led="1"] .native-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 16px}
+body[data-native-led="1"] .native-kicker{color:#78c9ff;font-weight:900;font-size:12px;letter-spacing:.18em}
+body[data-native-led="1"] .native-title{font-size:clamp(23px,2.3vw,34px);font-weight:900;line-height:1.15;margin:4px 0}
+body[data-native-led="1"] .native-subtitle{color:#8ba8c4;margin:4px 0 0;font-size:13px}
+body[data-native-led="1"] .native-links{display:flex;gap:10px;flex-wrap:wrap}
+body[data-native-led="1"] .native-links a{color:#b8deff;background:#102236;border:1px solid #285276;padding:10px 13px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700}
+body[data-native-led="1"] .native-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;background:#091522;border:1px solid #18364f;border-radius:12px;margin:0 0 14px}
+body[data-native-led="1"] .native-toolbar label{font-size:13px;color:#9ac5e4;font-weight:700}
+body[data-native-led="1"] .native-toolbar button,body[data-native-led="1"] .native-toolbar select{min-height:42px;color:#eff7ff;background:#14263b;border:1px solid #2e5571;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+body[data-native-led="1"] .native-toolbar select{max-width:100%;font-size:14px}
+body[data-native-led="1"] .native-toolbar button:focus-visible,body[data-native-led="1"] .native-toolbar select:focus-visible,body[data-native-led="1"] .native-links a:focus-visible{outline:2px solid #ffb34b;outline-offset:2px}
+body[data-native-led="1"] #nativeStatus{color:#96b6d0;font-size:12px;margin-left:auto}
+body[data-native-led="1"] #nativeStage{padding:16px;background:#000;border:2px solid #28445d;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:190px}
+body[data-native-led="1"] #nativeCanvas{display:block;width:100%;max-width:1280px;height:auto;aspect-ratio:2 / 1;image-rendering:pixelated;image-rendering:crisp-edges;background:#03080f;object-fit:contain}
+body[data-native-led="1"] #nativeStage:fullscreen{border:0;border-radius:0;padding:20px;background:#000}
+body[data-native-led="1"] #nativeStage:fullscreen #nativeCanvas{max-height:100%;max-width:100%;width:auto;height:auto}
+body[data-native-led="1"] #nativeReadout{margin:13px 0 4px;color:#8fe5ae;font-size:12px;font-weight:800;letter-spacing:.07em;line-height:1.5}
+body[data-native-led="1"] .native-notice{font-size:13px;line-height:1.55;color:#a3b9cb;max-width:960px}
+body[data-native-led="1"] .native-notice b{color:#f3f7fe}
+body[data-native-led="1"] #pairPanel{z-index:100}
+@media(max-width:650px){body[data-native-led="1"] #nativeApp{padding:13px 9px 24px}body[data-native-led="1"] .native-head{gap:7px}body[data-native-led="1"] .native-toolbar{gap:7px}body[data-native-led="1"] #nativeStatus{width:100%;margin-left:0}body[data-native-led="1"] #nativeStage{padding:5px;min-height:120px}}
