@@ -3,8 +3,9 @@ import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 
 const elements = new Map(), listeners = new Map();
+let mascotCelebrations = 0;
 const element = id => {
-  if (!elements.has(id)) elements.set(id, {innerHTML: '', textContent: '', dataset: {}, hidden: false, offsetWidth: 80, style: {setProperty() {}}, classList: {add() {}, remove() {}, toggle() {}}, addEventListener() {}, setAttribute() {}, querySelector() {return null;}});
+  if (!elements.has(id)) elements.set(id, {innerHTML: '', textContent: '', dataset: {}, hidden: false, offsetWidth: 80, style: {setProperty() {}}, classList: {add(name) {if (id === 'headerMascot' && name === 'led-own-scored') mascotCelebrations++;}, remove() {}, toggle() {}}, addEventListener() {}, setAttribute() {}, querySelector() {return null;}});
   return elements.get(id);
 };
 const player = (id, starter, color) => ({player_id: id, full_name: 'Player ' + id, position: 'WR', team: 'NE', starter, status: 'FINAL', actual: id === 'own-0' ? 0 : 2, projected: 10, fantasyTeamColor: color});
@@ -16,7 +17,7 @@ const events = Array.from({length: 12}, (_, i) => ({playerId: 'own-' + i, name: 
 const model = {loading: false, started: true, leagueStarted: true, ui: {league: 'espn', view: 'overview', playerId: null}, ownActual: 0, opponentActual: 28, ownFinish: 125.8, opponentFinish: 131.1, history: [], teamHistory: [], events, matchups, league: {ready: true, week: 5, ownName: 'Team 0', opponentName: 'Team 1', own, opponent, teams, allPlayers: own.concat(opponent)}};
 const document = {body: {dataset: {screen: 'tv', tvStyle: 'led'}}, documentElement: {style: {setProperty() {}}}, getElementById: element, querySelectorAll: () => [], querySelector: () => null, addEventListener: (name, fn) => listeners.set(name, fn), activeElement: null};
 const app = {model: () => model, getUI: () => model.ui, render() {context.window.FantasyGlass?.render();}, format: (v, d = 1, empty = '—') => v == null ? empty : Number(v).toFixed(d), escape: v => String(v ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'), data: {actual: p => p.actual, record: () => '2–2'}, markup: {face: () => '<span class="player-face"></span>', stats: () => '<div>269 passing yards</div>', gameLabel: () => ''}, dispatch() {}};
-const context = {window: {FantasyCenter: app, innerHeight: 1080, innerWidth: 1920, addEventListener() {}}, document, CSS: {escape: v => v}, Date, Map, Set, URL};
+const context = {window: {FantasyCenter: app, innerHeight: 1080, innerWidth: 1920, addEventListener() {}}, document, CSS: {escape: v => v}, Date, Map, Set, URL, setTimeout: () => 1, clearTimeout: () => {}};
 for (const script of ['soft-glass.js', 'tv-presentation.js', 'tv-led.js']) vm.runInNewContext(await readFile(new URL('../' + script, import.meta.url), 'utf8'), context);
 
 const led = context.window.FantasyLED;
@@ -27,8 +28,9 @@ assert.ok(overview.includes('<b>0.0</b>'), 'A reported zero remains an actual sc
 const stock = led.stock(model);
 for (const team of teams) assert.ok(stock.includes(team.name) && stock.includes(team.teamColor), 'Every league team keeps its own stock color');
 assert.ok(stock.includes('-2.0') && stock.includes('12 teams'), 'Negative points remain on the all-team chart');
-assert.equal((overview.match(/class="tv-feed-row"/g) || []).length, 2, 'Supporting scoring rows fit the TV instead of overflowing');
-assert.ok(element('scoreStrips').innerHTML.includes('led-nfl-only'), 'The overview keeps the NFL ribbon below the report row');
+assert.equal((overview.match(/class="tv-feed-row"/g) || []).length, 5, 'League scoring displays five rotating scoring plays');
+assert.ok(element('scoreStrips').innerHTML.includes('led-bottom-scores') && element('scoreStrips').innerHTML.includes('tv-fantasy-strip') && element('scoreStrips').innerHTML.includes('tv-nfl-strip'), 'Fantasy matchups and NFL games both stay at the bottom');
+assert.ok(stock.includes('top 5'), 'League stock retains every chart series but shows five ranked names at a time');
 assert.equal((led.fantasyStrip(model).match(/class="tv-strip-matchup"/g) || []).length, 2, 'Wide displays show two complete fantasy matchups');
 context.window.innerWidth = 1366;
 assert.equal((led.fantasyStrip(model).match(/class="tv-strip-matchup"/g) || []).length, 1, 'Smaller displays keep fantasy matchup names readable');
@@ -44,6 +46,23 @@ model.ui.view = 'league';
 app.render();
 assert.ok(element('workspace').innerHTML.includes('tv-league-full'), 'League navigation remains the complete shared TV scene');
 model.started = model.leagueStarted = false;
-assert.ok(led.momentum(model).includes('Matchup projections') && led.stock(model).includes('projections'), 'Pregame panels use the same projection mode as the existing TV');
+assert.ok(led.momentum(model).includes('Matchup projections') && led.stock(model).includes('League stock'), 'Pregame panels retain projection and stock views');
+model.started = model.leagueStarted = true;
+const originalCelebrations = mascotCelebrations;
+model.opponentActual += 5;
+led.celebrateOwnScore(model);
+assert.equal(mascotCelebrations, originalCelebrations, 'Opponent points never shake the character');
+model.ownActual += 6;
+led.celebrateOwnScore(model);
+assert.equal(mascotCelebrations, originalCelebrations + 1, 'New points for my team shake once');
+led.celebrateOwnScore(model);
+assert.equal(mascotCelebrations, originalCelebrations + 1, 'Same score refreshing does not retrigger shake');
+model.ui.league = 'sleeper';
+model.ownActual += 10;
+led.celebrateOwnScore(model);
+assert.equal(mascotCelebrations, originalCelebrations + 1, 'Switching leagues does not trigger shake');
+model.ownActual += 2;
+led.celebrateOwnScore(model);
+assert.equal(mascotCelebrations, originalCelebrations + 2, 'New points in another league trigger its own shake');
 
-console.log('Passed: LED panel composition, full rosters, all 12 stock colors and signed scores, readable rotating summaries, player/league navigation, and projection mode.');
+console.log('Passed: LED bottom fantasy/NFL tickers, five scoring plays, ranked stock list, own-team-only mascot shake and player navigation.');
