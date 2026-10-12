@@ -180,7 +180,7 @@
   function scoreRows(m,x,y,w,h){
     panel(x,y,w,h,'LEAGUE SCORING · ALL TEAMS',ink.gold);
     const events=(m?.events||[]).filter(Boolean);
-    const rowH=h>175?18:17,count=Math.max(1,Math.floor((h-19)/rowH));
+    const rowH=h>175?16:14,count=Math.max(1,Math.floor((h-19)/rowH));
     const offset=Math.floor(now()/8500)*count;
     if(!events.length){label(m?.started?'NO NEW SCORING':'AWAITING KICKOFF',x+5,y+22,ink.muted,1,w-10);return;}
     for(let i=0;i<Math.min(count,events.length);i++){
@@ -188,8 +188,8 @@
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
       label(e.name||'PLAYER',x+5,ry,ink.white,1,w-63);
       label((change>0?'+':'')+number(e.delta),x+w-56,ry,color,1,53);
-      label(e.fantasyTeamName||'LEAGUE',x+5,ry+8,ink.muted,1,w-67);
-      label('PTS '+number(e.total),x+w-66,ry+8,ink.gold,1,64);
+      label(e.fantasyTeamName||'LEAGUE',x+5,ry+7,ink.muted,1,w-67);
+      label('PTS '+number(e.total),x+w-66,ry+7,ink.gold,1,64);
     }
   }
   function drawRoster(m,x,y,w,h,key){
@@ -233,12 +233,12 @@
     }
   }
   function stock(m,x,y,w,h) {
-    panel(x,y,w,h,'LEAGUE STOCK · TOP 5',ink.blue);
+    panel(x,y,w,h,h>=68?'LEAGUE STOCK · TOP 5':'LEAGUE STOCK · TOP 3',ink.blue);
     const teams=(m?.league?.teams||[]).filter(Boolean).map(t=>({
       name:t.name||'TEAM',val:Number(m?.leagueStarted?t.total:t.projected??t.total)||0
     })).sort((a,b)=>b.val-a.val);
     if(!teams.length){label('WAITING FOR TEAMS',x+4,y+18,ink.muted,1,w-8);return;}
-    const top=teams.slice(0,5),max=Math.max(1,...top.map(t=>t.val));
+    const count=h>=68?5:3,top=teams.slice(0,count),max=Math.max(1,...top.map(t=>t.val));
     const rowHeight=Math.max(9,Math.min(13,Math.floor((h-20)/top.length)));
     for(let i=0;i<top.length;i++){
       const yy=y+17+i*rowHeight;
@@ -247,7 +247,7 @@
     }
   }
   function detailPanel(m,x,y,w,h,scene){
-    const p=m?.player||[...(m?.league?.own||[]),...(m?.league?.opponent||[])].find(t=>String(t.player_id)===String(m?.ui?.playerId));
+    const p=m?.ui?.playerId?(m?.player||[...(m?.league?.own||[]),...(m?.league?.opponent||[])].find(t=>String(t.player_id)===String(m.ui.playerId))):null;
     if(p){
       panel(x,y,w,h,'SELECTED PLAYER',ink.gold);
       label((p.position||'')+' '+(p.full_name||p.name||'PLAYER'),x+5,y+17,ink.white,1,w-10);
@@ -323,7 +323,7 @@
     const rightX=gap*3+leftW+middleW,rightW=w-rightX-gap;
     drawRoster(m,gap,bodyY,leftW,bodyH,'own');
     drawRoster(m,gap*2+leftW,bodyY,middleW,bodyH,'opponent');
-    const extraH=h>=350?94:59;
+    const extraH=h>=350?94:48;
     scoreRows(m,rightX,bodyY,rightW,bodyH-extraH-gap);
     detailPanel(m,rightX,bodyY+bodyH-extraH,rightW,extraH,scene);
     scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
@@ -394,7 +394,15 @@
     try {if(document.fullscreenElement)await document.exitFullscreen();else await $('nativeStage').requestFullscreen();}
     catch(_){$('nativeStatus').textContent='Use the TV browser fullscreen option.'}
   });
-  document.addEventListener('fantasy:session',()=>{draw()});
+  document.addEventListener('fantasy:session',e=>{
+    if(e.detail?.paired)document.getElementById('pairPanel')?.classList.add('hidden');
+    draw();
+  });
+  // Reloads may resume an already paired room before the native renderer loads.
+  window.setTimeout(()=>{
+    if(window.FantasyRemote?.getStatus?.().paired)document.getElementById('pairPanel')?.classList.add('hidden');
+    draw();
+  },850);
   window.setInterval(draw,120);
   const initial=new URL(location.href).searchParams.get('modules');
   pick(sizes[initial]?initial:'sixteen');
