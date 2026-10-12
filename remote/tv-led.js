@@ -29,9 +29,31 @@
     return '<section class="glass-panel tv-stock"><div class="tv-panel-title"><h2>League stock</h2><span>' + data.series.length + ' teams · top 5 ' + (leaders.pages > 1 ? leaders.current + '/' + leaders.pages : '') + '</span></div>' + charts.rangeControls() + '<div class="tv-stock-body"><div class="tv-stock-chart">' + charts.chart(data.series, data.raw, {league: true, projected: !model.leagueStarted, title: 'All league teams on one shared points scale'}) + '</div>' + legend(leaders.items) + '</div></section>';
   }
 
+  // A physical scoreboard needs fewer, larger player rows. All starters and
+  // reserves remain accessible because the visible slice rotates automatically.
+  function readableRoster(model, side) {
+    const all = model.league[side] || [];
+    const starters = all.filter(p => p.starter !== false);
+    const reserves = all.filter(p => p.starter === false);
+    const visibleStarters = tv.page(starters, window.innerHeight < 750 ? 5 : 6);
+    const visibleReserves = tv.page(reserves, window.innerHeight < 750 ? 1 : 2);
+    const selected = [...visibleStarters.items, ...visibleReserves.items];
+    const displayModel = {...model, league: {...model.league, [side]: selected}};
+    const roster = tv.roster(displayModel, side);
+    return roster
+      .replace('<b>Starters</b>', '<b>Starters ' + visibleStarters.current + '/' + visibleStarters.pages + '</b>')
+      .replace('<span>' + selected.length + ' players · ET</span>', '<span>' + all.length + ' total · rotating</span>')
+      .replace('<b>Bench & reserve</b>', '<b>Bench & reserve</b>');
+  }
+
+  function relevantInjuries(model) {
+    const league = {...model.league, allPlayers: []};
+    return tv.injuries({...model, league});
+  }
+
   function overview(model) {
-    const events = tv.page(model.events || [], 5).items;
-    return '<div class="led-overview">' + tv.roster(model, 'own') + '<div class="led-plots">' + momentum(model) + stock(model) + '</div>' + tv.roster(model, 'opponent') + '<div class="led-support"><div class="led-injury-compact">' + tv.injuries(model) + '</div>' + tv.feed({...model, events}) + '</div></div>';
+    const events = tv.page(model.events || [], 4).items;
+    return '<div class="led-overview">' + readableRoster(model, 'own') + '<div class="led-plots">' + momentum(model) + stock(model) + '</div>' + readableRoster(model, 'opponent') + '<div class="led-support"><div class="led-injury-compact">' + relevantInjuries(model) + '</div>' + tv.feed({...model, events}) + '</div></div>';
   }
 
   function fantasyStrip(model) {
@@ -128,6 +150,14 @@
     if (event.detail?.paired) document.getElementById('pairPanel')?.classList.add('hidden');
   });
 
-  window.FantasyLED = {overview, momentum, stock, legend, fantasyStrip, celebrateOwnScore};
+  // Refresh layout-only paging between provider updates, without changing any
+  // league selections or remote pairing. Do not spin renders in other scenes.
+  if (typeof window.setInterval === 'function') window.setInterval(() => {
+    const model = app.model();
+    if (!model.loading && model.league?.ready && !model.ui?.playerId &&
+        ['overview', 'matchups'].includes(model.ui?.view)) app.render();
+  }, 15000);
+
+  window.FantasyLED = {overview, momentum, stock, legend, fantasyStrip, celebrateOwnScore, readableRoster};
   app.render();
 })();
