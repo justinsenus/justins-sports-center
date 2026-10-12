@@ -391,7 +391,7 @@
     if(!photoCache.has(u)){
       const img=new Image();
       photoCache.set(u,img);
-      img.onload=draw;img.onerror=()=>{photoCache.delete(u)};
+      img.onload=draw;img.onerror=()=>{photoCache.set(u,null)};
       img.src=u;
     }
     const image=photoCache.get(u);
@@ -557,6 +557,17 @@
     draw();
   }
   $('nativeSize')?.addEventListener('change',e=>pick(e.target.value));
+  const kiosk=$('nativeKiosk'),exit=$('nativeExit');
+  function setKiosk(enabled){
+    document.body.classList.toggle('native-kiosk',Boolean(enabled));
+    kiosk?.setAttribute('aria-pressed',String(Boolean(enabled)));
+    if(kiosk)kiosk.textContent=enabled?'LED screen active':'LED screen only';
+  }
+  kiosk?.addEventListener('click',()=>setKiosk(!document.body.classList.contains('native-kiosk')));
+  exit?.addEventListener('click',()=>setKiosk(false));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&document.body.classList.contains('native-kiosk'))setKiosk(false);
+  });
   $('nativePause')?.addEventListener('click',()=>{
     auto=!auto;manualScene=Math.floor((now()-lastSceneAt)/10000)%3;lastSceneAt=now();
     $('nativePause').textContent=auto?'Pause rotation':'Resume rotation';draw();
