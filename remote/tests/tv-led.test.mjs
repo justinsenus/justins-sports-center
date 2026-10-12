@@ -23,12 +23,14 @@ for (const script of ['soft-glass.js', 'tv-presentation.js', 'tv-led.js']) vm.ru
 const led = context.window.FantasyLED;
 const overview = element('workspace').innerHTML;
 assert.ok(overview.includes('led-overview') && overview.includes('led-support'), 'The additional TV composes the reference panel arrangement');
-assert.equal((overview.match(/data-tv-player=/g) || []).length, 38, 'Both complete rosters, including every reserve, remain available');
+assert.equal((overview.match(/data-tv-player=/g) || []).length, 16, 'The TV shows eight larger rows on each side instead of cramming 38 at once');
+assert.ok(overview.includes('18 total · rotating') && overview.includes('20 total · rotating'), 'Both complete rosters remain accessible through rotating pages');
+assert.ok(overview.includes('Starters 1/2'), 'Starter paging is visibly marked');
 assert.ok(overview.includes('<b>0.0</b>'), 'A reported zero remains an actual score');
 const stock = led.stock(model);
 for (const team of teams) assert.ok(stock.includes(team.name) && stock.includes(team.teamColor), 'Every league team keeps its own stock color');
 assert.ok(stock.includes('-2.0') && stock.includes('12 teams'), 'Negative points remain on the all-team chart');
-assert.equal((overview.match(/class="tv-feed-row"/g) || []).length, 5, 'League scoring displays five rotating scoring plays');
+assert.equal((overview.match(/class="tv-feed-row"/g) || []).length, 4, 'League scoring displays four larger scoring plays');
 assert.ok(element('scoreStrips').innerHTML.includes('led-bottom-scores') && element('scoreStrips').innerHTML.includes('tv-fantasy-strip') && element('scoreStrips').innerHTML.includes('tv-nfl-strip'), 'Fantasy matchups and NFL games both stay at the bottom');
 assert.ok(stock.includes('top 5'), 'League stock retains every chart series but shows five ranked names at a time');
 assert.equal((led.fantasyStrip(model).match(/class="tv-strip-matchup"/g) || []).length, 2, 'Wide displays show two complete fantasy matchups');
