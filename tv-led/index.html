@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#020817">
+  <title>Justin’s Fantasy Scoreboard · LED TV</title>
+  <meta name="description" content="A live LED fantasy football scoreboard for Sleeper and ESPN. Connect another television to the same HP, iPad, or iPhone controller.">
+  <link rel="preload" href="../remote/fonts/scoreboard-led.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="../remote/soft-glass.css?v=6">
+  <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
+  <link rel="stylesheet" href="../remote/player-details.css?v=2">
+  <link rel="stylesheet" href="../remote/tv-led.css?v=1">
+</head>
+<body data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
+  <div class="glass-shell">
+    <header class="glass-header">
+      <div class="header-left"><span id="tvContext" class="header-week">Sleeper</span><span id="weekLabel" class="header-week">Week —</span></div>
+      <img id="headerMascot" class="header-mascot" src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+      <div class="header-right"><div class="remote-indicator"><span id="remoteStatus" role="status">Connecting…</span></div><button id="remoteToggle" class="tv-pair-code" type="button" aria-label="Open TV pairing">Pair TV</button><button id="ledFullscreen" class="led-screen-tool" type="button" aria-label="Enter fullscreen" title="Fullscreen">⛶</button></div>
+    </header>
+    <main class="glass-main">
+      <section id="matchupHero" aria-label="Matchup scores"><div class="glass-panel loading-state">Connecting your leagues…</div></section>
+      <section id="workspace" aria-label="Fantasy LED scoreboard"></section>
+      <section id="scoreStrips" aria-label="Live NFL scores"></section>
+    </main>
+    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="led-view-label">LED TV · Eastern time</span><span id="lastSync">Waiting for providers</span></footer>
+  </div>
+  <aside id="playerDrawer" class="player-drawer" aria-label="Player stats" hidden></aside>
+  <section id="pairPanel" class="pair-panel tv-pair" aria-label="Connect this LED TV">
+    <img src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot">
+    <h1>Connect this TV.</h1>
+    <p>Open the controller on your HP, iPad, or iPhone and enter this code.</p>
+    <strong id="pairDisplay" class="pair-display">Starting…</strong>
+    <p id="pairAddress" class="pair-address"></p>
+    <form id="pairForm" class="led-join-form">
+      <label for="pairInput">Add to an existing TV</label>
+      <p>Enter the pairing code from your current TV or controller to show the same selections on both TVs.</p>
+      <div><input id="pairInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="ABCD 2345" required aria-describedby="pairError"><button id="pairSubmit" type="submit">Join existing TV</button></div>
+    </form>
+    <p id="pairError" role="status"></p>
+    <div class="pair-actions"><button id="newRoom" type="button">New pairing code</button><button id="watchLocal" class="quiet-button" type="button">Watch while I pair</button></div>
+    <a class="led-original-link" href="../tv/">Original TV view ↗</a>
+  </section>
+  <script src="../patriots-fantasy-touch/source-catalog.js?v=2"></script>
+  <script src="../remote/config.js?v=1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.js" async></script>
+  <script src="../remote/projections.js?v=2" defer></script>
+  <script src="../patriots-fantasy-touch/remote-app.js?v=15" defer></script>
+  <script src="../remote/dom-patch.js?v=1" defer></script>
+  <script src="../remote/chart-timeline.js?v=1" defer></script>
+  <script src="../remote/soft-glass.js?v=9" defer></script>
+  <script src="../remote/tv-presentation.js?v=11" defer></script>
+  <script src="../remote/player-details.js?v=9" defer></script>
+  <script src="../remote/tv-led.js?v=1" defer></script>
+  <script src="../remote/session.js?v=2" defer></script>
+</body>
+</html>

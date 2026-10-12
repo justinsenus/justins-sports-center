@@ -1,0 +1,350 @@
+@font-face {
+  font-family: "Justin Scoreboard LED";
+  src: url("fonts/scoreboard-led.woff") format("woff");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* This sheet is scoped to the additional display. Shared data and navigation
+   still come from the same TV, player-detail, and session components. */
+body[data-screen="tv"][data-tv-style="led"] {
+  --bg: #020612;
+  --surface: #030b20;
+  --border: #2258ed;
+  --muted: #83a5d5;
+  --text: #dbf4ff;
+  --led-blue: #2f69ff;
+  --led-cyan: #92e4ff;
+  --led-font: "Justin Scoreboard LED", "Courier New", monospace;
+  --led-gap: clamp(5px, .5vw, 10px);
+  color: var(--text);
+  background: #020612;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+}
+body[data-tv-style="led"] .glass-shell {
+  width: 100%;
+  max-width: none;
+  height: var(--tv-height, 100vh);
+  padding: clamp(8px, .8vw, 18px);
+  gap: 0;
+  background-image: radial-gradient(circle, #1c2946 0.6px, transparent 1px);
+  background-size: 4px 4px;
+  border: 3px solid #070e23;
+  box-shadow: inset 0 0 30px #000c;
+}
+body[data-tv-style="led"] .glass-header {
+  height: clamp(52px, 7vh, 85px);
+  min-height: clamp(52px, 7vh, 85px);
+  grid-template-columns: 1fr 150px 1fr;
+  margin: 0;
+  padding: 0 8px;
+  z-index: 3;
+}
+body[data-tv-style="led"] .header-mascot {
+  width: clamp(106px, 12vh, 155px);
+  height: clamp(106px, 12vh, 155px);
+  margin-top: 4px;
+  filter: saturate(1.35) brightness(1.15) drop-shadow(0 0 4px #2e66ff99);
+  -webkit-mask-image: radial-gradient(circle, #000 1.2px, transparent 1.6px);
+  mask-image: radial-gradient(circle, #000 1.2px, transparent 1.6px);
+  -webkit-mask-size: 3.4px 3.4px;
+  mask-size: 3.4px 3.4px;
+}
+body[data-tv-style="led"] .header-week {
+  color: #b6edff;
+  font: 500 clamp(18px, 1.6vw, 30px)/1.1 var(--led-font);
+  text-transform: uppercase;
+  text-shadow: 0 0 7px #377dff77;
+}
+body[data-tv-style="led"] #weekLabel { color: #548fff; }
+body[data-tv-style="led"] .header-right { gap: 9px; }
+body[data-tv-style="led"] #remoteStatus { font-size: clamp(9px, .65vw, 13px); color: #849ecc; }
+body[data-tv-style="led"] #remoteStatus[data-connected="true"] { color: #95e7bd; }
+body[data-tv-style="led"] .tv-pair-code,
+body[data-tv-style="led"] .led-screen-tool {
+  color: #95b7ea;
+  border: 1px dotted #3464b4;
+  border-radius: 2px;
+  background: #050e2299;
+  padding: 6px 8px;
+  min-height: 28px;
+  font: 12px/1.2 "Courier New", monospace;
+}
+body[data-tv-style="led"] .led-screen-tool { font-size: 20px; min-width: 30px; }
+body[data-tv-style="led"] .glass-main { gap: var(--led-gap); }
+body[data-tv-style="led"] .glass-panel,
+body[data-tv-style="led"] .game-card,
+body[data-tv-style="led"] .tv-matchup,
+body[data-tv-style="led"] .detail-stat-grid > div,
+body[data-tv-style="led"] .player-health > div,
+body[data-tv-style="led"] .player-projection-summary > div,
+body[data-tv-style="led"] .player-headlines article {
+  background-color: #03091a;
+  background-image: radial-gradient(circle, #17274c 0.65px, transparent 1px);
+  background-size: 4px 4px;
+  border: 2px dotted var(--led-blue);
+  border-radius: 3px;
+  box-shadow: inset 0 0 12px #153c880e, 0 0 4px #2763ff33;
+}
+body[data-tv-style="led"] .tv-score-band {
+  height: clamp(128px, 16vh, 184px);
+  margin: 0;
+  padding: 16px 18px 9px;
+  grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr);
+  gap: 7px 16px;
+}
+body[data-tv-style="led"] .score-team h1 {
+  font: 500 clamp(21px, 2.1vw, 42px)/1.08 var(--led-font);
+  color: #bceeff;
+  text-shadow: 0 0 9px #56c7ff55;
+  letter-spacing: -.35px;
+}
+body[data-tv-style="led"] .score-team small {
+  color: #afcaec;
+  font: clamp(15px, 1.1vw, 23px)/1.1 var(--led-font);
+}
+body[data-tv-style="led"] .score-number > strong {
+  font: 500 clamp(66px, 6.5vw, 128px)/.95 var(--led-font);
+  letter-spacing: -2px;
+  color: #bcf3ff;
+  text-shadow: 0 0 8px #52bdfc66, 0 0 20px #3379ff26;
+}
+body[data-tv-style="led"] .score-vs {
+  font: clamp(17px, 1.7vw, 30px)/1 var(--led-font);
+  text-transform: uppercase;
+  color: #aac1ff;
+  align-self: end;
+  padding-bottom: 7px;
+}
+body[data-tv-style="led"] .team-dot {
+  box-shadow: 0 0 6px var(--team-color), 0 0 0 1px #ffffff25;
+  background-image: radial-gradient(circle, #0008 0.35px, transparent 0.75px);
+  background-size: 2px 2px;
+}
+body[data-tv-style="led"] .tv-projection-labels { margin-bottom: 8px; }
+body[data-tv-style="led"] .tv-projection-labels > span {
+  color: #a5bee8;
+  font-size: clamp(12px, .9vw, 18px);
+}
+body[data-tv-style="led"] .tv-projection-labels > span b {
+  font: clamp(17px, 1.4vw, 29px)/1 var(--led-font);
+  text-shadow: 0 0 5px currentColor;
+}
+body[data-tv-style="led"] .tv-projection-labels > small { color: #6c8bbd; }
+body[data-tv-style="led"] .tv-projection-line { height: 5px; border-radius: 0; }
+body[data-tv-style="led"] .tv-projection-line > i {
+  border-radius: 0;
+  box-shadow: 0 0 8px var(--home-color);
+  background-image: radial-gradient(circle, #000b .7px, transparent 1px);
+  background-size: 3px 3px;
+}
+body[data-tv-style="led"] .tv-projection-line > i:last-child { box-shadow: 0 0 8px var(--away-color); }
+
+/* Starters flank the wider score plots. Reports, fantasy totals, and scoring
+   events span the bottom, matching the reference board's arrangement. */
+body[data-tv-style="led"] .led-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 2.7fr) minmax(0, 1.15fr);
+  grid-template-rows: minmax(0, 1fr) clamp(118px, 16vh, 190px);
+  height: 100%;
+  min-height: 0;
+  gap: var(--led-gap);
+}
+body[data-tv-style="led"] .led-plots {
+  display: grid;
+  grid-template-rows: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: var(--led-gap);
+  min-height: 0;
+  min-width: 0;
+}
+body[data-tv-style="led"] .led-support {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr);
+  gap: var(--led-gap);
+  min-height: 0;
+}
+body[data-tv-style="led"] .led-support-right {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--led-gap);
+  min-height: 0;
+  min-width: 0;
+}
+body[data-tv-style="led"] .tv-panel-title,
+body[data-tv-style="led"] .tv-roster .tv-panel-title {
+  min-height: clamp(26px, 3.2vh, 36px);
+  padding: 5px 10px;
+  border-bottom: 1px dotted #194691;
+}
+body[data-tv-style="led"] .tv-panel-title h2,
+body[data-tv-style="led"] .panel-title h2,
+body[data-tv-style="led"] .tv-strip-label h2 {
+  font: 500 clamp(14px, 1vw, 22px)/1.1 var(--led-font);
+  color: #70c2ff;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  text-shadow: 0 0 6px #3588ff66;
+}
+body[data-tv-style="led"] .tv-panel-title > span { color: #6e97d2; font-size: clamp(9px, .6vw, 13px); }
+body[data-tv-style="led"] .tv-roster { border-top: 2px dotted var(--led-blue); }
+body[data-tv-style="led"] .tv-roster .tv-panel-title h2 { font-size: clamp(13px, .92vw, 20px); }
+body[data-tv-style="led"] .tv-roster .tv-panel-title > span { display: none; }
+body[data-tv-style="led"] .tv-roster-body { padding: 0 7px 4px; }
+body[data-tv-style="led"] .tv-roster-label { color: #638aca; font-size: clamp(9px, .65vw, 13px); }
+body[data-tv-style="led"] .tv-roster-label b { color: #99beef; text-transform: uppercase; }
+body[data-tv-style="led"] .tv-roster .tv-roster-row {
+  grid-template-columns: clamp(26px, 2.3vw, 44px) minmax(0, 1fr) clamp(47px, 4vw, 75px);
+  gap: 7px;
+  padding: 1px 2px;
+  border-top: 1px dotted #152952;
+  background: transparent;
+}
+body[data-tv-style="led"] .tv-player-photo {
+  width: 100%;
+  height: min(var(--tv-row-height, 38px), 44px);
+  border-radius: 2px;
+  background: #0d1730;
+}
+body[data-tv-style="led"] .player-face { border-color: var(--team-color, #3166ce); border-radius: 2px; background: #0e1931; }
+body[data-tv-style="led"] .tv-player-photo .player-face { border-color: var(--team-color); border-radius: 2px; }
+body[data-tv-style="led"] .tv-player-photo > small { color: #8bd8ff; background: #020918ee; font-family: "Courier New", monospace; }
+body[data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line > b {
+  font: 500 clamp(12px, calc(var(--tv-row-height, 34px) * .5), 22px)/1.1 var(--led-font);
+  color: #dbf4ff;
+  letter-spacing: -.3px;
+  text-shadow: 0 0 3px #89c5ff22;
+}
+body[data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name > .tv-player-game {
+  color: #7f9dc5;
+  font: clamp(8px, calc(var(--tv-row-height, 34px) * .28), 13px)/1.15 "Arial Narrow", Arial, sans-serif;
+}
+body[data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-game.live { color: #5fffb2; }
+body[data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-score > b {
+  color: #b6efff;
+  font: 500 clamp(17px, calc(var(--tv-row-height, 34px) * .64), 30px)/1 var(--led-font);
+  letter-spacing: -.5px;
+  text-shadow: 0 0 4px #57b6ff55;
+}
+body[data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-projection { color: var(--team-color); font-size: clamp(8px, calc(var(--tv-row-height, 34px) * .27), 13px); }
+body[data-tv-style="led"] .tv-bench-row { border-radius: 0; border: 0; }
+body[data-tv-style="led"] .tv-injury-badge { border-color: #ffd538; background: #f7b90012; color: #ffe062; border-radius: 1px; box-shadow: 0 0 5px #ffc93322; }
+body[data-tv-style="led"] .tv-chart-legend { padding: 6px 10px 0; }
+body[data-tv-style="led"] .tv-chart-legend b { font: clamp(11px, .8vw, 16px)/1.1 var(--led-font); color: #c4dfff; }
+body[data-tv-style="led"] .tv-chart-legend strong { font: clamp(20px, 1.6vw, 31px)/1 var(--led-font); color: var(--team-color, #b5eaff); }
+body[data-tv-style="led"] .tv-momentum .tv-chart-legend > span:first-child strong { color: var(--orange); }
+body[data-tv-style="led"] .tv-momentum .tv-chart-legend > span:last-child strong { color: #9ddaff; }
+body[data-tv-style="led"] .chart-range-controls { padding: 3px 10px; }
+body[data-tv-style="led"] [data-chart-range] { border-color: #2354a3; background: #050e24; color: #83a9e1; border-radius: 2px; }
+body[data-tv-style="led"] [data-chart-range].active { border-color: #387bff; color: #bce7ff; background: #16387166; }
+body[data-tv-style="led"] .glass-chart-grid path { stroke: #2352a94d; stroke-dasharray: 1 5; }
+body[data-tv-style="led"] .glass-chart-grid text,
+body[data-tv-style="led"] .glass-chart-times text { fill: #75a9f9; font-family: var(--led-font); font-size: 16px; }
+body[data-tv-style="led"] .glass-series > path { stroke-width: 2.6; stroke-dasharray: 1 3; filter: drop-shadow(0 0 2px currentColor); }
+body[data-tv-style="led"] .glass-series > circle { filter: drop-shadow(0 0 3px currentColor); }
+body[data-tv-style="led"] .chart-end-label { font-family: var(--led-font); font-size: 21px; }
+body[data-tv-style="led"] .chart-caption { color: #6f91c1; font-size: clamp(8px, .6vw, 12px); padding-bottom: 4px; }
+body[data-tv-style="led"] .tv-stock-body { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+body[data-tv-style="led"] .tv-stock-body > .tv-chart-legend { padding: 4px 8px 5px 0; gap: 4px 10px; }
+body[data-tv-style="led"] .tv-stock-body .tv-chart-legend b { font-size: clamp(10px, .72vw, 15px); }
+body[data-tv-style="led"] .tv-stock-body .tv-chart-legend strong { font-size: clamp(13px, .9vw, 19px); color: #bceaff; }
+body[data-tv-style="led"] .tv-injuries { height: 100%; min-height: 0; }
+body[data-tv-style="led"] .tv-injury-list { padding: 3px 10px 5px; }
+body[data-tv-style="led"] .tv-injury-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.5fr);
+  gap: 2px 10px;
+  border-bottom: 1px dotted #1d3970;
+  padding: 3px 0;
+}
+body[data-tv-style="led"] .tv-injury-row > div { gap: 8px; }
+body[data-tv-style="led"] .tv-injury-row b { font: clamp(12px, .95vw, 19px)/1.1 var(--led-font); }
+body[data-tv-style="led"] .tv-injury-row strong { color: #ffc948; font: clamp(11px, .8vw, 17px)/1 var(--led-font); }
+body[data-tv-style="led"] .tv-injury-row p { color: #adc2e7; font-size: clamp(10px, .72vw, 14px); margin: 0; line-height: 1.15; }
+body[data-tv-style="led"] .tv-injury-row > small { grid-column: 2; color: #6d88b3; font-size: clamp(8px, .55vw, 11px); }
+body[data-tv-style="led"] .led-support-right .tv-fantasy-strip { height: 100%; margin: 0; min-height: 0; }
+body[data-tv-style="led"] .led-support .tv-strip-cards { grid-template-columns: repeat(var(--led-matchups, 1), minmax(0, 1fr)); gap: 8px; }
+body[data-tv-style="led"] .tv-strip-label { width: clamp(100px, 9vw, 168px); padding: 5px 9px; border-right: 1px dotted #3264c3; }
+body[data-tv-style="led"] .tv-strip-label h2 { font-size: clamp(12px, .88vw, 19px); }
+body[data-tv-style="led"] .tv-strip-label > span { color: #759ed7; font-size: clamp(9px, .65vw, 13px); }
+body[data-tv-style="led"] .tv-strip-matchup { border-right: 1px dotted #3264c3; }
+body[data-tv-style="led"] .tv-strip-matchup b { font: clamp(12px, .82vw, 17px)/1.1 var(--led-font); }
+body[data-tv-style="led"] .tv-strip-matchup strong { font: clamp(18px, 1.3vw, 26px)/1 var(--led-font); text-shadow: 0 0 4px currentColor; }
+body[data-tv-style="led"] .led-support .tv-feed { display: grid; grid-template-columns: clamp(100px, 9vw, 168px) minmax(0, 1fr); }
+body[data-tv-style="led"] .led-support .tv-feed .tv-panel-title { padding: 5px 9px; border-bottom: 0; border-right: 1px dotted #3264c3; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; }
+body[data-tv-style="led"] .led-support .tv-feed .tv-panel-title h2 { font-size: clamp(12px, .85vw, 18px); white-space: normal; }
+body[data-tv-style="led"] .led-support .tv-feed-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 3px 9px; }
+body[data-tv-style="led"] .led-support .tv-feed-row { height: 100%; border: 0; gap: 7px; padding: 1px 0; }
+body[data-tv-style="led"] .led-support .tv-feed-row .player-face { height: clamp(24px, 3.2vh, 39px); width: clamp(24px, 3.2vh, 39px); border: 1px solid var(--team-color); box-shadow: 0 0 4px var(--team-color); }
+body[data-tv-style="led"] .tv-feed-name > b { font: clamp(11px, .82vw, 17px)/1.1 var(--led-font); }
+body[data-tv-style="led"] .tv-feed-name > small { color: #8ca4cd; font-size: clamp(8px, .56vw, 12px); }
+body[data-tv-style="led"] .tv-feed-row > strong { color: #bae8ff; font: clamp(17px, 1.2vw, 25px)/1 var(--led-font); }
+body[data-tv-style="led"] .tv-feed-row > strong > small { font: clamp(8px, .6vw, 12px)/1.1 Arial, sans-serif; }
+body[data-tv-style="led"] .led-nfl-only { grid-template-rows: minmax(0, 1fr); height: clamp(63px, 8.5vh, 98px); }
+body[data-tv-style="led"][data-led-scene="home"] #scoreStrips { flex: 0 0 auto; margin-top: 0; }
+body[data-tv-style="led"] .tv-score-strips { gap: var(--led-gap); }
+body[data-tv-style="led"] .tv-nfl-game { padding: 5px 9px; border-right: 1px dotted #2a61c3; }
+body[data-tv-style="led"] .tv-nfl-game > small { color: #92b4e6; font-size: clamp(9px, .68vw, 14px); }
+body[data-tv-style="led"] .tv-nfl-game b,
+body[data-tv-style="led"] .tv-nfl-game strong { font: clamp(15px, 1.1vw, 23px)/1 var(--led-font); }
+body[data-tv-style="led"] .tv-nfl-game img { height: clamp(16px, 2.2vh, 27px); width: clamp(16px, 2.2vh, 27px); }
+body[data-tv-style="led"] .tv-nfl-game.is-live > small { color: #54edac; }
+body[data-tv-style="led"] .glass-footer { min-height: 16px; padding: 3px 2px 0; font-size: clamp(8px, .6vw, 12px); color: #5674a5; }
+
+/* Controller-selected scenes retain their complete content and the LED finish. */
+body[data-tv-style="led"] .tv-profile { background-color: #03091a; }
+body[data-tv-style="led"] .tv-profile-identity h2 { font-family: var(--led-font); color: #c6efff; text-shadow: 0 0 5px #438aff55; }
+body[data-tv-style="led"] .tv-profile-points > b,
+body[data-tv-style="led"] .detail-stat-grid b,
+body[data-tv-style="led"] .player-projection-summary b { font-family: var(--led-font); font-weight: 500; }
+body[data-tv-style="led"] .player-detail-tabs > span,
+body[data-tv-style="led"] .player-detail-tabs > button { background: #04102b; border: 1px dotted #2c62c4; border-radius: 2px; }
+body[data-tv-style="led"] .player-detail-tabs .active { color: #a9e6ff; border-color: #5897ff; }
+body[data-tv-style="led"] .tv-league-full .tv-matchup-team > b,
+body[data-tv-style="led"] .tv-league-full .tv-matchup-team > strong { font-family: var(--led-font); font-weight: 500; }
+body[data-tv-style="led"] .pair-panel { background: #02091b; font-family: Arial, sans-serif; max-height: 100vh; overflow-y: auto; }
+body[data-tv-style="led"] .pair-panel h1 { font: clamp(26px, 3vw, 44px)/1.1 var(--led-font); color: #b8e9ff; }
+body[data-tv-style="led"] .pair-display { font-family: var(--led-font); color: #c2eeff; text-shadow: 0 0 7px #4d9aff; letter-spacing: 4px; }
+body[data-tv-style="led"] .pair-panel > img { height: 95px; width: 95px; object-fit: contain; }
+body[data-tv-style="led"] .pair-panel button { background: #133268; border-color: #3d79e4; border-radius: 3px; }
+body[data-tv-style="led"] .led-join-form { width: min(540px, 90vw); margin: 8px auto 0; padding: 16px; border: 1px dotted #2d66ca; border-radius: 3px; background: #07132a; text-align: left; }
+body[data-tv-style="led"] .led-join-form label { font-weight: 700; color: #abd6ff; font-size: 16px; }
+body[data-tv-style="led"] .led-join-form p { margin: 7px 0 12px; font-size: 13px; line-height: 1.45; color: #8ca7cd; }
+body[data-tv-style="led"] .led-join-form > div { display: flex; gap: 10px; }
+body[data-tv-style="led"] .led-join-form input { min-width: 0; width: 45%; color: #e2f1ff; background: #020817; border: 1px solid #3269be; border-radius: 3px; padding: 8px 10px; font: 18px/1.2 monospace; text-transform: uppercase; letter-spacing: 2px; }
+body[data-tv-style="led"] .led-join-form button { flex: 1; font-size: 14px; padding: 10px; }
+body[data-tv-style="led"] .led-original-link { display: block; margin: 14px 0 0; font-size: 13px; color: #6f9ad7; }
+body[data-tv-style="led"] .pair-actions { display: flex; gap: 10px; justify-content: center; }
+body[data-tv-style="led"] button:focus-visible,
+body[data-tv-style="led"] a:focus-visible,
+body[data-tv-style="led"] input:focus-visible { outline-color: #9ddbff; }
+
+@media (max-height: 760px) {
+  body[data-screen="tv"][data-tv-style="led"] .glass-header { height: 46px; min-height: 46px; }
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot { width: 96px; height: 96px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-score-band { height: 108px; padding: 8px 13px 7px; }
+  body[data-screen="tv"][data-tv-style="led"] .score-number > strong { font-size: clamp(54px, 6vw, 80px); }
+  body[data-screen="tv"][data-tv-style="led"] .led-overview { grid-template-rows: minmax(0, 1fr) 112px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-panel-title { min-height: 24px; padding: 3px 7px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-panel-title h2 { font-size: 14px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-injury-row > small { display: none; }
+  body[data-screen="tv"][data-tv-style="led"] .led-nfl-only { height: 63px; }
+  body[data-screen="tv"][data-tv-style="led"] .chart-caption { min-height: 13px; font-size: 8px; }
+  body[data-screen="tv"][data-tv-style="led"] .led-support .tv-feed-row .player-face { height: 25px; width: 25px; }
+}
+@media (max-width: 1100px) {
+  body[data-screen="tv"][data-tv-style="led"] .header-right .remote-indicator { display: none; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row { grid-template-columns: 25px minmax(0, 1fr) 43px; gap: 4px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-stock-body { grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); }
+  body[data-screen="tv"][data-tv-style="led"] .tv-stock-body > .tv-chart-legend { column-gap: 4px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend b { font-family: Arial, sans-serif; font-size: 9px; }
+  body[data-screen="tv"][data-tv-style="led"] .tv-injury-row { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+  body[data-screen="tv"][data-tv-style="led"] .led-support .tv-feed-list { gap: 6px; }
+  body[data-screen="tv"][data-tv-style="led"] .led-support .tv-feed-row { gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-tv-style="led"] *, body[data-tv-style="led"] *::before, body[data-tv-style="led"] *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

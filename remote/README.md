@@ -9,6 +9,24 @@
 
 The TV keeps its own provider refresh running when a controller disconnects. The session remembers the current league, player, game, matchup, and panel. Reconnecting or refreshing restores that selection. TV and controller connection status is separate from provider feed status.
 
+## Additional LED TV
+
+`/tv-led/` is the second display design: self-hosted dot-matrix lettering,
+blue LED panel borders, the existing mascot, full rosters, matchup and league
+plots, injury reports, scoring events, fantasy totals, and current NFL scores.
+The controller footer links to both designs.
+
+To add a second television to the same controller, open `/tv-led/`, choose
+**Pair**, and enter the code shown on the existing TV or controller under
+**Add to an existing TV**. All TVs in that room receive the same league,
+player, tab, matchup, and chart-range selections. The original and LED routes
+also reuse the same pairing when opened in the same browser. Provider data
+continues to refresh independently on each display.
+
+The LED font needs no third-party font service. Its original glyph source is
+`scripts/build-led-font.py`; regenerate with `python3 scripts/build-led-font.py`
+after installing `fonttools`. The generated font and glyph designs use CC0.
+
 ## Realtime service
 
 The `fantasy-remote` Supabase Edge Function handles creating, joining, resuming, and commanding rooms. It authenticates existing rooms with a random 256-bit capability. The pairing code permits joining; create/join operations are rate limited. Room state is committed with a monotonically increasing revision and then sent over Supabase Realtime Broadcast. Browsers use a small native WebSocket implementation of the documented 1.0.0 protocol. They send selections, acknowledgements, and heartbeats, not video.
