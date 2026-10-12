@@ -1,0 +1,146 @@
+/* LED TV visibility refresh — scoped to /tv-led/ only. Keeps touch and /tv/ unchanged. */
+body[data-screen="tv"][data-tv-style="led"] .glass-shell { overflow: hidden; }
+body[data-screen="tv"][data-tv-style="led"] .glass-header {
+  height: clamp(64px, 8vh, 88px);
+  min-height: clamp(64px, 8vh, 88px);
+  grid-template-columns: minmax(0,1fr) clamp(75px,7vw,120px) minmax(0,1fr);
+  align-items: center;
+  padding: 0 10px;
+}
+body[data-screen="tv"][data-tv-style="led"] .header-mascot {
+  display: block;
+  width: clamp(58px, 6.8vh, 84px);
+  height: clamp(58px, 6.8vh, 84px);
+  max-height: 96%;
+  max-width: 100%;
+  align-self: center;
+  justify-self: center;
+  margin: 0;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+body[data-screen="tv"][data-tv-style="led"] .glass-main { min-height: 0; }
+body[data-screen="tv"][data-tv-style="led"] .header-left,
+body[data-screen="tv"][data-tv-style="led"] .header-right { min-width:0; }
+body[data-screen="tv"][data-tv-style="led"] .header-right { flex-wrap: nowrap; justify-content: flex-end; }
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band {
+  height: clamp(116px, 15.2vh, 164px);
+  padding: 12px 17px 9px;
+  grid-template-columns: minmax(0,1fr) clamp(35px, 3.5vw, 60px) minmax(0,1fr);
+}
+body[data-screen="tv"][data-tv-style="led"] .score-team h1 {
+  font-size: clamp(25px, 2.15vw, 43px);
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+body[data-screen="tv"][data-tv-style="led"] .score-number > strong {
+  font-size: clamp(69px, 6.2vw, 120px);
+  line-height:.9;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-overview {
+  grid-template-columns: minmax(0,1.27fr) minmax(0,2.46fr) minmax(0,1.27fr);
+  grid-template-rows: minmax(0,1fr) clamp(108px,13.5vh,152px);
+  gap: clamp(5px,.55vw,10px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row {
+  grid-template-columns: clamp(30px,2.65vw,48px) minmax(0,1fr) clamp(56px,4.45vw,82px);
+  gap: clamp(4px,.45vw,9px);
+  min-width:0;
+  padding: 1px 4px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line {
+  min-width:0;
+  max-width:100%;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line > b {
+  font-size: clamp(14px, calc(var(--tv-row-height,38px) * .57), 25px);
+  line-height: 1;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-player-name { gap:1px; min-width:0; }
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-game {
+  display:block;
+  max-width:100%;
+  font-size: clamp(9px, calc(var(--tv-row-height,38px) * .29), 14px);
+  line-height:1.05;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-score > b {
+  font-size:clamp(20px, calc(var(--tv-row-height,38px) * .73), 34px);
+  line-height:1;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-player-photo {
+  height:min(var(--tv-row-height,38px),46px);
+  max-height:100%;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-projection {
+  font-size:clamp(9px, calc(var(--tv-row-height,38px) * .28), 14px);
+  line-height:1;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-panel-title h2 {
+  font-size: clamp(15px,1.05vw,23px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend strong {
+  font-size:clamp(14px,1.0vw,20px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-screen-tool.p25-action {
+  font: 700 clamp(11px,.8vw,15px)/1.1 Arial,sans-serif;
+  min-width: 76px;
+  white-space:nowrap;
+  border-color:#407de8;
+  color:#c0e8ff;
+  cursor:pointer;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-screen-tool.p25-action:hover { background:#173d82; }
+
+/* Pixel-accurate canvas dimensions, pixelated browser enlargement; LED optics are approximated. */
+#p25Overlay[hidden] { display:none!important; }
+#p25Overlay {
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#010510f2;
+  color:#ecf7ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(10px,3vw,32px);
+  overflow-y:auto;
+  font-family:Arial,sans-serif;
+}
+#p25Overlay .p25-card {
+  width:min(1040px,100%);
+  border:2px solid #2e6bda;
+  border-radius:12px;
+  background:#061124;
+  box-shadow:0 22px 80px #000b;
+  padding:clamp(13px,2vw,25px);
+}
+#p25Overlay .p25-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+#p25Overlay h2 {margin:0;font-size:clamp(20px,2vw,28px);}
+#p25Overlay .p25-close {cursor:pointer;background:#14264a;color:white;border:1px solid #5682c8;border-radius:6px;padding:9px 13px;font-size:18px;}
+#p25Overlay .p25-tabs {display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
+#p25Overlay .p25-tabs button {cursor:pointer;color:#b9daff;background:#0c2247;border:1px solid #2d5ba4;padding:10px 14px;border-radius:6px;font-weight:700;font-size:14px;}
+#p25Overlay .p25-tabs button[aria-pressed="true"] {background:#2164ce;color:white;border-color:#98cbff;}
+#p25Overlay .p25-frame {background:#010407;padding:clamp(8px,2vw,20px);border:8px solid #14233e;border-radius:5px;box-shadow:inset 0 0 20px #000;overflow:hidden;}
+#p25Canvas {display:block;width:100%;height:auto;aspect-ratio:2/1;image-rendering:pixelated;image-rendering:crisp-edges;background:#000;}
+#p25Overlay .p25-meta {margin:12px 0 3px;color:#acc2de;line-height:1.45;font-size:14px;}
+#p25Overlay .p25-note {margin:6px 0 0;color:#8eafda;font-size:12px;line-height:1.4;}
+@media(max-height:760px) {
+ body[data-screen="tv"][data-tv-style="led"] .glass-header {height:56px;min-height:56px;}
+ body[data-screen="tv"][data-tv-style="led"] .header-mascot {width:48px;height:48px;}
+ body[data-screen="tv"][data-tv-style="led"] .tv-score-band {height:105px;padding:8px 13px;}
+ body[data-screen="tv"][data-tv-style="led"] .led-overview {grid-template-rows:minmax(0,1fr) 104px;}
+}
+@media(max-width:1100px) {
+ body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row {grid-template-columns:26px minmax(0,1fr) 49px;gap:4px;}
+ body[data-screen="tv"][data-tv-style="led"] .led-screen-tool.p25-action {min-width:60px;padding:5px;}
+}
