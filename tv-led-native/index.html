@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../remote/tv-led.css?v=2">
   <link rel="stylesheet" href="../remote/tv-led-refinement.css?v=2">
   <link rel="stylesheet" href="../remote/tv-led-pro.css?v=1">
-  <link rel="stylesheet" href="../remote/tv-led-native.css?v=1">
+  <link rel="stylesheet" href="../remote/tv-led-native.css?v=2">
 </head>
 <body data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
   <div id="nativeApp">
@@ -28,23 +28,22 @@
     <div class="native-toolbar" aria-label="True LED simulator controls">
       <label for="nativeSize">Panel arrangement</label>
       <select id="nativeSize">
-        <option value="one">1 module · 128 × 64 · 12.6 × 6.3 in</option>
-        <option value="four" selected>2 × 2 · 256 × 128 · 25.2 × 12.6 in</option>
-        <option value="eight">4 × 2 · 512 × 128 · 50.4 × 12.6 in</option>
-        <option value="sixteen">4 × 4 · 512 × 256 · 50.4 × 25.2 in</option>
+        <option value="sixteen" selected>4 × 4 · 512 × 256 · 50.4 × 25.2 in</option>
+        <option value="twentyfour">6 × 4 · 768 × 256 · 75.6 × 25.2 in</option>
+        <option value="fortyeight">8 × 6 · 1024 × 384 · 100.8 × 37.8 in</option>
       </select>
       <button id="nativePause" type="button">Pause rotation</button>
       <button id="nativeNext" type="button">Next screen</button>
       <button id="nativeDemo" type="button" title="Local test only; does not change real scores">Test score animation</button>
-      <button id="nativePair" type="button">Pair controller</button>
+      <button id="nativePair" type="button">Connect / pair HP</button>
       <button id="nativeFull" type="button">Fullscreen</button>
-      <span id="nativeStatus" role="status">Live feed uses your existing fantasy dashboard and TV pairing.</span>
+      <span id="nativeStatus" role="status">Checking live feeds and controller connection…</span>
     </div>
     <section id="nativeStage" aria-label="True-resolution P2.5 LED simulator">
-      <canvas id="nativeCanvas" width="256" height="128" role="img" aria-label="256 by 128 LED-native pixel scoreboard"></canvas>
+      <canvas id="nativeCanvas" width="512" height="256" role="img" aria-label="512 by 256 LED-native pixel scoreboard"></canvas>
     </section>
-    <div id="nativeReadout" role="status">4 MODULES · 256 × 128 LED PIXELS · P2.5 · 640 × 320 MM</div>
-    <p class="native-notice"><b>This is a real pixel-count rendering, not a dot-pattern filter.</b> The canvas is drawn at the selected module resolution and enlarged using nearest-neighbor scaling, with no high-definition content behind it. For small panels, details rotate because they physically cannot fit together. The TV cannot reproduce real LED brightness, diode spacing, color calibration or viewing distance.</p>
+    <div id="nativeReadout" role="status">16 MODULES · 512 × 256 LED PIXELS · P2.5 · 1280 × 640 MM</div>
+    <p class="native-notice"><strong class="native-legend"><span class="native-chip lead">LEADING</span><span class="native-chip trail">TRAILING</span><span class="native-chip neutral">LIVE DATA / PREGAME</span></strong><br><b>This is a real pixel-count rendering, not a dot-pattern filter.</b> The canvas is drawn at the selected module resolution and enlarged using nearest-neighbor scaling, with no high-definition content behind it. All starters stay in view where physically possible; scoring, matchups, and NFL results scroll in LED-native pixels. The TV cannot reproduce real LED brightness, diode spacing, color calibration or viewing distance.</p>
   </div>
   <div class="glass-shell">
     <header class="glass-header">
@@ -88,6 +87,6 @@
 
 
   <script src="../remote/session.js?v=2" defer></script>
-  <script src="../remote/tv-led-native.js?v=1" defer></script>
+  <script src="../remote/tv-led-native.js?v=2" defer></script>
 </body>
 </html>
