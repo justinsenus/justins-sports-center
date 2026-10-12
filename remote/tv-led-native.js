@@ -6,13 +6,31 @@
   if (!ctx) return;
   const app = window.FantasyCenter;
   const sizes = {
-    sixteen:    {cols:4,rows:4,label:'16 MODULES · 512 × 256'},
-    twentyfour: {cols:4,rows:6,label:'24 MODULES · 512 × 384'}
+    twentyfour: {cols:6,rows:4,label:'24 MODULES · 768 × 256'}
   };
   const $ = id => document.getElementById(id);
-  let chosen = sizes.sixteen;
+  let chosen = sizes.twentyfour;
   let auto = true, manualScene = 0, lastSceneAt = Date.now();
   let demoUntil = 0, shakeUntil = 0, lastMeta = '';
+  let celebrationValue = 0;
+  // Transition points only on actual provider changes, never on a fresh first load.
+  const transitions=new Map();
+  function animatedPoints(key,raw) {
+    const n=Number(raw);
+    if(!Number.isFinite(n))return {value:0,delta:0,fraction:1,changed:false};
+    let entry=transitions.get(key);
+    if(!entry){entry={from:n,to:n,start:0,delta:0};transitions.set(key,entry);}
+    if(Math.abs(n-entry.to)>.001) {
+      const old=entry.to;
+      entry={from:old,to:n,start:now(),delta:n-old};
+      transitions.set(key,entry);
+    }
+    const progress=entry.start?Math.min(1,Math.max(0,(now()-entry.start)/1050)):1;
+    const ease=1-Math.pow(1-progress,3);
+    return {value:entry.from+(entry.to-entry.from)*ease,delta:entry.delta,
+      fraction:progress,changed:entry.start>0 && progress<1};
+  }
+  const scopeFor=m=>[m?.ui?.league||m?.league?.id||'sleeper',m?.league?.week||''].join(':');
   const baseline = new Map();
   const now = () => Date.now();
   const glyphs = {
@@ -171,71 +189,107 @@
     const key=[m.ui?.league||m.league.id||'',m.league.week||'',m.league.ownName||''].join('|');
     const prev=baseline.get(key);
     baseline.set(key,n);
-    if(prev!==undefined && n>prev+0.001)shakeUntil=now()+1050;
+    if(prev!==undefined && n>prev+.001){
+      shakeUntil=now()+1550;
+      celebrationValue=n-prev;
+    }
   }
+  function celebration(w) {
+    if(now()>=shakeUntil)return;
+    const time=now(),strength=(shakeUntil-time)/1550;
+    const cx=Math.floor(w/2);
+    // Pixel confetti and arcade jackpot rays stay INSIDE actual P2.5 resolution.
+    const colors=[ink.orange,ink.gold,ink.green,ink.white];
+    for(let i=0;i<45;i++){
+      const angle=i*2.3999,dist=23+(1-strength)*55+(i%5)*3;
+      const x=Math.round(cx+Math.cos(angle)*dist);
+      const y=Math.round(41+Math.sin(angle)*dist*.43);
+      if(x>1&&x<w-2&&y>12&&y<71)box(x,y,(i%3===0?3:2),2,colors[i%4]);
+    }
+    if(Math.floor(time/125)%2===0){
+      label('+'+number(celebrationValue),cx-25,2,ink.green,1,62);
+      box(3,73,w-6,2,ink.orange);
+    }
+  }
+
   const teamTint=(team,fallback)=>/^#[\da-f]{6}$/i.test(String(team||''))?team:fallback;
   function hero(m,w,h){
     const league=m?.league||{},isLive=Boolean(m?.started);
-    const mine=isLive?m?.ownActual:m?.ownFinish;
-    const theirs=isLive?m?.opponentActual:m?.opponentFinish;
-    const own=league.ownName||'MY TEAM',opp=league.opponentName||'OPPONENT';
-    const a=Number(mine),b=Number(theirs),valid=Number.isFinite(a)&&Number.isFinite(b);
-    const ownColor=isLive&&valid?(a>b?ink.green:a<b?ink.red:ink.orange):ink.orange;
-    const oppColor=isLive&&valid?(b>a?ink.green:b<a?ink.red:ink.blue):ink.blue;
-    const center=Math.floor(w/2),left=Math.max(12,Math.round(w*.09)),right=center+Math.max(65,Math.round(w*.085));
-    const labelSize=w>850?2:1,scoreSize=w>850?5:w>600?4:3;
-    label(own,left,21,ownColor,labelSize,center-left-57);
-    label(opp,right,21,oppColor,labelSize,w-right-9);
-    label(number(mine),left,40,ink.white,scoreSize,center-left-57);
-    label(number(theirs),right,40,ink.white,scoreSize,w-right-8);
-    // Size favors face legibility, while the gutters keep both scores outside its area.
-    const portrait=w>850?100:w>600?90:77;
-    drawMascot(center-portrait/2,11,portrait,portrait-7);
-    if(isLive && valid){
-      label(a>b?'LEADING':a<b?'TRAILING':'TIED',left,70,ownColor,1,88);
-      label(b>a?'LEADING':b<a?'TRAILING':'TIED',right,70,oppColor,1,88);
-    }else{
-      label('PROJECTED',left,70,ink.muted,1,90);
-      label('PROJECTED',right,70,ink.muted,1,90);
-    }
+    const ownName=league.ownName||'MY TEAM',oppName=league.opponentName||'OPPONENT';
+    const scope=scopeFor(m);
+    const a=animatedPoints(scope+'|hero-own',isLive?m?.ownActual:m?.ownFinish);
+    const b=animatedPoints(scope+'|hero-opp',isLive?m?.opponentActual:m?.opponentFinish);
+    const valid=Number.isFinite(a.value)&&Number.isFinite(b.value);
+    const ownColor=isLive&&valid?(a.value>b.value?ink.green:a.value<b.value?ink.red:ink.gold):ink.orange;
+    const oppColor=isLive&&valid?(b.value>a.value?ink.green:b.value<a.value?ink.red:ink.gold):ink.blue;
+    // Each side has 260 pixels; names and scores never collide with the center character.
+    const lx=17,rx=513,scoreSize=4;
+    label(short(ownName,37),lx,13,ink.orange,2,258);
+    label(short(oppName,37),rx,13,ink.blue,2,244);
+    label(number(a.value),lx+2,33,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize,245);
+    label(number(b.value),rx+2,33,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize,242);
+    label((isLive?(a.value>b.value?'LEADING':a.value<b.value?'TRAILING':'TIED'):'PROJECTED')+
+      (league.ownOwner?' / OWNER '+league.ownOwner:''),
+      lx,65,ownColor,1,259);
+    label((isLive?(b.value>a.value?'LEADING':b.value<a.value?'TRAILING':'TIED'):'PROJECTED')+
+      (league.opponentOwner?' / OWNER '+league.opponentOwner:''),
+      rx,65,oppColor,1,242);
+    drawMascot(337,6,94,68);
+    celebration(w);
   }
+
   function scoreRows(m,x,y,w,h){
-    panel(x,y,w,h,'LEAGUE SCORING · ALL TEAMS',ink.gold);
+    panel(x,y,w,h,'LEAGUE SCORING / '+(m?.events?.length||0)+' UPDATES',ink.gold);
     const events=(m?.events||[]).filter(Boolean);
-    const rowH=19,count=Math.max(1,Math.floor((h-21)/rowH));
-    const offset=Math.floor(now()/8500)*count;
-    if(!events.length){label(m?.started?'NO NEW SCORING':'AWAITING KICKOFF',x+5,y+22,ink.muted,1,w-10);return;}
+    const rowH=19,count=Math.max(1,Math.floor((h-22)/rowH));
+    const offset=Math.floor(now()/8000)*count;
+    if(!events.length){
+      label(m?.started?'NO RECENT SCORING':'AWAITING KICKOFF',x+5,y+22,ink.muted,1,w-10);
+      return;
+    }
     for(let i=0;i<Math.min(count,events.length);i++){
-      const e=events[(offset+i)%events.length],ry=y+16+i*rowH,change=Number(e.delta);
+      const e=events[(offset+i)%events.length],yy=y+16+i*rowH,change=Number(e.delta);
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
-      label(e.name||'PLAYER',x+5,ry,ink.white,1,w-63);
-      label((change>0?'+':'')+number(e.delta),x+w-56,ry,color,1,53);
-      label(e.fantasyTeamName||'LEAGUE',x+5,ry+9,ink.muted,1,w-67);
-      label('PTS '+number(e.total),x+w-66,ry+9,ink.gold,1,64);
+      box(x+3,yy,2,15,teamTint(e.teamColor,ink.blue));
+      label(e.name||'PLAYER',x+9,yy,ink.white,1,w-67);
+      label((change>0?'+':'')+number(e.delta),x+w-52,yy,color,1,48);
+      label((e.fantasyTeamOwner?'OWNER '+e.fantasyTeamOwner+' / ':'')+
+         (e.fantasyTeamName||'LEAGUE TEAM'),
+         x+9,yy+9,ink.muted,1,w-68);
+      label('TOTAL '+number(e.total),x+w-73,yy+9,ink.gold,1,69);
     }
   }
+
   function drawRoster(m,x,y,w,h,key){
     const mine=key==='own',name=mine?'MY STARTERS':'OPP STARTERS',baseColor=mine?ink.orange:ink.blue;
-    const team=(m?.league?.teams||[]).find(t=>t?.name===(mine?m.league.ownName:m.league.opponentName));
-    const color=teamTint(team?.teamColor,baseColor);
-    panel(x,y,w,h,name,color);
-    const rows=starters(m,key);
-    const capacity=Math.floor((h-19)/10);
-    const lineH=Math.max(10,Math.min(12,Math.floor((h-19)/Math.max(1,rows.length))));
+    const team=(m?.league?.teams||[]).find(t=>t.name===(mine?m.league.ownName:m.league.opponentName));
+    const color=teamTint(team?.teamColor,baseColor), owner=(mine?m.league.ownOwner:m.league.opponentOwner)||'';
+    panel(x,y,w,h,(mine?'MY':'OPP')+' STARTERS / PTS PRJ +-',color);
+    if(owner)label('OWNER '+owner,x+5,y+13,ink.muted,1,w-10);
+    const rows=starters(m,key),rowH=11,top=owner?y+25:y+17;
+    const capacity=Math.floor((y+h-top-1)/rowH);
     if(!rows.length){label('WAITING FOR ROSTER',x+4,y+24,ink.muted,1,w-8);return;}
-    if(rows.length>capacity)label('OVERFLOW '+(rows.length-capacity),x+w-87,y+4,ink.red,1,83);
-    // Never silently rotate starters off the physical 4x4 scoreboard.
+    if(rows.length>capacity)label('PLUS '+(rows.length-capacity)+' STARTERS ON PLAYER PAGE',x+4,y+4,ink.red,1,w-8);
+    const scope=scopeFor(m);
     for(let i=0;i<Math.min(rows.length,capacity);i++){
-      const p=rows[i],yy=y+15+i*lineH;
+      const p=rows[i],yy=top+i*rowH;
       const selected=String(m?.ui?.playerId||'')===String(p.player_id);
-      if(selected)box(x+2,yy-1,w-4,9,'#22435b');
-      box(x+4,yy+1,2,5,color);
+      if(selected)box(x+2,yy-1,w-4,10,'#22435b');
+      const keyId=scope+'|p|'+String(p.player_id??p.id??p.name);
+      const points=animatedPoints(keyId,numeric(p));
+      let delta=points.changed?points.delta:0;
+      box(x+4,yy+1,2,6,delta>0?ink.green:delta<0?ink.red:color);
       label((p.position||'')+' '+(p.full_name||p.name||'PLAYER'),x+9,yy,
-        selected?ink.gold:ink.white,1,w-49);
-      const val=number(numeric(p));
-      label(val,x+w-39,yy,selected?ink.gold:baseColor,1,36);
+        selected?ink.gold:ink.white,1,w-103);
+      label(number(points.value),x+w-91,yy,
+        points.changed?(delta>0?ink.green:ink.red):ink.white,1,37);
+      label(number(p.projected),x+w-52,yy,ink.muted,1,32);
+      if(points.changed)label((delta>0?'+':'')+number(delta),x+w-26,yy,
+        delta>0?ink.green:ink.red,1,25);
+      else label((p.status==='LIVE'?'LIVE':p.status==='FINAL'?'FIN':' '),x+w-27,yy,ink.blue,1,25);
     }
   }
+
   function trend(m,x,y,w,h) {
     panel(x,y,w,h,'MATCHUP STOCK',ink.green);
     const data=(m?.history||[]).slice(-64);
@@ -342,16 +396,14 @@
   // Keep the primary product layout predictable: both starter columns,
   // a readable league-scoring feed, and uninterrupted native-pixel ribbons.
   function fullScene(m,w,h){
-    const gap=6,bodyY=83,bodyBottom=h-29,bodyH=bodyBottom-bodyY;
-    const rosterW=Math.floor((w-gap*4)*.305),rightX=gap*3+rosterW*2;
-    const rightW=w-rightX-gap;
-    drawRoster(m,gap,bodyY,rosterW,bodyH,'own');
-    drawRoster(m,gap*2+rosterW,bodyY,rosterW,bodyH,'opponent');
-    scoreRows(m,rightX,bodyY,rightW,bodyH);
+    const gap=5,top=77,bottom=h-29,bodyH=bottom-top;
+    const rosterW=230,rightX=gap*3+rosterW*2;
+    drawRoster(m,gap,top,rosterW,bodyH,'own');
+    drawRoster(m,gap*2+rosterW,top,rosterW,bodyH,'opponent');
+    scoreRows(m,rightX,top,w-rightX-gap,bodyH);
     scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
-
 
   function allPlayers(m){
     const l=m?.league||{},seen=new Set();
@@ -512,9 +564,10 @@
     box(0,0,w,h,ink.bg);stroke(0,0,w,h,ink.line);
     const m=getModel();trackScores(m);
     const league=m?.league||{},ui=m?.ui||{},view=upper(ui.view||'OVERVIEW');
-    label(upper(ui.league||'SLEEPER'),6,4,ink.orange,1,Math.round(w*.22));
-    label('WEEK '+(league.week??'--')+' / '+view,Math.floor(w*.29),4,ink.blue,1,w*.59);
-    box(4,13,w-8,1,ink.line);
+    // Tiny ID label, so nearly the entire native LED budget shows game data.
+    label(upper(ui.league||'SLEEPER')+' W'+(league.week??'--')+' / 6X4 P2.5',
+      7,2,ink.muted,1,150);
+    if(view!=='OVERVIEW')label(view,w-120,2,ink.muted,1,114);
     if(m?.loading || !league.ready){
       label('CONNECTING FANTASY FEEDS',12,Math.floor(h/2),ink.gold,1,w-24);
     }else{
@@ -528,7 +581,7 @@
         contextScene(m,w,h,ui.view);
       else {
         const demo=now()<demoUntil;
-        if(demo)label('DEMO +6.4',w-85,15,ink.green,1,80);
+        if(demo)label('DEMO +6.4',w-93,2,ink.green,1,90);
         hero({...m,ownActual:demo?(Number(m.ownActual)||0)+6.4:m.ownActual,
           ownFinish:demo?(Number(m.ownFinish)||0)+6.4:m.ownFinish},w,h);
         fullScene(m,w,h);
@@ -547,7 +600,7 @@
   }
 
   function pick(key) {
-    chosen=sizes[key]||sizes.sixteen;
+    chosen=sizes.twentyfour;
     const {cols,rows}=chosen;
     const i=$('nativeSize');if(i)i.value=key;
     const url=new URL(location.href);url.searchParams.set('modules',key);
@@ -578,7 +631,8 @@
     $('nativePause').textContent='Resume rotation';draw();
   });
   $('nativeDemo')?.addEventListener('click',()=>{
-    demoUntil=now()+2300;shakeUntil=now()+1050;draw();
+    demoUntil=now()+2800;shakeUntil=now()+1550;
+    celebrationValue=6.4;draw();
   });
   $('nativePair')?.addEventListener('click',()=>document.getElementById('remoteToggle')?.click());
   $('nativeFull')?.addEventListener('click',async()=>{
@@ -596,6 +650,6 @@
   },850);
   window.setInterval(draw,120);
   const initial=new URL(location.href).searchParams.get('modules');
-  pick(sizes[initial]?initial:'sixteen');
+  pick('twentyfour');
   window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
 })();
