@@ -11,13 +11,14 @@
   <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
   <link rel="stylesheet" href="../remote/player-details.css?v=2">
   <link rel="stylesheet" href="../remote/tv-led.css?v=2">
+  <link rel="stylesheet" href="../remote/tv-led-refinement.css?v=1">
 </head>
 <body data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
   <div class="glass-shell">
     <header class="glass-header">
       <div class="header-left"><span id="tvContext" class="header-week">Sleeper</span><span id="weekLabel" class="header-week">Week —</span></div>
       <img id="headerMascot" class="header-mascot" src="../patriots-fantasy-touch/assets/justin-mascot-cutout.png" alt="Justin’s mascot">
-      <div class="header-right"><div class="remote-indicator"><span id="remoteStatus" role="status">Connecting…</span></div><button id="remoteToggle" class="tv-pair-code" type="button" aria-label="Open TV pairing">Pair TV</button><button id="ledPitchPreview" class="led-pitch-toggle led-screen-tool" type="button" aria-pressed="false" title="Show an illustrative P2.5 LED pixel grid (example: 3.2 m × 1.8 m wall)">P2.5 Preview</button><button id="ledFullscreen" class="led-screen-tool" type="button" aria-label="Enter fullscreen" title="Fullscreen">⛶</button></div>
+      <div class="header-right"><div class="remote-indicator"><span id="remoteStatus" role="status">Connecting…</span></div><button id="remoteToggle" class="tv-pair-code" type="button" aria-label="Open TV pairing">Pair TV</button><button id="ledPitchPreview" class="led-pitch-toggle led-screen-tool" type="button" aria-pressed="false" title="Show an illustrative P2.5 LED pixel grid (example: 3.2 m × 1.8 m wall)">P2.5 Preview</button><button id="ledPreview" class="led-screen-tool p25-action" type="button" title="Preview real P2.5 panel pixel counts">P2.5 Modules</button><button id="ledFullscreen" class="led-screen-tool" type="button" aria-label="Enter fullscreen" title="Fullscreen">⛶</button></div>
     </header>
     <main class="glass-main">
       <section id="matchupHero" aria-label="Matchup scores"><div class="glass-panel loading-state">Connecting your leagues…</div></section>
@@ -53,6 +54,7 @@
   <script src="../remote/tv-presentation.js?v=11" defer></script>
   <script src="../remote/player-details.js?v=9" defer></script>
   <script src="../remote/tv-led.js?v=2" defer></script>
+  <script src="../remote/tv-led-p25.js?v=1" defer></script>
   <script src="../remote/session.js?v=2" defer></script>
 </body>
 </html>
