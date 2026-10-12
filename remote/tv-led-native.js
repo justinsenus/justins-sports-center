@@ -352,27 +352,187 @@
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
 
+
+  function allPlayers(m){
+    const l=m?.league||{},seen=new Set();
+    return [...(l.own||[]),...(l.opponent||[]),...(l.allPlayers||[]),
+      ...(l.teams||[]).flatMap(t=>t.players||[])].filter(p=>{
+      if(!p)return false;
+      const key=String(p.player_id??p.id??p.full_name??p.name);
+      if(seen.has(key))return false;seen.add(key);return true;
+    });
+  }
+  function chosenPlayer(m){
+    const id=m?.ui?.playerId;
+    if(id==null || id==='')return null;
+    const match=allPlayers(m).find(p=>String(p.player_id??p.id)===String(id));
+    return match||((m?.player && String(m.player.player_id??m.player.id)===String(id))?m.player:null);
+  }
+  function statEntries(p,tab){
+    if(tab==='projections'){
+      const src=Array.isArray(p.projectedGameStats)?p.projectedGameStats:[];
+      return src.filter(q=>Number.isFinite(Number(q?.value))).map(q=>({label:q.label||q.name||'PROJ',value:q.value}));
+    }
+    try{
+      const arr=window.FantasyCenter?.data?.stats?.(p);
+      if(Array.isArray(arr)&&arr.length)return arr.filter(q=>Number.isFinite(Number(q?.value)));
+    }catch(_){}
+    const list=Array.isArray(p.gameStats)?p.gameStats:[];
+    if(list.length)return list.filter(q=>Number.isFinite(Number(q?.value)));
+    return [['RECEPTIONS',p.rec??p.receptions],['RECEIVING YARDS',p.rec_yd??p.receiving_yards],
+      ['RUSHING YARDS',p.rush_yd??p.rushing_yards],['PASS YARDS',p.pass_yd??p.passing_yards],
+      ['PASS TD',p.pass_td],['RUSH TD',p.rush_td],['REC TD',p.rec_td],['TARGETS',p.rec_tgt]]
+      .filter(([,v])=>v!==undefined&&v!==null).map(([label,value])=>({label,value}));
+  }
+  const photoCache=new Map();
+  function drawPhoto(src,x,y,w,h) {
+    const u=String(src||'');
+    if(!/^https:\/\//i.test(u))return false;
+    if(!photoCache.has(u)){
+      const img=new Image();
+      photoCache.set(u,img);
+      img.onload=draw;img.onerror=()=>{photoCache.delete(u)};
+      img.src=u;
+    }
+    const image=photoCache.get(u);
+    if(!image?.complete||!image.naturalWidth)return false;
+    const ratio=Math.min(w/image.naturalWidth,h/image.naturalHeight);
+    const cw=Math.round(image.naturalWidth*ratio),ch=Math.round(image.naturalHeight*ratio);
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(image,Math.round(x+(w-cw)/2),Math.round(y+(h-ch)/2),cw,ch);
+    return true;
+  }
+  function playerScene(m,p,w,h) {
+    const tab=m.ui?.playerTab||'stats',x=8,y=17,body=h-47;
+    panel(x,y,w-16,body,'PLAYER CENTER / '+upper(tab),ink.orange);
+    const large=h>=380,headW=large?105:77;
+    const photo=(p.headshot||p.photo||p.image||p.avatar||'');
+    if(!drawPhoto(photo,x+12,y+18,headW,large?108:80))
+      label(short((p.position||'')+' '+(p.team||''),12),x+14,y+44,ink.blue,1,headW-8);
+    const px=x+headW+23, rightW=w-px-20;
+    label(p.full_name||p.name||'SELECTED PLAYER',px,y+19,ink.white,2,rightW);
+    label((p.position||'FLEX')+' / '+(p.team||'NFL')+' / '+(p.status||'PREGAME'),
+      px,y+42,ink.blue,1,rightW);
+    label('ACTUAL POINTS',px,y+62,ink.muted,1,150);
+    label(number(numeric(p)),px,y+75,ink.green,3,140);
+    label('PROJECTED '+number(p.projected),px+152,y+76,ink.gold,1,rightW-154);
+    if(tab==='news'){
+      label('INJURY STATUS / PLAYER NEWS',x+12,y+126,ink.gold,1,w-40);
+      label(p.injury_status||p.injuryStatus||p.status||'NO INJURY FLAG',
+        x+12,y+146,p.injury_status?ink.red:ink.green,2,w-45);
+      label('LIVE REPORTS APPEAR WHEN SUPPLIED BY THE FEED',
+        x+12,y+174,ink.muted,1,w-45);
+    }else{
+      const rows=statEntries(p,tab);
+      const top=y+(large?151:119);
+      const columns=2,cw=Math.floor((w-30)/2),rowH=large?22:18;
+      panel(x+6,top-11,w-28,Math.max(16,body-(top-y)+4),
+        tab==='projections'?'PROJECTED GAME STATS':'LIVE GAME STATS',ink.blue);
+      if(!rows.length)label('NO DETAILED STATS IN PROVIDER FEED',x+14,top+10,ink.muted,1,w-39);
+      rows.slice(0,Math.max(2,Math.floor((h-top-49)/rowH)*columns)).forEach((s,i)=>{
+        const col=i%2,row=Math.floor(i/2),sx=x+12+col*cw,sy=top+6+row*rowH;
+        label(s.label||'STAT',sx,sy,ink.muted,1,cw-38);
+        label(number(s.value,Number.isInteger(Number(s.value))?0:1),
+          sx+cw-40,sy,ink.white,1,36);
+      });
+    }
+    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
+    scrollTicker(m,6,h-14,w-12,'NFL',true);
+  }
+  function matchupsScene(m,w,h){
+    const list=m.matchups||[],x=7,bodyY=32,room=h-64;
+    panel(6,17,w-12,h-46,'LEAGUE MATCHUPS · '+list.length+' GAMES',ink.gold);
+    if(!list.length){label('WAITING FOR MATCHUP FEED',x+7,45,ink.muted,1,w-20);}
+    const per=Math.max(1,Math.floor(room/26));
+    const offset=(Math.floor(now()/10500)*per)%Math.max(1,list.length);
+    for(let i=0;i<Math.min(per,list.length);i++){
+      const g=list[(offset+i)%list.length],yy=bodyY+i*26;
+      const a=Number(g.homeScore),b=Number(g.awayScore),c1=a>b?ink.green:a<b?ink.red:ink.orange,c2=b>a?ink.green:b<a?ink.red:ink.blue;
+      label(g.home?.name||'HOME',x+7,yy,c1,1,Math.round(w*.42));
+      label(number(g.homeScore),Math.round(w*.43),yy,ink.white,1,54);
+      label(g.away?.name||'AWAY',Math.round(w*.58),yy,c2,1,Math.round(w*.27));
+      label(number(g.awayScore),w-53,yy,ink.white,1,48);
+      box(x+5,yy+12,w-26,1,ink.line);
+    }
+    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
+    scrollTicker(m,6,h-14,w-12,'NFL',true);
+  }
+  function gameScene(m,w,h){
+    const games=[...(m.nflGames||m.games||[])];
+    const selected=games.find(g=>String(g.id)===String(m.ui?.gameId));
+    const shown=selected?[selected]:games;
+    panel(6,17,w-12,h-46,selected?'SELECTED NFL GAME':'NFL SCORES AND GAMES',ink.blue);
+    const capacity=Math.max(1,Math.floor((h-63)/38));
+    const offset=selected?0:(Math.floor(now()/11500)*capacity)%Math.max(1,shown.length);
+    if(!shown.length)label('NO NFL GAMES RETURNED',14,51,ink.muted,1,w-25);
+    for(let i=0;i<Math.min(capacity,shown.length);i++){
+      const g=shown[(offset+i)%shown.length],list=g.competitions?.[0]?.competitors||[];
+      const yy=38+i*38,status=g.status?.type?.shortDetail||g.status?.type?.name||'SCHEDULED';
+      label(upper(list[0]?.team?.displayName||list[0]?.team?.abbreviation||'AWAY'),
+        16,yy,ink.blue,1,Math.round(w*.43));
+      label(list[0]?.score??'--',Math.round(w*.44),yy,ink.white,2,68);
+      label(upper(list[1]?.team?.displayName||list[1]?.team?.abbreviation||'HOME'),
+        Math.round(w*.6),yy,ink.orange,1,Math.round(w*.25));
+      label(list[1]?.score??'--',w-54,yy,ink.white,2,50);
+      label(status,16,yy+18,ink.muted,1,w-26);
+      box(12,yy+31,w-24,1,ink.line);
+    }
+    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
+    scrollTicker(m,6,h-14,w-12,'NFL',true);
+  }
+  function contextScene(m,w,h,view){
+    const y=20,room=h-50;
+    if(view==='stock'){
+      trend(m,8,y,Math.floor(w*.61),room);
+      stock(m,14+Math.floor(w*.61),y,w-22-Math.floor(w*.61),room);
+    }else if(view==='injuries'){
+      panel(8,y,w-16,room,'LEAGUE INJURY REPORT',ink.red);
+      const entries=allPlayers(m).filter(p=>/OUT|IR|DOUBTFUL|QUESTIONABLE|PUP|INJUR/i.test(String(p.injury_status||p.injuryStatus||'')));
+      const capacity=Math.max(1,Math.floor((room-18)/17));
+      const at=Math.floor(now()/10000)*capacity;
+      if(!entries.length)label('NO INJURY UPDATES AVAILABLE',15,y+26,ink.green,1,w-30);
+      for(let i=0;i<Math.min(entries.length,capacity);i++){
+        const p=entries[(at+i)%entries.length],yy=y+17+i*17;
+        label(p.full_name||p.name||'PLAYER',15,yy,ink.white,1,Math.round(w*.48));
+        label(p.injury_status||p.injuryStatus,w*.54,yy,ink.red,1,w*.41);
+        label((p.position||'')+' '+(p.team||''),15,yy+8,ink.muted,1,w-30);
+      }
+    }else {
+      panel(8,y,w-16,room,'LIVE LEAGUE SCORING',ink.green);
+      scoreRows(m,12,y+15,w-24,room-19);
+    }
+    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
+    scrollTicker(m,6,h-14,w-12,'NFL',true);
+  }
   function draw() {
     const w=chosen.cols*128,h=chosen.rows*64;
     if(canvas.width!==w)canvas.width=w;
     if(canvas.height!==h)canvas.height=h;
     ctx.imageSmoothingEnabled=false;
-    box(0,0,w,h,ink.bg);
-    stroke(0,0,w,h,ink.line);
+    box(0,0,w,h,ink.bg);stroke(0,0,w,h,ink.line);
     const m=getModel();trackScores(m);
-    const league=m?.league||{},view=upper(m?.ui?.view||'OVERVIEW');
-    const currentLeague=upper(m?.ui?.league||'SLEEPER');
-    label(currentLeague,6,4,ink.orange,1,Math.round(w*.22));
+    const league=m?.league||{},ui=m?.ui||{},view=upper(ui.view||'OVERVIEW');
+    label(upper(ui.league||'SLEEPER'),6,4,ink.orange,1,Math.round(w*.22));
     label('WEEK '+(league.week??'--')+' / '+view,Math.floor(w*.29),4,ink.blue,1,w*.59);
     box(4,13,w-8,1,ink.line);
-    if(m?.loading || !league.ready)label('CONNECTING FEED - CHECK PAIRING',8,Math.floor(h/2),ink.gold,1,w-16);
-    else{
-      if(now()<demoUntil)label('DEMO +6.4',Math.max(6,w-87),15,ink.green,1,82);
-      const demo=now()<demoUntil;
-      hero({...m,ownActual:demo?(Number(m.ownActual)||0)+6.4:m.ownActual,
-        ownFinish:demo?(Number(m.ownFinish)||0)+6.4:m.ownFinish},w,h);
-      const scene=auto?Math.floor((now()-lastSceneAt)/10000)%3:manualScene;
-      fullScene(m,w,h,scene);
+    if(m?.loading || !league.ready){
+      label('CONNECTING FANTASY FEEDS',12,Math.floor(h/2),ink.gold,1,w-24);
+    }else{
+      const player=chosenPlayer(m);
+      if(player)playerScene(m,player,w,h);
+      else if(ui.gameId!=null&&ui.gameId!=='' || ['games','patriots'].includes(ui.view))
+        gameScene(m,w,h);
+      else if(['matchups','league'].includes(ui.view))
+        matchupsScene(m,w,h);
+      else if(['stock','injuries','live'].includes(ui.view))
+        contextScene(m,w,h,ui.view);
+      else {
+        const demo=now()<demoUntil;
+        if(demo)label('DEMO +6.4',w-85,15,ink.green,1,80);
+        hero({...m,ownActual:demo?(Number(m.ownActual)||0)+6.4:m.ownActual,
+          ownFinish:demo?(Number(m.ownFinish)||0)+6.4:m.ownFinish},w,h);
+        fullScene(m,w,h);
+      }
     }
     const mmW=chosen.cols*320,mmH=chosen.rows*160;
     const remote=window.FantasyRemote?.getStatus?.();
@@ -381,9 +541,8 @@
     const conn=remote?(remote.paired?(remote.connected?'PAIRED':'RECONNECTING'):'NOT PAIRED'):'WAITING FOR PAIRING';
     const meta=chosen.label+' · '+mmW+' × '+mmH+' MM · P2.5 · '+dataState+' · '+conn;
     if(lastMeta!==meta){$('nativeReadout').textContent=meta;lastMeta=meta}
-    const stage=$('nativeStatus');
-    const message=textStatus+' · '+dataState;
-    if(stage && stage.textContent!==message)stage.textContent=message;
+    const stage=$('nativeStatus'),message=textStatus+' · '+dataState;
+    if(stage&&stage.textContent!==message)stage.textContent=message;
     canvas.setAttribute('aria-label','Pixel-native LED fantasy scoreboard, '+w+' by '+h+' physical pixels');
   }
 
