@@ -348,3 +348,125 @@ body[data-tv-style="led"] input:focus-visible { outline-color: #9ddbff; }
 @media (prefers-reduced-motion: reduce) {
   body[data-tv-style="led"] *, body[data-tv-style="led"] *::before, body[data-tv-style="led"] *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+
+/* P2.5-ready layout: readable players, separated mascot, optional pixel-pitch guide. */
+body[data-screen="tv"][data-tv-style="led"] .glass-header {
+  grid-template-columns: minmax(0, 1fr) clamp(62px, 6.8vw, 94px) minmax(0, 1fr);
+}
+body[data-screen="tv"][data-tv-style="led"] .header-mascot {
+  width: clamp(48px, 6.4vh, 72px);
+  height: clamp(48px, 6.4vh, 72px);
+  max-height: 100%;
+  align-self: center;
+  margin: 0;
+  object-fit: contain;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band {
+  height: clamp(124px, 14.5vh, 169px);
+  grid-template-columns: minmax(0, 1fr) clamp(40px, 3vw, 60px) minmax(0, 1fr);
+  padding: 10px clamp(10px, 1vw, 18px) 8px;
+}
+body[data-screen="tv"][data-tv-style="led"] .score-number > strong {
+  font-size: clamp(61px, 5.85vw, 112px);
+  line-height: .98;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-overview {
+  grid-template-columns: minmax(0, 1.32fr) minmax(0, 2.36fr) minmax(0, 1.32fr);
+  grid-template-rows: minmax(0, 1fr) clamp(106px, 14.4vh, 166px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-panel-title {
+  padding: 5px 9px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-panel-title h2 {
+  font-size: clamp(15px, 1.12vw, 23px);
+  min-width: 0;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster-body {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row {
+  grid-template-columns: clamp(30px, 2.6vw, 46px) minmax(0, 1fr) clamp(55px, 4.2vw, 80px);
+  column-gap: clamp(4px, .42vw, 8px);
+  padding: 0 2px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-photo {
+  width: min(100%, var(--tv-row-height, 38px), 46px);
+  height: min(100%, var(--tv-row-height, 38px), 46px);
+  max-height: 46px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line > b {
+  font: 500 clamp(15px, calc(var(--tv-row-height, 36px) * .55), 23px)/1.06 var(--led-font);
+  color: #eefaff;
+  letter-spacing: -.3px;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-bench-row .tv-player-name-line > b {
+  font-size: clamp(13px, calc(var(--tv-row-height, 36px) * .48), 20px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name > .tv-player-game {
+  font-size: clamp(10px, calc(var(--tv-row-height, 36px) * .31), 15px);
+  line-height: 1.12;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-score > b {
+  font-size: clamp(18px, calc(var(--tv-row-height, 36px) * .68), 32px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-score > .tv-player-projection {
+  font-size: clamp(9px, calc(var(--tv-row-height, 36px) * .3), 15px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-feed-name > b {
+  font-size: clamp(13px, .96vw, 20px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-pitch-toggle[aria-pressed="true"] {
+  background: #163f78;
+  border-color: #82e2ff;
+  color: #e2faff;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-pitch-readout {
+  color: #9fe8ff;
+  font: 500 clamp(9px, .66vw, 13px)/1.15 var(--led-font);
+  white-space: nowrap;
+}
+body[data-screen="tv"][data-tv-style="led"].pitch-preview .led-view-label { display: none; }
+body[data-screen="tv"][data-tv-style="led"].pitch-preview .glass-shell {
+  --pitch-cell: clamp(1px, calc(100vw / 1280), 4px);
+  position: relative;
+  isolation: isolate;
+}
+body[data-screen="tv"][data-tv-style="led"].pitch-preview .glass-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  background-image: radial-gradient(circle at center, transparent 0 35%, #000b 85%);
+  background-size: var(--pitch-cell) var(--pitch-cell);
+  opacity: .34;
+}
+@media (max-height: 760px) {
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot {
+    width: clamp(36px, 5.8vh, 44px);
+    height: clamp(36px, 5.8vh, 44px);
+    margin: 0;
+  }
+  body[data-screen="tv"][data-tv-style="led"] .tv-score-band {
+    height: 108px;
+    padding: 8px 12px 6px;
+  }
+  body[data-screen="tv"][data-tv-style="led"] .led-overview {
+    grid-template-rows: minmax(0, 1fr) 108px;
+  }
+  body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row .tv-player-name-line > b {
+    font-size: clamp(13px, calc(var(--tv-row-height, 31px) * .50), 19px);
+  }
+}
+@media (max-width: 1100px) {
+  body[data-screen="tv"][data-tv-style="led"] .led-overview {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 2.05fr) minmax(0, 1.3fr);
+  }
+  body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row {
+    grid-template-columns: clamp(25px, 2.5vw, 34px) minmax(0, 1fr) 50px;
+    column-gap: 4px;
+  }
+  body[data-screen="tv"][data-tv-style="led"] .led-pitch-readout { font-size: 9px; }
+}
