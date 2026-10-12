@@ -7,8 +7,7 @@
   const app = window.FantasyCenter;
   const sizes = {
     sixteen:    {cols:4,rows:4,label:'16 MODULES · 512 × 256'},
-    twentyfour: {cols:6,rows:4,label:'24 MODULES · 768 × 256'},
-    fortyeight: {cols:8,rows:6,label:'48 MODULES · 1024 × 384'}
+    twentyfour: {cols:4,rows:6,label:'24 MODULES · 512 × 384'}
   };
   const $ = id => document.getElementById(id);
   let chosen = sizes.sixteen;
@@ -125,22 +124,45 @@
       }
     }catch(_){} // CORS-protected assets still render using the uncropped image.
   }
-  function drawMascot(x,y,w,h){
-    const cx=Math.round(x+w/2), cy=Math.round(y+h/2);
-    ctx.fillStyle='#112f45';ctx.beginPath();ctx.arc(cx,cy,Math.min(w,h)/2,0,Math.PI*2);ctx.fill();
-    if(!mascot.complete || !mascot.naturalWidth){
-      label('JS',x+w/2-11,y+h/2-4,ink.orange,2,30);return;
-    }
-    ctx.imageSmoothingEnabled=false;
-    const j=now()<shakeUntil?Math.round(Math.sin(now()/37)*4):0;
+  // Native pixel art: render the source head into a small transparent image,
+  // then scale with nearest-neighbor. Never draw a background badge or circle.
+  let pixelPortrait=null;
+  function makePixelPortrait(){
+    if(!mascot.naturalWidth)return;
     const crop=mascotCrop||{x:0,y:0,w:mascot.naturalWidth,h:mascot.naturalHeight};
-    const scale=Math.min((w-4)/crop.w,(h-4)/crop.h);
-    const tw=Math.max(1,Math.round(crop.w*scale)),th=Math.max(1,Math.round(crop.h*scale));
-    ctx.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,
-      Math.round(x+(w-tw)/2+j),Math.round(y+(h-th)/2),tw,th);
+    const off=document.createElement('canvas');off.width=40;off.height=44;
+    const g=off.getContext('2d',{willReadFrequently:true});if(!g)return;
+    g.clearRect(0,0,40,44);g.imageSmoothingEnabled=false;
+    const scale=Math.min(38/crop.w,42/crop.h);
+    const dw=Math.round(crop.w*scale),dh=Math.round(crop.h*scale);
+    g.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,Math.round((40-dw)/2),Math.round((44-dh)/2),dw,dh);
+    try{
+      // Reduce color banding gently without replacing transparent edges.
+      const id=g.getImageData(0,0,40,44),p=id.data;
+      for(let i=0;i<p.length;i+=4)if(p[i+3]>0){
+        p[i]=Math.round(p[i]/24)*24;
+        p[i+1]=Math.round(p[i+1]/24)*24;
+        p[i+2]=Math.round(p[i+2]/24)*24;
+      }
+      g.putImageData(id,0,0);
+    }catch(_){}
+    pixelPortrait=off;
+  }
+  function drawMascot(x,y,w,h){
+    if(!mascot.complete||!mascot.naturalWidth){
+      label('JS',x+w/2-12,y+h/2-9,ink.orange,2,30);return;
+    }
+    if(!pixelPortrait)makePixelPortrait();
+    ctx.imageSmoothingEnabled=false;
+    const jiggle=now()<shakeUntil?Math.round(Math.sin(now()/39)*3):0;
+    if(pixelPortrait){
+      const ratio=Math.min((w-3)/40,(h-2)/44);
+      const width=Math.round(40*ratio),height=Math.round(44*ratio);
+      ctx.drawImage(pixelPortrait,Math.round(x+(w-width)/2+jiggle),Math.round(y+(h-height)/2),width,height);
+    }
   }
   mascot.src='../patriots-fantasy-touch/assets/justin-mascot-cutout.png';
-  mascot.addEventListener('load',()=>{prepareMascot();draw()});
+  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();draw()});
   function getModel(){try{return app.model()}catch(_){return null}}
   function trackScores(m) {
     if(!m || m.loading || !m.league?.ready || !m.started)return;
@@ -180,16 +202,16 @@
   function scoreRows(m,x,y,w,h){
     panel(x,y,w,h,'LEAGUE SCORING · ALL TEAMS',ink.gold);
     const events=(m?.events||[]).filter(Boolean);
-    const rowH=h>175?16:14,count=Math.max(1,Math.floor((h-19)/rowH));
+    const rowH=19,count=Math.max(1,Math.floor((h-21)/rowH));
     const offset=Math.floor(now()/8500)*count;
     if(!events.length){label(m?.started?'NO NEW SCORING':'AWAITING KICKOFF',x+5,y+22,ink.muted,1,w-10);return;}
     for(let i=0;i<Math.min(count,events.length);i++){
-      const e=events[(offset+i)%events.length],ry=y+17+i*rowH,change=Number(e.delta);
+      const e=events[(offset+i)%events.length],ry=y+16+i*rowH,change=Number(e.delta);
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
       label(e.name||'PLAYER',x+5,ry,ink.white,1,w-63);
       label((change>0?'+':'')+number(e.delta),x+w-56,ry,color,1,53);
-      label(e.fantasyTeamName||'LEAGUE',x+5,ry+7,ink.muted,1,w-67);
-      label('PTS '+number(e.total),x+w-66,ry+7,ink.gold,1,64);
+      label(e.fantasyTeamName||'LEAGUE',x+5,ry+9,ink.muted,1,w-67);
+      label('PTS '+number(e.total),x+w-66,ry+9,ink.gold,1,64);
     }
   }
   function drawRoster(m,x,y,w,h,key){
@@ -198,13 +220,13 @@
     const color=teamTint(team?.teamColor,baseColor);
     panel(x,y,w,h,name,color);
     const rows=starters(m,key);
-    const capacity=Math.floor((h-20)/8);
-    const lineH=Math.max(8,Math.min(12,Math.floor((h-21)/Math.max(1,rows.length))));
+    const capacity=Math.floor((h-19)/10);
+    const lineH=Math.max(10,Math.min(12,Math.floor((h-19)/Math.max(1,rows.length))));
     if(!rows.length){label('WAITING FOR ROSTER',x+4,y+24,ink.muted,1,w-8);return;}
     if(rows.length>capacity)label('OVERFLOW '+(rows.length-capacity),x+w-87,y+4,ink.red,1,83);
     // Never silently rotate starters off the physical 4x4 scoreboard.
     for(let i=0;i<Math.min(rows.length,capacity);i++){
-      const p=rows[i],yy=y+16+i*lineH;
+      const p=rows[i],yy=y+15+i*lineH;
       const selected=String(m?.ui?.playerId||'')===String(p.player_id);
       if(selected)box(x+2,yy-1,w-4,9,'#22435b');
       box(x+4,yy+1,2,5,color);
@@ -317,19 +339,18 @@
     }
     ctx.restore();
   }
-  function fullScene(m,w,h,scene){
+  // Keep the primary product layout predictable: both starter columns,
+  // a readable league-scoring feed, and uninterrupted native-pixel ribbons.
+  function fullScene(m,w,h){
     const gap=6,bodyY=83,bodyBottom=h-29,bodyH=bodyBottom-bodyY;
-    const leftW=Math.floor((w-gap*4)*.32),middleW=leftW;
-    const rightX=gap*3+leftW+middleW,rightW=w-rightX-gap;
-    drawRoster(m,gap,bodyY,leftW,bodyH,'own');
-    drawRoster(m,gap*2+leftW,bodyY,middleW,bodyH,'opponent');
-    const extraH=h>=350?94:48;
-    scoreRows(m,rightX,bodyY,rightW,bodyH-extraH-gap);
-    detailPanel(m,rightX,bodyY+bodyH-extraH,rightW,extraH,scene);
+    const rosterW=Math.floor((w-gap*4)*.305),rightX=gap*3+rosterW*2;
+    const rightW=w-rightX-gap;
+    drawRoster(m,gap,bodyY,rosterW,bodyH,'own');
+    drawRoster(m,gap*2+rosterW,bodyY,rosterW,bodyH,'opponent');
+    scoreRows(m,rightX,bodyY,rightW,bodyH);
     scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
-  function compactScene(m,w,h,scene){fullScene(m,w,h,scene);}
 
   function draw() {
     const w=chosen.cols*128,h=chosen.rows*64;
