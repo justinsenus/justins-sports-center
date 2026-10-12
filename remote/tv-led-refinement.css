@@ -144,3 +144,209 @@ body[data-screen="tv"][data-tv-style="led"] .led-screen-tool.p25-action:hover { 
  body[data-screen="tv"][data-tv-style="led"] .tv-roster .tv-roster-row {grid-template-columns:26px minmax(0,1fr) 49px;gap:4px;}
  body[data-screen="tv"][data-tv-style="led"] .led-screen-tool.p25-action {min-width:60px;padding:5px;}
 }
+
+/* 2026-10-12: keep the mascot prominent, and move numbers APART.
+   The reserved score center is wider than the visible mascot. */
+body[data-screen="tv"][data-tv-style="led"] .glass-header {
+  height: clamp(88px, 9.6vh, 112px);
+  min-height: clamp(88px, 9.6vh, 112px);
+  grid-template-columns: minmax(0,1fr) clamp(156px,12vw,200px) minmax(0,1fr);
+  overflow: visible;
+  z-index: 5;
+}
+body[data-screen="tv"][data-tv-style="led"] .header-mascot {
+  width: clamp(118px, 13.1vh, 156px);
+  height: clamp(118px, 13.1vh, 156px);
+  max-height: none;
+  max-width: none;
+  margin: -3px 0 0;
+  align-self: start;
+  justify-self: center;
+  position: relative;
+  z-index: 6;
+  object-fit: contain;
+  transform-origin: 50% 65%;
+  pointer-events: none;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band {
+  grid-template-columns: minmax(0,1fr) clamp(156px,13vw,220px) minmax(0,1fr);
+  column-gap: clamp(7px,.8vw,16px);
+  overflow: visible;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band .score-side { min-width: 0; }
+body[data-screen="tv"][data-tv-style="led"] .tv-score-band .score-vs {
+  opacity: .32;
+  align-self: end;
+  z-index: 0;
+}
+body[data-screen="tv"][data-tv-style="led"] .score-number > strong {
+  font-size: clamp(64px, 5.9vw, 112px);
+  font-variant-numeric: tabular-nums;
+}
+body[data-screen="tv"][data-tv-style="led"] .header-mascot.led-own-scored {
+  animation: led-my-team-celebrate 950ms cubic-bezier(.25,.65,.35,1) both;
+  filter: saturate(1.5) brightness(1.2) drop-shadow(0 0 12px #ff9835);
+}
+@keyframes led-my-team-celebrate {
+  0%,100% { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+  12% { transform: translate3d(-8px,-4px,0) rotate(-6deg) scale(1.04); }
+  25% { transform: translate3d(8px,-6px,0) rotate(5deg) scale(1.07); }
+  38% { transform: translate3d(-7px,-3px,0) rotate(-5deg) scale(1.06); }
+  52% { transform: translate3d(7px,-5px,0) rotate(4deg) scale(1.07); }
+  69% { transform: translate3d(-3px,-3px,0) rotate(-2deg) scale(1.04); }
+  84% { transform: translate3d(2px,0,0) rotate(2deg) scale(1.02); }
+}
+/* Keep both rosters beside a taller matchup graph. League stock is the
+   shorter, full-width second chart; its graph still plots ALL teams. */
+body[data-screen="tv"][data-tv-style="led"] .led-overview {
+  grid-template-rows: minmax(0,1fr) clamp(130px,17.6vh,196px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-plots {
+  grid-template-rows: minmax(0,1.45fr) minmax(0,.70fr);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body {
+  grid-template-columns: minmax(0,1.8fr) minmax(0,.82fr);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body > .tv-chart-legend {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-rows: repeat(5,minmax(0,1fr));
+  grid-auto-rows: minmax(0,1fr);
+  gap: 1px;
+  padding: 1px 8px 3px 2px;
+  overflow: hidden;
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend b {
+  font-size: clamp(10px,.75vw,15px);
+}
+body[data-screen="tv"][data-tv-style="led"] .tv-stock-body .tv-chart-legend strong {
+  font-size: clamp(12px,.95vw,19px);
+}
+/* League scoring becomes the large lower report. Injury alerts stay compact. */
+body[data-screen="tv"][data-tv-style="led"] .led-support {
+  display: grid;
+  grid-template-columns: minmax(0,.42fr) minmax(0,1.58fr);
+  gap: var(--led-gap);
+  min-height: 0;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact {
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injuries {
+  height:100%;
+  min-height:0;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  grid-template-columns:none;
+  gap:2px;
+  padding:4px 1px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row > div {
+  justify-content:space-between;
+  flex-wrap:nowrap;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row p,
+body[data-screen="tv"][data-tv-style="led"] .led-injury-compact .tv-injury-row > small {
+  display:none;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-panel-title {
+  flex:none;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  min-height:30px;
+  padding:4px 12px;
+  border-bottom:1px dotted #194691;
+  border-right:0;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-panel-title h2 {
+  font-size:clamp(17px,1.2vw,25px);
+  white-space:nowrap;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-list {
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(0,1fr);
+  gap:4px 14px;
+  padding:4px 12px 6px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row {
+  height:auto;
+  min-height:0;
+  padding:3px 1px;
+  border-bottom:1px dotted #1d3970;
+  gap:8px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-name > b {
+  font-size:clamp(14px,1vw,20px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row > strong {
+  font-size:clamp(20px,1.45vw,29px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row .player-face {
+  width:clamp(28px,3.8vh,44px);
+  height:clamp(28px,3.8vh,44px);
+}
+/* Always show the fantasy ticker on the bottom directly ABOVE NFL scores. */
+body[data-screen="tv"][data-tv-style="led"] #scoreStrips {
+  flex:none;
+  min-height:0;
+  margin-top:clamp(4px,.55vh,8px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores {
+  display:grid;
+  gap:clamp(4px,.5vh,7px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-fantasy-strip {
+  height:clamp(52px,6vh,74px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-nfl-strip {
+  height:clamp(57px,6.6vh,80px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-strip-cards {
+  grid-template-columns:repeat(var(--led-matchups,1),minmax(0,1fr));
+  gap:8px;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-strip-matchup {
+  overflow:hidden;
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-strip-matchup b {
+  font-size:clamp(13px,.95vw,20px);
+}
+body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-strip-matchup strong {
+  font-size:clamp(20px,1.4vw,28px);
+}
+@media(max-width:1350px) {
+  body[data-screen="tv"][data-tv-style="led"] .led-support {grid-template-columns:minmax(0,.35fr) minmax(0,1.65fr);}
+  body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-list {grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));}
+  body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row .player-face {width:26px;height:26px;}
+}
+@media(max-height:760px) {
+  body[data-screen="tv"][data-tv-style="led"] .glass-header {height:74px;min-height:74px;}
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot {width:114px;height:114px;max-height:none;}
+  body[data-screen="tv"][data-tv-style="led"] .tv-score-band {height:110px;grid-template-columns:minmax(0,1fr) 156px minmax(0,1fr);}
+  body[data-screen="tv"][data-tv-style="led"] .led-overview {grid-template-rows:minmax(0,1fr) 112px;}
+  body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-list {grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));}
+  body[data-screen="tv"][data-tv-style="led"] .led-support > .tv-feed .tv-feed-row .player-face {width:23px;height:23px;}
+  body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-fantasy-strip {height:48px;}
+  body[data-screen="tv"][data-tv-style="led"] .led-bottom-scores .tv-nfl-strip {height:52px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  body[data-screen="tv"][data-tv-style="led"] .header-mascot.led-own-scored {animation:none;filter:none;}
+}
