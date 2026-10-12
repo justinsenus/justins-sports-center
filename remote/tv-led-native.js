@@ -63,6 +63,9 @@
     '?':['01110','10001','00001','00010','00100','00000','00100'],
     '!':['00100','00100','00100','00100','00100','00000','00100'],
     '%':['11001','11010','00010','00100','01000','01011','10011'],
+    "'":['00100','00100','00010','00000','00000','00000','00000'],
+    ',':['00000','00000','00000','00000','00110','00110','00100'],
+    '&':['01100','10010','10100','01000','10101','10010','01101'],
     ' ' :['00000','00000','00000','00000','00000','00000','00000']
   };
   const ink={bg:'#03080f',panel:'#081825',line:'#194057',white:'#f0f7ff',
@@ -137,15 +140,15 @@
     label(opp,rightX,heroTop,ink.blue,big?2:1,w-rightX-7);
     label(number(mine),leftX,heroTop+(big?19:15),ink.white,size,center-(big?85:35));
     label(number(theirs),rightX,heroTop+(big?19:15),ink.white,size,w-rightX-3);
-    drawMascot(center-(big?30:18),big?16:15,big?60:36,big?62:39);
+    drawMascot(center-(big&&!compact?30:18),big&&!compact?16:15,big&&!compact?60:36,big&&!compact?62:39);
   }
   function scoreRows(m,x,y,w,h) {
     panel(x,y,w,h,'LEAGUE SCORING',ink.gold);
     const events=(m?.events||[]).filter(Boolean);
-    const count=Math.max(1,Math.floor((h-19)/13)),offset=Math.floor(now()/9000)*count;
+    const count=Math.max(1,Math.floor((h-19)/11)),offset=Math.floor(now()/9000)*count;
     if(!events.length){label('NO NEW SCORING',x+5,y+20,ink.muted,1,w-10);return;}
     for(let i=0;i<Math.min(count,events.length);i++){
-      const e=events[(offset+i)%events.length],ry=y+17+i*13;
+      const e=events[(offset+i)%events.length],ry=y+17+i*11;
       const pts=(Number(e.delta)>0?'+':'')+number(e.delta);
       label(e.name||'PLAYER',x+5,ry,ink.white,1,w-60);
       label(pts,x+w-55,ry,Number(e.delta)<0?ink.red:ink.green,1,52);
@@ -264,7 +267,8 @@
       label('CONNECTING FANTASY FEEDS',5,Math.max(23,Math.floor(h/2)),ink.gold,1,w-10);
     }else {
       if(now()<demoUntil) {label('DEMO +6.4',Math.max(5,w-83),14,ink.green,1,80);}
-      hero({...m,ownActual:now()<demoUntil?(Number(m.ownActual)||0)+6.4:m.ownActual},w,h<200);
+      const example=now()<demoUntil;
+      hero({...m,ownActual:example?(Number(m.ownActual)||0)+6.4:m.ownActual,ownFinish:example?(Number(m.ownFinish)||0)+6.4:m.ownFinish},w,h<200);
       const scene=auto?Math.floor((now()-lastSceneAt)/10000)%3:manualScene;
       if(h>=200)fullScene(m,w,h);else compactScene(m,w,h,scene);
       if(h<200 && w>128)label('VIEW '+(scene+1)+'/3',w-57,h-34,ink.muted,1,54);
