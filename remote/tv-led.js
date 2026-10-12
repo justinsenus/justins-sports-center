@@ -23,12 +23,15 @@
 
   function stock(model) {
     const data = glass.dataFor(model, true);
-    return '<section class="glass-panel tv-stock"><div class="tv-panel-title"><h2>League stock</h2><span>' + data.series.length + ' teams · ' + (model.leagueStarted ? 'points' : 'projections') + '</span></div>' + charts.rangeControls() + '<div class="tv-stock-body"><div class="tv-stock-chart">' + charts.chart(data.series, data.raw, {league: true, projected: !model.leagueStarted, title: 'All league teams on one shared points scale'}) + '</div>' + legend(charts.rankSeries(data.series)) + '</div></section>';
+    // Draw ALL teams in the stock chart; page only the ranked text legend.
+    const ranked = charts.rankSeries(data.series);
+    const leaders = tv.page(ranked, 5);
+    return '<section class="glass-panel tv-stock"><div class="tv-panel-title"><h2>League stock</h2><span>' + data.series.length + ' teams · top 5 ' + (leaders.pages > 1 ? leaders.current + '/' + leaders.pages : '') + '</span></div>' + charts.rangeControls() + '<div class="tv-stock-body"><div class="tv-stock-chart">' + charts.chart(data.series, data.raw, {league: true, projected: !model.leagueStarted, title: 'All league teams on one shared points scale'}) + '</div>' + legend(leaders.items) + '</div></section>';
   }
 
   function overview(model) {
-    const events = tv.page(model.events || [], 2).items;
-    return '<div class="led-overview">' + tv.roster(model, 'own') + '<div class="led-plots">' + momentum(model) + stock(model) + '</div>' + tv.roster(model, 'opponent') + '<div class="led-support">' + tv.injuries(model) + '<div class="led-support-right">' + fantasyStrip(model) + tv.feed({...model, events}) + '</div></div></div>';
+    const events = tv.page(model.events || [], 5).items;
+    return '<div class="led-overview">' + tv.roster(model, 'own') + '<div class="led-plots">' + momentum(model) + stock(model) + '</div>' + tv.roster(model, 'opponent') + '<div class="led-support"><div class="led-injury-compact">' + tv.injuries(model) + '</div>' + tv.feed({...model, events}) + '</div></div>';
   }
 
   function fantasyStrip(model) {
@@ -44,18 +47,41 @@
     for (const {roster, height} of layouts) if (height !== null) roster.style.setProperty('--tv-row-height', height + 'px');
   }
 
+  // Record a baseline per league/team/week. Only increases to MY live fantasy
+  // points create a celebration; the opponent, projections and first load do not.
+  const ownScoreBaselines = new Map();
+  let scoreShakeTimer;
+  function celebrateOwnScore(model) {
+    if (!model || model.loading || !model.league?.ready || !model.started) return;
+    const value = model.ownActual;
+    if (value === null || value === undefined || value === '' || !Number.isFinite(Number(value))) return;
+    const key = [model.ui?.league || model.league.id || '', model.league.week ?? '', model.league.ownName || ''].join('|');
+    const current = Number(value);
+    const previous = ownScoreBaselines.get(key);
+    ownScoreBaselines.set(key, current);
+    if (previous === undefined || current <= previous + 0.001) return;
+    const mascot = document.getElementById('headerMascot');
+    if (!mascot) return;
+    mascot.classList.remove('led-own-scored');
+    void mascot.offsetWidth; // restart animation for consecutive scoring plays
+    mascot.classList.add('led-own-scored');
+    clearTimeout(scoreShakeTimer);
+    scoreShakeTimer = setTimeout(() => mascot.classList.remove('led-own-scored'), 1050);
+  }
+
   glass.render = () => {
     baseRender();
     const model = app.model();
+    celebrateOwnScore(model);
     if (model.loading || !model.league.ready) return;
     if (!model.ui.playerId && ['overview', 'matchups'].includes(model.ui.view)) {
       patch(document.getElementById('workspace'), overview(model));
       fitRosters();
     }
-    // Fantasy totals live beside injuries on the home screen. Retain the
-    // complete fantasy ribbon on every other scene and the NFL ribbon always.
+    // Fantasy matchups and NFL scores share the BOTTOM of every LED scene.
+    // The league scoring feed now owns the large supporting area above.
     const home = !model.ui.playerId && ['overview', 'matchups'].includes(model.ui.view);
-    patch(document.getElementById('scoreStrips'), home ? '<div class="tv-score-strips led-nfl-only">' + tv.nflStrip(model) + '</div>' : tv.strips(model));
+    patch(document.getElementById('scoreStrips'), '<div class="tv-score-strips led-bottom-scores">' + fantasyStrip(model) + tv.nflStrip(model) + '</div>');
     document.body.dataset.ledScene = home ? 'home' : 'detail';
   };
 
@@ -102,6 +128,6 @@
     if (event.detail?.paired) document.getElementById('pairPanel')?.classList.add('hidden');
   });
 
-  window.FantasyLED = {overview, momentum, stock, legend, fantasyStrip};
+  window.FantasyLED = {overview, momentum, stock, legend, fantasyStrip, celebrateOwnScore};
   app.render();
 })();
