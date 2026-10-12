@@ -311,14 +311,15 @@
   function stock(m,x,y,w,h) {
     panel(x,y,w,h,h>=68?'LEAGUE STOCK · TOP 5':'LEAGUE STOCK · TOP 3',ink.blue);
     const teams=(m?.league?.teams||[]).filter(Boolean).map(t=>({
-      name:t.name||'TEAM',val:Number(m?.leagueStarted?t.total:t.projected??t.total)||0
+      name:t.name||'TEAM',owner:t.ownerLabel||'',val:Number(m?.leagueStarted?t.total:t.projected??t.total)||0
     })).sort((a,b)=>b.val-a.val);
     if(!teams.length){label('WAITING FOR TEAMS',x+4,y+18,ink.muted,1,w-8);return;}
     const count=h>=68?5:3,top=teams.slice(0,count),max=Math.max(1,...top.map(t=>t.val));
     const rowHeight=Math.max(9,Math.min(13,Math.floor((h-20)/top.length)));
     for(let i=0;i<top.length;i++){
       const yy=y+17+i*rowHeight;
-      label(short(top[i].name,13),x+4,yy,i===0?ink.gold:ink.white,1,Math.max(30,w*.58));
+      label(short(top[i].name,22)+(top[i].owner?' / '+top[i].owner:''),
+        x+4,yy,i===0?ink.gold:ink.white,1,Math.max(30,w*.58));
       box(x+Math.round(w*.6),yy+1,Math.max(1,Math.round((w*.34)*top[i].val/max)),4,i===0?ink.orange:ink.blue);
     }
   }
@@ -363,9 +364,9 @@
       const games=(m?.matchups||[]).slice(0,16);
       for(const g of games){
         const a=Number(g.homeScore),b=Number(g.awayScore),live=m?.leagueStarted;
-        entries.push({text:(g.home?.name||'HOME')+' '+number(g.homeScore),
+        entries.push({text:(g.home?.name||'HOME')+(g.home?.ownerLabel?' ('+g.home.ownerLabel+')':'')+' '+number(g.homeScore),
           color:live&&Number.isFinite(a)&&Number.isFinite(b)?(a>b?ink.green:a<b?ink.red:ink.white):teamTint(g.home?.teamColor,ink.orange)});
-        entries.push({text:(g.away?.name||'AWAY')+' '+number(g.awayScore),
+        entries.push({text:(g.away?.name||'AWAY')+(g.away?.ownerLabel?' ('+g.away.ownerLabel+')':'')+' '+number(g.awayScore),
           color:live&&Number.isFinite(a)&&Number.isFinite(b)?(b>a?ink.green:b<a?ink.red:ink.white):teamTint(g.away?.teamColor,ink.blue)});
       }
       const all=[...(m?.league?.own||[]),...(m?.league?.opponent||[])].filter(p=>p.starter!==false);
@@ -500,9 +501,9 @@
     for(let i=0;i<Math.min(per,list.length);i++){
       const g=list[(offset+i)%list.length],yy=bodyY+i*26;
       const a=Number(g.homeScore),b=Number(g.awayScore),c1=a>b?ink.green:a<b?ink.red:ink.orange,c2=b>a?ink.green:b<a?ink.red:ink.blue;
-      label(g.home?.name||'HOME',x+7,yy,c1,1,Math.round(w*.42));
+      label((g.home?.name||'HOME')+(g.home?.ownerLabel?' / '+g.home.ownerLabel:''),x+7,yy,c1,1,Math.round(w*.42));
       label(number(g.homeScore),Math.round(w*.43),yy,ink.white,1,54);
-      label(g.away?.name||'AWAY',Math.round(w*.58),yy,c2,1,Math.round(w*.27));
+      label((g.away?.name||'AWAY')+(g.away?.ownerLabel?' / '+g.away.ownerLabel:''),Math.round(w*.58),yy,c2,1,Math.round(w*.27));
       label(number(g.awayScore),w-53,yy,ink.white,1,48);
       box(x+5,yy+12,w-26,1,ink.line);
     }
