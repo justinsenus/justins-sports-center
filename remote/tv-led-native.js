@@ -347,8 +347,9 @@
     const all=values.flatMap(r=>r.values).filter(v=>Number.isFinite(Number(v))).map(Number);
     const max=Math.max(25,...all,...series.map(s=>Number(s.value)||0)),min=Math.min(0,...all);
     const gx=x+21,gy=y+1,gw=w-24,gh=Math.max(8,h-12);
-    for(let k=0;k<3;k++){
-      const v=min+(max-min)*k/2,yy=gy+gh-1-(v-min)/(max-min)*(gh-1);
+    const ticks=gh<22?2:3;
+    for(let k=0;k<ticks;k++){
+      const v=min+(max-min)*k/(ticks-1),yy=gy+gh-1-(v-min)/(max-min)*(gh-1);
       box(gx,yy,gw,1,'#102442');rightLabel(number(v,0),gx-4,yy-3,ink.muted,1,20);
     }
     const px=i=>gx+(values.length===1?gw-1:i*(gw-1)/(values.length-1));
@@ -522,7 +523,8 @@
   function nflCards(m,x,y,w,h){
     panel(x,y,w,h,'');
     const games=(m.nflGames||m.games||[]).filter(g=>g.competitions?.[0]?.competitors?.length>=2),count=6,labelW=71;
-    const page=Math.floor(now()/13000)%Math.max(1,Math.ceil(games.length/count)),shown=games.slice(page*count,(page+1)*count);
+    const page=Math.floor(now()/13000)%Math.max(1,Math.ceil(games.length/count));
+    const shown=Array.from({length:Math.min(count,games.length)},(_,i)=>games[(page*count+i)%games.length]);
     label('NFL',x+6,y+5,ink.blue,1,63);
     label('W'+(m.nflWeek||m.league?.week||'--'),x+6,y+16,ink.muted,1,63);
     if(h>=38&&games.length>count)label((page+1)+'/'+Math.ceil(games.length/count),x+6,y+29,ink.muted,1,63);
