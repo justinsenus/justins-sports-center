@@ -4,39 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#020817">
-  <title>Justin’s Fantasy Scoreboard · TV & 6×4 LED Build</title>
+  <title>Justin’s Fantasy Scoreboard · Live TV & 6×4 LED Board</title>
   <meta name="description" content="A live LED fantasy football scoreboard for Sleeper and ESPN. Connect another television to the same HP, iPad, or iPhone controller.">
   <link rel="stylesheet" href="../remote/soft-glass.css?v=6">
   <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
   <link rel="stylesheet" href="../remote/player-details.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-native.css?v=8">
+  <link rel="stylesheet" href="../remote/tv-led-native.css?v=9">
 </head>
 <body data-tv-led-canvas="1" data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
   <div id="nativeApp">
     <div class="native-toolbar" aria-label="LED scoreboard controls">
       <div class="native-mode-controls" role="group" aria-label="Display proportions">
         <button id="nativeTV" type="button" aria-pressed="true">TV view</button>
-        <button id="nativeBuild" type="button" aria-pressed="false">6×4 build preview</button>
+        <button id="nativeBuild" type="button" aria-pressed="false">6×4 LED board</button>
       </div>
       <div class="native-league-controls" role="group" aria-label="Fantasy league">
         <button id="nativeLeagueSleeper" type="button" aria-pressed="true">Sleeper</button>
         <button id="nativeLeagueEspn" type="button" aria-pressed="false">ESPN</button>
       </div>
       <button id="nativeHome" type="button">Matchup</button>
-      <button id="nativeDemo" type="button" title="Preview only; provider scores and controller state stay unchanged">Test score animation</button>
-      <button id="nativeLaugh" type="button" aria-pressed="false" title="Enable and preview the scoring laugh on this screen">Enable laugh</button>
       <button id="nativePair" type="button">Pair controller</button>
       <button id="nativeKiosk" type="button" aria-pressed="false">Screen only</button>
       <button id="nativeFull" type="button">Fullscreen</button>
       <span id="nativeStatus" role="status">Connecting your leagues…</span>
     </div>
     <section id="nativeStage" aria-label="Live fantasy LED scoreboard">
-      <canvas id="nativeCanvas" width="768" height="432" role="img" aria-label="TV LED-style fantasy scoreboard"></canvas>
+      <canvas id="nativeCanvas" width="768" height="432" role="img" aria-label="Live fantasy LED scoreboard"></canvas>
       <button id="nativeExit" type="button" aria-label="Show scoreboard controls">Show controls</button>
     </section>
-    <footer class="native-meta"><span id="nativeReadout" role="status">TV VIEW · 16:9</span><span class="native-build-note">Build preview: 6 across × 4 down · 768×256 pixels · 1920×640 mm, assuming 320×160 mm P2.5 modules.</span></footer>
+    <footer class="native-meta"><span id="nativeReadout" role="status">TV VIEW · 16:9</span><span class="native-build-note">6×4 LED board: 6 across × 4 down · 768×256 pixels · 1920×640 mm, assuming 320×160 mm P2.5 modules.</span></footer>
   </div>
-  <audio id="nativeLaughAudio" src="../patriots-fantasy-touch/assets/senus-score-laugh.mp3?v=1" preload="auto" hidden></audio>
   <div class="glass-shell">
     <header class="glass-header">
       <div class="header-left"><span id="tvContext" class="header-week">Sleeper</span><span id="weekLabel" class="header-week">Week —</span></div>
@@ -79,6 +76,6 @@
 
 
   <script src="../remote/session.js?v=2" defer></script>
-  <script src="../remote/tv-led-native.js?v=11" defer></script>
+  <script src="../remote/tv-led-native.js?v=12" defer></script>
 </body>
 </html>

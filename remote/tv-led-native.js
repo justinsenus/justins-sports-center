@@ -7,12 +7,12 @@
   const app = window.FantasyCenter;
   const sizes = {
     twentyfour: {cols:6,rows:4,width:768,height:256,label:'6 ACROSS × 4 DOWN · P2.5 · 768 × 256'},
-    tv: {cols:6,rows:4,width:768,height:432,label:'65-INCH TV · 16:9 · LED-STYLE VIEW'}
+    tv: {cols:6,rows:4,width:768,height:432,label:'65-INCH TV · 16:9 · LIVE LED SCOREBOARD'}
   };
   const $ = id => document.getElementById(id);
   let chosen = sizes.twentyfour;
   let auto = true, manualScene = 0, lastSceneAt = Date.now();
-  let demoUntil = 0, shakeUntil = 0, lastMeta = '', demoBase = 0;
+  let shakeUntil = 0, lastMeta = '';
   let celebrationValue = 0, celebrationStarted = 0, celebrationScope = '', celebrationSide = 'own';
   let trackedScope = '';
   const celebrationDuration = 4800;
@@ -216,42 +216,9 @@
   mascot.src='../patriots-fantasy-touch/assets/justin-led-mascot-gray-64.png?v=1';
   function getModel(){try{return brightenModel(app.model())}catch(_){return null}}
 
-  const laughAudio=$('nativeLaughAudio'),laughButton=$('nativeLaugh');
-  let laughEnabled=true,laughUnlocked=false,lastLaughAt=-Infinity;
-  try{laughEnabled=localStorage.getItem('senus-led-laugh')!=='off'}catch(_){}
-  function updateLaughButton(){
-    if(!laughButton)return;
-    laughButton.textContent=!laughEnabled?'Laugh: Off':laughUnlocked?'Laugh: On':'Enable laugh';
-    laughButton.setAttribute('aria-pressed',String(laughEnabled&&laughUnlocked));
-    laughButton.title=!laughEnabled?'Turn the scoring laugh on':laughUnlocked?'Mute the scoring laugh':'Enable and preview the scoring laugh on this screen';
-  }
-  function playLaugh(gesture=false){
-    if(!laughEnabled||!laughAudio||typeof laughAudio.play!=='function'||(!gesture&&!laughUnlocked))return;
-    if(!gesture&&now()-lastLaughAt<1800)return;
-    lastLaughAt=now();
-    laughAudio.volume=.7; laughAudio.currentTime=0;
-    laughAudio.dataset.state='starting';
-    try{
-      Promise.resolve(laughAudio.play()).then(()=>{
-        laughUnlocked=true;laughAudio.dataset.state='playing';updateLaughButton();
-      }).catch(()=>{
-        laughUnlocked=false;laughAudio.dataset.state='blocked';updateLaughButton();
-      });
-    }catch(_){laughUnlocked=false;laughAudio.dataset.state='blocked';updateLaughButton()}
-  }
-  laughAudio?.addEventListener('ended',()=>{laughAudio.dataset.state='ready'});
-  laughAudio?.addEventListener('error',()=>{laughAudio.dataset.state='unavailable'});
-  laughButton?.addEventListener('click',()=>{
-    if(laughEnabled&&laughUnlocked){laughEnabled=false;laughAudio?.pause();}
-    else {laughEnabled=true;playLaugh(true);}
-    try{localStorage.setItem('senus-led-laugh',laughEnabled?'on':'off')}catch(_){}
-    updateLaughButton();
-  });
-  updateLaughButton();
-  function triggerCelebration(delta,m,gesture=false,side='own'){
+  function triggerCelebration(delta,m,side='own'){
     celebrationValue=delta;celebrationStarted=now();celebrationScope=scopeFor(m);celebrationSide=side;
     shakeUntil=now()+celebrationDuration;
-    playLaugh(gesture);
   }
   function trackScores(m) {
     if(!m || m.loading || m.stale || !m.league?.ready)return;
@@ -267,10 +234,10 @@
     const prev=baseline.get(key);
     baseline.set(key,n);
     const sameScope=trackedScope===key;trackedScope=key;
-    // Seed actual totals before kickoff, so the very first scoring play laughs.
+    // Seed actual totals before kickoff, so the first scoring play celebrates.
     // Loading, league/week changes, opponents and projection changes never do.
     if(sameScope&&prev!==undefined&&n>prev+.001&&(m.started||m.leagueStarted))
-      triggerCelebration(n-prev,m,false,oppIsMine?'opponent':'own');
+      triggerCelebration(n-prev,m,oppIsMine?'opponent':'own');
   }
   function celebration(w) {
     if(now()>=shakeUntil)return;
@@ -369,7 +336,7 @@
   function hero(m,w,h){
     const league=m?.league||{},compact=h===256,cx=w/2,hh=compact?70:99;
     const ownColor=sideInk(m,'own'),opponentColor=sideInk(m,'opponent');
-    const a=animatedPoints(scopeFor(m)+(m.animationPreview?'|preview-own':'|hero-own'),m?.ownActual);
+    const a=animatedPoints(scopeFor(m)+'|hero-own',m?.ownActual);
     const b=animatedPoints(scopeFor(m)+'|hero-opp',m?.opponentActual);
     panel(4,16,w-8,hh-16,'');
     const ownName=league.ownName||'MY TEAM',oppName=league.opponentName||'OPPONENT';
@@ -431,7 +398,7 @@
       const p=visible[i],yy=top+i*rowH;
       const selected=String(m?.ui?.playerId||'')===String(p.player_id);
       if(selected)box(x+2,yy-1,w-4,10,'#22435b');
-      const keyId=scope+(m.animationPreview?'|preview-p|':'|p|')+String(p.player_id??p.id??p.name);
+      const keyId=scope+'|p|'+String(p.player_id??p.id??p.name);
       const points=animatedPoints(keyId,numeric(p));
       let delta=points.changed?points.delta:0;
       box(x+4,yy+1,2,6,delta>0?ink.green:delta<0?ink.red:color);
@@ -615,7 +582,7 @@
     for(let i=0;i<2;i++){
       const side=i?'opponent':'own',left=x+labelW+i*(slotW+gap),c=sideInk(m,side);
       const name=i?m.league?.opponentName:m.league?.ownName,size=compact?14:22;
-      const key=scopeFor(m)+(m.animationPreview?'|preview-card-':'|card-')+side;
+      const key=scopeFor(m)+'|card-'+side;
       const points=animatedPoints(key,i?m.opponentActual:m.ownActual),scoreScale=compact?1:2;
       const score=number(points.value),scoreRoom=compact?41:78;
       fantasyLogo(m,side,left+4,y+Math.floor((h-size)/2),size);
@@ -841,18 +808,7 @@
     if(canvas.height!==h)canvas.height=h;
     ctx.imageSmoothingEnabled=false;
     box(0,0,w,h,ink.bg);stroke(0,0,w,h,ink.line);
-    const live=getModel();trackScores(live);
-    let m=live;
-    if(now()<demoUntil&&live?.league?.ready){
-      const first=(live.league.own||[]).find(p=>p.starter!==false);
-      const own=(live.league.own||[]).map(p=>p===first?{...p,actual:numeric(p)+6.4}:p);
-      m={...live,animationPreview:true,ownActual:demoBase+6.4,
-        ui:{...live.ui,view:'overview',playerId:null,gameId:null},league:{...live.league,own},
-        events:[{name:'DEMO '+(first?playerName(first):'SCORING PLAY'),fantasyTeamName:live.league.ownName,
-          fantasyTeamOwner:live.league.ownOwner,delta:6.4,total:first?numeric(first)+6.4:demoBase+6.4,
-          teamColor:sideInk(live,'own')},...(live.events||[])]};
-    }
-    canvas.dataset.animationPreview=m?.animationPreview?'true':'false';
+    const m=getModel();trackScores(m);
     const league=m?.league||{},ui=m?.ui||{},view=upper(ui.view||'OVERVIEW');
     // Tiny ID label, so nearly the entire native LED budget shows game data.
     label(upper(ui.league||'SLEEPER')+' WEEK '+(league.week??'--'),
@@ -871,7 +827,6 @@
       else if(['stock','injuries','live'].includes(ui.view))
         contextScene(m,w,h,ui.view);
       else {
-        if(m.animationPreview)centered('ANIMATION PREVIEW +6.4',w/2,5,ink.green,1);
         hero(m,w,h);
         fullScene(m,w,h);
       }
@@ -883,11 +838,11 @@
     const textStatus=document.getElementById('remoteStatus')?.textContent?.trim()||'Controller status unavailable';
     const dataState=m?.loading?'FEED LOADING':!league.ready?(m?.error||'FEED UNAVAILABLE'):m?.stale?'STALE FANTASY DATA':'FANTASY DATA READY';
     const conn=remote?(remote.paired?(remote.connected?'PAIRED':'RECONNECTING'):'NOT PAIRED'):'WAITING FOR PAIRING';
-    const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':' · BUILD PREVIEW SHOWS THE PHYSICAL PANEL SHAPE')+' · '+dataState+' · '+conn;
+    const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':' · 6X4 LED BOARD / 768X256')+' · '+dataState+' · '+conn;
     if(lastMeta!==meta){$('nativeReadout').textContent=meta;lastMeta=meta}
-    const stage=$('nativeStatus'),message=m?.animationPreview?'ANIMATION PREVIEW · live scores remain unchanged':textStatus+' · '+dataState;
+    const stage=$('nativeStatus'),message=textStatus+' · '+dataState;
     if(stage&&stage.textContent!==message)stage.textContent=message;
-    canvas.setAttribute('aria-label',(m?.animationPreview?'Animation preview. ':'')+(chosen===sizes.twentyfour?'P2.5 physical board preview':'TV LED-style scoreboard')+', '+w+' by '+h+' pixels. '+(league.ownName||'My team')+' '+number(m?.ownActual)+' vs '+(league.opponentName||'opponent')+' '+number(m?.opponentActual));
+    canvas.setAttribute('aria-label',(chosen===sizes.twentyfour?'Live 6 by 4 P2.5 LED scoreboard':'Live TV LED scoreboard')+', '+w+' by '+h+' pixels. '+(league.ownName||'My team')+' '+number(m?.ownActual)+' vs '+(league.opponentName||'opponent')+' '+number(m?.opponentActual));
     for(const key of ['sleeper','espn'])$('nativeLeague'+(key==='sleeper'?'Sleeper':'Espn'))?.setAttribute('aria-pressed',String(ui.league===key));
   }
 
@@ -944,16 +899,6 @@
     manualScene%=3;auto=false;
     $('nativePause').textContent='Resume rotation';draw();
   });
-  function previewAnimation(){
-    const m=getModel();if(!m?.league?.ready)return;
-    demoBase=Number(m.ownActual)||0;
-    const seed=n=>({from:n,to:n,start:0,delta:0});
-    for(const suffix of ['|preview-own','|preview-card-own'])transitions.set(scopeFor(m)+suffix,seed(demoBase));
-    const p=(m.league.own||[]).find(p=>p.starter!==false);
-    if(p)transitions.set(scopeFor(m)+'|preview-p|'+String(p.player_id??p.id??p.name),seed(numeric(p)));
-    demoUntil=now()+5500;triggerCelebration(6.4,m,true);draw();
-  }
-  $('nativeDemo')?.addEventListener('click',previewAnimation);
   $('nativePair')?.addEventListener('click',()=>document.getElementById('remoteToggle')?.click());
   $('nativeFull')?.addEventListener('click',async()=>{
     try {if(document.fullscreenElement)await document.exitFullscreen();else await $('nativeStage').requestFullscreen();}
@@ -972,5 +917,5 @@
   const initial=new URL(location.href).searchParams.get('modules');
   const display=new URL(location.href).searchParams.get('display');
   pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
-  window.FantasyLEDNative={draw,pick,previewAnimation,getSize:()=>({...chosen}),sizes};
+  window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
 })();

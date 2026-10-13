@@ -11,10 +11,14 @@ The TV keeps its own provider refresh running when a controller disconnects. The
 
 ## Additional LED TV
 
-`/tv-led/` is the second display design: self-hosted dot-matrix lettering,
-blue LED panel borders, the existing mascot, full rosters, matchup and league
-plots, injury reports, scoring events, fantasy totals, and current NFL scores.
-The controller footer links to both designs.
+`/tv-led/` is the live LED scoreboard for a 16:9 television. The **6×4 LED
+board** control switches to the 768×256 pixel layout, also available directly
+at `/tv-led-native/`, for six P2.5 modules across and four down. Both layouts
+use actual Sleeper or ESPN totals, bright team colors, Justin's gray-hat
+mascot, full rosters, matchup and league plots, injury reports, scoring events,
+fantasy totals, and current NFL scores. The mascot celebrates automatically
+when Justin's actual team total increases. The board is silent and has no
+demo scores or test controls. The controller footer links to both designs.
 
 To add a second television to the same controller, open `/tv-led/`, choose
 **Pair**, and enter the code shown on the existing TV or controller under
