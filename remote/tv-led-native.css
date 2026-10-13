@@ -35,3 +35,5 @@ body[data-native-led="1"] #pairPanel .led-original-link{color:#9ccfff;font:13px 
 
 body[data-native-led="1"] #nativeDemo{color:#091a0d;background:#78eaa0;border-color:#a3ffc3;font-weight:800}
 body[data-native-led="1"] #nativeDemo:hover{background:#a5ffc4}
+body[data-native-led="1"] #nativeLaugh{color:#ffcf98;border-color:#bd7136}
+body[data-native-led="1"] #nativeLaugh[aria-pressed="true"]{color:#fff0d7;background:#663512;border-color:#ffb66b}

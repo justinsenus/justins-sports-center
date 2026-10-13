@@ -13,7 +13,9 @@
   let chosen = sizes.twentyfour;
   let auto = true, manualScene = 0, lastSceneAt = Date.now();
   let demoUntil = 0, shakeUntil = 0, lastMeta = '', demoBase = 0;
-  let celebrationValue = 0;
+  let celebrationValue = 0, celebrationStarted = 0, celebrationScope = '', celebrationSide = 'own';
+  let trackedScope = '';
+  const celebrationDuration = 4800;
   // Transition points only on actual provider changes, never on a fresh first load.
   const transitions=new Map();
   function animatedPoints(key,raw) {
@@ -132,14 +134,14 @@
   const starters=(m,key)=>((m?.league?.[key])||[]).filter(p=>p.starter!==false);
   const ledPalette=['#FF9638','#40D9FF','#68F58C','#FC76E8','#FFE76B','#B9A0FF',
     '#FF849E','#75F1D3','#91BFFF','#FFBC71','#CCF889','#F4A5FF','#83ECFF','#FFAED6'];
+  const isMineTeam=t=>Boolean(t?.isOwnFantasyTeam)||/^(THE BIG SENUS|GUMBYS? BIG D)$/.test(upper(t?.name).replace(/'/g,''));
   function brightenModel(raw){
     if(!raw?.league)return raw;
     const all=raw.league.teams||[],byId=new Map(),byName=new Map();
-    const mine=t=>t.isOwnFantasyTeam||/^(THE BIG SENUS|GUMBYS? BIG D)$/.test(upper(t.name).replace(/'/g,''));
     const ordered=all.slice().sort((a,b)=>String(a.id??a.name).localeCompare(String(b.id??b.name),undefined,{numeric:true}));
     let index=1;
     const teams=ordered.map(t=>{
-      const teamColor=mine(t)?ledPalette[0]:ledPalette[1+(index++-1)%(ledPalette.length-1)];
+      const teamColor=isMineTeam(t)?ledPalette[0]:ledPalette[1+(index++-1)%(ledPalette.length-1)];
       byId.set(String(t.id),teamColor);byName.set(upper(t.name),teamColor);
       return {...t,teamColor};
     });
@@ -193,16 +195,7 @@
     const scale=Math.min(62/crop.w,62/crop.h);
     const dw=Math.round(crop.w*scale),dh=Math.round(crop.h*scale);
     g.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,Math.round((64-dw)/2),Math.round((64-dh)/2),dw,dh);
-    try{
-      // Reduce color banding gently without replacing transparent edges.
-      const id=g.getImageData(0,0,64,64),p=id.data;
-      for(let i=0;i<p.length;i+=4)if(p[i+3]>0){
-        p[i]=Math.round(p[i]/24)*24;
-        p[i+1]=Math.round(p[i+1]/24)*24;
-        p[i+2]=Math.round(p[i+2]/24)*24;
-      }
-      g.putImageData(id,0,0);
-    }catch(_){}
+    // Keep the supplied gray cap, orange insignia and white outline colors.
     pixelPortrait=off;
   }
   function drawMascot(x,y,w,h){
@@ -218,25 +211,70 @@
       ctx.drawImage(pixelPortrait,Math.round(x+(w-width)/2+jiggle),Math.round(y+(h-height)/2),width,height);
     }
   }
-  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();canvas.dataset.mascotReady='true';draw()});
+  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();canvas.dataset.mascotReady='true';canvas.dataset.mascotStyle='gray-hat';draw()});
   mascot.addEventListener('error',()=>{if(!mascot.src.includes('justin-mascot-cutout.png'))mascot.src='../patriots-fantasy-touch/assets/justin-mascot-cutout.png'});
-  mascot.src='../patriots-fantasy-touch/assets/justin-led-mascot-blue-64.png?v=1';
+  mascot.src='../patriots-fantasy-touch/assets/justin-led-mascot-gray-64.png?v=1';
   function getModel(){try{return brightenModel(app.model())}catch(_){return null}}
+
+  const laughAudio=$('nativeLaughAudio'),laughButton=$('nativeLaugh');
+  let laughEnabled=true,laughUnlocked=false,lastLaughAt=-Infinity;
+  try{laughEnabled=localStorage.getItem('senus-led-laugh')!=='off'}catch(_){}
+  function updateLaughButton(){
+    if(!laughButton)return;
+    laughButton.textContent=!laughEnabled?'Laugh: Off':laughUnlocked?'Laugh: On':'Enable laugh';
+    laughButton.setAttribute('aria-pressed',String(laughEnabled&&laughUnlocked));
+    laughButton.title=!laughEnabled?'Turn the scoring laugh on':laughUnlocked?'Mute the scoring laugh':'Enable and preview the scoring laugh on this screen';
+  }
+  function playLaugh(gesture=false){
+    if(!laughEnabled||!laughAudio||typeof laughAudio.play!=='function'||(!gesture&&!laughUnlocked))return;
+    if(!gesture&&now()-lastLaughAt<1800)return;
+    lastLaughAt=now();
+    laughAudio.volume=.7; laughAudio.currentTime=0;
+    laughAudio.dataset.state='starting';
+    try{
+      Promise.resolve(laughAudio.play()).then(()=>{
+        laughUnlocked=true;laughAudio.dataset.state='playing';updateLaughButton();
+      }).catch(()=>{
+        laughUnlocked=false;laughAudio.dataset.state='blocked';updateLaughButton();
+      });
+    }catch(_){laughUnlocked=false;laughAudio.dataset.state='blocked';updateLaughButton()}
+  }
+  laughAudio?.addEventListener('ended',()=>{laughAudio.dataset.state='ready'});
+  laughAudio?.addEventListener('error',()=>{laughAudio.dataset.state='unavailable'});
+  laughButton?.addEventListener('click',()=>{
+    if(laughEnabled&&laughUnlocked){laughEnabled=false;laughAudio?.pause();}
+    else {laughEnabled=true;playLaugh(true);}
+    try{localStorage.setItem('senus-led-laugh',laughEnabled?'on':'off')}catch(_){}
+    updateLaughButton();
+  });
+  updateLaughButton();
+  function triggerCelebration(delta,m,gesture=false,side='own'){
+    celebrationValue=delta;celebrationStarted=now();celebrationScope=scopeFor(m);celebrationSide=side;
+    shakeUntil=now()+celebrationDuration;
+    playLaugh(gesture);
+  }
   function trackScores(m) {
-    if(!m || m.loading || !m.league?.ready || !m.started)return;
-    const n=Number(m.ownActual);
-    if(!Number.isFinite(n))return;
-    const key=[m.ui?.league||m.league.id||'',m.league.week||'',m.league.ownName||''].join('|');
+    if(!m || m.loading || m.stale || !m.league?.ready)return;
+    const teams=m.league.teams||[];
+    const mine=teams.find(isMineTeam);
+    const ownIsMine=isMineTeam({name:m.league.ownName})||Boolean(mine&&upper(mine.name)===upper(m.league.ownName));
+    const oppIsMine=isMineTeam({name:m.league.opponentName})||Boolean(mine&&upper(mine.name)===upper(m.league.opponentName));
+    const raw=ownIsMine?m.ownActual:oppIsMine?m.opponentActual:mine?.total;
+    const n=Number(raw);
+    if(raw==null||raw===''||!Number.isFinite(n))return;
+    const teamName=ownIsMine?m.league.ownName:oppIsMine?m.league.opponentName:mine.name;
+    const key=scopeFor(m)+'|'+upper(teamName);
     const prev=baseline.get(key);
     baseline.set(key,n);
-    if(prev!==undefined && n>prev+.001){
-      shakeUntil=now()+2400;
-      celebrationValue=n-prev;
-    }
+    const sameScope=trackedScope===key;trackedScope=key;
+    // Seed actual totals before kickoff, so the very first scoring play laughs.
+    // Loading, league/week changes, opponents and projection changes never do.
+    if(sameScope&&prev!==undefined&&n>prev+.001&&(m.started||m.leagueStarted))
+      triggerCelebration(n-prev,m,false,oppIsMine?'opponent':'own');
   }
   function celebration(w) {
     if(now()>=shakeUntil)return;
-    const time=now(),strength=clamp((shakeUntil-time)/2400,0,1),hh=chosen.height===256?70:99;
+    const time=now(),strength=clamp((shakeUntil-time)/celebrationDuration,0,1),hh=chosen.height===256?70:99;
     const cx=Math.floor(w/2);
     // Pixel confetti and arcade jackpot rays stay INSIDE actual P2.5 resolution.
     const colors=[ink.orange,ink.gold,ink.green,ink.white];
@@ -247,8 +285,84 @@
       if(x>w/2-92&&x<w/2+92&&y>15&&y<hh-6)box(x,y,(i%3===0?3:2),2,colors[i%4]);
     }
     if(Math.floor(time/125)%2===0){
-      box(5,hh-3,cx-9,2,ink.green);
+      box(celebrationSide==='opponent'?cx+4:5,hh-3,cx-9,2,ink.green);
     }
+  }
+
+  function pixelLine(x0,y0,x1,y1,color,size=1){
+    const steps=Math.max(Math.abs(x1-x0),Math.abs(y1-y0),1);
+    for(let i=0;i<=steps;i++)box(x0+(x1-x0)*i/steps,y0+(y1-y0)*i/steps,size,size,color);
+  }
+  function burst(x,y,r,color,phase){
+    for(let i=0;i<12;i++){
+      const a=i*Math.PI/6+phase;
+      pixelLine(x+Math.cos(a)*r*.52,y+Math.sin(a)*r*.52,x+Math.cos(a)*r,y+Math.sin(a)*r,color);
+      box(x+Math.cos(a)*(r+3),y+Math.sin(a)*(r+3),2,2,ink.white);
+    }
+    box(x-2,y,5,1,color);box(x,y-2,1,5,color);
+  }
+  function laughingPortrait(x,y,size,time){
+    if(!pixelPortrait){drawMascot(x,y,size,size);return;}
+    const beat=Math.sin(time/83),jaw=1+Math.max(0,beat)*.18,unit=size/64;
+    ctx.save();ctx.translate(Math.round(x+size/2),Math.round(y+size/2+Math.sin(time/140)*2));
+    ctx.rotate(Math.sin(time/170)*.045);ctx.imageSmoothingEnabled=false;
+    // Animate the original artwork in two adjoining slices; preserve its face.
+    ctx.drawImage(pixelPortrait,0,0,64,43,-size/2,-size/2,size,43*unit);
+    ctx.drawImage(pixelPortrait,0,43,64,21,-size/2,-size/2+43*unit,size,21*unit*jaw);
+    ctx.restore();
+  }
+  function flyingFootball(x,y,size,angle){
+    ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.rotate(angle);
+    const unit=size/24;
+    const rows=[8,14,18,22,24,24,22,18,14,8];
+    rows.forEach((width,i)=>box(-width*unit/2,(i-5)*unit,width*unit,unit,i===0||i===9?'#ffcb83':'#be622b'));
+    box(-9*unit,-3*unit,unit,6*unit,ink.white);box(8*unit,-3*unit,unit,6*unit,ink.white);
+    box(-4*unit,-unit,8*unit,unit,ink.white);
+    for(let i=-3;i<=3;i+=2)box(i*unit,-2*unit,unit,3*unit,ink.white);
+    ctx.restore();
+  }
+  function scoreCelebration(m,w,h){
+    const time=now()-celebrationStarted;
+    const active=celebrationStarted>0&&time>=0&&time<celebrationDuration&&scopeFor(m)===celebrationScope;
+    canvas.dataset.celebration=active?'laughing':'idle';
+    if(!active)return;
+    const compact=h===256,x=210,y=compact?74:103,cw=w-420,ch=compact?98:204,cx=w/2;
+    const colors=['#ff9638','#ffe76b','#68f58c','#40d9ff','#b9a0ff','#fc76e8'];
+    box(x,y,cw,ch,'#020713');
+    ctx.save();ctx.beginPath();ctx.rect(x,y,cw,ch);ctx.clip();
+    // A moving rainbow marquee and staggered star bursts echo the reference.
+    for(let i=0;i<cw;i+=8){
+      const c=colors[(Math.floor(i/24)+Math.floor(time/240))%colors.length];
+      box(x+i,y,Math.min(8,cw-i),2,c);box(x+i,y+ch-2,Math.min(8,cw-i),2,c);
+    }
+    for(let i=2;i<ch-2;i+=8){
+      const c=colors[(Math.floor(i/16)+Math.floor(time/240))%colors.length];
+      box(x,y+i,2,Math.min(8,ch-i-2),c);box(x+cw-2,y+i,2,Math.min(8,ch-i-2),c);
+    }
+    const locations=compact?[[46,32],[cw-48,66],[cw-53,29],[56,69]]:
+      [[51,49],[cw-51,140],[cw-53,46],[53,146],[97,91],[cw-92,93]];
+    locations.forEach(([bx,by],i)=>{
+      const life=((time+i*213)%1150)/1150;
+      burst(x+bx,y+by,5+life*(compact?15:25),colors[i%colors.length],i*.24);
+    });
+    for(let i=0;i<26;i++){
+      const px=x+6+((i*97+Math.floor(time/24))%(cw-12));
+      const py=y+9+((i*43+Math.floor(time/35))%(ch-18));
+      if(Math.floor(time/180+i)%3!==0)box(px,py,1,1,colors[i%colors.length]);
+    }
+    centered('FANTASY POINTS',cx,y+(compact?7:12),ink.gold,compact?1:2);
+    const size=compact?60:122,headY=y+(compact?18:43);
+    laughingPortrait(cx-size/2,headY,size,time);
+    const flight=clamp((time-1250)/1500,0,1);
+    if(time>1250&&time<2750){
+      const fx=x-25+flight*(cw+50),fy=y+ch*.64-Math.sin(flight*Math.PI)*(compact?13:34);
+      flyingFootball(fx,fy,compact?22:34,-.6+flight*3.7);
+    }
+    const delta='+'+number(celebrationValue);
+    const caption=time<2900?delta:compact?delta+' POINTS':delta+' FANTASY POINTS';
+    const font=compact?1:time<2900?3:2;
+    centered(caption,cx,y+ch-(compact?12:25),ledPalette[0],font);
+    ctx.restore();
   }
 
   const teamTint=(team,fallback)=>/^#[\da-f]{6}$/i.test(String(team||''))?team:fallback;
@@ -762,6 +876,8 @@
         fullScene(m,w,h);
       }
     }
+    if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
+    else canvas.dataset.celebration='idle';
     const mmW=chosen.cols*320,mmH=chosen.rows*160;
     const remote=window.FantasyRemote?.getStatus?.();
     const textStatus=document.getElementById('remoteStatus')?.textContent?.trim()||'Controller status unavailable';
@@ -835,7 +951,7 @@
     for(const suffix of ['|preview-own','|preview-card-own'])transitions.set(scopeFor(m)+suffix,seed(demoBase));
     const p=(m.league.own||[]).find(p=>p.starter!==false);
     if(p)transitions.set(scopeFor(m)+'|preview-p|'+String(p.player_id??p.id??p.name),seed(numeric(p)));
-    demoUntil=now()+5500;shakeUntil=now()+2400;celebrationValue=6.4;draw();
+    demoUntil=now()+5500;triggerCelebration(6.4,m,true);draw();
   }
   $('nativeDemo')?.addEventListener('click',previewAnimation);
   $('nativePair')?.addEventListener('click',()=>document.getElementById('remoteToggle')?.click());
