@@ -6,7 +6,8 @@
   if (!ctx) return;
   const app = window.FantasyCenter;
   const sizes = {
-    twentyfour: {cols:6,rows:4,label:'24 MODULES · 768 × 256'}
+    twentyfour: {cols:6,rows:4,width:768,height:256,label:'6 ACROSS × 4 DOWN · P2.5 · 768 × 256'},
+    tv: {cols:6,rows:4,width:768,height:432,label:'65-INCH TV · 16:9 · LED-STYLE VIEW'}
   };
   const $ = id => document.getElementById(id);
   let chosen = sizes.twentyfour;
@@ -17,7 +18,7 @@
   const transitions=new Map();
   function animatedPoints(key,raw) {
     const n=Number(raw);
-    if(!Number.isFinite(n))return {value:0,delta:0,fraction:1,changed:false};
+    if(raw==null || raw==='' || !Number.isFinite(n))return {value:null,delta:0,fraction:1,changed:false};
     let entry=transitions.get(key);
     if(!entry){entry={from:n,to:n,start:0,delta:0};transitions.set(key,entry);}
     if(Math.abs(n-entry.to)>.001) {
@@ -84,15 +85,15 @@
     '&':['01100','10010','10100','01000','10101','10010','01101'],
     ' ' :['00000','00000','00000','00000','00000','00000','00000']
   };
-  const ink={bg:'#03080f',panel:'#081825',line:'#194057',white:'#f0f7ff',
-    orange:'#ff912c',blue:'#75ccff',green:'#54eab3',muted:'#7c9db7',red:'#ff5d6e',gold:'#ffdb74'};
+  const ink={bg:'#01040b',panel:'#030a18',line:'#2258ba',white:'#d8f7ff',
+    orange:'#ff912c',blue:'#67bcff',green:'#54eab3',muted:'#90b2d2',red:'#ff5d6e',gold:'#ffdb74'};
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const number = (v,d=1) => {
     if(v==null || v==='') return '--';
     const n=Number(v);
     return Number.isFinite(n)?n.toFixed(d):'--';
   };
-  const upper=v=>String(v??'').replace(/\s+/g,' ').trim().toUpperCase();
+  const upper=v=>String(v??'').replace(/[\u2010-\u2015]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/\s+/g,' ').trim().toUpperCase();
   const short=(v,max)=>upper(v).slice(0,max);
   function box(x,y,w,h,color) {ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
   function stroke(x,y,w,h,color) {
@@ -112,6 +113,17 @@
   function panel(x,y,w,h,title,color=ink.blue) {
     box(x,y,w,h,ink.panel);stroke(x,y,w,h,ink.line);
     if(title)label(title,x+4,y+4,color,1,w-8);
+  }
+  function textWidth(raw,s=1){return Math.max(0,upper(raw).length*6*s-s);}
+  function rightLabel(raw,right,y,color=ink.white,s=1,maxWidth=999){
+    const n=Math.min(upper(raw).length,Math.floor(maxWidth/(6*s)));
+    label(raw,right-Math.max(0,n*6*s-s),y,color,s,maxWidth);
+  }
+  function centered(raw,cx,y,color=ink.white,s=1){label(raw,Math.round(cx-textWidth(raw,s)/2),y,color,s);}
+  function playerName(p){
+    const name=String(p.full_name||p.name||'PLAYER').trim();
+    const words=name.split(/\s+/);
+    return words.length>1?words[0][0]+'. '+words.slice(1).join(' '):name;
   }
   const numeric=p=>Number(p && (p.actual ?? p.points ?? 0))||0;
   const starters=(m,key)=>((m?.league?.[key])||[]).filter(p=>p.starter!==false);
@@ -214,114 +226,157 @@
 
   const teamTint=(team,fallback)=>/^#[\da-f]{6}$/i.test(String(team||''))?team:fallback;
   function hero(m,w,h){
-    const league=m?.league||{},isLive=Boolean(m?.started);
+    const league=m?.league||{},compact=h===256,cx=w/2,hh=compact?70:99;
+    const a=animatedPoints(scopeFor(m)+'|hero-own',m?.ownActual);
+    const b=animatedPoints(scopeFor(m)+'|hero-opp',m?.opponentActual);
+    panel(4,16,w-8,hh-16,'');
     const ownName=league.ownName||'MY TEAM',oppName=league.opponentName||'OPPONENT';
-    const scope=scopeFor(m);
-    const a=animatedPoints(scope+'|hero-own',isLive?m?.ownActual:m?.ownFinish);
-    const b=animatedPoints(scope+'|hero-opp',isLive?m?.opponentActual:m?.opponentFinish);
-    const valid=Number.isFinite(a.value)&&Number.isFinite(b.value);
-    const ownColor=isLive&&valid?(a.value>b.value?ink.green:a.value<b.value?ink.red:ink.gold):ink.orange;
-    const oppColor=isLive&&valid?(b.value>a.value?ink.green:b.value<a.value?ink.red:ink.gold):ink.blue;
-    // Each side has 260 pixels; names and scores never collide with the center character.
-    const lx=17,rx=513,scoreSize=4;
-    label(short(ownName,37),lx,13,ink.orange,2,258);
-    label(short(oppName,37),rx,13,ink.blue,2,244);
-    label(number(a.value),lx+2,33,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize,245);
-    label(number(b.value),rx+2,33,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize,242);
-    label((isLive?(a.value>b.value?'LEADING':a.value<b.value?'TRAILING':'TIED'):'PROJECTED')+
-      (league.ownOwner?' / OWNER '+league.ownOwner:''),
-      lx,65,ownColor,1,259);
-    label((isLive?(b.value>a.value?'LEADING':b.value<a.value?'TRAILING':'TIED'):'PROJECTED')+
-      (league.opponentOwner?' / OWNER '+league.opponentOwner:''),
-      rx,65,oppColor,1,242);
-    drawMascot(337,6,94,68);
+    const ownScale=textWidth(ownName,2)<=180?2:1,oppScale=textWidth(oppName,2)<=180?2:1;
+    box(12,28,5,5,ink.orange);label(ownName,23,compact?25:29,ink.white,ownScale,180);
+    box(w-17,28,5,5,ink.blue);rightLabel(oppName,w-23,compact?25:29,ink.white,oppScale,180);
+    const record=raw=>app.data?.record?.(raw)||'';
+    label(record(league.ownRecord),23,compact?43:49,ink.muted,1,186);
+    rightLabel(record(league.opponentRecord),w-23,compact?43:49,ink.muted,1,186);
+    const ownOwner=league.ownOwner,oppOwner=league.opponentOwner;
+    if(!compact){
+      if(ownOwner)label('OWNER '+ownOwner,23,61,ink.muted,1,204);
+      if(oppOwner)rightLabel('OWNER '+oppOwner,w-23,61,ink.muted,1,204);
+    }
+    // Fixed, mirrored score slots reserve room for three-digit totals.
+    const scoreSize=compact?4:5,scoreY=compact?30:42;
+    centered(number(a.value),cx-107,scoreY,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    centered(number(b.value),cx+107,scoreY,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    label('PROJ '+number(m?.ownFinish),23,hh-14,ink.orange,1,204);
+    rightLabel('PROJ '+number(m?.opponentFinish),w-23,hh-14,ink.blue,1,204);
+    drawMascot(cx-31,compact?18:18,62,compact?38:57);
+    centered('VS',cx,compact?59:80,ink.white,1);
+    box(5,hh-3,cx-9,2,ink.orange);box(cx+4,hh-3,cx-9,2,ink.blue);
     celebration(w);
   }
 
   function scoreRows(m,x,y,w,h){
-    panel(x,y,w,h,'LEAGUE SCORING / '+(m?.events?.length||0)+' UPDATES',ink.gold);
+    panel(x,y,w,h,'LIVE LEAGUE SCORING',ink.blue);
     const events=(m?.events||[]).filter(Boolean);
-    const rowH=19,count=Math.max(1,Math.floor((h-22)/rowH));
+    const rowH=18,count=Math.max(1,Math.floor((h-15)/rowH));
     const offset=Math.floor(now()/8000)*count;
     if(!events.length){
-      label(m?.started?'NO RECENT SCORING':'AWAITING KICKOFF',x+5,y+22,ink.muted,1,w-10);
+      label(m?.started?'WAITING FOR NEW SCORING PLAYS':'AWAITING KICKOFF',x+5,y+16,ink.muted,1,w-10);
       return;
     }
     for(let i=0;i<Math.min(count,events.length);i++){
       const e=events[(offset+i)%events.length],yy=y+16+i*rowH,change=Number(e.delta);
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
       box(x+3,yy,2,15,teamTint(e.teamColor,ink.blue));
-      label(e.name||'PLAYER',x+9,yy,ink.white,1,w-67);
-      label((change>0?'+':'')+number(e.delta),x+w-52,yy,color,1,48);
-      label((e.fantasyTeamOwner?'OWNER '+e.fantasyTeamOwner+' / ':'')+
-         (e.fantasyTeamName||'LEAGUE TEAM'),
-         x+9,yy+9,ink.muted,1,w-68);
-      label('TOTAL '+number(e.total),x+w-73,yy+9,ink.gold,1,69);
+      const owner=(e.fantasyTeamOwner?' / '+e.fantasyTeamOwner:'');
+      label((e.name||'PLAYER')+' / '+(e.fantasyTeamName||'LEAGUE TEAM')+owner,x+9,yy,ink.white,1,w-77);
+      rightLabel((change>0?'+':'')+number(e.delta),x+w-6,yy,color,1,66);
+      if(h>=46)label('TOTAL '+number(e.total),x+9,yy+9,ink.muted,1,w-20);
     }
   }
 
   function drawRoster(m,x,y,w,h,key){
-    const mine=key==='own',name=mine?'MY STARTERS':'OPP STARTERS',baseColor=mine?ink.orange:ink.blue;
-    const team=(m?.league?.teams||[]).find(t=>t.name===(mine?m.league.ownName:m.league.opponentName));
-    const color=teamTint(team?.teamColor,baseColor), owner=(mine?m.league.ownOwner:m.league.opponentOwner)||'';
-    panel(x,y,w,h,(mine?'MY':'OPP')+' STARTERS / PTS PRJ +-',color);
-    if(owner)label('OWNER '+owner,x+5,y+13,ink.muted,1,w-10);
-    const rows=starters(m,key),rowH=11,top=owner?y+25:y+17;
-    const capacity=Math.floor((y+h-top-1)/rowH);
-    if(!rows.length){label('WAITING FOR ROSTER',x+4,y+24,ink.muted,1,w-8);return;}
-    if(rows.length>capacity)label('PLUS '+(rows.length-capacity)+' STARTERS ON PLAYER PAGE',x+4,y+4,ink.red,1,w-8);
+    const mine=key==='own',color=mine?ink.orange:ink.blue,compact=h<150;
+    const all=m?.league?.[key]||[],rows=all.filter(p=>p.starter!==false);
+    panel(x,y,w,h,(mine?'MY':'OPPONENT')+' STARTERS',ink.blue);
+    rightLabel('PTS',x+w-5,y+4,ink.blue,1,24);
+    const top=y+17,rowH=compact?10:18,capacity=Math.max(1,Math.floor((h-20)/rowH));
+    const page=Math.floor(now()/15000)%Math.max(1,Math.ceil(rows.length/capacity));
+    const visible=rows.slice(page*capacity,(page+1)*capacity);
+    if(!rows.length){label('WAITING FOR ROSTER',x+5,top,ink.muted,1,w-10);return;}
     const scope=scopeFor(m);
-    for(let i=0;i<Math.min(rows.length,capacity);i++){
-      const p=rows[i],yy=top+i*rowH;
+    for(let i=0;i<visible.length;i++){
+      const p=visible[i],yy=top+i*rowH;
       const selected=String(m?.ui?.playerId||'')===String(p.player_id);
       if(selected)box(x+2,yy-1,w-4,10,'#22435b');
       const keyId=scope+'|p|'+String(p.player_id??p.id??p.name);
       const points=animatedPoints(keyId,numeric(p));
       let delta=points.changed?points.delta:0;
       box(x+4,yy+1,2,6,delta>0?ink.green:delta<0?ink.red:color);
-      label((p.position||'')+' '+(p.full_name||p.name||'PLAYER'),x+9,yy,
-        selected?ink.gold:ink.white,1,w-103);
-      label(number(points.value),x+w-91,yy,
-        points.changed?(delta>0?ink.green:ink.red):ink.white,1,37);
-      label(number(p.projected),x+w-52,yy,ink.muted,1,32);
-      if(points.changed)label((delta>0?'+':'')+number(delta),x+w-26,yy,
-        delta>0?ink.green:ink.red,1,25);
-      else label((p.status==='LIVE'?'LIVE':p.status==='FINAL'?'FIN':' '),x+w-27,yy,ink.blue,1,25);
+      label(p.position||'FLX',x+9,yy,ink.blue,1,25);
+      label(playerName(p),x+37,yy,selected?ink.gold:ink.white,1,w-76);
+      rightLabel(number(points.value),x+w-5,yy,points.changed?(delta>0?ink.green:ink.red):ink.white,1,38);
+      if(!compact){
+        const schedule=String(app.markup?.gameLabel?.(p)||p.status||'').replace(/<[^>]*>/g,'');
+        label(schedule,x+37,yy+9,p.status==='LIVE'?ink.green:ink.muted,1,w-76);
+        rightLabel('P '+number(p.projected),x+w-5,yy+9,ink.muted,1,44);
+        box(x+4,yy+16,w-8,1,'#102442');
+      }
+    }
+    if(!compact && top+visible.length*rowH+19<y+h){
+      const by=top+visible.length*rowH+4,bench=all.filter(p=>p.starter===false),count=Math.floor((y+h-by-13)/18);
+      label('BENCH',x+7,by,ink.muted,1,w-14);
+      bench.slice(0,Math.max(0,count)).forEach((p,i)=>{
+        label((p.position||'')+' '+playerName(p),x+9,by+12+i*18,ink.muted,1,w-52);
+        rightLabel(number(numeric(p)),x+w-5,by+12+i*18,ink.muted,1,38);
+      });
     }
   }
 
-  function trend(m,x,y,w,h) {
-    panel(x,y,w,h,'MATCHUP STOCK',ink.green);
-    const data=(m?.history||[]).slice(-64);
-    const raw=data.length>1?data.map(row=>[Number(row.own)||0,Number(row.opponent)||0]):
-      [[0,0],[Number(m?.ownActual)||0,Number(m?.opponentActual)||0]];
-    const vals=raw.flat(),max=Math.max(1,...vals),min=Math.min(0,...vals);
-    const gx=x+5,gy=y+17,gw=w-10,gh=h-24;
-    for(let k=0;k<2;k++) {
-      const color=k?ink.blue:ink.orange;
-      for(let i=1;i<raw.length;i++){
-        const xa=gx+(i-1)*(gw-1)/(raw.length-1),xb=gx+i*(gw-1)/(raw.length-1);
-        const ya=gy+gh-1-((raw[i-1][k]-min)/(max-min))*(gh-2);
-        const yb=gy+gh-1-((raw[i][k]-min)/(max-min))*(gh-2);
-        const n=Math.max(1,Math.ceil(Math.max(Math.abs(xb-xa),Math.abs(yb-ya))));
-        for(let j=0;j<=n;j++){const t=j/n;box(Math.round(xa+(xb-xa)*t),Math.round(ya+(yb-ya)*t),1,1,color);}
-      }
+  function plot(data,x,y,w,h) {
+    const series=data.series||[],raw=(data.raw||[]).filter(r=>r&&Array.isArray(r.values));
+    const values=raw.length?raw:[{values:series.map(s=>s.value)}];
+    const all=values.flatMap(r=>r.values).filter(v=>Number.isFinite(Number(v))).map(Number);
+    const max=Math.max(25,...all,...series.map(s=>Number(s.value)||0)),min=Math.min(0,...all);
+    const gx=x+21,gy=y+1,gw=w-24,gh=Math.max(8,h-12);
+    for(let k=0;k<3;k++){
+      const v=min+(max-min)*k/2,yy=gy+gh-1-(v-min)/(max-min)*(gh-1);
+      box(gx,yy,gw,1,'#102442');rightLabel(number(v,0),gx-4,yy-3,ink.muted,1,20);
     }
+    const px=i=>gx+(values.length===1?gw-1:i*(gw-1)/(values.length-1));
+    const py=v=>gy+gh-1-(Number(v)-min)/(max-min)*(gh-1);
+    for(let k=0;k<series.length;k++){
+      const color=teamTint(series[k].color,k?ink.blue:ink.orange);
+      // Historical provider samples only; first load has a single point.
+      for(let i=1;i<values.length;i++){
+        const xa=px(i-1),xb=px(i),ya=py(values[i-1].values[k]??series[k].value),yb=py(values[i].values[k]??series[k].value);
+        box(xa,ya,Math.max(1,xb-xa),1,color);box(xb,Math.min(ya,yb),1,Math.max(1,Math.abs(yb-ya)),color);
+      }
+      const yy=clamp(Math.round(py(series[k].value)),gy,gy+gh-1);
+      box(gx+gw-2,yy-1,3,3,color);
+    }
+    label(values.length>1?'START':'RECORDED',gx,gy+gh+2,ink.muted,1,58);
+    rightLabel('LATEST',gx+gw,gy+gh+2,ink.muted,1,42);
+  }
+  function chartData(m,all=false){
+    try{return window.FantasyGlass.dataFor(m,all)}catch(_){return {series:[],raw:[]}}
+  }
+  function trend(m,x,y,w,h) {
+    panel(x,y,w,h,m?.started?'MATCHUP SCORING':'MATCHUP PROJECTIONS',ink.blue);
+    const data=chartData(m),colors=[ink.orange,ink.blue];
+    data.series.forEach((s,i)=>s.color=colors[i]);
+    for(let i=0;i<Math.min(2,data.series.length);i++){
+      const cx=x+5+i*Math.floor(w/2);
+      box(cx,y+15,3,3,colors[i]);label(data.series[i].name,cx+7,y+13,ink.muted,1,Math.floor(w/2)-49);
+      rightLabel(number(data.series[i].value),cx+Math.floor(w/2)-8,y+13,colors[i],1,38);
+    }
+    plot(data,x+3,y+24,w-6,h-28);
   }
   function stock(m,x,y,w,h) {
-    panel(x,y,w,h,h>=68?'LEAGUE STOCK · TOP 5':'LEAGUE STOCK · TOP 3',ink.blue);
-    const teams=(m?.league?.teams||[]).filter(Boolean).map(t=>({
-      name:t.name||'TEAM',owner:t.ownerLabel||'',val:Number(m?.leagueStarted?t.total:t.projected??t.total)||0
-    })).sort((a,b)=>b.val-a.val);
-    if(!teams.length){label('WAITING FOR TEAMS',x+4,y+18,ink.muted,1,w-8);return;}
-    const count=h>=68?5:3,top=teams.slice(0,count),max=Math.max(1,...top.map(t=>t.val));
-    const rowHeight=Math.max(9,Math.min(13,Math.floor((h-20)/top.length)));
-    for(let i=0;i<top.length;i++){
-      const yy=y+17+i*rowHeight;
-      label(short(top[i].name,22)+(top[i].owner?' / '+top[i].owner:''),
-        x+4,yy,i===0?ink.gold:ink.white,1,Math.max(30,w*.58));
-      box(x+Math.round(w*.6),yy+1,Math.max(1,Math.round((w*.34)*top[i].val/max)),4,i===0?ink.orange:ink.blue);
-    }
+    const data=chartData(m,true),all=data.series||[];
+    panel(x,y,w,h,'LEAGUE STOCK / '+all.length+' TEAMS',ink.blue);
+    const count=Math.max(1,Math.floor((h-16)/11)),ranked=all.slice().sort((a,b)=>b.value-a.value);
+    const page=Math.floor(now()/12000)%Math.max(1,Math.ceil(ranked.length/count));
+    const shown=ranked.slice(page*count,(page+1)*count),legendW=Math.floor(w*.46),chartW=w-legendW-7;
+    plot(data,x+3,y+16,chartW,h-21);
+    const lx=x+chartW+9;
+    shown.forEach((t,i)=>{
+      const yy=y+17+i*11,team=(m?.league?.teams||[]).find(q=>String(q.id)===String(t.id));
+      box(lx,yy+1,3,3,teamTint(t.color,ink.blue));
+      label((team?.ownerLabel?team.ownerLabel+' / ':'')+t.name,lx+6,yy,ink.white,1,legendW-45);
+      rightLabel(number(t.value),x+w-5,yy,ink.white,1,38);
+    });
+    if(!all.length)label('WAITING FOR TEAMS',x+5,y+18,ink.muted,1,w-10);
+  }
+  function injuryPanel(m,x,y,w,h){
+    panel(x,y,w,h,'INJURY UPDATES',ink.blue);
+    const list=[...(m?.league?.own||[]),...(m?.league?.opponent||[])].filter(p=>p.injury_status&&/OUT|IR|Q|DOUBT|PUP|QUESTION/i.test(p.injury_status));
+    const count=Math.max(1,Math.floor((h-17)/11)),page=Math.floor(now()/12000)%Math.max(1,Math.ceil(list.length/count));
+    list.slice(page*count,(page+1)*count).forEach((p,i)=>{
+      const status=upper(p.injury_status),flag=status.includes('QUESTION')?'Q':status.includes('DOUBT')?'D':status;
+      label(playerName(p),x+5,y+17+i*11,ink.white,1,w-42);
+      rightLabel(flag,x+w-5,y+17+i*11,ink.gold,1,32);
+    });
+    if(!list.length)label('NO INJURY FLAGS',x+5,y+17,ink.muted,1,w-10);
   }
   function detailPanel(m,x,y,w,h,scene){
     const p=m?.ui?.playerId?(m?.player||[...(m?.league?.own||[]),...(m?.league?.opponent||[])].find(t=>String(t.player_id)===String(m.ui.playerId))):null;
@@ -394,16 +449,33 @@
     }
     ctx.restore();
   }
+  function fantasyTotals(m,x,y,w){
+    panel(x,y,w,12,'');
+    label('FANTASY',x+5,y+3,ink.blue,1,58);
+    box(x+65,y+2,1,8,ink.line);
+    box(x+73,y+5,3,3,ink.orange);
+    label(m?.league?.ownName||'MY TEAM',x+80,y+3,ink.white,1,235);
+    rightLabel(number(m?.ownActual),x+352,y+3,ink.orange,1,38);
+    centered('VS',x+376,y+3,ink.muted,1);
+    box(x+396,y+5,3,3,ink.blue);
+    label(m?.league?.opponentName||'OPPONENT',x+403,y+3,ink.white,1,w-446);
+    rightLabel(number(m?.opponentActual),x+w-5,y+3,ink.blue,1,38);
+  }
   // Keep the primary product layout predictable: both starter columns,
   // a readable league-scoring feed, and uninterrupted native-pixel ribbons.
   function fullScene(m,w,h){
-    const gap=5,top=77,bottom=h-29,bodyH=bottom-top;
-    const rosterW=230,rightX=gap*3+rosterW*2;
+    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?192:327;
+    const rosterW=200,rightX=w-gap-rosterW,cx=gap*2+rosterW,cw=rightX-cx-gap;
+    const bodyH=bottom-top,upperH=Math.floor((bodyH-gap)*.54);
     drawRoster(m,gap,top,rosterW,bodyH,'own');
-    drawRoster(m,gap*2+rosterW,top,rosterW,bodyH,'opponent');
-    scoreRows(m,rightX,top,w-rightX-gap,bodyH);
-    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
-    scrollTicker(m,6,h-14,w-12,'NFL',true);
+    drawRoster(m,rightX,top,rosterW,bodyH,'opponent');
+    trend(m,cx,top,cw,upperH);
+    stock(m,cx,top+upperH+gap,cw,bodyH-upperH-gap);
+    const supportY=bottom+gap,supportH=h-supportY-32;
+    injuryPanel(m,gap,supportY,rosterW,supportH);
+    scoreRows(m,cx,supportY,w-cx-gap,supportH);
+    fantasyTotals(m,4,h-27,w-8);
+    scrollTicker(m,4,h-14,w-8,'NFL',true);
   }
 
   function allPlayers(m){
@@ -558,7 +630,7 @@
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
   function draw() {
-    const w=chosen.cols*128,h=chosen.rows*64;
+    const w=chosen.width,h=chosen.height;
     if(canvas.width!==w)canvas.width=w;
     if(canvas.height!==h)canvas.height=h;
     ctx.imageSmoothingEnabled=false;
@@ -566,9 +638,10 @@
     const m=getModel();trackScores(m);
     const league=m?.league||{},ui=m?.ui||{},view=upper(ui.view||'OVERVIEW');
     // Tiny ID label, so nearly the entire native LED budget shows game data.
-    label(upper(ui.league||'SLEEPER')+' W'+(league.week??'--')+' / 6X4 P2.5',
-      7,2,ink.muted,1,150);
-    if(view!=='OVERVIEW')label(view,w-120,2,ink.muted,1,114);
+    label(upper(ui.league||'SLEEPER')+' WEEK '+(league.week??'--'),
+      8,5,ink.blue,1,220);
+    rightLabel(chosen===sizes.twentyfour?'6X4 P2.5 / 768X256':'TV / 16:9',w-8,5,ink.muted,1,220);
+    if(view!=='OVERVIEW')centered(view,w/2,5,ink.muted,1);
     if(m?.loading || !league.ready){
       label('CONNECTING FANTASY FEEDS',12,Math.floor(h/2),ink.gold,1,w-24);
     }else{
@@ -593,32 +666,55 @@
     const textStatus=document.getElementById('remoteStatus')?.textContent?.trim()||'Controller status unavailable';
     const dataState=m?.loading?'FEED LOADING':!league.ready?(m?.error||'FEED UNAVAILABLE'):m?.stale?'STALE FANTASY DATA':'FANTASY DATA READY';
     const conn=remote?(remote.paired?(remote.connected?'PAIRED':'RECONNECTING'):'NOT PAIRED'):'WAITING FOR PAIRING';
-    const meta=chosen.label+' · '+mmW+' × '+mmH+' MM · P2.5 · '+dataState+' · '+conn;
+    const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':' · BUILD PREVIEW SHOWS THE PHYSICAL PANEL SHAPE')+' · '+dataState+' · '+conn;
     if(lastMeta!==meta){$('nativeReadout').textContent=meta;lastMeta=meta}
     const stage=$('nativeStatus'),message=textStatus+' · '+dataState;
     if(stage&&stage.textContent!==message)stage.textContent=message;
-    canvas.setAttribute('aria-label','Pixel-native LED fantasy scoreboard, '+w+' by '+h+' physical pixels');
+    canvas.setAttribute('aria-label',(chosen===sizes.twentyfour?'P2.5 physical board preview':'TV LED-style scoreboard')+', '+w+' by '+h+' pixels. '+(league.ownName||'My team')+' '+number(m?.ownActual)+' vs '+(league.opponentName||'opponent')+' '+number(m?.opponentActual));
+    for(const key of ['sleeper','espn'])$('nativeLeague'+(key==='sleeper'?'Sleeper':'Espn'))?.setAttribute('aria-pressed',String(ui.league===key));
   }
 
   function pick(key) {
-    chosen=sizes.twentyfour;
+    chosen=key==='tv'&&document.body.dataset.tvLedCanvas==='1'?sizes.tv:sizes.twentyfour;
     const {cols,rows}=chosen;
     const i=$('nativeSize');if(i)i.value=key;
-    const url=new URL(location.href);url.searchParams.set('modules',key);
+    const url=new URL(location.href);url.searchParams.set('modules','twentyfour');url.searchParams.set('display',chosen===sizes.tv?'tv':'build');
     history.replaceState(history.state,'',url.pathname+url.search+url.hash);
     const screen=$('nativeCanvas');
-    screen.style.aspectRatio=(cols*128)+' / '+(rows*64);
-    draw();
+    screen.style.aspectRatio=chosen.width+' / '+chosen.height;
+    document.body.dataset.ledDisplay=chosen===sizes.tv?'tv':'build';
+    $('nativeTV')?.setAttribute('aria-pressed',String(chosen===sizes.tv));
+    $('nativeBuild')?.setAttribute('aria-pressed',String(chosen===sizes.twentyfour));
+    fitCanvas();draw();
   }
+  function fitCanvas(){
+    const stage=$('nativeStage');if(!stage)return;
+    const roomW=stage.clientWidth-8,roomH=stage.clientHeight-8;
+    let scale=Math.min(roomW/chosen.width,roomH/chosen.height);
+    // Preserve the canvas proportions, including the wider physical 6x4 build.
+    scale=Math.max(.1,scale);
+    canvas.style.width=Math.floor(chosen.width*scale)+'px';canvas.style.height=Math.floor(chosen.height*scale)+'px';
+  }
+  window.addEventListener('resize',fitCanvas);
+  document.addEventListener('fullscreenchange',fitCanvas);
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(fitCanvas).observe($('nativeStage'));
+  $('nativeTV')?.addEventListener('click',()=>pick('tv'));
+  $('nativeBuild')?.addEventListener('click',()=>pick('twentyfour'));
+  for(const key of ['sleeper','espn'])$('nativeLeague'+(key==='sleeper'?'Sleeper':'Espn'))?.addEventListener('click',()=>{app.dispatch({league:key,matchupId:null,playerId:null,gameId:null,view:'overview'});draw()});
+  $('nativeHome')?.addEventListener('click',()=>{app.dispatch({view:'overview',playerId:null,gameId:null});draw()});
   $('nativeSize')?.addEventListener('change',e=>pick(e.target.value));
   const kiosk=$('nativeKiosk'),exit=$('nativeExit');
   function setKiosk(enabled){
     document.body.classList.toggle('native-kiosk',Boolean(enabled));
     kiosk?.setAttribute('aria-pressed',String(Boolean(enabled)));
-    if(kiosk)kiosk.textContent=enabled?'LED screen active':'LED screen only';
+    if(kiosk)kiosk.textContent=enabled?'Screen only active':'Screen only';
+    fitCanvas();
   }
   kiosk?.addEventListener('click',()=>setKiosk(!document.body.classList.contains('native-kiosk')));
-  exit?.addEventListener('click',()=>setKiosk(false));
+  exit?.addEventListener('click',async()=>{
+    if(document.fullscreenElement)try{await document.exitFullscreen()}catch(_){}
+    setKiosk(false);
+  });
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&document.body.classList.contains('native-kiosk'))setKiosk(false);
   });
@@ -651,6 +747,7 @@
   },850);
   window.setInterval(draw,120);
   const initial=new URL(location.href).searchParams.get('modules');
-  pick('twentyfour');
+  const display=new URL(location.href).searchParams.get('display');
+  pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
   window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
 })();

@@ -4,72 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#020817">
-  <title>Justin’s Fantasy Scoreboard · 65-inch LED TV</title>
+  <title>Justin’s Fantasy Scoreboard · TV & 6×4 LED Build</title>
   <meta name="description" content="A live LED fantasy football scoreboard for Sleeper and ESPN. Connect another television to the same HP, iPad, or iPhone controller.">
-  <link rel="preload" href="../remote/fonts/scoreboard-led.woff" as="font" type="font/woff" crossorigin>
   <link rel="stylesheet" href="../remote/soft-glass.css?v=6">
   <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
   <link rel="stylesheet" href="../remote/player-details.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-refinement.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-pro.css?v=1">
-<style id="tv65-reference">
-
-/* Reference LED presentation for a full 16:9 TV. Shared live data stays intact. */
-body#ledTV{--led-ui:var(--led-font);--led-gap:.55vw;background:#01040c;overflow:hidden}
-body#ledTV .glass-shell{position:relative;box-sizing:border-box;width:100vw;max-width:none;height:100vh;height:100dvh;padding:1.1vh .8vw .6vh;background:#020611;background-image:radial-gradient(circle,#14233a .55px,transparent .9px);background-size:4px 4px;border:0;border-radius:0;overflow:hidden}
-body#ledTV .glass-header{height:5vh;min-height:5vh;padding:0 .6vw;grid-template-columns:1fr 12vw 1fr;position:static}
-body#ledTV .header-mascot{position:absolute;top:5.2vh;left:50%;transform:translateX(-50%);width:10vw;height:14vh;margin:0;max-width:none;max-height:none;object-fit:contain;z-index:8;filter:saturate(1.18) drop-shadow(0 0 3px #258aff);animation:none}
-body#ledTV .header-week,body#ledTV #tvContext{font:500 1.65vw/1 var(--led-font);color:#bceeff;letter-spacing:0}
-body#ledTV #weekLabel{color:#388cff}
-body#ledTV .header-right{gap:.5vw}
-body#ledTV #ledPreview,body#ledTV #ledPitchPreview{display:none}
-body#ledTV #remoteToggle,body#ledTV #ledFullscreen{min-height:0;padding:.45vh .6vw;font:500 .8vw/1.2 Arial,sans-serif;border-radius:2px;background:#051128;border-color:#204e96}
-body#ledTV #remoteStatus{font-size:.65vw}
-body#ledTV .glass-main{flex:1;min-height:0;display:flex;flex-direction:column;gap:.7vh}
-body#ledTV #matchupHero{flex:none}
-body#ledTV .tv-score-band{box-sizing:border-box;height:20vh;min-height:0;margin:0;padding:2vh 1vw .7vh;display:grid;grid-template-columns:minmax(0,1fr) 11vw minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:.5vh .5vw;overflow:visible}
-body#ledTV .glass-panel{background:#030918;background-image:radial-gradient(circle,#122441 .55px,transparent .9px);background-size:4px 4px;border:1px solid #245ad4;border-radius:1px;box-shadow:none}
-body#ledTV .score-side{display:flex;align-items:center;gap:.8vw;min-width:0}
-body#ledTV .score-side.own{flex-direction:row}
-body#ledTV .score-side.opponent{flex-direction:row-reverse}
-body#ledTV .score-team{flex:1;min-width:0}
-body#ledTV .score-team h1{font:500 2vw/1.12 var(--led-font);color:#bdefff;white-space:normal;overflow-wrap:anywhere;letter-spacing:0;max-height:4.6em}
-body#ledTV .score-team small{font:500 1.2vw/1.1 var(--led-font);color:#a8d1ef}
-body#ledTV .score-number{flex:0 0 auto;min-width:0}
-body#ledTV .score-number>strong{font:500 5.8vw/.95 var(--led-font);letter-spacing:-.15vw;color:#c2f5ff;white-space:nowrap;font-variant-numeric:tabular-nums;text-shadow:0 0 6px #3fa7ff55}
-body#ledTV .tv-score-band .score-vs{visibility:visible;opacity:1;align-self:end;justify-self:center;padding:0 0 .5vh;font:500 1.7vw/1 var(--led-font);color:#b3c7ff}
-body#ledTV .tv-projection-labels>span{font:500 1.05vw/1.15 var(--led-font)}
-body#ledTV .tv-projection-labels>span b{font:500 1.6vw/1 var(--led-font)}
-body#ledTV .tv-projection-labels>small{visibility:hidden}
-body#ledTV .tv-projection-line{height:.5vh}
-body#ledTV #workspace{flex:1;min-height:0;overflow:hidden}
-body#ledTV .led-overview{height:100%;grid-template-columns:minmax(0,1.15fr) minmax(0,2.45fr) minmax(0,1.15fr);grid-template-rows:minmax(0,1fr) 13vh;gap:.55vw}
-body#ledTV .led-plots{grid-template-rows:minmax(0,1.15fr) minmax(0,1fr)}
-body#ledTV .tv-panel-title{min-height:2.7vh;padding:.45vh .6vw;border-bottom:1px dotted #2256a5}
-body#ledTV .tv-panel-title h2,body#ledTV .tv-roster .tv-panel-title h2,body#ledTV .led-support>.tv-feed .tv-panel-title h2{font:500 1.15vw/1.1 var(--led-font);color:#7cc9ff}
-body#ledTV .tv-roster .tv-roster-row .tv-player-name-line>b{font:500 clamp(10px,calc(var(--tv-row-height,30px)*.46),23px)/1.1 var(--led-font)}
-body#ledTV .tv-roster .tv-roster-row .tv-player-score>b{font:500 clamp(13px,calc(var(--tv-row-height,30px)*.61),32px)/1 var(--led-font);color:#bcf3ff}
-body#ledTV .tv-roster .tv-roster-row .tv-player-game{font-family:Arial,sans-serif}
-body#ledTV .led-support{grid-template-columns:minmax(0,.75fr) minmax(0,1.6fr)}
-body#ledTV .led-support>.tv-feed{background:#030918}
-body#ledTV .led-support>.tv-feed .tv-feed-list{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));padding:.3vh .6vw}
-body#ledTV .led-support>.tv-feed .tv-feed-name>b{font:500 1vw/1.1 var(--led-font)}
-body#ledTV #scoreStrips{flex:none;margin:0}
-body#ledTV .led-bottom-scores{gap:.5vh}
-body#ledTV .led-bottom-scores .tv-fantasy-strip{height:6vh}
-body#ledTV .led-bottom-scores .tv-nfl-strip{height:7vh}
-body#ledTV .tv-strip-label h2{font:500 1.05vw/1.1 var(--led-font)}
-body#ledTV .tv-strip-matchup b,body#ledTV .tv-nfl-game b{font:500 1vw/1.1 var(--led-font)}
-body#ledTV .tv-strip-matchup strong,body#ledTV .tv-nfl-game strong{font:500 1.4vw/1 var(--led-font)}
-body#ledTV .glass-footer{min-height:1.4vh;padding:.3vh 0 0;font:500 .65vw/1 Arial,sans-serif}
-body#ledTV .header-mascot.led-own-scored{animation:tv65-score .8s ease-in-out}
-@keyframes tv65-score{0%,100%{transform:translateX(-50%) rotate(0)}25%{transform:translateX(-54%) rotate(-5deg)}70%{transform:translateX(-46%) rotate(5deg)}}
-@media(prefers-reduced-motion:reduce){body#ledTV .header-mascot.led-own-scored{animation:none}}
-
-</style>
+  <link rel="stylesheet" href="../remote/tv-led-native.css?v=6">
 </head>
-<body id="ledTV" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
+<body data-tv-led-canvas="1" data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
+  <div id="nativeApp">
+    <div class="native-toolbar" aria-label="LED scoreboard controls">
+      <div class="native-mode-controls" role="group" aria-label="Display proportions">
+        <button id="nativeTV" type="button" aria-pressed="true">TV view</button>
+        <button id="nativeBuild" type="button" aria-pressed="false">6×4 build preview</button>
+      </div>
+      <div class="native-league-controls" role="group" aria-label="Fantasy league">
+        <button id="nativeLeagueSleeper" type="button" aria-pressed="true">Sleeper</button>
+        <button id="nativeLeagueEspn" type="button" aria-pressed="false">ESPN</button>
+      </div>
+      <button id="nativeHome" type="button">Matchup</button>
+      <button id="nativePair" type="button">Pair controller</button>
+      <button id="nativeKiosk" type="button" aria-pressed="false">Screen only</button>
+      <button id="nativeFull" type="button">Fullscreen</button>
+      <span id="nativeStatus" role="status">Connecting your leagues…</span>
+    </div>
+    <section id="nativeStage" aria-label="Live fantasy LED scoreboard">
+      <canvas id="nativeCanvas" width="768" height="432" role="img" aria-label="TV LED-style fantasy scoreboard"></canvas>
+      <button id="nativeExit" type="button" aria-label="Show scoreboard controls">Show controls</button>
+    </section>
+    <footer class="native-meta"><span id="nativeReadout" role="status">TV VIEW · 16:9</span><span class="native-build-note">Build preview: 6 across × 4 down · 768×256 pixels · 1920×640 mm, assuming 320×160 mm P2.5 modules.</span></footer>
+  </div>
   <div class="glass-shell">
     <header class="glass-header">
       <div class="header-left"><span id="tvContext" class="header-week">Sleeper</span><span id="weekLabel" class="header-week">Week —</span></div>
@@ -81,7 +45,7 @@ body#ledTV .header-mascot.led-own-scored{animation:tv65-score .8s ease-in-out}
       <section id="workspace" aria-label="Fantasy LED scoreboard"></section>
       <section id="scoreStrips" aria-label="Fantasy and NFL score ribbons"></section>
     </main>
-    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="led-view-label">65″ TV · LED style · Eastern time</span><span id="ledPitchReadout" class="led-pitch-readout" role="status" hidden>P2.5 sample · 3.2 × 1.8 m = 1280 × 720 pixels · visual guide only</span><span id="lastSync">Waiting for providers</span></footer>
+    <footer class="glass-footer"><span id="sourceStatus">Connecting feeds</span><span class="led-view-label">LED TV · Eastern time</span><span id="ledPitchReadout" class="led-pitch-readout" role="status" hidden>P2.5 sample · 3.2 × 1.8 m = 1280 × 720 pixels · visual guide only</span><span id="lastSync">Waiting for providers</span></footer>
   </div>
   <aside id="playerDrawer" class="player-drawer" aria-label="Player stats" hidden></aside>
   <section id="pairPanel" class="pair-panel tv-pair" aria-label="Connect this LED TV">
@@ -103,14 +67,15 @@ body#ledTV .header-mascot.led-own-scored{animation:tv65-score .8s ease-in-out}
   <script src="../remote/config.js?v=1"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.js" async></script>
   <script src="../remote/projections.js?v=2" defer></script>
-  <script src="../patriots-fantasy-touch/remote-app.js?v=15" defer></script>
+  <script src="../patriots-fantasy-touch/remote-app.js?v=16" defer></script>
   <script src="../remote/dom-patch.js?v=1" defer></script>
   <script src="../remote/chart-timeline.js?v=1" defer></script>
   <script src="../remote/soft-glass.js?v=9" defer></script>
   <script src="../remote/tv-presentation.js?v=11" defer></script>
   <script src="../remote/player-details.js?v=9" defer></script>
-  <script src="../remote/tv-led.js?v=4" defer></script>
-  <script src="../remote/tv-led-p25.js?v=1" defer></script>
+
+
   <script src="../remote/session.js?v=2" defer></script>
+  <script src="../remote/tv-led-native.js?v=6" defer></script>
 </body>
 </html>

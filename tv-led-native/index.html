@@ -4,41 +4,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#020817">
-  <title>Justin’s Fantasy Scoreboard · True P2.5 LED Pixel Preview</title>
+  <title>Justin’s Fantasy Scoreboard · 6×4 P2.5 Build Preview</title>
   <meta name="description" content="A live LED fantasy football scoreboard for Sleeper and ESPN. Connect another television to the same HP, iPad, or iPhone controller.">
-  <link rel="preload" href="../remote/fonts/scoreboard-led.woff" as="font" type="font/woff" crossorigin>
   <link rel="stylesheet" href="../remote/soft-glass.css?v=6">
   <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
   <link rel="stylesheet" href="../remote/player-details.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-refinement.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-pro.css?v=1">
-  <link rel="stylesheet" href="../remote/tv-led-native.css?v=4">
+  <link rel="stylesheet" href="../remote/tv-led-native.css?v=6">
 </head>
-<body data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
+<body data-tv-led-canvas="0" data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
   <div id="nativeApp">
-    <div class="native-head">
-      <div>
-        <div class="native-kicker">TRUE LED · P2.5 · 1 PIXEL = 1 PHYSICAL LED PIXEL</div>
-        <h1 class="native-title">Pixel-native fantasy scoreboard</h1>
-        <p class="native-subtitle">6 modules across × 4 high. Native-resolution sports arcade with live rosters, owner labels, and HP touch control.</p>
+    <div class="native-toolbar" aria-label="LED scoreboard controls">
+      <div class="native-mode-controls" role="group" aria-label="Display proportions">
+        <a href="../tv-led/">TV view</a>
+        <button id="nativeBuild" type="button" aria-pressed="false">6×4 build preview</button>
       </div>
-      <nav class="native-links" aria-label="Switch scoreboard editions"><a href="../tv/">Original TV</a><a href="../tv-led/">Smooth LED TV</a><a href="../touch/">Touch controller</a></nav>
-    </div>
-    <div class="native-toolbar" aria-label="True LED simulator controls">
-      <span class="native-size-fixed" aria-label="Fixed LED panel layout">6 ACROSS × 4 HIGH · P2.5 · 768 × 256 PIXELS</span>
-      <button id="nativeKiosk" type="button" aria-pressed="false">LED screen only</button>
-      <button id="nativeDemo" type="button" title="Local demonstration only; does not change provider scores">Test scoring celebration</button>
-      <button id="nativePair" type="button">Connect / pair HP</button>
+      <div class="native-league-controls" role="group" aria-label="Fantasy league">
+        <button id="nativeLeagueSleeper" type="button" aria-pressed="true">Sleeper</button>
+        <button id="nativeLeagueEspn" type="button" aria-pressed="false">ESPN</button>
+      </div>
+      <button id="nativeHome" type="button">Matchup</button>
+      <button id="nativePair" type="button">Pair controller</button>
+      <button id="nativeKiosk" type="button" aria-pressed="false">Screen only</button>
       <button id="nativeFull" type="button">Fullscreen</button>
-      <span id="nativeStatus" role="status">Checking live feeds and controller connection…</span>
+      <span id="nativeStatus" role="status">Connecting your leagues…</span>
     </div>
-    <section id="nativeStage" aria-label="True-resolution P2.5 LED simulator">
-      <canvas id="nativeCanvas" width="768" height="256" role="img" aria-label="768 by 256 LED-native pixel scoreboard"></canvas>
-      <button id="nativeExit" type="button" aria-label="Leave LED screen mode">Exit LED view</button>
+    <section id="nativeStage" aria-label="Live fantasy LED scoreboard">
+      <canvas id="nativeCanvas" width="768" height="256" role="img" aria-label="TV LED-style fantasy scoreboard"></canvas>
+      <button id="nativeExit" type="button" aria-label="Show scoreboard controls">Show controls</button>
     </section>
-    <div id="nativeReadout" role="status">24 MODULES · 768 × 256 LED PIXELS · P2.5 · 1920 × 640 MM</div>
-    <p class="native-notice"><strong class="native-legend"><span class="native-chip lead">LEADING</span><span class="native-chip trail">TRAILING</span><span class="native-chip neutral">LIVE DATA / PREGAME</span></strong><br><b>This is a real pixel-count rendering, not a dot-pattern filter.</b> The canvas is drawn at the selected module resolution and enlarged using nearest-neighbor scaling, with no high-definition content behind it. One fixed 6×4 physical canvas. Players, team owners (when supplied by the providers), and score changes are labeled; controller selections switch scenes. Fantasy and NFL ribbons scroll in real native pixels. The TV cannot reproduce real LED brightness, diode spacing, color calibration or viewing distance.</p>
+    <footer class="native-meta"><span id="nativeReadout" role="status">TV VIEW · 16:9</span><span class="native-build-note">Build preview: 6 across × 4 down · 768×256 pixels · 1920×640 mm, assuming 320×160 mm P2.5 modules.</span></footer>
   </div>
   <div class="glass-shell">
     <header class="glass-header">
@@ -82,6 +76,6 @@
 
 
   <script src="../remote/session.js?v=2" defer></script>
-  <script src="../remote/tv-led-native.js?v=5" defer></script>
+  <script src="../remote/tv-led-native.js?v=6" defer></script>
 </body>
 </html>
