@@ -279,7 +279,7 @@
     const all=m?.league?.[key]||[],rows=all.filter(p=>p.starter!==false);
     panel(x,y,w,h,(mine?'MY':'OPPONENT')+' STARTERS',ink.blue);
     rightLabel('PTS',x+w-5,y+4,ink.blue,1,24);
-    const top=y+17,rowH=compact?10:18,capacity=Math.max(1,Math.floor((h-20)/rowH));
+    const top=y+17,rowH=compact?10:18,capacity=Math.max(1,Math.floor((h-18)/rowH));
     const page=Math.floor(now()/15000)%Math.max(1,Math.ceil(rows.length/capacity));
     const visible=rows.slice(page*capacity,(page+1)*capacity);
     if(!rows.length){label('WAITING FOR ROSTER',x+5,top,ink.muted,1,w-10);return;}
@@ -751,3 +751,4 @@
   pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
   window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
 })();
+
