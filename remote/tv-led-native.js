@@ -12,7 +12,7 @@
   const $ = id => document.getElementById(id);
   let chosen = sizes.twentyfour;
   let auto = true, manualScene = 0, lastSceneAt = Date.now();
-  let demoUntil = 0, shakeUntil = 0, lastMeta = '';
+  let demoUntil = 0, shakeUntil = 0, lastMeta = '', demoBase = 0;
   let celebrationValue = 0;
   // Transition points only on actual provider changes, never on a fresh first load.
   const transitions=new Map();
@@ -130,6 +130,30 @@
   }
   const numeric=p=>Number(p && (p.actual ?? p.points ?? 0))||0;
   const starters=(m,key)=>((m?.league?.[key])||[]).filter(p=>p.starter!==false);
+  const ledPalette=['#FF9638','#40D9FF','#68F58C','#FC76E8','#FFE76B','#B9A0FF',
+    '#FF849E','#75F1D3','#91BFFF','#FFBC71','#CCF889','#F4A5FF','#83ECFF','#FFAED6'];
+  function brightenModel(raw){
+    if(!raw?.league)return raw;
+    const all=raw.league.teams||[],byId=new Map(),byName=new Map();
+    const mine=t=>t.isOwnFantasyTeam||/^(THE BIG SENUS|GUMBYS? BIG D)$/.test(upper(t.name).replace(/'/g,''));
+    const ordered=all.slice().sort((a,b)=>String(a.id??a.name).localeCompare(String(b.id??b.name),undefined,{numeric:true}));
+    let index=1;
+    const teams=ordered.map(t=>{
+      const teamColor=mine(t)?ledPalette[0]:ledPalette[1+(index++-1)%(ledPalette.length-1)];
+      byId.set(String(t.id),teamColor);byName.set(upper(t.name),teamColor);
+      return {...t,teamColor};
+    });
+    const tint=(id,name,fallback)=>byId.get(String(id))||byName.get(upper(name))||fallback;
+    const ownColor=tint(null,raw.league.ownName,ledPalette[0]),opponentColor=tint(null,raw.league.opponentName,ledPalette[1]);
+    const player=(p,fallback)=>({...p,fantasyTeamColor:tint(p.fantasyTeamId,p.fantasyTeamName,fallback)});
+    return {...raw,league:{...raw.league,teams,ownColor,opponentColor,
+      own:(raw.league.own||[]).map(p=>player(p,ownColor)),opponent:(raw.league.opponent||[]).map(p=>player(p,opponentColor)),
+      allPlayers:(raw.league.allPlayers||[]).map(p=>player(p,ownColor))},
+      player:raw.player?player(raw.player,ownColor):raw.player,
+      events:(raw.events||[]).map(e=>({...e,teamColor:tint(e.fantasyTeamId,e.fantasyTeamName,ledPalette[1])})),
+      matchups:(raw.matchups||[]).map(g=>({...g,home:{...g.home,teamColor:tint(g.home?.id,g.home?.name,ledPalette[0])},away:{...g.away,teamColor:tint(g.away?.id,g.away?.name,ledPalette[1])}}))};
+  }
+  const sideInk=(m,side)=>side==='own'?(m?.league?.ownColor||ledPalette[0]):(m?.league?.opponentColor||ledPalette[1]);
   // Crop transparent margins before reducing the mascot into true LED pixels.
   // For a tall mascot, keep the head and cap instead of shrinking the whole body.
   const mascot=new Image();
@@ -163,15 +187,15 @@
   function makePixelPortrait(){
     if(!mascot.naturalWidth)return;
     const crop=mascotCrop||{x:0,y:0,w:mascot.naturalWidth,h:mascot.naturalHeight};
-    const off=document.createElement('canvas');off.width=40;off.height=44;
+    const off=document.createElement('canvas');off.width=64;off.height=64;
     const g=off.getContext('2d',{willReadFrequently:true});if(!g)return;
-    g.clearRect(0,0,40,44);g.imageSmoothingEnabled=false;
-    const scale=Math.min(38/crop.w,42/crop.h);
+    g.clearRect(0,0,64,64);g.imageSmoothingEnabled=false;
+    const scale=Math.min(62/crop.w,62/crop.h);
     const dw=Math.round(crop.w*scale),dh=Math.round(crop.h*scale);
-    g.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,Math.round((40-dw)/2),Math.round((44-dh)/2),dw,dh);
+    g.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,Math.round((64-dw)/2),Math.round((64-dh)/2),dw,dh);
     try{
       // Reduce color banding gently without replacing transparent edges.
-      const id=g.getImageData(0,0,40,44),p=id.data;
+      const id=g.getImageData(0,0,64,64),p=id.data;
       for(let i=0;i<p.length;i+=4)if(p[i+3]>0){
         p[i]=Math.round(p[i]/24)*24;
         p[i+1]=Math.round(p[i+1]/24)*24;
@@ -189,14 +213,15 @@
     ctx.imageSmoothingEnabled=false;
     const jiggle=now()<shakeUntil?Math.round(Math.sin(now()/39)*3):0;
     if(pixelPortrait){
-      const ratio=Math.min((w-3)/40,(h-2)/44);
-      const width=Math.round(40*ratio),height=Math.round(44*ratio);
+      const ratio=Math.min(w/64,h/64);
+      const width=Math.round(64*ratio),height=Math.round(64*ratio);
       ctx.drawImage(pixelPortrait,Math.round(x+(w-width)/2+jiggle),Math.round(y+(h-height)/2),width,height);
     }
   }
-  mascot.src='../patriots-fantasy-touch/assets/justin-mascot-cutout.png';
-  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();draw()});
-  function getModel(){try{return app.model()}catch(_){return null}}
+  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();canvas.dataset.mascotReady='true';draw()});
+  mascot.addEventListener('error',()=>{if(!mascot.src.includes('justin-mascot-cutout.png'))mascot.src='../patriots-fantasy-touch/assets/justin-mascot-cutout.png'});
+  mascot.src='../patriots-fantasy-touch/assets/justin-led-mascot-blue-64.png?v=1';
+  function getModel(){try{return brightenModel(app.model())}catch(_){return null}}
   function trackScores(m) {
     if(!m || m.loading || !m.league?.ready || !m.started)return;
     const n=Number(m.ownActual);
@@ -205,38 +230,38 @@
     const prev=baseline.get(key);
     baseline.set(key,n);
     if(prev!==undefined && n>prev+.001){
-      shakeUntil=now()+1550;
+      shakeUntil=now()+2400;
       celebrationValue=n-prev;
     }
   }
   function celebration(w) {
     if(now()>=shakeUntil)return;
-    const time=now(),strength=(shakeUntil-time)/1550;
+    const time=now(),strength=clamp((shakeUntil-time)/2400,0,1),hh=chosen.height===256?70:99;
     const cx=Math.floor(w/2);
     // Pixel confetti and arcade jackpot rays stay INSIDE actual P2.5 resolution.
     const colors=[ink.orange,ink.gold,ink.green,ink.white];
     for(let i=0;i<45;i++){
       const angle=i*2.3999,dist=23+(1-strength)*55+(i%5)*3;
       const x=Math.round(cx+Math.cos(angle)*dist);
-      const y=Math.round(41+Math.sin(angle)*dist*.43);
-      if(x>1&&x<w-2&&y>12&&y<71)box(x,y,(i%3===0?3:2),2,colors[i%4]);
+      const y=Math.round(hh*.52+Math.sin(angle)*dist*.43);
+      if(x>w/2-92&&x<w/2+92&&y>15&&y<hh-6)box(x,y,(i%3===0?3:2),2,colors[i%4]);
     }
     if(Math.floor(time/125)%2===0){
-      label('+'+number(celebrationValue),cx-25,2,ink.green,1,62);
-      box(3,73,w-6,2,ink.orange);
+      box(5,hh-3,cx-9,2,ink.green);
     }
   }
 
   const teamTint=(team,fallback)=>/^#[\da-f]{6}$/i.test(String(team||''))?team:fallback;
   function hero(m,w,h){
     const league=m?.league||{},compact=h===256,cx=w/2,hh=compact?70:99;
-    const a=animatedPoints(scopeFor(m)+'|hero-own',m?.ownActual);
+    const ownColor=sideInk(m,'own'),opponentColor=sideInk(m,'opponent');
+    const a=animatedPoints(scopeFor(m)+(m.animationPreview?'|preview-own':'|hero-own'),m?.ownActual);
     const b=animatedPoints(scopeFor(m)+'|hero-opp',m?.opponentActual);
     panel(4,16,w-8,hh-16,'');
     const ownName=league.ownName||'MY TEAM',oppName=league.opponentName||'OPPONENT';
     const ownScale=textWidth(ownName,2)<=180?2:1,oppScale=textWidth(oppName,2)<=180?2:1;
-    box(12,28,5,5,ink.orange);label(ownName,23,compact?25:29,ink.white,ownScale,180);
-    box(w-17,28,5,5,ink.blue);rightLabel(oppName,w-23,compact?25:29,ink.white,oppScale,180);
+    box(12,28,5,5,ownColor);label(ownName,23,compact?25:25,ink.white,ownScale,180);
+    box(w-17,28,5,5,opponentColor);rightLabel(oppName,w-23,compact?25:25,ink.white,oppScale,180);
     const record=raw=>app.data?.record?.(raw)||'';
     label(record(league.ownRecord),23,compact?43:49,ink.muted,1,186);
     rightLabel(record(league.opponentRecord),w-23,compact?43:49,ink.muted,1,186);
@@ -247,13 +272,14 @@
     }
     // Fixed, mirrored score slots reserve room for three-digit totals.
     const scoreSize=compact?4:5,scoreY=compact?30:42;
-    centered(number(a.value),cx-107,scoreY,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize);
-    centered(number(b.value),cx+107,scoreY,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize);
-    label('PROJ '+number(m?.ownFinish),23,hh-14,ink.orange,1,204);
-    rightLabel('PROJ '+number(m?.opponentFinish),w-23,hh-14,ink.blue,1,204);
-    drawMascot(cx-31,compact?18:18,62,compact?38:57);
-    centered('VS',cx,compact?59:80,ink.white,1);
-    box(5,hh-3,cx-9,2,ink.orange);box(cx+4,hh-3,cx-9,2,ink.blue);
+    centered(number(a.value),cx-120,scoreY,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    centered(number(b.value),cx+120,scoreY,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    label('PROJ '+number(m?.ownFinish),23,hh-14,ownColor,1,204);
+    rightLabel('PROJ '+number(m?.opponentFinish),w-23,hh-14,opponentColor,1,204);
+    drawMascot(cx-36,compact?12:16,72,compact?48:72);
+    centered('VS',cx,compact?59:88,ink.white,1);
+    box(5,hh-3,cx-9,2,ownColor);box(cx+4,hh-3,cx-9,2,opponentColor);
+    if(a.changed)centered((a.delta>0?'+':'')+number(a.delta),cx-120,hh-13,a.delta>0?ink.green:ink.red,1);
     celebration(w);
   }
 
@@ -269,7 +295,7 @@
     for(let i=0;i<Math.min(count,events.length);i++){
       const e=events[(offset+i)%events.length],yy=y+16+i*rowH,change=Number(e.delta);
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
-      box(x+3,yy,2,15,teamTint(e.teamColor,ink.blue));
+      box(x+3,yy,2,Math.min(15,h-17),teamTint(e.teamColor,ink.blue));
       const owner=(e.fantasyTeamOwner?' / '+e.fantasyTeamOwner:'');
       label((e.name||'PLAYER')+' / '+(e.fantasyTeamName||'LEAGUE TEAM')+owner,x+9,yy,ink.white,1,w-77);
       rightLabel((change>0?'+':'')+number(e.delta),x+w-6,yy,color,1,66);
@@ -278,11 +304,11 @@
   }
 
   function drawRoster(m,x,y,w,h,key){
-    const mine=key==='own',color=mine?ink.orange:ink.blue,compact=h<150;
+    const mine=key==='own',color=sideInk(m,key),compact=h<150;
     const all=m?.league?.[key]||[],rows=all.filter(p=>p.starter!==false);
     panel(x,y,w,h,(mine?'MY':'OPPONENT')+' STARTERS',ink.blue);
     rightLabel('PTS',x+w-5,y+4,ink.blue,1,24);
-    const top=y+17,rowH=compact?10:18,capacity=Math.max(1,Math.floor((h-18)/rowH));
+    const top=y+17,rowH=compact?8:18,capacity=Math.max(1,Math.floor((h-18)/rowH));
     const page=Math.floor(now()/15000)%Math.max(1,Math.ceil(rows.length/capacity));
     const visible=rows.slice(page*capacity,(page+1)*capacity);
     if(!rows.length){label('WAITING FOR ROSTER',x+5,top,ink.muted,1,w-10);return;}
@@ -291,7 +317,7 @@
       const p=visible[i],yy=top+i*rowH;
       const selected=String(m?.ui?.playerId||'')===String(p.player_id);
       if(selected)box(x+2,yy-1,w-4,10,'#22435b');
-      const keyId=scope+'|p|'+String(p.player_id??p.id??p.name);
+      const keyId=scope+(m.animationPreview?'|preview-p|':'|p|')+String(p.player_id??p.id??p.name);
       const points=animatedPoints(keyId,numeric(p));
       let delta=points.changed?points.delta:0;
       box(x+4,yy+1,2,6,delta>0?ink.green:delta<0?ink.red:color);
@@ -301,13 +327,13 @@
       if(!compact){
         const schedule=String(app.markup?.gameLabel?.(p)||p.status||'').replace(/<[^>]*>/g,'');
         label(schedule,x+37,yy+9,p.status==='LIVE'?ink.green:ink.muted,1,w-76);
-        rightLabel('P '+number(p.projected),x+w-5,yy+9,ink.muted,1,44);
+        rightLabel('P '+number(p.projected),x+w-5,yy+9,color,1,44);
         box(x+4,yy+16,w-8,1,'#102442');
       }
     }
     if(!compact && top+visible.length*rowH+19<y+h){
       const by=top+visible.length*rowH+4,bench=all.filter(p=>p.starter===false),count=Math.floor((y+h-by-13)/18);
-      label('BENCH',x+7,by,ink.muted,1,w-14);
+      if(count>0&&bench.length)label('BENCH',x+7,by,ink.muted,1,w-14);
       bench.slice(0,Math.max(0,count)).forEach((p,i)=>{
         label((p.position||'')+' '+playerName(p),x+9,by+12+i*18,ink.muted,1,w-52);
         rightLabel(number(numeric(p)),x+w-5,by+12+i*18,ink.muted,1,38);
@@ -345,7 +371,7 @@
   }
   function trend(m,x,y,w,h) {
     panel(x,y,w,h,m?.started?'MATCHUP SCORING':'MATCHUP PROJECTIONS',ink.blue);
-    const data=chartData(m),colors=[ink.orange,ink.blue];
+    const data=chartData(m),colors=[sideInk(m,'own'),sideInk(m,'opponent')];
     data.series.forEach((s,i)=>s.color=colors[i]);
     for(let i=0;i<Math.min(2,data.series.length);i++){
       const cx=x+5+i*Math.floor(w/2);
@@ -452,33 +478,94 @@
     }
     ctx.restore();
   }
-  function fantasyTotals(m,x,y,w){
-    panel(x,y,w,12,'');
-    label('FANTASY',x+5,y+3,ink.blue,1,58);
-    box(x+65,y+2,1,8,ink.line);
-    box(x+73,y+5,3,3,ink.orange);
-    label(m?.league?.ownName||'MY TEAM',x+80,y+3,ink.white,1,235);
-    rightLabel(number(m?.ownActual),x+352,y+3,ink.orange,1,38);
-    centered('VS',x+376,y+3,ink.muted,1);
-    box(x+396,y+5,3,3,ink.blue);
-    label(m?.league?.opponentName||'OPPONENT',x+403,y+3,ink.white,1,w-446);
-    rightLabel(number(m?.opponentActual),x+w-5,y+3,ink.blue,1,38);
+  function fantasyLogo(m,side,x,y,size){
+    const league=m?.league||{},name=side==='own'?league.ownName:league.opponentName;
+    const team=(league.teams||[]).find(t=>t.name===name);
+    const isMine=team?.isOwnFantasyTeam||/^(THE BIG SENUS|GUMBYS? BIG D)$/.test(upper(name).replace(/'/g,''));
+    if(isMine){drawMascot(x,y,size,size);return;}
+    const avatar=(side==='own'?league.ownAvatar:league.opponentAvatar)||team?.avatar||team?.logo||'';
+    if(drawPhoto(avatar,x,y,size,size))return;
+    const c=sideInk(m,side);
+    stroke(x,y,size,size,c);
+    const initials=upper(name).split(' ').filter(Boolean).map(n=>n[0]).slice(0,2).join('')||'FT';
+    centered(initials,x+size/2,y+Math.floor((size-7)/2),c,1);
   }
-  // Keep the primary product layout predictable: both starter columns,
-  // a readable league-scoring feed, and uninterrupted native-pixel ribbons.
+  function fantasyTotals(m,x,y,w,h){
+    const compact=h<25,labelW=74,mid=x+Math.floor(w/2)+labelW/2,gap=3;
+    panel(x,y,w,h,'');
+    label('FANTASY',x+5,y+(compact?6:5),ink.blue,1,63);
+    if(!compact)label('WEEK '+(m.league?.week||'--'),x+5,y+18,ink.muted,1,63);
+    box(x+labelW-3,y+2,1,h-4,ink.line);
+    const slotW=Math.floor((w-labelW-gap*3)/2);
+    for(let i=0;i<2;i++){
+      const side=i?'opponent':'own',left=x+labelW+i*(slotW+gap),c=sideInk(m,side);
+      const name=i?m.league?.opponentName:m.league?.ownName,size=compact?14:22;
+      const key=scopeFor(m)+(m.animationPreview?'|preview-card-':'|card-')+side;
+      const points=animatedPoints(key,i?m.opponentActual:m.ownActual),scoreScale=compact?1:2;
+      const score=number(points.value),scoreRoom=compact?41:78;
+      fantasyLogo(m,side,left+4,y+Math.floor((h-size)/2),size);
+      label(name||'TEAM',left+size+10,y+(compact?6:5),ink.white,1,slotW-size-scoreRoom-18);
+      if(!compact){const owner=i?m.league?.opponentOwner:m.league?.ownOwner;
+        label(owner||'WEEKLY MATCHUP',left+size+10,y+17,c,1,slotW-size-scoreRoom-18);}
+      rightLabel(score,left+slotW-5,y+(compact?6:8),points.changed?(points.delta>0?ink.green:ink.red):c,scoreScale,scoreRoom);
+      box(left+2,y+h-2,slotW-4,1,c);
+      if(i)box(left-2,y+3,1,h-6,ink.line);
+    }
+  }
+  function gameTime(g,state){
+    if(state==='in')return 'LIVE '+String(g.status?.type?.shortDetail||g.competitions?.[0]?.status?.type?.shortDetail||'');
+    if(state==='post')return 'FINAL';
+    const date=new Date(g.date||g.competitions?.[0]?.date||'');
+    if(!Number.isFinite(date.getTime()))return 'SCHEDULED';
+    return date.toLocaleDateString('en-US',{timeZone:'America/New_York',weekday:'short'})+' '+date.toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'}).replace(' AM','A').replace(' PM','P');
+  }
+  function nflCards(m,x,y,w,h){
+    panel(x,y,w,h,'');
+    const games=(m.nflGames||m.games||[]).filter(g=>g.competitions?.[0]?.competitors?.length>=2),count=6,labelW=71;
+    const page=Math.floor(now()/13000)%Math.max(1,Math.ceil(games.length/count)),shown=games.slice(page*count,(page+1)*count);
+    label('NFL',x+6,y+5,ink.blue,1,63);
+    label('W'+(m.nflWeek||m.league?.week||'--'),x+6,y+16,ink.muted,1,63);
+    if(h>=38&&games.length>count)label((page+1)+'/'+Math.ceil(games.length/count),x+6,y+29,ink.muted,1,63);
+    box(x+labelW-3,y+2,1,h-4,ink.line);
+    if(!games.length){label('NFL SCORES PENDING',x+labelW+9,y+12,ink.muted,1,w-labelW-20);return;}
+    const cw=Math.floor((w-labelW-3)/count),compact=h<38;
+    shown.forEach((g,i)=>{
+      const left=x+labelW+i*cw,comp=g.competitions[0],state=g.status?.type?.state||comp.status?.type?.state||'pre';
+      const teams=comp.competitors.slice().sort((a,b)=>(a.homeAway==='away'?0:1)-(b.homeAway==='away'?0:1));
+      label(gameTime(g,state),left+3,y+3,state==='in'?ink.green:ink.muted,1,cw-8);
+      for(let j=0;j<2;j++){
+        const t=teams[j],team=t.team||{},yy=y+(compact?12+j*10:14+j*15);
+        const src=team.logo||team.logos?.[0]?.href||(team.abbreviation?'https://a.espncdn.com/i/teamlogos/nfl/500/'+String(team.abbreviation).toLowerCase()+'.png':'');
+        const logoW=compact?14:18,logoH=compact?9:14;
+        if(!drawPhoto(src,left+3,yy-1,logoW,logoH)){
+          box(left+5,yy+1,6,5,'#'+String(team.color||'40D9FF').replace('#',''));
+        }
+        label(team.abbreviation||'NFL',left+logoW+7,yy+(compact?0:3),ink.white,1,26);
+        const score=state==='pre'?'--':String(t.score??'--');
+        rightLabel(score,left+cw-5,yy,state==='in'?ink.green:ink.white,compact?1:2,compact?29:42);
+      }
+      if(i)box(left-1,y+2,1,h-4,ink.line);
+    });
+    canvas.dataset.logoCount=String([...photoCache.values()].filter(v=>v?.complete&&v.naturalWidth).length);
+  }
+  function bottomCards(m,w,h){
+    const compact=h===256,nflH=compact?31:44,fantasyH=compact?18:30;
+    const nflY=h-nflH-3,fantasyY=nflY-fantasyH-3;
+    fantasyTotals(m,4,fantasyY,w-8,fantasyH);nflCards(m,4,nflY,w-8,nflH);
+  }
+  // Equal starter columns flank both charts; score cards keep stable positions.
   function fullScene(m,w,h){
-    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?192:327;
+    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?172:307;
     const rosterW=200,rightX=w-gap-rosterW,cx=gap*2+rosterW,cw=rightX-cx-gap;
     const bodyH=bottom-top,upperH=Math.floor((bodyH-gap)*.54);
     drawRoster(m,gap,top,rosterW,bodyH,'own');
     drawRoster(m,rightX,top,rosterW,bodyH,'opponent');
     trend(m,cx,top,cw,upperH);
     stock(m,cx,top+upperH+gap,cw,bodyH-upperH-gap);
-    const supportY=bottom+gap,supportH=h-supportY-32;
+    const supportY=bottom+gap,supportH=compact?24:35;
     injuryPanel(m,gap,supportY,rosterW,supportH);
     scoreRows(m,cx,supportY,w-cx-gap,supportH);
-    fantasyTotals(m,4,h-27,w-8);
-    scrollTicker(m,4,h-14,w-8,'NFL',true);
+    bottomCards(m,w,h);
   }
 
   function allPlayers(m){
@@ -543,7 +630,7 @@
       px,y+42,ink.blue,1,rightW);
     label('ACTUAL POINTS',px,y+62,ink.muted,1,150);
     label(number(numeric(p)),px,y+75,ink.green,3,140);
-    label('PROJECTED '+number(p.projected),px+152,y+76,ink.gold,1,rightW-154);
+    label('PROJECTED '+number(p.projected),px+152,y+76,p.fantasyTeamColor||sideInk(m,'own'),1,rightW-154);
     if(tab==='news'){
       label('INJURY STATUS / PLAYER NEWS',x+12,y+126,ink.gold,1,w-40);
       label(p.injury_status||p.injuryStatus||p.status||'NO INJURY FLAG',
@@ -638,7 +725,18 @@
     if(canvas.height!==h)canvas.height=h;
     ctx.imageSmoothingEnabled=false;
     box(0,0,w,h,ink.bg);stroke(0,0,w,h,ink.line);
-    const m=getModel();trackScores(m);
+    const live=getModel();trackScores(live);
+    let m=live;
+    if(now()<demoUntil&&live?.league?.ready){
+      const first=(live.league.own||[]).find(p=>p.starter!==false);
+      const own=(live.league.own||[]).map(p=>p===first?{...p,actual:numeric(p)+6.4}:p);
+      m={...live,animationPreview:true,ownActual:demoBase+6.4,
+        ui:{...live.ui,view:'overview',playerId:null,gameId:null},league:{...live.league,own},
+        events:[{name:'DEMO '+(first?playerName(first):'SCORING PLAY'),fantasyTeamName:live.league.ownName,
+          fantasyTeamOwner:live.league.ownOwner,delta:6.4,total:first?numeric(first)+6.4:demoBase+6.4,
+          teamColor:sideInk(live,'own')},...(live.events||[])]};
+    }
+    canvas.dataset.animationPreview=m?.animationPreview?'true':'false';
     const league=m?.league||{},ui=m?.ui||{},view=upper(ui.view||'OVERVIEW');
     // Tiny ID label, so nearly the entire native LED budget shows game data.
     label(upper(ui.league||'SLEEPER')+' WEEK '+(league.week??'--'),
@@ -657,10 +755,8 @@
       else if(['stock','injuries','live'].includes(ui.view))
         contextScene(m,w,h,ui.view);
       else {
-        const demo=now()<demoUntil;
-        if(demo)label('DEMO +6.4',w-93,2,ink.green,1,90);
-        hero({...m,ownActual:demo?(Number(m.ownActual)||0)+6.4:m.ownActual,
-          ownFinish:demo?(Number(m.ownFinish)||0)+6.4:m.ownFinish},w,h);
+        if(m.animationPreview)centered('ANIMATION PREVIEW +6.4',w/2,5,ink.green,1);
+        hero(m,w,h);
         fullScene(m,w,h);
       }
     }
@@ -671,9 +767,9 @@
     const conn=remote?(remote.paired?(remote.connected?'PAIRED':'RECONNECTING'):'NOT PAIRED'):'WAITING FOR PAIRING';
     const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':' · BUILD PREVIEW SHOWS THE PHYSICAL PANEL SHAPE')+' · '+dataState+' · '+conn;
     if(lastMeta!==meta){$('nativeReadout').textContent=meta;lastMeta=meta}
-    const stage=$('nativeStatus'),message=textStatus+' · '+dataState;
+    const stage=$('nativeStatus'),message=m?.animationPreview?'ANIMATION PREVIEW · live scores remain unchanged':textStatus+' · '+dataState;
     if(stage&&stage.textContent!==message)stage.textContent=message;
-    canvas.setAttribute('aria-label',(chosen===sizes.twentyfour?'P2.5 physical board preview':'TV LED-style scoreboard')+', '+w+' by '+h+' pixels. '+(league.ownName||'My team')+' '+number(m?.ownActual)+' vs '+(league.opponentName||'opponent')+' '+number(m?.opponentActual));
+    canvas.setAttribute('aria-label',(m?.animationPreview?'Animation preview. ':'')+(chosen===sizes.twentyfour?'P2.5 physical board preview':'TV LED-style scoreboard')+', '+w+' by '+h+' pixels. '+(league.ownName||'My team')+' '+number(m?.ownActual)+' vs '+(league.opponentName||'opponent')+' '+number(m?.opponentActual));
     for(const key of ['sleeper','espn'])$('nativeLeague'+(key==='sleeper'?'Sleeper':'Espn'))?.setAttribute('aria-pressed',String(ui.league===key));
   }
 
@@ -730,10 +826,16 @@
     manualScene%=3;auto=false;
     $('nativePause').textContent='Resume rotation';draw();
   });
-  $('nativeDemo')?.addEventListener('click',()=>{
-    demoUntil=now()+2800;shakeUntil=now()+1550;
-    celebrationValue=6.4;draw();
-  });
+  function previewAnimation(){
+    const m=getModel();if(!m?.league?.ready)return;
+    demoBase=Number(m.ownActual)||0;
+    const seed=n=>({from:n,to:n,start:0,delta:0});
+    for(const suffix of ['|preview-own','|preview-card-own'])transitions.set(scopeFor(m)+suffix,seed(demoBase));
+    const p=(m.league.own||[]).find(p=>p.starter!==false);
+    if(p)transitions.set(scopeFor(m)+'|preview-p|'+String(p.player_id??p.id??p.name),seed(numeric(p)));
+    demoUntil=now()+5500;shakeUntil=now()+2400;celebrationValue=6.4;draw();
+  }
+  $('nativeDemo')?.addEventListener('click',previewAnimation);
   $('nativePair')?.addEventListener('click',()=>document.getElementById('remoteToggle')?.click());
   $('nativeFull')?.addEventListener('click',async()=>{
     try {if(document.fullscreenElement)await document.exitFullscreen();else await $('nativeStage').requestFullscreen();}
@@ -752,6 +854,5 @@
   const initial=new URL(location.href).searchParams.get('modules');
   const display=new URL(location.href).searchParams.get('display');
   pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
-  window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
+  window.FantasyLEDNative={draw,pick,previewAnimation,getSize:()=>({...chosen}),sizes};
 })();
-

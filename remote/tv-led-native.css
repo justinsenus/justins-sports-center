@@ -32,3 +32,6 @@ body[data-native-led="1"] #pairPanel .pair-address{overflow-wrap:anywhere}
 body[data-native-led="1"] #pairPanel .led-original-link{color:#9ccfff;font:13px Arial,sans-serif}
 @media(max-width:1000px){body[data-native-led="1"] #nativeStatus{max-width:100%;width:100%;margin:0;font-size:11px}body[data-native-led="1"] .native-build-note{display:none}}
 @media(max-width:650px){body[data-native-led="1"] #nativeApp{padding:4px;gap:4px}body[data-native-led="1"] .native-toolbar{gap:4px;padding:4px}body[data-native-led="1"] .native-toolbar button,body[data-native-led="1"] .native-toolbar a{padding:6px;min-height:32px;font-size:11px}body[data-native-led="1"] .native-meta{font-size:9px}body[data-native-led="1"] #nativeReadout{font-size:9px}}
+
+body[data-native-led="1"] #nativeDemo{color:#091a0d;background:#78eaa0;border-color:#a3ffc3;font-weight:800}
+body[data-native-led="1"] #nativeDemo:hover{background:#a5ffc4}
