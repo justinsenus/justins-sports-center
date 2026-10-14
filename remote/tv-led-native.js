@@ -207,17 +207,37 @@
   makePixelPortrait();
   const laughAsset=new Image();laughAsset.decoding='async';
   window.setTimeout(()=>{laughAsset.src='../patriots-fantasy-touch/assets/justin-led-reference-laugh.png'},2500);
+  const referenceSilhouettes={"still":"41.02 0.98,40.82 2.15,39.06 3.32,37.70 4.49,37.30 5.66,28.71 6.84,25.20 8.01,25.20 9.18,21.29 10.35,19.34 11.52,19.34 12.70,17.19 13.87,15.82 15.04,15.23 16.21,13.28 17.38,11.13 18.55,9.38 19.73,9.38 20.90,8.79 22.07,7.23 23.24,6.64 24.41,5.08 25.59,4.88 26.76,3.12 27.93,3.12 29.10,3.12 30.27,3.12 31.45,3.12 32.62,3.12 33.79,3.12 34.96,3.12 36.13,3.12 37.30,3.32 38.48,3.32 39.65,3.12 40.82,3.32 41.99,3.12 43.16,3.12 44.34,3.12 45.51,3.12 46.68,3.12 47.85,3.12 49.02,3.12 50.20,3.12 51.37,3.12 52.54,2.93 53.71,0.78 54.88,0.59 56.05,0.78 57.23,0.59 58.40,0.59 59.57,0.59 60.74,0.59 61.91,0.59 63.09,0.39 64.26,0.59 65.43,0.39 66.60,0.98 67.77,2.15 68.95,3.91 70.12,3.91 71.29,4.69 72.46,4.69 73.63,4.49 74.80,6.45 75.98,6.64 77.15,8.59 78.32,8.98 79.49,16.41 80.66,17.38 81.84,17.38 83.01,19.34 84.18,19.53 85.35,21.29 86.52,23.24 87.70,23.24 88.87,25.20 90.04,25.78 91.21,28.52 92.38,32.62 93.55,32.81 94.73,36.52 95.90,42.77 97.07,42.77 98.24,42.77 98.63,57.62 98.63,57.81 98.24,57.81 97.07,65.43 95.90,69.14 94.73,69.34 93.55,73.05 92.38,73.24 91.21,75.20 90.04,75.20 88.87,76.95 87.70,78.52 86.52,78.91 85.35,80.47 84.18,80.66 83.01,82.42 81.84,82.23 80.66,82.03 79.49,83.79 78.32,84.96 77.15,85.35 75.98,86.72 74.80,86.91 73.63,86.72 72.46,86.91 71.29,86.72 70.12,86.72 68.95,86.72 67.77,86.72 66.60,85.16 65.43,84.96 64.26,83.59 63.09,83.40 61.91,83.59 60.74,81.84 59.57,83.01 58.40,83.40 57.23,88.28 56.05,88.48 54.88,92.19 53.71,92.19 52.54,95.90 51.37,97.07 50.20,97.66 49.02,99.22 47.85,99.41 46.68,99.22 45.51,99.22 44.34,99.22 43.16,98.83 41.99,97.46 40.82,95.70 39.65,95.51 38.48,92.19 37.30,90.04 36.13,87.11 34.96,79.69 33.79,78.52 32.62,78.32 31.45,78.52 30.27,78.32 29.10,78.32 27.93,78.52 26.76,78.32 25.59,76.56 24.41,76.56 23.24,76.56 22.07,76.56 20.90,76.56 19.73,76.17 18.55,74.61 17.38,72.85 16.21,72.85 15.04,71.09 13.87,69.14 12.70,69.14 11.52,67.19 10.35,67.19 9.18,63.48 8.01,63.28 6.84,54.10 5.66,54.10 4.49,53.71 3.32,51.95 2.15,49.22 0.98","laugh":"36 0,56 2,69 8,77 26,83 27,100 33,100 41,83 50,85 68,79 85,58 100,39 98,20 87,17 78,3 78,0 56,4 52,1 33,15 18,23 9,33 6"};
+  function referenceSVG(tag,attributes={}){
+    const element=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    for(const [name,value] of Object.entries(attributes))element.setAttribute(name,String(value));
+    return element;
+  }
   function referenceFace(key,x,y,size,frame='still',angle=0){
     referenceFacesUsed.add(key);
     let node=referenceFaces.get(key);
     if(!node){
       node=document.createElement('div');node.className='native-reference-face';node.setAttribute('aria-hidden','true');
-      const picture=document.createElement('img');picture.alt='';picture.decoding='async';picture.draggable=false;
-      node.appendChild(picture);referenceLayer.appendChild(node);referenceFaces.set(key,node);
+      const clipId='native-character-clip-'+key;
+      const art=referenceSVG('svg',{viewBox:'0 0 100 100',preserveAspectRatio:'none','aria-hidden':'true',focusable:'false'});
+      const defs=referenceSVG('defs'),clip=referenceSVG('clipPath',{id:clipId,clipPathUnits:'userSpaceOnUse'});
+      const outline=referenceSVG('polygon');clip.appendChild(outline);defs.appendChild(clip);art.appendChild(defs);
+      const cutout=referenceSVG('g',{'clip-path':'url(#'+clipId+')'});
+      cutout.appendChild(referenceSVG('rect',{x:0,y:0,width:100,height:100,fill:'#010308'}));
+      const picture=referenceSVG('image',{preserveAspectRatio:'none'});cutout.appendChild(picture);art.appendChild(cutout);
+      node._referenceArt={outline,picture};
+      node.appendChild(art);referenceLayer.appendChild(node);referenceFaces.set(key,node);
     }
-    const picture=node.firstElementChild;
+    const {outline,picture}=node._referenceArt;
     const file=frame==='laugh'?'justin-led-reference-laugh.png':'justin-led-reference-photo.jpg';
-    if(node.dataset.frame!==frame){picture.src='../patriots-fantasy-touch/assets/'+file;node.dataset.frame=frame;}
+    if(node.dataset.frame!==frame){
+      outline.setAttribute('points',referenceSilhouettes[frame]);
+      const crop=frame==='laugh'?[-79.49,-22.06,255.62,146.71]:[-11.67,-7.86,121.33,116.63];
+      ['x','y','width','height'].forEach((name,i)=>picture.setAttribute(name,crop[i]));
+      const src='../patriots-fantasy-touch/assets/'+file;
+      picture.setAttribute('href',src);picture.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',src);
+      node.dataset.frame=frame;
+    }
     if(node.style.display!=='block')node.style.display='block';node.style.left=x/chosen.width*100+'%';node.style.top=y/chosen.height*100+'%';
     node.style.width=size/chosen.width*100+'%';node.style.height=size/chosen.height*100+'%';
     node.style.transform='rotate('+angle+'deg)'+(frame==='laugh'?' scale(1,'+(1+Math.max(0,Math.sin(now()/83))*.035)+')':'');
