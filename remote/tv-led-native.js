@@ -111,8 +111,8 @@
     y:'00000/10001/10001/10001/01111/00001/01110',z:'00000/00000/11111/00010/00100/01000/11111'
   };
   for(const [letter,rows] of Object.entries(lowercase))glyphs[letter]=rows.split('/');
-  const ink={bg:'#02050a',panel:'#020610',line:'#245aff',white:'#d8f7ff',
-    orange:'#ff912c',blue:'#67bcff',green:'#54eab3',muted:'#90b2d2',red:'#ff5d6e',gold:'#ffdb74'};
+  const ink={bg:'#010308',panel:'#01040a',line:'#1764ff',white:'#effcff',
+    orange:'#ff861c',blue:'#65ccff',green:'#65ffb4',muted:'#aecce6',red:'#ff5d6e',gold:'#ffe27a'};
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const number = (v,d=1) => {
     if(v==null || v==='') return '--';
@@ -154,7 +154,7 @@
   }
   const numeric=p=>Number(p && (p.actual ?? p.points ?? 0))||0;
   const starters=(m,key)=>((m?.league?.[key])||[]).filter(p=>p.starter!==false);
-  const ledPalette=['#FF9638','#40D9FF','#68F58C','#FC76E8','#FFE76B','#B9A0FF',
+  const ledPalette=['#FF881F','#32D9FF','#68FF96','#FF73EB','#FFE76B','#BEA1FF',
     '#FF849E','#75F1D3','#91BFFF','#FFBC71','#CCF889','#F4A5FF','#83ECFF','#FFAED6'];
   const isMineTeam=t=>Boolean(t?.isOwnFantasyTeam)||/^(THE BIG SENUS|GUMBYS? BIG D)$/.test(upper(t?.name).replace(/'/g,''));
   function brightenModel(raw){
@@ -185,6 +185,16 @@
   $('nativeStage')?.appendChild(referenceLayer);
   const referenceFaces=new Map();
   const referenceFacesUsed=new Set();
+  const hitTargets=new Map(),hitTargetsUsed=new Set();
+  function hitTarget(key,x,y,w,h,name,patch){
+    hitTargetsUsed.add(key);
+    let button=hitTargets.get(key);
+    if(!button){button=document.createElement('button');button.type='button';button.className='native-hit-target';referenceLayer.appendChild(button);hitTargets.set(key,button);}
+    button.setAttribute('aria-label',name);button.onclick=()=>{app.dispatch(patch);draw()};
+    button.style.display='block';button.style.left=x/chosen.width*100+'%';button.style.top=y/chosen.height*100+'%';
+    button.style.width=w/chosen.width*100+'%';button.style.height=h/chosen.height*100+'%';
+  }
+
   let pixelPortrait=null;
   function makePixelPortrait(){
     const art=window.JustinLEDCharacter;if(!art)return;
@@ -289,7 +299,7 @@
     const active=celebrationStarted>0&&time>=0&&time<celebrationDuration&&scopeFor(m)===celebrationScope;
     canvas.dataset.celebration=active?'laughing':'idle';
     if(!active)return;
-    const compact=h===256,x=210,y=compact?74:103,cw=w-420,ch=compact?80:175,cx=w/2;
+    const compact=h===256,x=210,y=compact?74:112,cw=w-420,ch=compact?80:190,cx=w/2;
     const colors=['#ff9638','#ffe76b','#68f58c','#40d9ff','#b9a0ff','#fc76e8'];
     box(x,y,cw,ch,'#020713');
     ctx.save();ctx.beginPath();ctx.rect(x,y,cw,ch);ctx.clip();
@@ -330,7 +340,7 @@
 
   const teamTint=(team,fallback)=>/^#[\da-f]{6}$/i.test(String(team||''))?team:fallback;
   function hero(m,w,h){
-    const league=m?.league||{},compact=h===256,cx=w/2,hh=compact?70:99;
+    const league=m?.league||{},compact=h===256,cx=w/2,hh=compact?70:108;
     const ownColor=sideInk(m,'own'),opponentColor=sideInk(m,'opponent');
     const a=animatedPoints(scopeFor(m)+'|hero-own',m?.ownActual);
     const b=animatedPoints(scopeFor(m)+'|hero-opp',m?.opponentActual);
@@ -344,17 +354,17 @@
     rightLabel(record(league.opponentRecord),w-23,compact?43:49,ink.muted,1,186);
     const ownOwner=league.ownOwner,oppOwner=league.opponentOwner;
     if(!compact){
-      if(ownOwner)label('OWNER '+ownOwner,23,61,ink.muted,1,204);
-      if(oppOwner)rightLabel('OWNER '+oppOwner,w-23,61,ink.muted,1,204);
+      if(ownOwner)label('OWNER '+ownOwner,23,61,ink.muted,1,156);
+      if(oppOwner)rightLabel('OWNER '+oppOwner,w-23,61,ink.muted,1,156);
     }
     // Fixed, mirrored score slots reserve room for three-digit totals.
     const scoreSize=compact?4:5,scoreY=compact?30:42;
-    centered(number(a.value),cx-120,scoreY,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize);
-    centered(number(b.value),cx+120,scoreY,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize);
-    label('PROJ '+number(m?.ownFinish),23,hh-14,ownColor,1,204);
-    rightLabel('PROJ '+number(m?.opponentFinish),w-23,hh-14,opponentColor,1,204);
-    drawMascot(cx-36,compact?12:16,72,compact?48:72);
-    centered('VS',cx,compact?59:88,ink.white,1);
+    centered(number(a.value),cx-(compact?120:130),scoreY,a.changed?(a.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    centered(number(b.value),cx+(compact?120:130),scoreY,b.changed?(b.delta>0?ink.green:ink.red):ink.white,scoreSize);
+    label('PROJ '+number(m?.ownFinish),23,hh-17,ownColor,1,204);
+    rightLabel('PROJ '+number(m?.opponentFinish),w-23,hh-17,opponentColor,1,204);
+    drawMascot(cx-(compact?36:48),compact?12:-2,compact?72:96,compact?48:96);
+    centered('VS',cx,compact?59:98,ink.white,1);
     box(5,hh-3,cx-9,2,ownColor);box(cx+4,hh-3,cx-9,2,opponentColor);
     if(a.changed)centered((a.delta>0?'+':'')+number(a.delta),cx-120,hh-13,a.delta>0?ink.green:ink.red,1);
     celebration(w);
@@ -383,41 +393,34 @@
     }
   }
 
+  function rosterGame(p){
+    const full=String(app.markup?.gameLabel?.(p)||p.status||'').replace(/<[^>]*>/g,'');
+    if(/BYE/i.test(full))return 'BYE WEEK';
+    if(/PEND|UNKNOWN|NEXT GAME|NO GAME/i.test(full))return (p.team||'NFL')+' TIME TBD';
+    return full.replace(/(\d(?::\d{2})?)\s*(AM|PM)/gi,(_,t,a)=>t.replace(':00','')+(a.toUpperCase()==='AM'?'a':'p')).replace(/\s+(vs|@)\s+/gi,' ').replace(/\s+/g,' ').trim();
+  }
   function drawRoster(m,x,y,w,h,key){
     const mine=key==='own',color=sideInk(m,key),compact=h<150;
-    const all=m?.league?.[key]||[],rows=all.filter(p=>p.starter!==false);
+    const rows=(m?.league?.[key]||[]).filter(p=>p.starter!==false);
     panel(x,y,w,h,(mine?'MY':'OPPONENT')+' STARTERS',ink.blue);
-    rightLabel('PTS',x+w-5,y+4,ink.blue,1,24);
-    const top=y+17,rowH=compact?8:Math.max(15,Math.min(18,Math.floor((h-18)/Math.max(1,rows.length)))),capacity=Math.max(1,Math.floor((h-18)/rowH));
+    rightLabel(compact?'PTS':'ACTUAL',x+w-5,y+4,ink.blue,1,compact?24:40);
+    const top=y+17,rowH=compact?8:Math.max(17,Math.min(21,Math.floor((h-18)/Math.max(1,rows.length)))),capacity=Math.max(1,Math.floor((h-18)/rowH));
     const page=Math.floor(now()/15000)%Math.max(1,Math.ceil(rows.length/capacity));
     const visible=rows.slice(page*capacity,(page+1)*capacity);
     if(!rows.length){label('WAITING FOR ROSTER',x+5,top,ink.muted,1,w-10);return;}
-    const scope=scopeFor(m);
     for(let i=0;i<visible.length;i++){
-      const p=visible[i],yy=top+i*rowH;
-      const selected=String(m?.ui?.playerId||'')===String(p.player_id);
-      if(selected)box(x+2,yy-1,w-4,10,'#22435b');
-      const keyId=scope+'|p|'+String(p.player_id??p.id??p.name);
-      const points=animatedPoints(keyId,numeric(p));
-      let delta=points.changed?points.delta:0;
-      box(x+4,yy+1,2,6,delta>0?ink.green:delta<0?ink.red:color);
+      const p=visible[i],yy=top+i*rowH,keyId=scopeFor(m)+'|p|'+String(p.player_id??p.id??p.name);
+      const points=animatedPoints(keyId,numeric(p)),pointColor=points.changed?(points.delta>0?ink.green:ink.red):ink.white;
+      box(x+4,yy+1,2,compact?6:13,color);
       label(p.position||'FLX',x+9,yy,ink.blue,1,25);
-      label(playerName(p),x+37,yy,selected?ink.gold:ink.white,1,w-76);
-      rightLabel(number(points.value),x+w-5,yy,points.changed?(delta>0?ink.green:ink.red):ink.white,1,38);
+      label(playerName(p),x+34,yy,ink.white,1,w-(compact?73:104));
+      rightLabel(number(points.value),x+w-5,yy+(compact?0:1),pointColor,compact?1:2,compact?38:62);
       if(!compact){
-        const schedule=String(app.markup?.gameLabel?.(p)||p.status||'').replace(/<[^>]*>/g,'');
-        label(schedule,x+37,yy+rowH-8,p.status==='LIVE'?ink.green:ink.muted,1,w-76);
-        rightLabel('P '+number(p.projected),x+w-5,yy+rowH-8,color,1,44);
-        box(x+4,yy+rowH-1,w-8,1,'#102442');
+        label(rosterGame(p),x+9,yy+9,p.status==='LIVE'?ink.green:ink.muted,1,w-116);
+        rightLabel('P'+number(p.projected),x+w-68,yy+9,color,1,37);
+        box(x+4,yy+rowH-1,w-8,1,'#112741');
+        hitTarget('roster-'+key+'-'+i,x+3,yy-1,w-6,rowH,'View '+(p.full_name||p.name||'player')+' projections',{playerId:p.player_id??p.id,playerTab:'projections',view:'overview'});
       }
-    }
-    if(!compact && top+visible.length*rowH+19<y+h){
-      const by=top+visible.length*rowH+4,bench=all.filter(p=>p.starter===false),count=Math.floor((y+h-by-13)/18);
-      if(count>0&&bench.length)label('BENCH',x+7,by,ink.muted,1,w-14);
-      bench.slice(0,Math.max(0,count)).forEach((p,i)=>{
-        label((p.position||'')+' '+playerName(p),x+9,by+12+i*18,ink.muted,1,w-52);
-        rightLabel(number(numeric(p)),x+w-5,by+12+i*18,ink.muted,1,38);
-      });
     }
   }
 
@@ -480,11 +483,11 @@
   function injuryPanel(m,x,y,w,h){
     panel(x,y,w,h,'INJURY UPDATES',ink.blue);
     const list=[...(m?.league?.own||[]),...(m?.league?.opponent||[])].filter(p=>p.injury_status&&/OUT|IR|Q|DOUBT|PUP|QUESTION/i.test(p.injury_status));
-    const count=Math.max(1,Math.floor((h-17)/11)),page=Math.floor(now()/12000)%Math.max(1,Math.ceil(list.length/count));
+    const rowH=h>28&&h<60?9:11,count=Math.max(1,Math.floor((h-17)/rowH)),page=Math.floor(now()/12000)%Math.max(1,Math.ceil(list.length/count));
     list.slice(page*count,(page+1)*count).forEach((p,i)=>{
       const status=upper(p.injury_status),flag=status.includes('QUESTION')?'Q':status.includes('DOUBT')?'D':status;
-      label(playerName(p),x+5,y+(h<28?13:17)+i*11,ink.white,1,w-42);
-      rightLabel(flag,x+w-5,y+(h<28?13:17)+i*11,ink.gold,1,32);
+      label(playerName(p),x+5,y+(h<28?13:17)+i*rowH,ink.white,1,w-42);
+      rightLabel(flag,x+w-5,y+(h<28?13:17)+i*rowH,ink.gold,1,32);
     });
     if(!list.length)label('NO INJURY FLAGS',x+5,y+(h<28?13:17),ink.muted,1,w-10);
   }
@@ -649,14 +652,14 @@
     canvas.dataset.logoCount=String([...photoCache.values()].filter(v=>v?.complete&&v.naturalWidth).length);
   }
   function bottomCards(m,w,h){
-    const compact=h===256,nflH=compact?31:44,fantasyH=compact?20:30;
+    const compact=h===256,nflH=compact?31:32,fantasyH=compact?20:26;
     const nflY=h-nflH-3,fantasyY=nflY-fantasyH-3;
     fantasyTotals(m,4,fantasyY,w-8,fantasyH);nflCards(m,4,nflY,w-8,nflH);
   }
   // Equal starter columns flank both charts; score cards keep stable positions.
   function fullScene(m,w,h){
-    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?172:278;
-    const rosterW=200,rightX=w-gap-rosterW,cx=gap*2+rosterW,cw=rightX-cx-gap;
+    const compact=h===256,gap=4,top=compact?74:112,bottom=compact?172:306;
+    const rosterW=compact?200:214,rightX=w-gap-rosterW,cx=gap*2+rosterW,cw=rightX-cx-gap;
     const bodyH=bottom-top,upperH=compact?42:Math.floor((bodyH-gap)*.54);
     drawRoster(m,gap,top,rosterW,bodyH,'own');
     drawRoster(m,rightX,top,rosterW,bodyH,'opponent');
@@ -667,8 +670,8 @@
       injuryPanel({...m,league:{...m.league,opponent:[]}},gap,176,rosterW,22);
       injuryPanel({...m,league:{...m.league,own:[]}},rightX,176,rosterW,22);
     }else{
-      injuryPanel(m,gap,282,rosterW,66);
-      scoreRows(m,cx,282,w-cx-gap,66);
+      injuryPanel(m,gap,310,rosterW,54);
+      scoreRows(m,cx,310,w-cx-gap,54);
     }
     bottomCards(m,w,h);
   }
@@ -722,7 +725,7 @@
     ctx.drawImage(image,Math.round(x+(w-cw)/2),Math.round(y+(h-ch)/2),cw,ch);
     return true;
   }
-  function playerScene(m,p,w,h) {
+  function compactPlayerScene(m,p,w,h) {
     const tab=m.ui?.playerTab||'stats',x=8,y=17,body=h-47;
     panel(x,y,w-16,body,'PLAYER CENTER / '+upper(tab),ink.orange);
     const large=h>=380,headW=large?105:77;
@@ -759,6 +762,95 @@
     scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
+  function wrapped(raw,x,y,width,color=ink.muted,scale=1,lineHeight=11,maxLines=3){
+    const limit=Math.max(1,Math.floor(width/(6*scale))),words=String(raw||'').split(/\s+/),lines=[];let row='';
+    for(const word of words){if(row&&row.length+word.length+1>limit){lines.push(row);row=word;}else row+=(row?' ':'')+word;}
+    if(row)lines.push(row);
+    lines.slice(0,maxLines).forEach((line,i)=>label(line,x,y+i*lineHeight,color,scale,width));
+  }
+  function playerScene(m,p,w,h){
+    if(h<380){compactPlayerScene(m,p,w,h);return;}
+    const tab=['stats','news','projections'].includes(m.ui?.playerTab)?m.ui.playerTab:'projections';
+    const team=(m.league?.teams||[]).find(t=>(t.players||[]).some(q=>String(q.player_id)===String(p.player_id)));
+    const color=p.fantasyTeamColor||team?.teamColor||sideInk(m,p.side==='opponent'?'opponent':'own');
+    const details=window.FantasyPlayerDetails;
+    let report={},average={sources:[]},intel=null;
+    try{report=details?.injurySummary(p)||{};average=details?.average(p,m.league?.week)||average;intel=details?.playerData(p);}catch(_){}
+    const status=String(report.status||p.injury_status||p.injuryStatus||'').replace(/_/g,' ');
+    const flag=status.toUpperCase(),hurt=/OUT|IR|INJURY|DOUBT|QUESTION|PUP|^Q$|^D$/.test(flag);
+    const statusText=!status?'NO INJURY DESIGNATION':flag==='Q'?'QUESTIONABLE':flag==='D'?'DOUBTFUL':flag==='IR'?'INJURED RESERVE':status;
+    panel(4,16,w-8,110,'',color);box(5,17,w-10,2,color);
+    if(!drawPhoto(p.headshot||p.photo||p.image||p.avatar||'',14,28,80,84)){
+      centered(p.position||'NFL',54,48,color,3);centered(p.team||'PLAYER',54,78,ink.white,1);
+    }
+    label(p.full_name||p.name||'SELECTED PLAYER',106,29,ink.white,3,w-278);
+    label((p.position||'FLEX')+' / '+(p.team||'NFL')+' / '+(team?.name||p.fantasyTeamName||m.league?.ownName||''),106,57,color,1,w-280);
+    label(String(app.markup?.gameLabel?.(p)||p.status||'GAME TIME PENDING').replace(/<[^>]*>/g,''),106,76,ink.white,1,w-274);
+    label(hurt?statusText:(p.status||'SCHEDULED'),106,99,hurt?ink.gold:ink.green,1,w-274);
+    rightLabel('ACTUAL POINTS',w-16,31,ink.muted,1,108);
+    rightLabel(number(numeric(p)),w-16,52,ink.white,4,122);
+    rightLabel('WEEK '+(m.league?.week||'--'),w-16,91,ink.muted,1,108);
+    panel(4,132,94,22,'',ink.blue);centered('< BACK',51,139,ink.blue,1);
+    hitTarget('player-back',4,132,94,22,'Back to scoreboard',{playerId:null,view:'overview'});
+    const tabs=[['projections','PROJECTIONS'],['news','INJURIES'],['stats','LIVE STATS']];
+    tabs.forEach(([id,name],i)=>{
+      const x=104+i*220;panel(x,132,214,22,'',id===tab?color:ink.line);
+      if(id===tab)box(x+1,133,212,20,'#0b1b2e');
+      centered(name,x+107,136,id===tab?ink.white:ink.muted,2);
+      hitTarget('player-tab-'+id,x,132,214,22,'Show player '+(id==='news'?'injuries':id),{playerId:p.player_id,playerTab:id});
+    });
+    const nativeProjection=p.consensus?.cloud?(p.providerProjected??p.projected):p.projected;
+    panel(4,162,238,82,'LEAGUE PROJECTION',color);
+    centered(number(nativeProjection),123,183,color,5);
+    centered(upper(m.ui?.league||'LEAGUE')+' / WEEK '+(m.league?.week||'--'),123,229,ink.muted,1);
+    panel(4,250,238,66,'SOURCE AVERAGE / PPR',ink.blue);
+    centered(number(average.value),123,270,ink.white,3);
+    centered(average.sourceCount?average.sourceCount+' VERIFIED SOURCES':'AVERAGE NOT REPORTED',123,301,ink.muted,1);
+    panel(4,322,238,68,'AVAILABILITY',hurt?ink.gold:ink.green);
+    wrapped(statusText,14,339,216,hurt?ink.gold:ink.green,2,17,2);
+    if(!hurt)label('CHECK THE INJURIES TAB FOR REPORTS',14,375,ink.muted,1,216);
+    const x=250,width=w-254;
+    if(tab==='news'){
+      panel(x,162,width,228,'INJURY REPORT / PRACTICE',ink.gold);
+      label('CURRENT DESIGNATION',x+10,181,ink.muted,1,width-20);
+      label(statusText,x+10,195,hurt?ink.gold:ink.green,2,width-20);
+      label('LATEST PRACTICE',x+10,228,ink.muted,1,width-20);
+      wrapped(report.practice||p.practice_participation||'NOT REPORTED',x+10,241,width-20,ink.white,2,17,2);
+      label('REPORTED INJURY',x+10,283,ink.muted,1,width-20);
+      label(report.injury||'NO ISSUE REPORTED IN AVAILABLE FEEDS',x+10,297,ink.white,1,width-20);
+      label((report.source||'League roster')+(report.week?' / W'+report.week:'')+(report.date?' / '+report.date:''),x+10,322,ink.blue,1,width-20);
+      const stories=intel?.news||intel?.headlines||[];
+      const headline=stories[0]?.title||stories[0]?.headline;
+      const chance=(intel?.reports||[]).find(q=>q.play_probability!=null&&Number.isFinite(Number(q.play_probability)));
+      const probability=chance?clamp(Number(chance.play_probability),0,100):null;
+      label(probability==null?'CHANCE TO PLAY / NOT PUBLISHED':'CHANCE TO PLAY / '+Math.round(probability)+'%',x+10,345,probability==null?ink.muted:ink.green,1,width-20);
+      if(headline)wrapped(headline,x+10,366,width-20,ink.muted,1,10,2);
+    }else{
+      panel(x,162,width,228,tab==='projections'?'PROJECTED GAME STATS':'ACTUAL GAME STATS',ink.blue);
+      const preferred=['PASSING YARDS','PASSING TOUCHDOWNS','RUSHING YARDS','RECEIVING YARDS','RECEPTIONS','RECEIVING TOUCHDOWNS','RUSHING TOUCHDOWNS','TARGETS'];
+      const rows=statEntries(p,tab).slice().sort((a,b)=>{
+        const rank=s=>{const i=preferred.findIndex(t=>upper(s.label).includes(t));return i<0?99:i;};return rank(a)-rank(b);
+      }).slice(0,6);
+      if(!rows.length){
+        wrapped(tab==='projections'?'DETAILED STAT PROJECTION PENDING':'NO GAME STATS YET',x+18,217,width-36,ink.white,2,20,2);
+        wrapped(tab==='projections'?'Your league points projection is shown at left.':'Live statistics appear when the provider reports game activity.',x+18,269,width-36,ink.muted,1,13,3);
+      }
+      rows.forEach((stat,i)=>{
+        const cw=Math.floor((width-28)/2),sx=x+9+(i%2)*(cw+10),sy=183+Math.floor(i/2)*55;
+        box(sx,sy,2,45,color);
+        label(String(stat.label||'STAT').replace(/^PROJ /i,''),sx+8,sy+2,ink.muted,1,cw-12);
+        label(number(stat.value,Number.isInteger(Number(stat.value))?0:1),sx+8,sy+17,ink.white,3,cw-12);
+      });
+      if(tab==='projections'){
+        label('POINTS FOLLOW YOUR LEAGUE SCORING',x+12,357,color,1,width-24);
+        if(average.min!=null&&average.max!=null)label('SOURCE RANGE '+number(average.min)+' - '+number(average.max),x+12,373,ink.muted,1,width-24);
+      }
+    }
+    scrollTicker(m,6,h-27,w-12,'FANTASY + PLAYERS',false);
+    scrollTicker(m,6,h-14,w-12,'NFL',true);
+    canvas.dataset.playerView=tab;canvas.dataset.playerName=p.full_name||p.name||'';
+  }
+
   function matchupsScene(m,w,h){
     const list=m.matchups||[],x=7,bodyY=32,room=h-64;
     panel(6,17,w-12,h-46,'LEAGUE MATCHUPS · '+list.length+' GAMES',ink.gold);
@@ -826,7 +918,7 @@
   }
   function draw() {
     if(!pairingRequested)$('pairPanel')?.classList.add('hidden');
-    referenceFacesUsed.clear();
+    referenceFacesUsed.clear();hitTargetsUsed.clear();
     const w=chosen.width,h=chosen.height;
     if(canvas.width!==w)canvas.width=w;
     if(canvas.height!==h)canvas.height=h;
@@ -837,7 +929,7 @@
     // Tiny ID label, so nearly the entire native LED budget shows game data.
     label(upper(ui.league||'SLEEPER')+' WEEK '+(league.week??'--'),
       8,5,ink.blue,1,220);
-    rightLabel(chosen===sizes.twentyfour?'6X4 P2.5 / 768X256':'TV / 16:9',w-8,5,ink.muted,1,220);
+    if(chosen===sizes.twentyfour)rightLabel('6X4 P2.5 / 768X256',w-8,5,ink.muted,1,220);
     if(view!=='OVERVIEW')centered(view,w/2,5,ink.muted,1);
     if(m?.loading || !league.ready){
       label(m?.loading?'CONNECTING FANTASY FEEDS':'FEED UNAVAILABLE - REFRESH TO RETRY',12,Math.floor(h/2),ink.gold,1,w-24);
@@ -858,6 +950,7 @@
     if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
     else canvas.dataset.celebration='idle';
     for(const [key,face] of referenceFaces)if(!referenceFacesUsed.has(key))face.style.display='none';
+    for(const [key,button] of hitTargets)if(!hitTargetsUsed.has(key))button.style.display='none';
     if(ledRenderer){
       try { ledRenderer.render(canvas); }
       catch(error){
@@ -886,10 +979,10 @@
   }
 
   function pick(key) {
-    chosen=key==='tv'&&document.body.dataset.tvLedCanvas==='1'?sizes.tv:sizes.twentyfour;
+    chosen=document.body.dataset.tvLedCanvas==='1'?sizes.tv:sizes.twentyfour;
     const {cols,rows}=chosen;
     const i=$('nativeSize');if(i)i.value=key;
-    const url=new URL(location.href);url.searchParams.set('modules','twentyfour');url.searchParams.set('display',chosen===sizes.tv?'tv':'build');
+    const url=new URL(location.href);if(chosen===sizes.tv)url.searchParams.delete('modules');else url.searchParams.set('modules','twentyfour');url.searchParams.set('display',chosen===sizes.tv?'tv':'build');
     history.replaceState(history.state,'',url.pathname+url.search+url.hash);
     const screen=$('nativeCanvas');
     screen.style.aspectRatio=chosen.width+' / '+chosen.height;
@@ -900,7 +993,8 @@
   }
   function fitCanvas(){
     const stage=$('nativeStage');if(!stage)return;
-    const roomW=stage.clientWidth-8,roomH=stage.clientHeight-8;
+    const padding=document.body.classList.contains('native-kiosk')?0:8;
+    const roomW=stage.clientWidth-padding,roomH=stage.clientHeight-padding;
     let scale=Math.min(roomW/chosen.width,roomH/chosen.height);
     // Preserve the canvas proportions, including the wider physical 6x4 build.
     scale=Math.max(.1,scale);
@@ -933,7 +1027,10 @@
     setKiosk(false);
   });
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'&&document.body.classList.contains('native-kiosk'))setKiosk(false);
+    if(e.key==='Escape'){
+      if(app.getUI?.().playerId)app.dispatch({playerId:null,view:'overview'});
+      else if(document.body.classList.contains('native-kiosk'))setKiosk(false);
+    }
   });
   $('nativePause')?.addEventListener('click',()=>{
     auto=!auto;manualScene=Math.floor((now()-lastSceneAt)/10000)%3;lastSceneAt=now();
@@ -968,6 +1065,7 @@
   window.setTimeout(tick,1000);
   const initial=new URL(location.href).searchParams.get('modules');
   const display=new URL(location.href).searchParams.get('display');
-  pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
+  pick(document.body.dataset.tvLedCanvas==='1'?'tv':'twentyfour');
+  if(document.body.dataset.tvLedCanvas==='1')setKiosk(true);
   window.FantasyLEDNative={draw,pick,getSize:()=>({...chosen}),sizes};
 })();
