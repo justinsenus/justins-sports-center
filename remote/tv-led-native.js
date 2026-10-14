@@ -301,7 +301,7 @@
     const active=celebrationStarted>0&&time>=0&&time<celebrationDuration&&scopeFor(m)===celebrationScope;
     canvas.dataset.celebration=active?'laughing':'idle';
     if(!active)return;
-    const compact=h===256,x=210,y=compact?74:112,cw=w-420,ch=compact?80:190,cx=w/2;
+    const compact=h===256,x=compact?210:222,y=compact?74:112,cw=w-2*x,ch=compact?80:190,cx=w/2;
     const colors=['#ff9638','#ffe76b','#68f58c','#40d9ff','#b9a0ff','#fc76e8'];
     box(x,y,cw,ch,'#020713');
     ctx.save();ctx.beginPath();ctx.rect(x,y,cw,ch);ctx.clip();
@@ -792,7 +792,7 @@
     rightLabel('ACTUAL POINTS',w-16,31,ink.muted,1,108);
     rightLabel(number(numeric(p)),w-16,52,ink.white,4,122);
     rightLabel('WEEK '+(m.league?.week||'--'),w-16,91,ink.muted,1,108);
-    panel(4,132,94,22,'',ink.blue);centered('< BACK',51,139,ink.blue,1);
+    panel(4,132,94,22,'',ink.blue);centered('BACK',51,139,ink.blue,1);
     hitTarget('player-back',4,132,94,22,'Back to scoreboard',{playerId:null,view:'overview'});
     const tabs=[['projections','PROJECTIONS'],['news','INJURIES'],['stats','LIVE STATS']];
     tabs.forEach(([id,name],i)=>{
@@ -807,7 +807,7 @@
     centered(upper(m.ui?.league||'LEAGUE')+' / WEEK '+(m.league?.week||'--'),123,229,ink.muted,1);
     panel(4,250,238,66,'SOURCE AVERAGE / PPR',ink.blue);
     centered(number(average.value),123,270,ink.white,3);
-    centered(average.sourceCount?average.sourceCount+' VERIFIED SOURCES':'AVERAGE NOT REPORTED',123,301,ink.muted,1);
+    centered(average.sourceCount?average.sourceCount+' VERIFIED '+(average.sourceCount===1?'SOURCE':'SOURCES'):'AVERAGE NOT REPORTED',123,301,ink.muted,1);
     panel(4,322,238,68,'AVAILABILITY',hurt?ink.gold:ink.green);
     wrapped(statusText,14,339,216,hurt?ink.gold:ink.green,2,17,2);
     if(!hurt)label('CHECK THE INJURIES TAB FOR REPORTS',14,375,ink.muted,1,216);
@@ -822,20 +822,39 @@
       label(report.injury||'NO ISSUE REPORTED IN AVAILABLE FEEDS',x+10,297,ink.white,1,width-20);
       label((report.source||'League roster')+(report.week?' / W'+report.week:'')+(report.date?' / '+report.date:''),x+10,322,ink.blue,1,width-20);
       const stories=intel?.news||intel?.headlines||[];
-      const headline=stories[0]?.title||stories[0]?.headline;
+      const injuryStory=stories.find(s=>/injur|practice|questionable|doubtful|ruled out|inactive|concussion|hamstring|ankle|knee|shoulder|illness/i.test(s.title||s.headline||''));
+      const headline=injuryStory?.title||injuryStory?.headline;
       const chance=(intel?.reports||[]).find(q=>q.play_probability!=null&&Number.isFinite(Number(q.play_probability)));
       const probability=chance?clamp(Number(chance.play_probability),0,100):null;
       label(probability==null?'CHANCE TO PLAY / NOT PUBLISHED':'CHANCE TO PLAY / '+Math.round(probability)+'%',x+10,345,probability==null?ink.muted:ink.green,1,width-20);
       if(headline)wrapped(headline,x+10,366,width-20,ink.muted,1,10,2);
     }else{
-      panel(x,162,width,228,tab==='projections'?'PROJECTED GAME STATS':'ACTUAL GAME STATS',ink.blue);
       const preferred=['PASSING YARDS','PASSING TOUCHDOWNS','RUSHING YARDS','RECEIVING YARDS','RECEPTIONS','RECEIVING TOUCHDOWNS','RUSHING TOUCHDOWNS','TARGETS'];
       const rows=statEntries(p,tab).slice().sort((a,b)=>{
         const rank=s=>{const i=preferred.findIndex(t=>upper(s.label).includes(t));return i<0?99:i;};return rank(a)-rank(b);
       }).slice(0,6);
+      panel(x,162,width,228,tab==='projections'?(rows.length?'PROJECTED GAME STATS':'POINT PROJECTIONS'):'ACTUAL GAME STATS',ink.blue);
       if(!rows.length){
-        wrapped(tab==='projections'?'DETAILED STAT PROJECTION PENDING':'NO GAME STATS YET',x+18,217,width-36,ink.white,2,20,2);
-        wrapped(tab==='projections'?'Your league points projection is shown at left.':'Live statistics appear when the provider reports game activity.',x+18,269,width-36,ink.muted,1,13,3);
+        if(tab==='projections'){
+          const top=Math.max(10,Number(nativeProjection)||0,Number(average.value)||0),barWidth=width-36;
+          [[upper(m.ui?.league||'LEAGUE')+' LEAGUE POINTS',nativeProjection,color],['SOURCE AVERAGE / PPR',average.value,ink.blue]].forEach(([name,value,tint],i)=>{
+            const yy=183+i*60;
+            label(name,x+18,yy,ink.muted,1,barWidth-100);
+            rightLabel(number(value),x+width-18,yy+7,tint,3,108);
+            box(x+18,yy+38,barWidth,6,'#102442');
+            if(value!=null&&Number.isFinite(Number(value)))box(x+18,yy+38,Math.round(barWidth*clamp(Number(value)/top,0,1)),6,tint);
+          });
+          const sources=(average.sources||[]).slice(0,3);
+          label('PROJECTION CONTRIBUTORS',x+18,308,ink.muted,1,barWidth);
+          if(sources.length)sources.forEach((s,i)=>{
+            label(s.source||'SOURCE',x+18,322+i*10,ink.blue,1,barWidth-52);
+            rightLabel(number(s.value),x+width-18,322+i*10,ink.white,1,48);
+          });
+          else label(average.sourceCount?average.sourceCount+' VERIFIED SOURCES':'NO SAME-WEEK SOURCE REPORTS',x+18,324,ink.muted,1,barWidth);
+        }else{
+          wrapped('NO GAME STATS YET',x+18,217,width-36,ink.white,2,20,2);
+          wrapped('Live statistics appear when the provider reports game activity.',x+18,269,width-36,ink.muted,1,13,3);
+        }
       }
       rows.forEach((stat,i)=>{
         const cw=Math.floor((width-28)/2),sx=x+9+(i%2)*(cw+10),sy=183+Math.floor(i/2)*55;
