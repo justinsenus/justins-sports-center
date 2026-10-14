@@ -38,4 +38,4 @@ body[data-native-led="1"] #pairPanel .led-original-link{color:#9ccfff;font:13px 
 
 /* The TV renders physical round diode lenses, independently of CSS mask support. */
 body[data-native-led="1"].led-bulbs-ready #nativeCanvas{opacity:0;filter:none;mask-image:none;-webkit-mask-image:none;pointer-events:none}
-body[data-native-led="1"].led-bulbs-ready #nativeGlow{opacity:1;filter:none;image-rendering:auto;z-index:2}
+body[data-native-led="1"].led-bulbs-ready #nativeGlow{opacity:1;filter:brightness(1.8) contrast(1.12) saturate(1.25);image-rendering:auto;z-index:2}
