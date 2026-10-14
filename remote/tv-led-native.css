@@ -56,3 +56,8 @@ body[data-native-led="1"].native-kiosk #nativeExit{opacity:0}
 body[data-native-led="1"].native-kiosk #nativeExit:hover,body[data-native-led="1"].native-kiosk #nativeExit:focus-visible{opacity:1}
 body[data-native-led="1"] .native-hit-target{position:absolute;z-index:5;appearance:none;background:transparent;border:0;margin:0;padding:0;pointer-events:auto;cursor:pointer}
 body[data-native-led="1"] .native-hit-target:focus-visible{outline:2px solid #65ccff;outline-offset:-2px}
+
+body[data-native-led="1"].native-kiosk #nativeStage{cursor:none}
+body[data-native-led="1"].native-kiosk.native-input-active #nativeStage{cursor:auto}
+body[data-native-led="1"].native-kiosk .native-hit-target{cursor:none}
+body[data-native-led="1"].native-kiosk.native-input-active .native-hit-target{cursor:pointer}

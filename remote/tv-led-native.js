@@ -181,7 +181,7 @@
   // The main character is the actual reference photo, displayed independently
   // from the small hardware canvas so the television preserves its LED detail.
   const referenceLayer=document.createElement('div');
-  referenceLayer.id='nativeReferenceFaces';referenceLayer.setAttribute('aria-hidden','true');
+  referenceLayer.id='nativeReferenceFaces';referenceLayer.setAttribute('aria-label','Scoreboard player controls');
   $('nativeStage')?.appendChild(referenceLayer);
   const referenceFaces=new Map();
   const referenceFacesUsed=new Set();
@@ -205,11 +205,13 @@
     }));pixelPortrait=off;
   }
   makePixelPortrait();
+  const laughAsset=new Image();laughAsset.decoding='async';
+  window.setTimeout(()=>{laughAsset.src='../patriots-fantasy-touch/assets/justin-led-reference-laugh.png'},2500);
   function referenceFace(key,x,y,size,frame='still',angle=0){
     referenceFacesUsed.add(key);
     let node=referenceFaces.get(key);
     if(!node){
-      node=document.createElement('div');node.className='native-reference-face';
+      node=document.createElement('div');node.className='native-reference-face';node.setAttribute('aria-hidden','true');
       const picture=document.createElement('img');picture.alt='';picture.decoding='async';picture.draggable=false;
       node.appendChild(picture);referenceLayer.appendChild(node);referenceFaces.set(key,node);
     }
@@ -218,12 +220,12 @@
     if(node.dataset.frame!==frame){picture.src='../patriots-fantasy-touch/assets/'+file;node.dataset.frame=frame;}
     if(node.style.display!=='block')node.style.display='block';node.style.left=x/chosen.width*100+'%';node.style.top=y/chosen.height*100+'%';
     node.style.width=size/chosen.width*100+'%';node.style.height=size/chosen.height*100+'%';
-    node.style.transform='rotate('+angle+'deg)';
+    node.style.transform='rotate('+angle+'deg)'+(frame==='laugh'?' scale(1,'+(1+Math.max(0,Math.sin(now()/83))*.035)+')':'');
     canvas.dataset.characterReference=frame==='laugh'?'supplied-video':'supplied-photo';
   }
   function drawMascot(x,y,w,h){
     const size=Math.min(w,h),jiggle=now()<shakeUntil?Math.round(Math.sin(now()/39)*3):0;
-    if(size>=44){referenceFace('main',x+(w-size)/2+jiggle,y+(h-size)/2,size);return;}
+    if(size>=44){referenceFace('main',x+(w-size)/2+jiggle,y+(h-size)/2,size,now()<shakeUntil?'laugh':'still');return;}
     if(pixelPortrait){ctx.imageSmoothingEnabled=false;ctx.drawImage(pixelPortrait,x+(w-size)/2,y+(h-size)/2,size,size);}
     else label('JS',x,y,ink.orange,1,20);
   }
@@ -254,7 +256,7 @@
   }
   function celebration(w) {
     if(now()>=shakeUntil)return;
-    const time=now(),strength=clamp((shakeUntil-time)/celebrationDuration,0,1),hh=chosen.height===256?70:99;
+    const time=now(),strength=clamp((shakeUntil-time)/celebrationDuration,0,1),hh=chosen.height===256?70:108;
     const cx=Math.floor(w/2);
     // Pixel confetti and arcade jackpot rays stay INSIDE actual P2.5 resolution.
     const colors=[ink.orange,ink.gold,ink.green,ink.white];
@@ -324,7 +326,7 @@
       if(Math.floor(time/180+i)%3!==0)box(px,py,1,1,colors[i%colors.length]);
     }
     centered('FANTASY POINTS',cx,y+(compact?7:12),ink.gold,compact?1:2);
-    const size=compact?44:94,headY=y+(compact?18:43);
+    const size=compact?44:112,headY=y+(compact?18:43);
     laughingPortrait(cx-size/2,headY,size,time);
     const flight=clamp((time-1250)/1500,0,1);
     if(time>1250&&time<2750){
@@ -970,7 +972,7 @@
     const textStatus=document.getElementById('remoteStatus')?.textContent?.trim()||'Controller status unavailable';
     const dataState=m?.loading?'FEED LOADING':!league.ready?(m?.error||'FEED UNAVAILABLE'):m?.stale?'STALE FANTASY DATA':'FANTASY DATA READY';
     const conn=remote?(remote.paired?(remote.connected?'PAIRED':'RECONNECTING'):'NOT PAIRED'):'WAITING FOR PAIRING';
-    const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':' · 6X4 LED BOARD / 768X256')+' · '+dataState+' · '+conn;
+    const meta=chosen.label+(chosen===sizes.twentyfour?' · '+mmW+' × '+mmH+' MM':'')+' · '+dataState+' · '+conn;
     if(lastMeta!==meta){$('nativeReadout').textContent=meta;lastMeta=meta}
     const stage=$('nativeStatus'),message=textStatus+' · '+dataState;
     if(stage&&stage.textContent!==message)stage.textContent=message;
@@ -1005,6 +1007,12 @@
     canvas.style.setProperty('--led-pitch-x',width/chosen.width+'px');
     canvas.style.setProperty('--led-pitch-y',height/chosen.height+'px');
   }
+  let pointerTimer=0;
+  window.addEventListener('pointermove',()=>{
+    document.body.classList.add('native-input-active');
+    window.clearTimeout(pointerTimer);
+    pointerTimer=window.setTimeout(()=>document.body.classList.remove('native-input-active'),2200);
+  });
   window.addEventListener('resize',fitCanvas);
   document.addEventListener('fullscreenchange',fitCanvas);
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(fitCanvas).observe($('nativeStage'));
