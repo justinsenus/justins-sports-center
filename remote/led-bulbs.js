@@ -1,10 +1,33 @@
 /* A GPU diode surface for ordinary televisions. The score/data canvas stays native. */
 (() => {
   'use strict';
+  function canvasBulbs(surface){
+    const out=surface.getContext('2d',{alpha:false});if(!out)return null;
+    const layer=document.createElement('canvas'),paint=layer.getContext('2d');
+    let tile=document.createElement('canvas');tile.width=tile.height=4;
+    let t=tile.getContext('2d');t.fillStyle='#fff';t.beginPath();t.arc(2,2,1.45,0,Math.PI*2);t.fill();
+    const mask=paint.createPattern(tile,'repeat');
+    tile=document.createElement('canvas');tile.width=tile.height=4;t=tile.getContext('2d');t.fillStyle='#04060a';t.fillRect(0,0,4,4);
+    const lens=t.createRadialGradient(1.5,1.4,.1,2,2,1.65);
+    lens.addColorStop(0,'#202736');lens.addColorStop(.45,'#111724');lens.addColorStop(1,'#070a11');
+    t.fillStyle=lens;t.beginPath();t.arc(2,2,1.65,0,Math.PI*2);t.fill();
+    const grid=out.createPattern(tile,'repeat');
+    return {render(source){
+      const w=source.width*4,h=source.height*4;
+      if(surface.width!==w||surface.height!==h){surface.width=layer.width=w;surface.height=layer.height=h;}
+      paint.globalCompositeOperation='source-over';paint.imageSmoothingEnabled=false;
+      paint.drawImage(source,0,0,w,h);
+      paint.globalCompositeOperation='destination-in';paint.fillStyle=mask;paint.fillRect(0,0,w,h);
+      out.globalAlpha=1;out.filter='none';out.fillStyle=grid;out.fillRect(0,0,w,h);
+      out.globalCompositeOperation='lighter';out.globalAlpha=.38;out.filter='blur(2px)';out.drawImage(layer,0,0);
+      out.filter='none';out.globalAlpha=1;out.drawImage(layer,0,0);out.globalCompositeOperation='source-over';
+      document.body.classList.add('led-bulbs-ready');
+    }};
+  }
   window.createLEDBulbRenderer = surface => {
     if(!surface)return null;
     const gl=surface.getContext('webgl',{alpha:false,antialias:false,depth:false,preserveDrawingBuffer:true});
-    if(!gl)return null;
+    if(!gl)return canvasBulbs(surface);
     const shader=(type,source)=>{
       const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);
       if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));
@@ -17,7 +40,7 @@
         void main(){uv=(position+1.0)*0.5;gl_Position=vec4(position,0.0,1.0);}
       `));
       gl.attachShader(program,shader(gl.FRAGMENT_SHADER,`
-        precision mediump float;
+        precision highp float;
         varying vec2 uv; uniform sampler2D source; uniform vec2 grid;
         vec3 lightAt(vec2 cell){
           vec3 c=texture2D(source,(clamp(cell,vec2(0.0),grid-1.0)+0.5)/grid).rgb;
