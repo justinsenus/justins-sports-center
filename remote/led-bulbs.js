@@ -15,7 +15,7 @@
       mask=paint.createPattern(tile,'repeat');
       const unlit=document.createElement('canvas');unlit.width=unlit.height=step;
       const u=unlit.getContext('2d');u.fillStyle='#010205';u.fillRect(0,0,step,step);
-      u.fillStyle='#0d111a';u.beginPath();u.arc(step/2,step/2,step*.38,0,Math.PI*2);u.fill();
+      u.fillStyle='#0b0d11';u.beginPath();u.arc(step/2,step/2,step*.38,0,Math.PI*2);u.fill();
       grid=out.createPattern(unlit,'repeat');
     }
     return {render(source){
@@ -23,7 +23,7 @@
       const cssWidth=Number.parseFloat(surface.style.width)||source.width*2;
       // Limit the intermediate image to three samples per bulb. The previous
       // 4x image and per-frame blur could stall embedded television browsers.
-      const step=Math.max(2,Math.min(3,Math.ceil(cssWidth/source.width)));
+      const step=3;
       const w=source.width*step,h=source.height*step;
       const resize=surface.width!==w||surface.height!==h;
       if(!resize&&time-lastFrame<90)return;
