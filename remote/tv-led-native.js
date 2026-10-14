@@ -4,6 +4,8 @@
   if (!canvas || !window.FantasyCenter) return;
   const ctx = canvas.getContext('2d', {alpha:false});
   if (!ctx) return;
+  const glowCanvas=document.getElementById('nativeGlow');
+  const glowCtx=glowCanvas?.getContext('2d',{alpha:false});
   const app = window.FantasyCenter;
   const sizes = {
     twentyfour: {cols:6,rows:4,width:768,height:256,label:'6 ACROSS × 4 DOWN · P2.5 · 768 × 256'},
@@ -63,7 +65,7 @@
     'X':['10001','10001','01010','00100','01010','10001','10001'],
     'Y':['10001','10001','01010','00100','00100','00100','00100'],
     'Z':['11111','00001','00010','00100','01000','10000','11111'],
-    '0':['01110','10011','10101','10101','11001','10001','01110'],
+    '0':['01110','10001','10001','10001','10001','10001','01110'],
     '1':['00100','01100','00100','00100','00100','00100','01110'],
     '2':['01110','10001','00001','00010','00100','01000','11111'],
     '3':['11110','00001','00001','01110','00001','00001','11110'],
@@ -90,7 +92,23 @@
     ')':['01000','00100','00010','00010','00010','00100','01000'],
     ' ' :['00000','00000','00000','00000','00000','00000','00000']
   };
-  const ink={bg:'#01040b',panel:'#030a18',line:'#2258ba',white:'#d8f7ff',
+  const lowercase={
+    a:'00000/00000/01110/00001/01111/10001/01111',b:'10000/10000/10110/11001/10001/10001/11110',
+    c:'00000/00000/01110/10000/10000/10001/01110',d:'00001/00001/01101/10011/10001/10001/01111',
+    e:'00000/00000/01110/10001/11111/10000/01110',f:'00110/01001/01000/11100/01000/01000/01000',
+    g:'00000/01111/10001/10001/01111/00001/01110',h:'10000/10000/10110/11001/10001/10001/10001',
+    i:'00100/00000/01100/00100/00100/00100/01110',j:'00010/00000/00110/00010/00010/10010/01100',
+    k:'10000/10000/10010/10100/11000/10100/10010',l:'01100/00100/00100/00100/00100/00100/01110',
+    m:'00000/00000/11010/10101/10101/10101/10101',n:'00000/00000/10110/11001/10001/10001/10001',
+    o:'00000/00000/01110/10001/10001/10001/01110',p:'00000/11110/10001/10001/11110/10000/10000',
+    q:'00000/01111/10001/10001/01111/00001/00001',r:'00000/00000/10110/11001/10000/10000/10000',
+    s:'00000/00000/01111/10000/01110/00001/11110',t:'01000/01000/11100/01000/01000/01001/00110',
+    u:'00000/00000/10001/10001/10001/10011/01101',v:'00000/00000/10001/10001/10001/01010/00100',
+    w:'00000/00000/10001/10001/10101/10101/01010',x:'00000/00000/10001/01010/00100/01010/10001',
+    y:'00000/10001/10001/10001/01111/00001/01110',z:'00000/00000/11111/00010/00100/01000/11111'
+  };
+  for(const [letter,rows] of Object.entries(lowercase))glyphs[letter]=rows.split('/');
+  const ink={bg:'#02050a',panel:'#020610',line:'#245aff',white:'#d8f7ff',
     orange:'#ff912c',blue:'#67bcff',green:'#54eab3',muted:'#90b2d2',red:'#ff5d6e',gold:'#ffdb74'};
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const number = (v,d=1) => {
@@ -105,7 +123,8 @@
     box(x,y,w,1,color);box(x,y+h-1,w,1,color);box(x,y,1,h,color);box(x+w-1,y,1,h,color);
   }
   function label(raw,x,y,color=ink.white,s=1,maxWidth=999) {
-    const text=upper(raw), length=Math.max(0,Math.floor(maxWidth/(s*6)));
+    const text=String(raw??'').replace(/[\u2010-\u2015]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/\s+/g,' ').trim();
+    const length=Math.max(0,Math.floor(maxWidth/(s*6)));
     const chars=text.slice(0,length);
     ctx.fillStyle=color;
     for(let ci=0;ci<chars.length;ci++){
@@ -293,7 +312,7 @@
     const active=celebrationStarted>0&&time>=0&&time<celebrationDuration&&scopeFor(m)===celebrationScope;
     canvas.dataset.celebration=active?'laughing':'idle';
     if(!active)return;
-    const compact=h===256,x=210,y=compact?74:103,cw=w-420,ch=compact?98:204,cx=w/2;
+    const compact=h===256,x=210,y=compact?74:103,cw=w-420,ch=compact?80:175,cx=w/2;
     const colors=['#ff9638','#ffe76b','#68f58c','#40d9ff','#b9a0ff','#fc76e8'];
     box(x,y,cw,ch,'#020713');
     ctx.save();ctx.beginPath();ctx.rect(x,y,cw,ch);ctx.clip();
@@ -318,7 +337,7 @@
       if(Math.floor(time/180+i)%3!==0)box(px,py,1,1,colors[i%colors.length]);
     }
     centered('FANTASY POINTS',cx,y+(compact?7:12),ink.gold,compact?1:2);
-    const size=compact?60:122,headY=y+(compact?18:43);
+    const size=compact?44:94,headY=y+(compact?18:43);
     laughingPortrait(cx-size/2,headY,size,time);
     const flight=clamp((time-1250)/1500,0,1);
     if(time>1250&&time<2750){
@@ -365,9 +384,9 @@
   }
 
   function scoreRows(m,x,y,w,h){
-    panel(x,y,w,h,'LIVE LEAGUE SCORING',ink.blue);
+    panel(x,y,w,h,'LIVE LEAGUE SCORING',ink.green);
     const events=(m?.events||[]).filter(Boolean);
-    const rowH=18,count=Math.max(1,Math.floor((h-15)/rowH));
+    const prominent=h>=38,rowH=prominent?24:18,count=Math.max(1,Math.floor((h-15)/rowH));
     const offset=Math.floor(now()/8000)*count;
     if(!events.length){
       label(m?.started?'WAITING FOR NEW SCORING PLAYS':'AWAITING KICKOFF',x+5,y+16,ink.muted,1,w-10);
@@ -376,11 +395,14 @@
     for(let i=0;i<Math.min(count,events.length);i++){
       const e=events[(offset+i)%events.length],yy=y+16+i*rowH,change=Number(e.delta);
       const color=change<0?ink.red:change>0?ink.green:ink.muted;
-      box(x+3,yy,2,Math.min(15,h-17),teamTint(e.teamColor,ink.blue));
+      box(x+3,yy,3,Math.min(prominent?22:15,h-17),teamTint(e.teamColor,ink.blue));
       const owner=(e.fantasyTeamOwner?' / '+e.fantasyTeamOwner:'');
-      label((e.name||'PLAYER')+' / '+(e.fantasyTeamName||'LEAGUE TEAM')+owner,x+9,yy,ink.white,1,w-77);
-      rightLabel((change>0?'+':'')+number(e.delta),x+w-6,yy,color,1,66);
-      if(h>=46)label('TOTAL '+number(e.total),x+9,yy+9,ink.muted,1,w-20);
+      label(prominent?(e.name||'PLAYER'):(e.name||'PLAYER')+' / '+(e.fantasyTeamName||'LEAGUE TEAM')+owner,x+10,yy,ink.white,prominent?2:1,w-(prominent?108:77));
+      rightLabel((change>0?'+':'')+number(e.delta),x+w-6,yy,color,prominent?2:1,prominent?90:66);
+      if(prominent){
+        label((e.fantasyTeamName||'LEAGUE TEAM')+owner,x+10,yy+15,teamTint(e.teamColor,ink.blue),1,w-105);
+        rightLabel('TOT '+number(e.total),x+w-6,yy+15,ink.muted,1,90);
+      }
     }
   }
 
@@ -389,7 +411,7 @@
     const all=m?.league?.[key]||[],rows=all.filter(p=>p.starter!==false);
     panel(x,y,w,h,(mine?'MY':'OPPONENT')+' STARTERS',ink.blue);
     rightLabel('PTS',x+w-5,y+4,ink.blue,1,24);
-    const top=y+17,rowH=compact?8:18,capacity=Math.max(1,Math.floor((h-18)/rowH));
+    const top=y+17,rowH=compact?8:Math.max(15,Math.min(18,Math.floor((h-18)/Math.max(1,rows.length)))),capacity=Math.max(1,Math.floor((h-18)/rowH));
     const page=Math.floor(now()/15000)%Math.max(1,Math.ceil(rows.length/capacity));
     const visible=rows.slice(page*capacity,(page+1)*capacity);
     if(!rows.length){label('WAITING FOR ROSTER',x+5,top,ink.muted,1,w-10);return;}
@@ -407,9 +429,9 @@
       rightLabel(number(points.value),x+w-5,yy,points.changed?(delta>0?ink.green:ink.red):ink.white,1,38);
       if(!compact){
         const schedule=String(app.markup?.gameLabel?.(p)||p.status||'').replace(/<[^>]*>/g,'');
-        label(schedule,x+37,yy+9,p.status==='LIVE'?ink.green:ink.muted,1,w-76);
-        rightLabel('P '+number(p.projected),x+w-5,yy+9,color,1,44);
-        box(x+4,yy+16,w-8,1,'#102442');
+        label(schedule,x+37,yy+rowH-8,p.status==='LIVE'?ink.green:ink.muted,1,w-76);
+        rightLabel('P '+number(p.projected),x+w-5,yy+rowH-8,color,1,44);
+        box(x+4,yy+rowH-1,w-8,1,'#102442');
       }
     }
     if(!compact && top+visible.length*rowH+19<y+h){
@@ -427,10 +449,10 @@
     const values=raw.length?raw:[{values:series.map(s=>s.value)}];
     const all=values.flatMap(r=>r.values).filter(v=>Number.isFinite(Number(v))).map(Number);
     const max=Math.max(25,...all,...series.map(s=>Number(s.value)||0)),min=Math.min(0,...all);
-    const gx=x+21,gy=y+1,gw=w-24,gh=Math.max(8,h-12);
-    const ticks=gh<22?2:3;
+    const gx=x+21,gy=y+1,gw=w-24,gh=Math.max(3,h-12);
+    const ticks=gh<10?1:gh<22?2:3;
     for(let k=0;k<ticks;k++){
-      const v=min+(max-min)*k/(ticks-1),yy=gy+gh-1-(v-min)/(max-min)*(gh-1);
+      const v=ticks===1?min:min+(max-min)*k/(ticks-1),yy=gy+gh-1-(v-min)/(max-min)*(gh-1);
       box(gx,yy,gw,1,'#102442');rightLabel(number(v,0),gx-4,yy-3,ink.muted,1,20);
     }
     const px=i=>gx+(values.length===1?gw-1:i*(gw-1)/(values.length-1));
@@ -440,7 +462,7 @@
       // Historical provider samples only; first load has a single point.
       for(let i=1;i<values.length;i++){
         const xa=px(i-1),xb=px(i),ya=py(values[i-1].values[k]??series[k].value),yb=py(values[i].values[k]??series[k].value);
-        box(xa,ya,Math.max(1,xb-xa),1,color);box(xb,Math.min(ya,yb),1,Math.max(1,Math.abs(yb-ya)),color);
+        pixelLine(xa,ya,xb,yb,color);
       }
       const yy=clamp(Math.round(py(series[k].value)),gy,gy+gh-1);
       box(gx+gw-2,yy-1,3,3,color);
@@ -484,10 +506,10 @@
     const count=Math.max(1,Math.floor((h-17)/11)),page=Math.floor(now()/12000)%Math.max(1,Math.ceil(list.length/count));
     list.slice(page*count,(page+1)*count).forEach((p,i)=>{
       const status=upper(p.injury_status),flag=status.includes('QUESTION')?'Q':status.includes('DOUBT')?'D':status;
-      label(playerName(p),x+5,y+17+i*11,ink.white,1,w-42);
-      rightLabel(flag,x+w-5,y+17+i*11,ink.gold,1,32);
+      label(playerName(p),x+5,y+(h<28?13:17)+i*11,ink.white,1,w-42);
+      rightLabel(flag,x+w-5,y+(h<28?13:17)+i*11,ink.gold,1,32);
     });
-    if(!list.length)label('NO INJURY FLAGS',x+5,y+17,ink.muted,1,w-10);
+    if(!list.length)label('NO INJURY FLAGS',x+5,y+(h<28?13:17),ink.muted,1,w-10);
   }
   function detailPanel(m,x,y,w,h,scene){
     const p=m?.ui?.playerId?(m?.player||[...(m?.league?.own||[]),...(m?.league?.opponent||[])].find(t=>String(t.player_id)===String(m.ui.playerId))):null;
@@ -572,27 +594,45 @@
     const initials=upper(name).split(' ').filter(Boolean).map(n=>n[0]).slice(0,2).join('')||'FT';
     centered(initials,x+size/2,y+Math.floor((size-7)/2),c,1);
   }
+  let fantasyCycleScope='',fantasyCycleStart=0;
   function fantasyTotals(m,x,y,w,h){
-    const compact=h<25,labelW=74,mid=x+Math.floor(w/2)+labelW/2,gap=3;
+    const scope=scopeFor(m);
+    if(scope!==fantasyCycleScope){fantasyCycleScope=scope;fantasyCycleStart=now();}
+    const teams=m.league?.teams||[],key=t=>String(t?.id??t?.teamId??upper(t?.name));
+    const games=(m.matchups||[]).filter(g=>g.home?.name&&g.away?.name).slice()
+      .sort((a,b)=>Number(Boolean(b.ownGame))-Number(Boolean(a.ownGame))||String(a.id??key(a.home)).localeCompare(String(b.id??key(b.home)),undefined,{numeric:true}));
+    const covered=new Set(games.flatMap(g=>[key(g.home),key(g.away)]));
+    const others=teams.filter(t=>!covered.has(key(t)));
+    for(let i=0;i<others.length;i+=2)games.push({id:'teams-'+key(others[i]),home:others[i],away:others[i+1]});
+    if(!games.length)games.push({home:{name:m.league?.ownName,avatar:m.league?.ownAvatar,ownerLabel:m.league?.ownOwner,teamColor:sideInk(m,'own')},away:{name:m.league?.opponentName,avatar:m.league?.opponentAvatar,ownerLabel:m.league?.opponentOwner,teamColor:sideInk(m,'opponent')}});
+    const page=Math.floor((now()-fantasyCycleStart)/9000)%games.length,game=games[page];
+    const actual=(t,score)=>!t?null:upper(t.name)===upper(m.league?.ownName)?m.ownActual:upper(t.name)===upper(m.league?.opponentName)?m.opponentActual:t.total??(m.leagueStarted?score:null);
+    const model={...m,league:{...m.league,
+      ownName:game.home?.name,opponentName:game.away?.name,
+      ownAvatar:game.home?.avatar||game.home?.logo,opponentAvatar:game.away?.avatar||game.away?.logo,
+      ownOwner:game.home?.ownerLabel,opponentOwner:game.away?.ownerLabel,
+      ownColor:game.home?.teamColor||ink.orange,opponentColor:game.away?.teamColor||ink.blue}};
+    const compact=h<25,labelW=74,gap=3;
     panel(x,y,w,h,'');
-    label('FANTASY',x+5,y+(compact?6:5),ink.blue,1,63);
-    if(!compact)label('WEEK '+(m.league?.week||'--'),x+5,y+18,ink.muted,1,63);
+    label('FANTASY',x+5,y+(compact?3:5),ink.blue,1,63);
+    label('W'+(m.league?.week||'--')+' '+(page+1)+'/'+games.length,x+5,y+(compact?12:18),ink.muted,1,63);
     box(x+labelW-3,y+2,1,h-4,ink.line);
     const slotW=Math.floor((w-labelW-gap*3)/2);
     for(let i=0;i<2;i++){
-      const side=i?'opponent':'own',left=x+labelW+i*(slotW+gap),c=sideInk(m,side);
-      const name=i?m.league?.opponentName:m.league?.ownName,size=compact?14:22;
-      const key=scopeFor(m)+'|card-'+side;
-      const points=animatedPoints(key,i?m.opponentActual:m.ownActual),scoreScale=compact?1:2;
-      const score=number(points.value),scoreRoom=compact?41:78;
-      fantasyLogo(m,side,left+4,y+Math.floor((h-size)/2),size);
-      label(name||'TEAM',left+size+10,y+(compact?6:5),ink.white,1,slotW-size-scoreRoom-18);
-      if(!compact){const owner=i?m.league?.opponentOwner:m.league?.ownOwner;
-        label(owner||'WEEKLY MATCHUP',left+size+10,y+17,c,1,slotW-size-scoreRoom-18);}
-      rightLabel(score,left+slotW-5,y+(compact?6:8),points.changed?(points.delta>0?ink.green:ink.red):c,scoreScale,scoreRoom);
+      const team=i?game.away:game.home,side=i?'opponent':'own',left=x+labelW+i*(slotW+gap),c=sideInk(model,side);
+      if(!team){label('BYE',left+12,y+Math.floor(h/2)-3,ink.muted,1,slotW-20);continue;}
+      const size=compact?14:22;
+      const points=animatedPoints(scope+'|team-card|'+key(team),actual(team,i?game.awayScore:game.homeScore)),scoreScale=compact?1:2;
+      const scoreRoom=compact?41:78;
+      fantasyLogo(model,side,left+4,y+Math.floor((h-size)/2),size);
+      label(team.name||'TEAM',left+size+10,y+(compact?7:5),ink.white,1,slotW-size-scoreRoom-18);
+      if(!compact)label(team.ownerLabel||'WEEKLY MATCHUP',left+size+10,y+17,c,1,slotW-size-scoreRoom-18);
+      rightLabel(number(points.value),left+slotW-5,y+(compact?7:8),points.changed?(points.delta>0?ink.green:ink.red):c,scoreScale,scoreRoom);
       box(left+2,y+h-2,slotW-4,1,c);
       if(i)box(left-2,y+3,1,h-6,ink.line);
     }
+    canvas.dataset.fantasyPage=String(page+1);canvas.dataset.fantasyPages=String(games.length);
+    canvas.dataset.fantasyTeams=[game.home?.name,game.away?.name].filter(Boolean).join(' / ');
   }
   function gameTime(g,state){
     if(state==='in')return 'LIVE '+String(g.status?.type?.shortDetail||g.competitions?.[0]?.status?.type?.shortDetail||'');
@@ -632,22 +672,27 @@
     canvas.dataset.logoCount=String([...photoCache.values()].filter(v=>v?.complete&&v.naturalWidth).length);
   }
   function bottomCards(m,w,h){
-    const compact=h===256,nflH=compact?31:44,fantasyH=compact?18:30;
+    const compact=h===256,nflH=compact?31:44,fantasyH=compact?20:30;
     const nflY=h-nflH-3,fantasyY=nflY-fantasyH-3;
     fantasyTotals(m,4,fantasyY,w-8,fantasyH);nflCards(m,4,nflY,w-8,nflH);
   }
   // Equal starter columns flank both charts; score cards keep stable positions.
   function fullScene(m,w,h){
-    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?172:307;
+    const compact=h===256,gap=4,top=compact?74:103,bottom=compact?172:278;
     const rosterW=200,rightX=w-gap-rosterW,cx=gap*2+rosterW,cw=rightX-cx-gap;
-    const bodyH=bottom-top,upperH=Math.floor((bodyH-gap)*.54);
+    const bodyH=bottom-top,upperH=compact?42:Math.floor((bodyH-gap)*.54);
     drawRoster(m,gap,top,rosterW,bodyH,'own');
     drawRoster(m,rightX,top,rosterW,bodyH,'opponent');
     trend(m,cx,top,cw,upperH);
-    stock(m,cx,top+upperH+gap,cw,bodyH-upperH-gap);
-    const supportY=bottom+gap,supportH=compact?24:35;
-    injuryPanel(m,gap,supportY,rosterW,supportH);
-    scoreRows(m,cx,supportY,w-cx-gap,supportH);
+    stock(m,cx,top+upperH+gap,cw,compact?34:bodyH-upperH-gap);
+    if(compact){
+      scoreRows(m,cx,158,cw,40);
+      injuryPanel({...m,league:{...m.league,opponent:[]}},gap,176,rosterW,22);
+      injuryPanel({...m,league:{...m.league,own:[]}},rightX,176,rosterW,22);
+    }else{
+      injuryPanel(m,gap,282,rosterW,66);
+      scoreRows(m,cx,282,w-cx-gap,66);
+    }
     bottomCards(m,w,h);
   }
 
@@ -833,6 +878,11 @@
     }
     if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
     else canvas.dataset.celebration='idle';
+    if(glowCtx){
+      if(glowCanvas.width!==w)glowCanvas.width=w;
+      if(glowCanvas.height!==h)glowCanvas.height=h;
+      glowCtx.drawImage(canvas,0,0);
+    }
     const mmW=chosen.cols*320,mmH=chosen.rows*160;
     const remote=window.FantasyRemote?.getStatus?.();
     const textStatus=document.getElementById('remoteStatus')?.textContent?.trim()||'Controller status unavailable';
@@ -865,7 +915,12 @@
     let scale=Math.min(roomW/chosen.width,roomH/chosen.height);
     // Preserve the canvas proportions, including the wider physical 6x4 build.
     scale=Math.max(.1,scale);
-    canvas.style.width=Math.floor(chosen.width*scale)+'px';canvas.style.height=Math.floor(chosen.height*scale)+'px';
+    const width=Math.floor(chosen.width*scale),height=Math.floor(chosen.height*scale);
+    for(const layer of [canvas,glowCanvas].filter(Boolean)){
+      layer.style.width=width+'px';layer.style.height=height+'px';
+    }
+    canvas.style.setProperty('--led-pitch-x',width/chosen.width+'px');
+    canvas.style.setProperty('--led-pitch-y',height/chosen.height+'px');
   }
   window.addEventListener('resize',fitCanvas);
   document.addEventListener('fullscreenchange',fitCanvas);

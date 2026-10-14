@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../remote/soft-glass.css?v=6">
   <link rel="stylesheet" href="../remote/tv-presentation.css?v=12">
   <link rel="stylesheet" href="../remote/player-details.css?v=2">
-  <link rel="stylesheet" href="../remote/tv-led-native.css?v=9">
+  <link rel="stylesheet" href="../remote/tv-led-native.css?v=10">
 </head>
 <body data-tv-led-canvas="0" data-native-led="1" data-screen="tv" data-root="../patriots-fantasy-touch/" data-design="soft-glass" data-tv-style="led">
   <div id="nativeApp">
@@ -29,6 +29,7 @@
       <span id="nativeStatus" role="status">Connecting your leagues…</span>
     </div>
     <section id="nativeStage" aria-label="Live fantasy LED scoreboard">
+      <canvas id="nativeGlow" aria-hidden="true"></canvas>
       <canvas id="nativeCanvas" width="768" height="256" role="img" aria-label="Live fantasy LED scoreboard"></canvas>
       <button id="nativeExit" type="button" aria-label="Show scoreboard controls">Show controls</button>
     </section>
@@ -76,6 +77,6 @@
 
 
   <script src="../remote/session.js?v=2" defer></script>
-  <script src="../remote/tv-led-native.js?v=12" defer></script>
+  <script src="../remote/tv-led-native.js?v=13" defer></script>
 </body>
 </html>
