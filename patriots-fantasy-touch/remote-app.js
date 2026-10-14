@@ -879,6 +879,10 @@
       const local = await getJSON(new URL("../patriots-fantasy/espn-data.json?ts=" + Date.now(), location.href));
       if (local && local.ready) {
         synced = normalizeStoredESPNData(local);
+        if (!state.espn || !state.espn.ready) {
+          state.espn = synced;
+          revealReadyLeague();
+        }
       }
     } catch (_) { /* A missing sync must not interrupt the direct scoring feed. */ }
     // Read live points on every dashboard refresh. The private snapshot is a
@@ -1968,20 +1972,43 @@
     finally { cloudRefreshInFlight = false; }
   }
 
+  function revealReadyLeague() {
+    const ready = state.league === "espn" ? Boolean(state.espn && state.espn.ready) : Boolean(state.sleeper);
+    if (ready) { state.loading = false; render(); }
+  }
+
   async function refresh() {
     if (refreshInFlight) return;
     refreshInFlight = true;
     refreshCloudProjections();
     try {
-    // Load Sleeper first so the scoreboard request can use the current NFL
-    // week and expose upcoming game times/opponents, not only today's games.
-    const sleeperResult = await loadSleeper().then((value) => ({ value })).catch((error) => ({ error }));
-    if (sleeperResult.value && sleeperResult.value.week) state.week = sleeperResult.value.week;
-    const [scoreboardResult, espnResult, consensusResult] = await Promise.all([
-      loadScoreboard().then((value) => ({ value })).catch((error) => ({ error })),
-      loadESPN().then((value) => ({ value })).catch((error) => ({ error })),
-      loadConsensus().then((value) => ({ value })).catch((error) => ({ error }))
-    ]);
+    // Each provider renders when ready; optional NFL/projection requests must
+    // not hold a working league behind the initial loading screen.
+    const sleeperTask = loadSleeper().then((value) => {
+      state.sleeper = value;
+      if (value.week) state.week = value.week;
+      state.refreshedAt = new Date();
+      revealReadyLeague();
+      return { value };
+    }).catch((error) => ({ error }));
+    const espnTask = loadESPN().then((value) => {
+      if (value.ready) state.espn = value;
+      revealReadyLeague();
+      return { value };
+    }).catch((error) => ({ error }));
+    const consensusTask = loadConsensus().then((value) => {
+      state.consensus = value;
+      revealReadyLeague();
+      return { value };
+    }).catch((error) => ({ error }));
+    const sleeperResult = await sleeperTask;
+    const scoreboardTask = loadScoreboard().then((value) => {
+      state.scoreboard = value.events || [];
+      state.scoreboards[state.week] = state.scoreboard;
+      revealReadyLeague();
+      return { value };
+    }).catch((error) => ({ error }));
+    const [scoreboardResult, espnResult, consensusResult] = await Promise.all([scoreboardTask, espnTask, consensusTask]);
     const failures = [];
     if (scoreboardResult.value) {state.scoreboard = scoreboardResult.value.events || [];state.scoreboards[state.week]=state.scoreboard;}
     if (sleeperResult.value) state.sleeper = sleeperResult.value; else failures.push("SLEEPER");
@@ -1997,6 +2024,11 @@
     state.loading = false;
     state.refreshedAt = new Date();
     render();
+    } catch (error) {
+      state.error = "FEED RETRYING";
+      state.loading = false;
+      console.warn("Fantasy refresh will retry", error);
+      render();
     } finally { refreshInFlight = false; }
   }
 
@@ -2034,6 +2066,9 @@
     if ("gameId" in ui) state.selectedGame = ui.gameId;
     if (ui.playerFilter) state.playerFilter = ui.playerFilter;
     if (typeof ui.refresh === "number") state.refreshNonce = ui.refresh;
+    if (oldLeague !== state.league) {
+      state.loading = state.league === "espn" ? !Boolean(state.espn && state.espn.ready) : !Boolean(state.sleeper);
+    }
     if (oldLeague !== state.league || oldMatchup !== state.selectedMatchup) {
       state.scoreSnapshot = {}; state.scoreMoves = {}; state.selectedPlayer = null;
       updateScoreMoves(currentLeague());

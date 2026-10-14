@@ -5,7 +5,8 @@
   const ctx = canvas.getContext('2d', {alpha:false});
   if (!ctx) return;
   const glowCanvas=document.getElementById('nativeGlow');
-  const ledRenderer=window.createLEDBulbRenderer?.(glowCanvas);
+  let ledRenderer=null;
+  try { ledRenderer=window.createLEDBulbRenderer?.(glowCanvas); } catch(error) { console.warn('Using standard scoreboard display',error); }
   const glowCtx=ledRenderer?null:glowCanvas?.getContext('2d',{alpha:false});
   const app = window.FantasyCenter;
   const sizes = {
@@ -176,64 +177,43 @@
       matchups:(raw.matchups||[]).map(g=>({...g,home:{...g.home,teamColor:tint(g.home?.id,g.home?.name,ledPalette[0])},away:{...g.away,teamColor:tint(g.away?.id,g.away?.name,ledPalette[1])}}))};
   }
   const sideInk=(m,side)=>side==='own'?(m?.league?.ownColor||ledPalette[0]):(m?.league?.opponentColor||ledPalette[1]);
-  // Crop transparent margins before reducing the mascot into true LED pixels.
-  // For a tall mascot, keep the head and cap instead of shrinking the whole body.
-  const mascot=new Image();
-  let mascotCrop=null;
-  function prepareMascot(){
-    try {
-      const off=document.createElement('canvas');
-      off.width=mascot.naturalWidth;off.height=mascot.naturalHeight;
-      const c=off.getContext('2d',{willReadFrequently:true});
-      if(!c)return;
-      c.drawImage(mascot,0,0);
-      const pixels=c.getImageData(0,0,off.width,off.height).data;
-      let l=off.width,t=off.height,r=0,b=0;
-      const step=Math.max(1,Math.floor(Math.max(off.width,off.height)/1300));
-      for(let y=0;y<off.height;y+=step)for(let x=0;x<off.width;x+=step){
-        if(pixels[(y*off.width+x)*4+3]>40){
-          l=Math.min(l,x);t=Math.min(t,y);r=Math.max(r,x);b=Math.max(b,y);
-        }
-      }
-      if(r>l && b>t){
-        const bw=r-l+step,bh=b-t+step,pad=Math.round(bw*.05);
-        mascotCrop={x:Math.max(0,l-pad),y:Math.max(0,t-pad),
-          w:Math.min(off.width-l+pad,bw+pad*2),
-          h:Math.min(off.height-t+pad,bh>bw*1.45?Math.round(bw*1.17):bh+pad*2)};
-      }
-    }catch(_){} // CORS-protected assets still render using the uncropped image.
-  }
-  // Native pixel art: render the source head into a small transparent image,
-  // then scale with nearest-neighbor. Never draw a background badge or circle.
+  // The main character is the actual reference photo, displayed independently
+  // from the small hardware canvas so the television preserves its LED detail.
+  const referenceLayer=document.createElement('div');
+  referenceLayer.id='nativeReferenceFaces';referenceLayer.setAttribute('aria-hidden','true');
+  $('nativeStage')?.appendChild(referenceLayer);
+  const referenceFaces=new Map();
   let pixelPortrait=null;
   function makePixelPortrait(){
-    if(!mascot.naturalWidth)return;
-    const crop=mascotCrop||{x:0,y:0,w:mascot.naturalWidth,h:mascot.naturalHeight};
-    const off=document.createElement('canvas');off.width=64;off.height=64;
-    const g=off.getContext('2d',{willReadFrequently:true});if(!g)return;
-    g.clearRect(0,0,64,64);g.imageSmoothingEnabled=false;
-    const scale=Math.min(62/crop.w,62/crop.h);
-    const dw=Math.round(crop.w*scale),dh=Math.round(crop.h*scale);
-    g.drawImage(mascot,crop.x,crop.y,crop.w,crop.h,Math.round((64-dw)/2),Math.round((64-dh)/2),dw,dh);
-    // Keep the supplied gray cap, orange insignia and white outline colors.
-    pixelPortrait=off;
+    const art=window.JustinLEDCharacter;if(!art)return;
+    const off=document.createElement('canvas');off.width=off.height=art.size;
+    const g=off.getContext('2d');if(!g)return;
+    art.still.forEach((row,y)=>[...row].forEach((v,x)=>{
+      if(v==='0')return;g.fillStyle=art.palette[Number(v)];g.fillRect(x,y,1,1);
+    }));pixelPortrait=off;
+  }
+  makePixelPortrait();
+  function referenceFace(key,x,y,size,frame='still',angle=0){
+    let node=referenceFaces.get(key);
+    if(!node){
+      node=document.createElement('div');node.className='native-reference-face';
+      const picture=document.createElement('img');picture.alt='';picture.decoding='async';picture.draggable=false;
+      node.appendChild(picture);referenceLayer.appendChild(node);referenceFaces.set(key,node);
+    }
+    const picture=node.firstElementChild;
+    const file=frame==='laugh'?'justin-led-reference-laugh.png':'justin-led-reference-photo.jpg';
+    if(node.dataset.frame!==frame){picture.src='../patriots-fantasy-touch/assets/'+file;node.dataset.frame=frame;}
+    node.style.display='block';node.style.left=x/chosen.width*100+'%';node.style.top=y/chosen.height*100+'%';
+    node.style.width=size/chosen.width*100+'%';node.style.height=size/chosen.height*100+'%';
+    node.style.transform='rotate('+angle+'deg)';
+    canvas.dataset.characterReference=frame==='laugh'?'supplied-video':'supplied-photo';
   }
   function drawMascot(x,y,w,h){
-    if(!mascot.complete||!mascot.naturalWidth){
-      label('JS',x+w/2-12,y+h/2-9,ink.orange,2,30);return;
-    }
-    if(!pixelPortrait)makePixelPortrait();
-    ctx.imageSmoothingEnabled=false;
-    const jiggle=now()<shakeUntil?Math.round(Math.sin(now()/39)*3):0;
-    if(pixelPortrait){
-      const ratio=Math.min(w/64,h/64);
-      const width=Math.round(64*ratio),height=Math.round(64*ratio);
-      ctx.drawImage(pixelPortrait,Math.round(x+(w-width)/2+jiggle),Math.round(y+(h-height)/2),width,height);
-    }
+    const size=Math.min(w,h),jiggle=now()<shakeUntil?Math.round(Math.sin(now()/39)*3):0;
+    if(size>=44){referenceFace('main',x+(w-size)/2+jiggle,y+(h-size)/2,size);return;}
+    if(pixelPortrait){ctx.imageSmoothingEnabled=false;ctx.drawImage(pixelPortrait,x+(w-size)/2,y+(h-size)/2,size,size);}
+    else label('JS',x,y,ink.orange,1,20);
   }
-  mascot.addEventListener('load',()=>{prepareMascot();makePixelPortrait();canvas.dataset.mascotReady='true';canvas.dataset.mascotStyle='gray-hat';draw()});
-  mascot.addEventListener('error',()=>{if(!mascot.src.includes('justin-mascot-cutout.png'))mascot.src='../patriots-fantasy-touch/assets/justin-mascot-cutout.png'});
-  mascot.src='../patriots-fantasy-touch/assets/justin-led-mascot-gray-64.png?v=1';
   function getModel(){try{return brightenModel(app.model())}catch(_){return null}}
 
   function triggerCelebration(delta,m,side='own'){
@@ -289,14 +269,7 @@
     box(x-2,y,5,1,color);box(x,y-2,1,5,color);
   }
   function laughingPortrait(x,y,size,time){
-    if(!pixelPortrait){drawMascot(x,y,size,size);return;}
-    const beat=Math.sin(time/83),jaw=1+Math.max(0,beat)*.18,unit=size/64;
-    ctx.save();ctx.translate(Math.round(x+size/2),Math.round(y+size/2+Math.sin(time/140)*2));
-    ctx.rotate(Math.sin(time/170)*.045);ctx.imageSmoothingEnabled=false;
-    // Animate the original artwork in two adjoining slices; preserve its face.
-    ctx.drawImage(pixelPortrait,0,0,64,43,-size/2,-size/2,size,43*unit);
-    ctx.drawImage(pixelPortrait,0,43,64,21,-size/2,-size/2+43*unit,size,21*unit*jaw);
-    ctx.restore();
+    referenceFace('laugh',x,y+Math.sin(time/140)*2,size,'laugh',Math.sin(time/170)*2.6);
   }
   function flyingFootball(x,y,size,angle){
     ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.rotate(angle);
@@ -849,6 +822,7 @@
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
   function draw() {
+    for(const face of referenceFaces.values())face.style.display='none';
     const w=chosen.width,h=chosen.height;
     if(canvas.width!==w)canvas.width=w;
     if(canvas.height!==h)canvas.height=h;
@@ -862,7 +836,7 @@
     rightLabel(chosen===sizes.twentyfour?'6X4 P2.5 / 768X256':'TV / 16:9',w-8,5,ink.muted,1,220);
     if(view!=='OVERVIEW')centered(view,w/2,5,ink.muted,1);
     if(m?.loading || !league.ready){
-      label('CONNECTING FANTASY FEEDS',12,Math.floor(h/2),ink.gold,1,w-24);
+      label(m?.loading?'CONNECTING FANTASY FEEDS':'FEED UNAVAILABLE - REFRESH TO RETRY',12,Math.floor(h/2),ink.gold,1,w-24);
     }else{
       const player=chosenPlayer(m);
       if(player)playerScene(m,player,w,h);
@@ -879,7 +853,15 @@
     }
     if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
     else canvas.dataset.celebration='idle';
-    if(ledRenderer)ledRenderer.render(canvas);
+    if(ledRenderer){
+      try { ledRenderer.render(canvas); }
+      catch(error){
+        ledRenderer=null;
+        document.body.classList.remove('led-bulbs-ready');
+        document.body.classList.add('led-bulbs-failed');
+        console.warn('LED effect disabled; keeping live scoreboard visible',error);
+      }
+    }
     else if(glowCtx){
       if(glowCanvas.width!==w)glowCanvas.width=w;
       if(glowCanvas.height!==h)glowCanvas.height=h;
@@ -918,7 +900,7 @@
     // Preserve the canvas proportions, including the wider physical 6x4 build.
     scale=Math.max(.1,scale);
     const width=Math.floor(chosen.width*scale),height=Math.floor(chosen.height*scale);
-    for(const layer of [canvas,glowCanvas].filter(Boolean)){
+    for(const layer of [canvas,glowCanvas,referenceLayer].filter(Boolean)){
       layer.style.width=width+'px';layer.style.height=height+'px';
     }
     canvas.style.setProperty('--led-pitch-x',width/chosen.width+'px');
@@ -930,6 +912,7 @@
   $('nativeTV')?.addEventListener('click',()=>pick('tv'));
   $('nativeBuild')?.addEventListener('click',()=>pick('twentyfour'));
   for(const key of ['sleeper','espn'])$('nativeLeague'+(key==='sleeper'?'Sleeper':'Espn'))?.addEventListener('click',()=>{app.dispatch({league:key,matchupId:null,playerId:null,gameId:null,view:'overview'});draw()});
+  $('nativeRefresh')?.addEventListener('click',()=>{app.dispatch({refresh:true});draw()});
   $('nativeHome')?.addEventListener('click',()=>{app.dispatch({view:'overview',playerId:null,gameId:null});draw()});
   $('nativeSize')?.addEventListener('change',e=>pick(e.target.value));
   const kiosk=$('nativeKiosk'),exit=$('nativeExit');
@@ -970,7 +953,14 @@
     if(window.FantasyRemote?.getStatus?.().paired)document.getElementById('pairPanel')?.classList.add('hidden');
     draw();
   },850);
-  window.setInterval(draw,120);
+  function tick(){
+    draw();
+    const t=now();
+    const animating=t<shakeUntil || celebrationStarted>0 && t-celebrationStarted<celebrationDuration ||
+      [...transitions.values()].some(entry=>entry.start>0&&t-entry.start<1050);
+    window.setTimeout(tick,animating?120:1000);
+  }
+  window.setTimeout(tick,1000);
   const initial=new URL(location.href).searchParams.get('modules');
   const display=new URL(location.href).searchParams.get('display');
   pick(document.body.dataset.tvLedCanvas==='1'&&display!=='build'?'tv':'twentyfour');
