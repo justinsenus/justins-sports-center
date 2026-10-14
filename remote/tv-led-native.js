@@ -5,7 +5,8 @@
   const ctx = canvas.getContext('2d', {alpha:false});
   if (!ctx) return;
   const glowCanvas=document.getElementById('nativeGlow');
-  const glowCtx=glowCanvas?.getContext('2d',{alpha:false});
+  const ledRenderer=window.createLEDBulbRenderer?.(glowCanvas);
+  const glowCtx=ledRenderer?null:glowCanvas?.getContext('2d',{alpha:false});
   const app = window.FantasyCenter;
   const sizes = {
     twentyfour: {cols:6,rows:4,width:768,height:256,label:'6 ACROSS × 4 DOWN · P2.5 · 768 × 256'},
@@ -878,7 +879,8 @@
     }
     if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
     else canvas.dataset.celebration='idle';
-    if(glowCtx){
+    if(ledRenderer)ledRenderer.render(canvas);
+    else if(glowCtx){
       if(glowCanvas.width!==w)glowCanvas.width=w;
       if(glowCanvas.height!==h)glowCanvas.height=h;
       glowCtx.drawImage(canvas,0,0);

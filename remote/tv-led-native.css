@@ -35,3 +35,7 @@ body[data-native-led="1"] #pairPanel .pair-address{overflow-wrap:anywhere}
 body[data-native-led="1"] #pairPanel .led-original-link{color:#9ccfff;font:13px Arial,sans-serif}
 @media(max-width:1000px){body[data-native-led="1"] #nativeStatus{max-width:100%;width:100%;margin:0;font-size:11px}body[data-native-led="1"] .native-build-note{display:none}}
 @media(max-width:650px){body[data-native-led="1"] #nativeApp{padding:4px;gap:4px}body[data-native-led="1"] .native-toolbar{gap:4px;padding:4px}body[data-native-led="1"] .native-toolbar button,body[data-native-led="1"] .native-toolbar a{padding:6px;min-height:32px;font-size:11px}body[data-native-led="1"] .native-meta{font-size:9px}body[data-native-led="1"] #nativeReadout{font-size:9px}}
+
+/* The TV renders physical round diode lenses, independently of CSS mask support. */
+body[data-native-led="1"].led-bulbs-ready #nativeCanvas{opacity:0;filter:none;mask-image:none;-webkit-mask-image:none;pointer-events:none}
+body[data-native-led="1"].led-bulbs-ready #nativeGlow{opacity:1;filter:none;image-rendering:auto;z-index:2}
