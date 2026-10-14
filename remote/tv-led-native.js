@@ -420,7 +420,6 @@
       if(!compact){
         label(rosterGame(p),x+9,yy+9,p.status==='LIVE'?ink.green:ink.muted,1,w-116);
         rightLabel('P'+number(p.projected),x+w-68,yy+9,color,1,37);
-        box(x+4,yy+rowH-1,w-8,1,'#112741');
         hitTarget('roster-'+key+'-'+i,x+3,yy-1,w-6,rowH,'View '+(p.full_name||p.name||'player')+' projections',{playerId:p.player_id??p.id,playerTab:'projections',view:'overview'});
       }
     }
