@@ -184,6 +184,7 @@
   referenceLayer.id='nativeReferenceFaces';referenceLayer.setAttribute('aria-hidden','true');
   $('nativeStage')?.appendChild(referenceLayer);
   const referenceFaces=new Map();
+  const referenceFacesUsed=new Set();
   let pixelPortrait=null;
   function makePixelPortrait(){
     const art=window.JustinLEDCharacter;if(!art)return;
@@ -195,6 +196,7 @@
   }
   makePixelPortrait();
   function referenceFace(key,x,y,size,frame='still',angle=0){
+    referenceFacesUsed.add(key);
     let node=referenceFaces.get(key);
     if(!node){
       node=document.createElement('div');node.className='native-reference-face';
@@ -204,7 +206,7 @@
     const picture=node.firstElementChild;
     const file=frame==='laugh'?'justin-led-reference-laugh.png':'justin-led-reference-photo.jpg';
     if(node.dataset.frame!==frame){picture.src='../patriots-fantasy-touch/assets/'+file;node.dataset.frame=frame;}
-    node.style.display='block';node.style.left=x/chosen.width*100+'%';node.style.top=y/chosen.height*100+'%';
+    if(node.style.display!=='block')node.style.display='block';node.style.left=x/chosen.width*100+'%';node.style.top=y/chosen.height*100+'%';
     node.style.width=size/chosen.width*100+'%';node.style.height=size/chosen.height*100+'%';
     node.style.transform='rotate('+angle+'deg)';
     canvas.dataset.characterReference=frame==='laugh'?'supplied-video':'supplied-photo';
@@ -824,7 +826,7 @@
   }
   function draw() {
     if(!pairingRequested)$('pairPanel')?.classList.add('hidden');
-    for(const face of referenceFaces.values())face.style.display='none';
+    referenceFacesUsed.clear();
     const w=chosen.width,h=chosen.height;
     if(canvas.width!==w)canvas.width=w;
     if(canvas.height!==h)canvas.height=h;
@@ -855,6 +857,7 @@
     }
     if(!m?.loading&&league.ready)scoreCelebration(m,w,h);
     else canvas.dataset.celebration='idle';
+    for(const [key,face] of referenceFaces)if(!referenceFacesUsed.has(key))face.style.display='none';
     if(ledRenderer){
       try { ledRenderer.render(canvas); }
       catch(error){
