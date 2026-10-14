@@ -15,6 +15,7 @@
   };
   const $ = id => document.getElementById(id);
   let chosen = sizes.twentyfour;
+  let pairingRequested=false;
   let auto = true, manualScene = 0, lastSceneAt = Date.now();
   let shakeUntil = 0, lastMeta = '';
   let celebrationValue = 0, celebrationStarted = 0, celebrationScope = '', celebrationSide = 'own';
@@ -822,6 +823,7 @@
     scrollTicker(m,6,h-14,w-12,'NFL',true);
   }
   function draw() {
+    if(!pairingRequested)$('pairPanel')?.classList.add('hidden');
     for(const face of referenceFaces.values())face.style.display='none';
     const w=chosen.width,h=chosen.height;
     if(canvas.width!==w)canvas.width=w;
@@ -939,7 +941,7 @@
     manualScene%=3;auto=false;
     $('nativePause').textContent='Resume rotation';draw();
   });
-  $('nativePair')?.addEventListener('click',()=>document.getElementById('remoteToggle')?.click());
+  $('nativePair')?.addEventListener('click',()=>{pairingRequested=true;document.getElementById('remoteToggle')?.click()});
   $('nativeFull')?.addEventListener('click',async()=>{
     try {if(document.fullscreenElement)await document.exitFullscreen();else await $('nativeStage').requestFullscreen();}
     catch(_){$('nativeStatus').textContent='Use the TV browser fullscreen option.'}
