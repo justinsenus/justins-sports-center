@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-17T05:42:38.418Z",
+  "generated_at": "2026-10-17T09:41:39.647Z",
   "season": 2026,
   "week": 6,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-17T05:42:38.418Z",
+      "updated_at": "2026-10-17T09:41:39.647Z",
       "count": 56,
       "access": "public fallback"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-17T05:42:38.418Z",
+      "updated_at": "2026-10-17T09:41:39.647Z",
       "count": 159
     },
     {
@@ -5747,9 +5747,9 @@
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 7.5,
+          "min": 7.4,
           "max": 8.9,
-          "range": 1.4,
+          "range": 1.5,
           "sourceCount": 2,
           "sources": [
             {
@@ -5763,7 +5763,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 7.5,
+              "value": 7.4,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -5772,7 +5772,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 8.9,
-            "delta": 0.7
+            "delta": 0.8
           },
           "odds": [],
           "market": null
@@ -11646,9 +11646,9 @@
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 7.5,
+      "min": 7.4,
       "max": 8.9,
-      "range": 1.4,
+      "range": 1.5,
       "sourceCount": 2,
       "sources": [
         {
@@ -11662,7 +11662,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 7.5,
+          "value": 7.4,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -11671,7 +11671,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 8.9,
-        "delta": 0.7
+        "delta": 0.8
       },
       "odds": [],
       "market": null
@@ -12143,7 +12143,7 @@
       "rank": "11"
     },
     {
-      "name": "Kansas City Chiefs",
+      "name": "New England Patriots",
       "market": "PROJECTION OUTLIER",
       "source": "Sleeper",
       "delta": 0.8,
