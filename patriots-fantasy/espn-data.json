@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-18T09:50:29.467Z",
+  "savedAt": "2026-10-18T13:39:50.687Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 6,
@@ -15,7 +15,7 @@
       "wins": 2,
       "losses": 3
     },
-    "total": 25.4,
+    "total": 26.4,
     "projected": 119.80000000000003,
     "starters": [
       {
@@ -1179,10 +1179,77 @@
         "name": "Trevor Lawrence",
         "team": "JAX",
         "position": "QB",
-        "points": 0,
+        "points": 1,
         "scoringPeriodId": 6,
         "projected": 17.1,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "0",
+            "label": "PASSING ATTEMPTS",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "1",
+            "label": "PASSING COMPLETIONS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "2",
+            "label": "INCOMPLETE PASSES",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "3",
+            "label": "PASSING YARDS",
+            "value": 24,
+            "projected": false
+          },
+          {
+            "id": "5",
+            "label": "STAT 5",
+            "value": 4,
+            "projected": false
+          },
+          {
+            "id": "6",
+            "label": "STAT 6",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "7",
+            "label": "STAT 7",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "21",
+            "label": "STAT 21",
+            "value": 50,
+            "projected": false
+          },
+          {
+            "id": "22",
+            "label": "STAT 22",
+            "value": 24,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "211",
+            "label": "STAT 211",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "0",
@@ -2996,7 +3063,7 @@
       "losses": 1
     },
     "total": 5.2,
-    "projected": 100.89999999999999,
+    "projected": 123,
     "starters": [
       {
         "id": "4241389",
@@ -3776,15 +3843,160 @@
         "starter": true
       },
       {
-        "id": "4430027",
-        "name": "Sam LaPorta",
-        "team": "DET",
-        "position": "TE",
+        "id": "4047650",
+        "name": "DK Metcalf",
+        "team": "PIT",
+        "position": "WR",
         "points": 0,
         "scoringPeriodId": 6,
-        "projected": 0,
+        "projected": 11.6,
         "gameStats": [],
-        "projectedGameStats": [],
+        "projectedGameStats": [
+          {
+            "id": "42",
+            "label": "PROJ RECEIVING YARDS",
+            "value": 59.85505152,
+            "projected": true
+          },
+          {
+            "id": "43",
+            "label": "PROJ RECEIVING TOUCHDOWNS",
+            "value": 0.28580467,
+            "projected": true
+          },
+          {
+            "id": "44",
+            "label": "PROJ STAT 44",
+            "value": 0.013300441,
+            "projected": true
+          },
+          {
+            "id": "45",
+            "label": "PROJ STAT 45",
+            "value": 0.010738637,
+            "projected": true
+          },
+          {
+            "id": "46",
+            "label": "PROJ STAT 46",
+            "value": 0.0070177,
+            "projected": true
+          },
+          {
+            "id": "47",
+            "label": "PROJ STAT 47",
+            "value": 11,
+            "projected": true
+          },
+          {
+            "id": "48",
+            "label": "PROJ STAT 48",
+            "value": 5,
+            "projected": true
+          },
+          {
+            "id": "49",
+            "label": "PROJ STAT 49",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "50",
+            "label": "PROJ STAT 50",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "51",
+            "label": "PROJ STAT 51",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "53",
+            "label": "PROJ RECEPTIONS",
+            "value": 3.926503382,
+            "projected": true
+          },
+          {
+            "id": "56",
+            "label": "PROJ STAT 56",
+            "value": 0.154373812,
+            "projected": true
+          },
+          {
+            "id": "57",
+            "label": "PROJ STAT 57",
+            "value": 0.00477,
+            "projected": true
+          },
+          {
+            "id": "58",
+            "label": "PROJ TARGETS",
+            "value": 7.51402108,
+            "projected": true
+          },
+          {
+            "id": "60",
+            "label": "PROJ STAT 60",
+            "value": 15.24385584,
+            "projected": true
+          },
+          {
+            "id": "61",
+            "label": "PROJ STAT 61",
+            "value": 59.85505152,
+            "projected": true
+          },
+          {
+            "id": "62",
+            "label": "PROJ STAT 62",
+            "value": 0.013300441,
+            "projected": true
+          },
+          {
+            "id": "67",
+            "label": "PROJ STAT 67",
+            "value": 0.0689878,
+            "projected": true
+          },
+          {
+            "id": "68",
+            "label": "PROJ STAT 68",
+            "value": 0.0689878,
+            "projected": true
+          },
+          {
+            "id": "71",
+            "label": "PROJ STAT 71",
+            "value": 0.038633168,
+            "projected": true
+          },
+          {
+            "id": "72",
+            "label": "PROJ FUMBLES LOST",
+            "value": 0.038633168,
+            "projected": true
+          },
+          {
+            "id": "73",
+            "label": "PROJ STAT 73",
+            "value": 0.038633168,
+            "projected": true
+          },
+          {
+            "id": "210",
+            "label": "PROJ STAT 210",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "213",
+            "label": "PROJ STAT 213",
+            "value": 2.594787142,
+            "projected": true
+          }
+        ],
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
@@ -4077,6 +4289,279 @@
           }
         ],
         "injuryStatus": "",
+        "headshot": "",
+        "starter": true
+      },
+      {
+        "id": "4697815",
+        "name": "Rachaad White",
+        "team": "WAS",
+        "position": "RB",
+        "points": 0,
+        "scoringPeriodId": 6,
+        "projected": 10.5,
+        "gameStats": [],
+        "projectedGameStats": [
+          {
+            "id": "23",
+            "label": "PROJ RUSHING ATTEMPTS",
+            "value": 11.05154208,
+            "projected": true
+          },
+          {
+            "id": "24",
+            "label": "PROJ RUSHING YARDS",
+            "value": 43.19140985,
+            "projected": true
+          },
+          {
+            "id": "25",
+            "label": "PROJ RUSHING TOUCHDOWNS",
+            "value": 0.318604818,
+            "projected": true
+          },
+          {
+            "id": "26",
+            "label": "PROJ STAT 26",
+            "value": 0.014364454,
+            "projected": true
+          },
+          {
+            "id": "27",
+            "label": "PROJ STAT 27",
+            "value": 8,
+            "projected": true
+          },
+          {
+            "id": "28",
+            "label": "PROJ STAT 28",
+            "value": 4,
+            "projected": true
+          },
+          {
+            "id": "29",
+            "label": "PROJ STAT 29",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "30",
+            "label": "PROJ STAT 30",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "33",
+            "label": "PROJ STAT 33",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "34",
+            "label": "PROJ STAT 34",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "35",
+            "label": "PROJ STAT 35",
+            "value": 0.022339172,
+            "projected": true
+          },
+          {
+            "id": "36",
+            "label": "PROJ STAT 36",
+            "value": 0.01563742,
+            "projected": true
+          },
+          {
+            "id": "37",
+            "label": "PROJ STAT 37",
+            "value": 0.0815,
+            "projected": true
+          },
+          {
+            "id": "38",
+            "label": "PROJ STAT 38",
+            "value": 0.00278,
+            "projected": true
+          },
+          {
+            "id": "39",
+            "label": "PROJ STAT 39",
+            "value": 3.908179469,
+            "projected": true
+          },
+          {
+            "id": "40",
+            "label": "PROJ STAT 40",
+            "value": 43.19140985,
+            "projected": true
+          },
+          {
+            "id": "42",
+            "label": "PROJ RECEIVING YARDS",
+            "value": 13.57695039,
+            "projected": true
+          },
+          {
+            "id": "43",
+            "label": "PROJ RECEIVING TOUCHDOWNS",
+            "value": 0.105288692,
+            "projected": true
+          },
+          {
+            "id": "44",
+            "label": "PROJ STAT 44",
+            "value": 0.007102874,
+            "projected": true
+          },
+          {
+            "id": "45",
+            "label": "PROJ STAT 45",
+            "value": 0.002456886,
+            "projected": true
+          },
+          {
+            "id": "46",
+            "label": "PROJ STAT 46",
+            "value": 0.001605575,
+            "projected": true
+          },
+          {
+            "id": "47",
+            "label": "PROJ STAT 47",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "48",
+            "label": "PROJ STAT 48",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "53",
+            "label": "PROJ RECEPTIONS",
+            "value": 2.292209571,
+            "projected": true
+          },
+          {
+            "id": "56",
+            "label": "PROJ STAT 56",
+            "value": 0.005107206,
+            "projected": true
+          },
+          {
+            "id": "58",
+            "label": "PROJ TARGETS",
+            "value": 2.438703022,
+            "projected": true
+          },
+          {
+            "id": "60",
+            "label": "PROJ STAT 60",
+            "value": 5.92308424,
+            "projected": true
+          },
+          {
+            "id": "61",
+            "label": "PROJ STAT 61",
+            "value": 13.57695039,
+            "projected": true
+          },
+          {
+            "id": "62",
+            "label": "PROJ STAT 62",
+            "value": 0.021467328,
+            "projected": true
+          },
+          {
+            "id": "66",
+            "label": "PROJ STAT 66",
+            "value": 0.099716721,
+            "projected": true
+          },
+          {
+            "id": "67",
+            "label": "PROJ STAT 67",
+            "value": 0.020682328,
+            "projected": true
+          },
+          {
+            "id": "68",
+            "label": "PROJ STAT 68",
+            "value": 0.120399049,
+            "projected": true
+          },
+          {
+            "id": "70",
+            "label": "PROJ STAT 70",
+            "value": 0.045869692,
+            "projected": true
+          },
+          {
+            "id": "71",
+            "label": "PROJ STAT 71",
+            "value": 0.011582104,
+            "projected": true
+          },
+          {
+            "id": "72",
+            "label": "PROJ FUMBLES LOST",
+            "value": 0.057451796,
+            "projected": true
+          },
+          {
+            "id": "73",
+            "label": "PROJ STAT 73",
+            "value": 0.057451796,
+            "projected": true
+          },
+          {
+            "id": "101",
+            "label": "PROJ STAT 101",
+            "value": 0.005365962,
+            "projected": true
+          },
+          {
+            "id": "114",
+            "label": "PROJ STAT 114",
+            "value": 57.27217076,
+            "projected": true
+          },
+          {
+            "id": "116",
+            "label": "PROJ STAT 116",
+            "value": 5,
+            "projected": true
+          },
+          {
+            "id": "117",
+            "label": "PROJ STAT 117",
+            "value": 2,
+            "projected": true
+          },
+          {
+            "id": "210",
+            "label": "PROJ STAT 210",
+            "value": 1,
+            "projected": true
+          },
+          {
+            "id": "212",
+            "label": "PROJ STAT 212",
+            "value": 2.489190432,
+            "projected": true
+          },
+          {
+            "id": "213",
+            "label": "PROJ STAT 213",
+            "value": 0.872293367,
+            "projected": true
+          }
+        ],
+        "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
       },
@@ -4737,20 +5222,6 @@
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
-      },
-      {
-        "id": "4569603",
-        "name": "Malik Washington",
-        "team": "MIA",
-        "position": "WR",
-        "points": 0,
-        "scoringPeriodId": 6,
-        "projected": 0,
-        "gameStats": [],
-        "projectedGameStats": [],
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": true
       }
     ],
     "bench": [
@@ -4765,6 +5236,20 @@
         "gameStats": [],
         "projectedGameStats": [],
         "injuryStatus": "OUT",
+        "headshot": "",
+        "starter": false
+      },
+      {
+        "id": "4430027",
+        "name": "Sam LaPorta",
+        "team": "DET",
+        "position": "TE",
+        "points": 0,
+        "scoringPeriodId": 6,
+        "projected": 0,
+        "gameStats": [],
+        "projectedGameStats": [],
+        "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
       },
@@ -5012,438 +5497,6 @@
         "starter": false
       },
       {
-        "id": "4047650",
-        "name": "DK Metcalf",
-        "team": "PIT",
-        "position": "WR",
-        "points": 0,
-        "scoringPeriodId": 6,
-        "projected": 11.6,
-        "gameStats": [],
-        "projectedGameStats": [
-          {
-            "id": "42",
-            "label": "PROJ RECEIVING YARDS",
-            "value": 59.85505152,
-            "projected": true
-          },
-          {
-            "id": "43",
-            "label": "PROJ RECEIVING TOUCHDOWNS",
-            "value": 0.28580467,
-            "projected": true
-          },
-          {
-            "id": "44",
-            "label": "PROJ STAT 44",
-            "value": 0.013300441,
-            "projected": true
-          },
-          {
-            "id": "45",
-            "label": "PROJ STAT 45",
-            "value": 0.010738637,
-            "projected": true
-          },
-          {
-            "id": "46",
-            "label": "PROJ STAT 46",
-            "value": 0.0070177,
-            "projected": true
-          },
-          {
-            "id": "47",
-            "label": "PROJ STAT 47",
-            "value": 11,
-            "projected": true
-          },
-          {
-            "id": "48",
-            "label": "PROJ STAT 48",
-            "value": 5,
-            "projected": true
-          },
-          {
-            "id": "49",
-            "label": "PROJ STAT 49",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "50",
-            "label": "PROJ STAT 50",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "51",
-            "label": "PROJ STAT 51",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "53",
-            "label": "PROJ RECEPTIONS",
-            "value": 3.926503382,
-            "projected": true
-          },
-          {
-            "id": "56",
-            "label": "PROJ STAT 56",
-            "value": 0.154373812,
-            "projected": true
-          },
-          {
-            "id": "57",
-            "label": "PROJ STAT 57",
-            "value": 0.00477,
-            "projected": true
-          },
-          {
-            "id": "58",
-            "label": "PROJ TARGETS",
-            "value": 7.51402108,
-            "projected": true
-          },
-          {
-            "id": "60",
-            "label": "PROJ STAT 60",
-            "value": 15.24385584,
-            "projected": true
-          },
-          {
-            "id": "61",
-            "label": "PROJ STAT 61",
-            "value": 59.85505152,
-            "projected": true
-          },
-          {
-            "id": "62",
-            "label": "PROJ STAT 62",
-            "value": 0.013300441,
-            "projected": true
-          },
-          {
-            "id": "67",
-            "label": "PROJ STAT 67",
-            "value": 0.0689878,
-            "projected": true
-          },
-          {
-            "id": "68",
-            "label": "PROJ STAT 68",
-            "value": 0.0689878,
-            "projected": true
-          },
-          {
-            "id": "71",
-            "label": "PROJ STAT 71",
-            "value": 0.038633168,
-            "projected": true
-          },
-          {
-            "id": "72",
-            "label": "PROJ FUMBLES LOST",
-            "value": 0.038633168,
-            "projected": true
-          },
-          {
-            "id": "73",
-            "label": "PROJ STAT 73",
-            "value": 0.038633168,
-            "projected": true
-          },
-          {
-            "id": "210",
-            "label": "PROJ STAT 210",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "213",
-            "label": "PROJ STAT 213",
-            "value": 2.594787142,
-            "projected": true
-          }
-        ],
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
-        "id": "4697815",
-        "name": "Rachaad White",
-        "team": "WAS",
-        "position": "RB",
-        "points": 0,
-        "scoringPeriodId": 6,
-        "projected": 10.5,
-        "gameStats": [],
-        "projectedGameStats": [
-          {
-            "id": "23",
-            "label": "PROJ RUSHING ATTEMPTS",
-            "value": 11.05154208,
-            "projected": true
-          },
-          {
-            "id": "24",
-            "label": "PROJ RUSHING YARDS",
-            "value": 43.19140985,
-            "projected": true
-          },
-          {
-            "id": "25",
-            "label": "PROJ RUSHING TOUCHDOWNS",
-            "value": 0.318604818,
-            "projected": true
-          },
-          {
-            "id": "26",
-            "label": "PROJ STAT 26",
-            "value": 0.014364454,
-            "projected": true
-          },
-          {
-            "id": "27",
-            "label": "PROJ STAT 27",
-            "value": 8,
-            "projected": true
-          },
-          {
-            "id": "28",
-            "label": "PROJ STAT 28",
-            "value": 4,
-            "projected": true
-          },
-          {
-            "id": "29",
-            "label": "PROJ STAT 29",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "30",
-            "label": "PROJ STAT 30",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "33",
-            "label": "PROJ STAT 33",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "34",
-            "label": "PROJ STAT 34",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "35",
-            "label": "PROJ STAT 35",
-            "value": 0.022339172,
-            "projected": true
-          },
-          {
-            "id": "36",
-            "label": "PROJ STAT 36",
-            "value": 0.01563742,
-            "projected": true
-          },
-          {
-            "id": "37",
-            "label": "PROJ STAT 37",
-            "value": 0.0815,
-            "projected": true
-          },
-          {
-            "id": "38",
-            "label": "PROJ STAT 38",
-            "value": 0.00278,
-            "projected": true
-          },
-          {
-            "id": "39",
-            "label": "PROJ STAT 39",
-            "value": 3.908179469,
-            "projected": true
-          },
-          {
-            "id": "40",
-            "label": "PROJ STAT 40",
-            "value": 43.19140985,
-            "projected": true
-          },
-          {
-            "id": "42",
-            "label": "PROJ RECEIVING YARDS",
-            "value": 13.57695039,
-            "projected": true
-          },
-          {
-            "id": "43",
-            "label": "PROJ RECEIVING TOUCHDOWNS",
-            "value": 0.105288692,
-            "projected": true
-          },
-          {
-            "id": "44",
-            "label": "PROJ STAT 44",
-            "value": 0.007102874,
-            "projected": true
-          },
-          {
-            "id": "45",
-            "label": "PROJ STAT 45",
-            "value": 0.002456886,
-            "projected": true
-          },
-          {
-            "id": "46",
-            "label": "PROJ STAT 46",
-            "value": 0.001605575,
-            "projected": true
-          },
-          {
-            "id": "47",
-            "label": "PROJ STAT 47",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "48",
-            "label": "PROJ STAT 48",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "53",
-            "label": "PROJ RECEPTIONS",
-            "value": 2.292209571,
-            "projected": true
-          },
-          {
-            "id": "56",
-            "label": "PROJ STAT 56",
-            "value": 0.005107206,
-            "projected": true
-          },
-          {
-            "id": "58",
-            "label": "PROJ TARGETS",
-            "value": 2.438703022,
-            "projected": true
-          },
-          {
-            "id": "60",
-            "label": "PROJ STAT 60",
-            "value": 5.92308424,
-            "projected": true
-          },
-          {
-            "id": "61",
-            "label": "PROJ STAT 61",
-            "value": 13.57695039,
-            "projected": true
-          },
-          {
-            "id": "62",
-            "label": "PROJ STAT 62",
-            "value": 0.021467328,
-            "projected": true
-          },
-          {
-            "id": "66",
-            "label": "PROJ STAT 66",
-            "value": 0.099716721,
-            "projected": true
-          },
-          {
-            "id": "67",
-            "label": "PROJ STAT 67",
-            "value": 0.020682328,
-            "projected": true
-          },
-          {
-            "id": "68",
-            "label": "PROJ STAT 68",
-            "value": 0.120399049,
-            "projected": true
-          },
-          {
-            "id": "70",
-            "label": "PROJ STAT 70",
-            "value": 0.045869692,
-            "projected": true
-          },
-          {
-            "id": "71",
-            "label": "PROJ STAT 71",
-            "value": 0.011582104,
-            "projected": true
-          },
-          {
-            "id": "72",
-            "label": "PROJ FUMBLES LOST",
-            "value": 0.057451796,
-            "projected": true
-          },
-          {
-            "id": "73",
-            "label": "PROJ STAT 73",
-            "value": 0.057451796,
-            "projected": true
-          },
-          {
-            "id": "101",
-            "label": "PROJ STAT 101",
-            "value": 0.005365962,
-            "projected": true
-          },
-          {
-            "id": "114",
-            "label": "PROJ STAT 114",
-            "value": 57.27217076,
-            "projected": true
-          },
-          {
-            "id": "116",
-            "label": "PROJ STAT 116",
-            "value": 5,
-            "projected": true
-          },
-          {
-            "id": "117",
-            "label": "PROJ STAT 117",
-            "value": 2,
-            "projected": true
-          },
-          {
-            "id": "210",
-            "label": "PROJ STAT 210",
-            "value": 1,
-            "projected": true
-          },
-          {
-            "id": "212",
-            "label": "PROJ STAT 212",
-            "value": 2.489190432,
-            "projected": true
-          },
-          {
-            "id": "213",
-            "label": "PROJ STAT 213",
-            "value": 0.872293367,
-            "projected": true
-          }
-        ],
-        "injuryStatus": "ACTIVE",
-        "headshot": "",
-        "starter": false
-      },
-      {
         "id": "4870653",
         "name": "KC Concepcion",
         "team": "CLE",
@@ -5664,7 +5717,26 @@
         "points": 0,
         "scoringPeriodId": 6,
         "projected": 14.1,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "0",
+            "label": "PASSING ATTEMPTS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "2",
+            "label": "INCOMPLETE PASSES",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "0",
@@ -6075,6 +6147,20 @@
         "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": false
+      },
+      {
+        "id": "4569603",
+        "name": "Malik Washington",
+        "team": "MIA",
+        "position": "WR",
+        "points": 0,
+        "scoringPeriodId": 6,
+        "projected": 0,
+        "gameStats": [],
+        "projectedGameStats": [],
+        "injuryStatus": "ACTIVE",
+        "headshot": "",
+        "starter": false
       }
     ]
   },
@@ -6088,7 +6174,7 @@
         "wins": 3,
         "losses": 2
       },
-      "total": 6,
+      "total": 9.4,
       "projected": 109.20000000000002,
       "starters": [
         {
@@ -7561,10 +7647,83 @@
           "name": "Brenton Strange",
           "team": "JAX",
           "position": "TE",
-          "points": 0,
+          "points": 3.4,
           "scoringPeriodId": 6,
           "projected": 9.4,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 24,
+              "projected": false
+            },
+            {
+              "id": "47",
+              "label": "STAT 47",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "49",
+              "label": "STAT 49",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": 24,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": 24,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "213",
+              "label": "STAT 213",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "42",
@@ -17544,7 +17703,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 0,
+      "total": 0.3,
       "projected": 114.8,
       "starters": [
         {
@@ -18137,10 +18296,41 @@
           "name": "Bhayshul Tuten",
           "team": "JAX",
           "position": "RB",
-          "points": 0,
+          "points": 0.3,
           "scoringPeriodId": 6,
           "projected": 13.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "23",
+              "label": "RUSHING ATTEMPTS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "39",
+              "label": "STAT 39",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "40",
+              "label": "STAT 40",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -20406,7 +20596,20 @@
           "points": 0,
           "scoringPeriodId": 6,
           "projected": 16.3,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -22799,7 +23002,7 @@
         "losses": 1
       },
       "total": 5.2,
-      "projected": 100.89999999999999,
+      "projected": 123,
       "starters": [
         {
           "id": "4241389",
@@ -23579,15 +23782,160 @@
           "starter": true
         },
         {
-          "id": "4430027",
-          "name": "Sam LaPorta",
-          "team": "DET",
-          "position": "TE",
+          "id": "4047650",
+          "name": "DK Metcalf",
+          "team": "PIT",
+          "position": "WR",
           "points": 0,
           "scoringPeriodId": 6,
-          "projected": 0,
+          "projected": 11.6,
           "gameStats": [],
-          "projectedGameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "42",
+              "label": "PROJ RECEIVING YARDS",
+              "value": 59.85505152,
+              "projected": true
+            },
+            {
+              "id": "43",
+              "label": "PROJ RECEIVING TOUCHDOWNS",
+              "value": 0.28580467,
+              "projected": true
+            },
+            {
+              "id": "44",
+              "label": "PROJ STAT 44",
+              "value": 0.013300441,
+              "projected": true
+            },
+            {
+              "id": "45",
+              "label": "PROJ STAT 45",
+              "value": 0.010738637,
+              "projected": true
+            },
+            {
+              "id": "46",
+              "label": "PROJ STAT 46",
+              "value": 0.0070177,
+              "projected": true
+            },
+            {
+              "id": "47",
+              "label": "PROJ STAT 47",
+              "value": 11,
+              "projected": true
+            },
+            {
+              "id": "48",
+              "label": "PROJ STAT 48",
+              "value": 5,
+              "projected": true
+            },
+            {
+              "id": "49",
+              "label": "PROJ STAT 49",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "50",
+              "label": "PROJ STAT 50",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "51",
+              "label": "PROJ STAT 51",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "53",
+              "label": "PROJ RECEPTIONS",
+              "value": 3.926503382,
+              "projected": true
+            },
+            {
+              "id": "56",
+              "label": "PROJ STAT 56",
+              "value": 0.154373812,
+              "projected": true
+            },
+            {
+              "id": "57",
+              "label": "PROJ STAT 57",
+              "value": 0.00477,
+              "projected": true
+            },
+            {
+              "id": "58",
+              "label": "PROJ TARGETS",
+              "value": 7.51402108,
+              "projected": true
+            },
+            {
+              "id": "60",
+              "label": "PROJ STAT 60",
+              "value": 15.24385584,
+              "projected": true
+            },
+            {
+              "id": "61",
+              "label": "PROJ STAT 61",
+              "value": 59.85505152,
+              "projected": true
+            },
+            {
+              "id": "62",
+              "label": "PROJ STAT 62",
+              "value": 0.013300441,
+              "projected": true
+            },
+            {
+              "id": "67",
+              "label": "PROJ STAT 67",
+              "value": 0.0689878,
+              "projected": true
+            },
+            {
+              "id": "68",
+              "label": "PROJ STAT 68",
+              "value": 0.0689878,
+              "projected": true
+            },
+            {
+              "id": "71",
+              "label": "PROJ STAT 71",
+              "value": 0.038633168,
+              "projected": true
+            },
+            {
+              "id": "72",
+              "label": "PROJ FUMBLES LOST",
+              "value": 0.038633168,
+              "projected": true
+            },
+            {
+              "id": "73",
+              "label": "PROJ STAT 73",
+              "value": 0.038633168,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "213",
+              "label": "PROJ STAT 213",
+              "value": 2.594787142,
+              "projected": true
+            }
+          ],
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
@@ -23880,6 +24228,279 @@
             }
           ],
           "injuryStatus": "",
+          "headshot": "",
+          "starter": true
+        },
+        {
+          "id": "4697815",
+          "name": "Rachaad White",
+          "team": "WAS",
+          "position": "RB",
+          "points": 0,
+          "scoringPeriodId": 6,
+          "projected": 10.5,
+          "gameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "23",
+              "label": "PROJ RUSHING ATTEMPTS",
+              "value": 11.05154208,
+              "projected": true
+            },
+            {
+              "id": "24",
+              "label": "PROJ RUSHING YARDS",
+              "value": 43.19140985,
+              "projected": true
+            },
+            {
+              "id": "25",
+              "label": "PROJ RUSHING TOUCHDOWNS",
+              "value": 0.318604818,
+              "projected": true
+            },
+            {
+              "id": "26",
+              "label": "PROJ STAT 26",
+              "value": 0.014364454,
+              "projected": true
+            },
+            {
+              "id": "27",
+              "label": "PROJ STAT 27",
+              "value": 8,
+              "projected": true
+            },
+            {
+              "id": "28",
+              "label": "PROJ STAT 28",
+              "value": 4,
+              "projected": true
+            },
+            {
+              "id": "29",
+              "label": "PROJ STAT 29",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "30",
+              "label": "PROJ STAT 30",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "33",
+              "label": "PROJ STAT 33",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "34",
+              "label": "PROJ STAT 34",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "35",
+              "label": "PROJ STAT 35",
+              "value": 0.022339172,
+              "projected": true
+            },
+            {
+              "id": "36",
+              "label": "PROJ STAT 36",
+              "value": 0.01563742,
+              "projected": true
+            },
+            {
+              "id": "37",
+              "label": "PROJ STAT 37",
+              "value": 0.0815,
+              "projected": true
+            },
+            {
+              "id": "38",
+              "label": "PROJ STAT 38",
+              "value": 0.00278,
+              "projected": true
+            },
+            {
+              "id": "39",
+              "label": "PROJ STAT 39",
+              "value": 3.908179469,
+              "projected": true
+            },
+            {
+              "id": "40",
+              "label": "PROJ STAT 40",
+              "value": 43.19140985,
+              "projected": true
+            },
+            {
+              "id": "42",
+              "label": "PROJ RECEIVING YARDS",
+              "value": 13.57695039,
+              "projected": true
+            },
+            {
+              "id": "43",
+              "label": "PROJ RECEIVING TOUCHDOWNS",
+              "value": 0.105288692,
+              "projected": true
+            },
+            {
+              "id": "44",
+              "label": "PROJ STAT 44",
+              "value": 0.007102874,
+              "projected": true
+            },
+            {
+              "id": "45",
+              "label": "PROJ STAT 45",
+              "value": 0.002456886,
+              "projected": true
+            },
+            {
+              "id": "46",
+              "label": "PROJ STAT 46",
+              "value": 0.001605575,
+              "projected": true
+            },
+            {
+              "id": "47",
+              "label": "PROJ STAT 47",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "48",
+              "label": "PROJ STAT 48",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "53",
+              "label": "PROJ RECEPTIONS",
+              "value": 2.292209571,
+              "projected": true
+            },
+            {
+              "id": "56",
+              "label": "PROJ STAT 56",
+              "value": 0.005107206,
+              "projected": true
+            },
+            {
+              "id": "58",
+              "label": "PROJ TARGETS",
+              "value": 2.438703022,
+              "projected": true
+            },
+            {
+              "id": "60",
+              "label": "PROJ STAT 60",
+              "value": 5.92308424,
+              "projected": true
+            },
+            {
+              "id": "61",
+              "label": "PROJ STAT 61",
+              "value": 13.57695039,
+              "projected": true
+            },
+            {
+              "id": "62",
+              "label": "PROJ STAT 62",
+              "value": 0.021467328,
+              "projected": true
+            },
+            {
+              "id": "66",
+              "label": "PROJ STAT 66",
+              "value": 0.099716721,
+              "projected": true
+            },
+            {
+              "id": "67",
+              "label": "PROJ STAT 67",
+              "value": 0.020682328,
+              "projected": true
+            },
+            {
+              "id": "68",
+              "label": "PROJ STAT 68",
+              "value": 0.120399049,
+              "projected": true
+            },
+            {
+              "id": "70",
+              "label": "PROJ STAT 70",
+              "value": 0.045869692,
+              "projected": true
+            },
+            {
+              "id": "71",
+              "label": "PROJ STAT 71",
+              "value": 0.011582104,
+              "projected": true
+            },
+            {
+              "id": "72",
+              "label": "PROJ FUMBLES LOST",
+              "value": 0.057451796,
+              "projected": true
+            },
+            {
+              "id": "73",
+              "label": "PROJ STAT 73",
+              "value": 0.057451796,
+              "projected": true
+            },
+            {
+              "id": "101",
+              "label": "PROJ STAT 101",
+              "value": 0.005365962,
+              "projected": true
+            },
+            {
+              "id": "114",
+              "label": "PROJ STAT 114",
+              "value": 57.27217076,
+              "projected": true
+            },
+            {
+              "id": "116",
+              "label": "PROJ STAT 116",
+              "value": 5,
+              "projected": true
+            },
+            {
+              "id": "117",
+              "label": "PROJ STAT 117",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "212",
+              "label": "PROJ STAT 212",
+              "value": 2.489190432,
+              "projected": true
+            },
+            {
+              "id": "213",
+              "label": "PROJ STAT 213",
+              "value": 0.872293367,
+              "projected": true
+            }
+          ],
+          "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
         },
@@ -24540,20 +25161,6 @@
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
-        },
-        {
-          "id": "4569603",
-          "name": "Malik Washington",
-          "team": "MIA",
-          "position": "WR",
-          "points": 0,
-          "scoringPeriodId": 6,
-          "projected": 0,
-          "gameStats": [],
-          "projectedGameStats": [],
-          "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": true
         }
       ],
       "bench": [
@@ -24568,6 +25175,20 @@
           "gameStats": [],
           "projectedGameStats": [],
           "injuryStatus": "OUT",
+          "headshot": "",
+          "starter": false
+        },
+        {
+          "id": "4430027",
+          "name": "Sam LaPorta",
+          "team": "DET",
+          "position": "TE",
+          "points": 0,
+          "scoringPeriodId": 6,
+          "projected": 0,
+          "gameStats": [],
+          "projectedGameStats": [],
+          "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
         },
@@ -24815,438 +25436,6 @@
           "starter": false
         },
         {
-          "id": "4047650",
-          "name": "DK Metcalf",
-          "team": "PIT",
-          "position": "WR",
-          "points": 0,
-          "scoringPeriodId": 6,
-          "projected": 11.6,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "42",
-              "label": "PROJ RECEIVING YARDS",
-              "value": 59.85505152,
-              "projected": true
-            },
-            {
-              "id": "43",
-              "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.28580467,
-              "projected": true
-            },
-            {
-              "id": "44",
-              "label": "PROJ STAT 44",
-              "value": 0.013300441,
-              "projected": true
-            },
-            {
-              "id": "45",
-              "label": "PROJ STAT 45",
-              "value": 0.010738637,
-              "projected": true
-            },
-            {
-              "id": "46",
-              "label": "PROJ STAT 46",
-              "value": 0.0070177,
-              "projected": true
-            },
-            {
-              "id": "47",
-              "label": "PROJ STAT 47",
-              "value": 11,
-              "projected": true
-            },
-            {
-              "id": "48",
-              "label": "PROJ STAT 48",
-              "value": 5,
-              "projected": true
-            },
-            {
-              "id": "49",
-              "label": "PROJ STAT 49",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "50",
-              "label": "PROJ STAT 50",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "51",
-              "label": "PROJ STAT 51",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "53",
-              "label": "PROJ RECEPTIONS",
-              "value": 3.926503382,
-              "projected": true
-            },
-            {
-              "id": "56",
-              "label": "PROJ STAT 56",
-              "value": 0.154373812,
-              "projected": true
-            },
-            {
-              "id": "57",
-              "label": "PROJ STAT 57",
-              "value": 0.00477,
-              "projected": true
-            },
-            {
-              "id": "58",
-              "label": "PROJ TARGETS",
-              "value": 7.51402108,
-              "projected": true
-            },
-            {
-              "id": "60",
-              "label": "PROJ STAT 60",
-              "value": 15.24385584,
-              "projected": true
-            },
-            {
-              "id": "61",
-              "label": "PROJ STAT 61",
-              "value": 59.85505152,
-              "projected": true
-            },
-            {
-              "id": "62",
-              "label": "PROJ STAT 62",
-              "value": 0.013300441,
-              "projected": true
-            },
-            {
-              "id": "67",
-              "label": "PROJ STAT 67",
-              "value": 0.0689878,
-              "projected": true
-            },
-            {
-              "id": "68",
-              "label": "PROJ STAT 68",
-              "value": 0.0689878,
-              "projected": true
-            },
-            {
-              "id": "71",
-              "label": "PROJ STAT 71",
-              "value": 0.038633168,
-              "projected": true
-            },
-            {
-              "id": "72",
-              "label": "PROJ FUMBLES LOST",
-              "value": 0.038633168,
-              "projected": true
-            },
-            {
-              "id": "73",
-              "label": "PROJ STAT 73",
-              "value": 0.038633168,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "213",
-              "label": "PROJ STAT 213",
-              "value": 2.594787142,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
-          "id": "4697815",
-          "name": "Rachaad White",
-          "team": "WAS",
-          "position": "RB",
-          "points": 0,
-          "scoringPeriodId": 6,
-          "projected": 10.5,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "23",
-              "label": "PROJ RUSHING ATTEMPTS",
-              "value": 11.05154208,
-              "projected": true
-            },
-            {
-              "id": "24",
-              "label": "PROJ RUSHING YARDS",
-              "value": 43.19140985,
-              "projected": true
-            },
-            {
-              "id": "25",
-              "label": "PROJ RUSHING TOUCHDOWNS",
-              "value": 0.318604818,
-              "projected": true
-            },
-            {
-              "id": "26",
-              "label": "PROJ STAT 26",
-              "value": 0.014364454,
-              "projected": true
-            },
-            {
-              "id": "27",
-              "label": "PROJ STAT 27",
-              "value": 8,
-              "projected": true
-            },
-            {
-              "id": "28",
-              "label": "PROJ STAT 28",
-              "value": 4,
-              "projected": true
-            },
-            {
-              "id": "29",
-              "label": "PROJ STAT 29",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "30",
-              "label": "PROJ STAT 30",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "33",
-              "label": "PROJ STAT 33",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "34",
-              "label": "PROJ STAT 34",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "35",
-              "label": "PROJ STAT 35",
-              "value": 0.022339172,
-              "projected": true
-            },
-            {
-              "id": "36",
-              "label": "PROJ STAT 36",
-              "value": 0.01563742,
-              "projected": true
-            },
-            {
-              "id": "37",
-              "label": "PROJ STAT 37",
-              "value": 0.0815,
-              "projected": true
-            },
-            {
-              "id": "38",
-              "label": "PROJ STAT 38",
-              "value": 0.00278,
-              "projected": true
-            },
-            {
-              "id": "39",
-              "label": "PROJ STAT 39",
-              "value": 3.908179469,
-              "projected": true
-            },
-            {
-              "id": "40",
-              "label": "PROJ STAT 40",
-              "value": 43.19140985,
-              "projected": true
-            },
-            {
-              "id": "42",
-              "label": "PROJ RECEIVING YARDS",
-              "value": 13.57695039,
-              "projected": true
-            },
-            {
-              "id": "43",
-              "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.105288692,
-              "projected": true
-            },
-            {
-              "id": "44",
-              "label": "PROJ STAT 44",
-              "value": 0.007102874,
-              "projected": true
-            },
-            {
-              "id": "45",
-              "label": "PROJ STAT 45",
-              "value": 0.002456886,
-              "projected": true
-            },
-            {
-              "id": "46",
-              "label": "PROJ STAT 46",
-              "value": 0.001605575,
-              "projected": true
-            },
-            {
-              "id": "47",
-              "label": "PROJ STAT 47",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "48",
-              "label": "PROJ STAT 48",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "53",
-              "label": "PROJ RECEPTIONS",
-              "value": 2.292209571,
-              "projected": true
-            },
-            {
-              "id": "56",
-              "label": "PROJ STAT 56",
-              "value": 0.005107206,
-              "projected": true
-            },
-            {
-              "id": "58",
-              "label": "PROJ TARGETS",
-              "value": 2.438703022,
-              "projected": true
-            },
-            {
-              "id": "60",
-              "label": "PROJ STAT 60",
-              "value": 5.92308424,
-              "projected": true
-            },
-            {
-              "id": "61",
-              "label": "PROJ STAT 61",
-              "value": 13.57695039,
-              "projected": true
-            },
-            {
-              "id": "62",
-              "label": "PROJ STAT 62",
-              "value": 0.021467328,
-              "projected": true
-            },
-            {
-              "id": "66",
-              "label": "PROJ STAT 66",
-              "value": 0.099716721,
-              "projected": true
-            },
-            {
-              "id": "67",
-              "label": "PROJ STAT 67",
-              "value": 0.020682328,
-              "projected": true
-            },
-            {
-              "id": "68",
-              "label": "PROJ STAT 68",
-              "value": 0.120399049,
-              "projected": true
-            },
-            {
-              "id": "70",
-              "label": "PROJ STAT 70",
-              "value": 0.045869692,
-              "projected": true
-            },
-            {
-              "id": "71",
-              "label": "PROJ STAT 71",
-              "value": 0.011582104,
-              "projected": true
-            },
-            {
-              "id": "72",
-              "label": "PROJ FUMBLES LOST",
-              "value": 0.057451796,
-              "projected": true
-            },
-            {
-              "id": "73",
-              "label": "PROJ STAT 73",
-              "value": 0.057451796,
-              "projected": true
-            },
-            {
-              "id": "101",
-              "label": "PROJ STAT 101",
-              "value": 0.005365962,
-              "projected": true
-            },
-            {
-              "id": "114",
-              "label": "PROJ STAT 114",
-              "value": 57.27217076,
-              "projected": true
-            },
-            {
-              "id": "116",
-              "label": "PROJ STAT 116",
-              "value": 5,
-              "projected": true
-            },
-            {
-              "id": "117",
-              "label": "PROJ STAT 117",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "212",
-              "label": "PROJ STAT 212",
-              "value": 2.489190432,
-              "projected": true
-            },
-            {
-              "id": "213",
-              "label": "PROJ STAT 213",
-              "value": 0.872293367,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
           "id": "4870653",
           "name": "KC Concepcion",
           "team": "CLE",
@@ -25467,7 +25656,26 @@
           "points": 0,
           "scoringPeriodId": 6,
           "projected": 14.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "0",
+              "label": "PASSING ATTEMPTS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "2",
+              "label": "INCOMPLETE PASSES",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "0",
@@ -25878,6 +26086,20 @@
           "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": false
+        },
+        {
+          "id": "4569603",
+          "name": "Malik Washington",
+          "team": "MIA",
+          "position": "WR",
+          "points": 0,
+          "scoringPeriodId": 6,
+          "projected": 0,
+          "gameStats": [],
+          "projectedGameStats": [],
+          "injuryStatus": "ACTIVE",
+          "headshot": "",
+          "starter": false
         }
       ]
     },
@@ -25890,7 +26112,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 7,
+      "total": 17,
       "projected": 107.8,
       "starters": [
         {
@@ -26627,10 +26849,89 @@
           "name": "Texans D/ST",
           "team": "HOU",
           "position": "DEF",
-          "points": 0,
+          "points": 10,
           "scoringPeriodId": 6,
           "projected": 5.2,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "89",
+              "label": "DEFENSE SACKS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "90",
+              "label": "DEFENSE INTERCEPTIONS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "91",
+              "label": "DEFENSE FUMBLES RECOVERED",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "92",
+              "label": "DEFENSE TOUCHDOWNS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "107",
+              "label": "STAT 107",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "108",
+              "label": "STAT 108",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "109",
+              "label": "STAT 109",
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "110",
+              "label": "STAT 110",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "111",
+              "label": "STAT 111",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "127",
+              "label": "STAT 127",
+              "value": 28,
+              "projected": false
+            },
+            {
+              "id": "128",
+              "label": "STAT 128",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "188",
+              "label": "STAT 188",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "89",
@@ -29578,7 +29879,7 @@
         "wins": 1,
         "losses": 4
       },
-      "total": 0,
+      "total": 10,
       "projected": 120.3,
       "starters": [
         {
@@ -30774,10 +31075,71 @@
           "name": "Jaguars D/ST",
           "team": "JAX",
           "position": "DEF",
-          "points": 0,
+          "points": 10,
           "scoringPeriodId": 6,
           "projected": 6.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "89",
+              "label": "DEFENSE SACKS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "90",
+              "label": "DEFENSE INTERCEPTIONS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "91",
+              "label": "DEFENSE FUMBLES RECOVERED",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "92",
+              "label": "DEFENSE TOUCHDOWNS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "114",
+              "label": "STAT 114",
+              "value": 25,
+              "projected": false
+            },
+            {
+              "id": "116",
+              "label": "STAT 116",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "117",
+              "label": "STAT 117",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "128",
+              "label": "STAT 128",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "188",
+              "label": "STAT 188",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "89",
@@ -32544,7 +32906,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 25.4,
+      "total": 26.4,
       "projected": 119.80000000000003,
       "starters": [
         {
@@ -33708,10 +34070,77 @@
           "name": "Trevor Lawrence",
           "team": "JAX",
           "position": "QB",
-          "points": 0,
+          "points": 1,
           "scoringPeriodId": 6,
           "projected": 17.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "0",
+              "label": "PASSING ATTEMPTS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "1",
+              "label": "PASSING COMPLETIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "2",
+              "label": "INCOMPLETE PASSES",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 24,
+              "projected": false
+            },
+            {
+              "id": "5",
+              "label": "STAT 5",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "6",
+              "label": "STAT 6",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "7",
+              "label": "STAT 7",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "21",
+              "label": "STAT 21",
+              "value": 50,
+              "projected": false
+            },
+            {
+              "id": "22",
+              "label": "STAT 22",
+              "value": 24,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "211",
+              "label": "STAT 211",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "0",
@@ -36274,7 +36703,14 @@
           "points": 0,
           "scoringPeriodId": 6,
           "projected": 10.5,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "74",
@@ -41931,7 +42367,7 @@
       "id": "32",
       "homeTeamId": "10",
       "awayTeamId": "7",
-      "homeTotal": 25.4,
+      "homeTotal": 26.36,
       "awayTotal": 5.2,
       "homeProjected": null,
       "awayProjected": null
@@ -41940,8 +42376,8 @@
       "id": "33",
       "homeTeamId": "1",
       "awayTeamId": "5",
-      "homeTotal": 6,
-      "awayTotal": 0,
+      "homeTotal": 9.4,
+      "awayTotal": 0.3,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -41950,7 +42386,7 @@
       "homeTeamId": "2",
       "awayTeamId": "8",
       "homeTotal": 0,
-      "awayTotal": 7,
+      "awayTotal": 17,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -41968,7 +42404,7 @@
       "homeTeamId": "3",
       "awayTeamId": "9",
       "homeTotal": 0,
-      "awayTotal": 0,
+      "awayTotal": 10,
       "homeProjected": null,
       "awayProjected": null
     }
