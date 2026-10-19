@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-19T01:45:11.890Z",
+  "savedAt": "2026-10-19T06:57:14.652Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 6,
@@ -4573,7 +4573,7 @@
       "wins": 4,
       "losses": 1
     },
-    "total": 72.6,
+    "total": 92.4,
     "projected": 123.10000000000001,
     "starters": [
       {
@@ -4581,68 +4581,92 @@
         "name": "CeeDee Lamb",
         "team": "DAL",
         "position": "WR",
-        "points": 4.2,
+        "points": 16,
         "scoringPeriodId": 6,
         "projected": 18.6,
         "gameStats": [
           {
             "id": "41",
             "label": "RECEIVING TARGETS",
-            "value": 2,
+            "value": 9,
             "projected": false
           },
           {
             "id": "42",
             "label": "RECEIVING YARDS",
-            "value": 22,
+            "value": 70,
             "projected": false
           },
           {
             "id": "47",
             "label": "STAT 47",
-            "value": 4,
+            "value": 14,
             "projected": false
           },
           {
             "id": "48",
             "label": "STAT 48",
-            "value": 2,
+            "value": 7,
             "projected": false
           },
           {
             "id": "49",
             "label": "STAT 49",
+            "value": 3,
+            "projected": false
+          },
+          {
+            "id": "50",
+            "label": "STAT 50",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "51",
+            "label": "STAT 51",
             "value": 1,
             "projected": false
           },
           {
             "id": "53",
             "label": "RECEPTIONS",
-            "value": 2,
+            "value": 9,
+            "projected": false
+          },
+          {
+            "id": "54",
+            "label": "STAT 54",
+            "value": 1,
             "projected": false
           },
           {
             "id": "58",
             "label": "TARGETS",
-            "value": 6,
+            "value": 18,
             "projected": false
           },
           {
             "id": "59",
             "label": "STAT 59",
-            "value": 4,
+            "value": 23,
             "projected": false
           },
           {
             "id": "60",
             "label": "STAT 60",
-            "value": 11,
+            "value": 7.778,
             "projected": false
           },
           {
             "id": "61",
             "label": "STAT 61",
-            "value": 22,
+            "value": 70,
+            "projected": false
+          },
+          {
+            "id": "156",
+            "label": "STAT 156",
+            "value": 1,
             "projected": false
           },
           {
@@ -4654,7 +4678,7 @@
           {
             "id": "213",
             "label": "STAT 213",
-            "value": 1,
+            "value": 4,
             "projected": false
           }
         ],
@@ -4861,56 +4885,74 @@
         "name": "Javonte Williams",
         "team": "DAL",
         "position": "RB",
-        "points": 5,
+        "points": 13,
         "scoringPeriodId": 6,
         "projected": 16.9,
         "gameStats": [
           {
             "id": "23",
             "label": "RUSHING ATTEMPTS",
-            "value": 6,
+            "value": 11,
             "projected": false
           },
           {
             "id": "24",
             "label": "RUSHING YARDS",
-            "value": 21,
+            "value": 41,
+            "projected": false
+          },
+          {
+            "id": "25",
+            "label": "RUSHING TOUCHDOWNS",
+            "value": 1,
             "projected": false
           },
           {
             "id": "27",
             "label": "STAT 27",
-            "value": 4,
+            "value": 8,
             "projected": false
           },
           {
             "id": "28",
             "label": "STAT 28",
-            "value": 2,
+            "value": 4,
             "projected": false
           },
           {
             "id": "29",
             "label": "STAT 29",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "30",
+            "label": "STAT 30",
             "value": 1,
             "projected": false
           },
           {
             "id": "33",
             "label": "STAT 33",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "34",
+            "label": "STAT 34",
             "value": 1,
             "projected": false
           },
           {
             "id": "39",
             "label": "STAT 39",
-            "value": 3.5,
+            "value": 3.727,
             "projected": false
           },
           {
             "id": "40",
             "label": "STAT 40",
-            "value": 21,
+            "value": 41,
             "projected": false
           },
           {
@@ -4962,6 +5004,24 @@
             "projected": false
           },
           {
+            "id": "156",
+            "label": "STAT 156",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "158",
+            "label": "STAT 158",
+            "value": 6,
+            "projected": false
+          },
+          {
+            "id": "179",
+            "label": "STAT 179",
+            "value": 1,
+            "projected": false
+          },
+          {
             "id": "210",
             "label": "STAT 210",
             "value": 1,
@@ -4970,7 +5030,7 @@
           {
             "id": "212",
             "label": "STAT 212",
-            "value": 1,
+            "value": 4,
             "projected": false
           }
         ],
@@ -20457,7 +20517,7 @@
               "projected": true
             }
           ],
-          "injuryStatus": "OUT",
+          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
         },
@@ -25372,7 +25432,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 87.1,
+      "total": 88.1,
       "projected": 118.10000000000001,
       "starters": [
         {
@@ -27188,10 +27248,41 @@
           "name": "Brandon Aubrey",
           "team": "DAL",
           "position": "K",
-          "points": 0,
+          "points": 1,
           "scoringPeriodId": 6,
           "projected": 10.2,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "86",
+              "label": "STAT 86",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "87",
+              "label": "STAT 87",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "156",
+              "label": "STAT 156",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "158",
+              "label": "STAT 158",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "74",
@@ -29060,7 +29151,7 @@
         "wins": 4,
         "losses": 1
       },
-      "total": 84,
+      "total": 95.8,
       "projected": 128.39999999999998,
       "starters": [
         {
@@ -30708,74 +30799,98 @@
           "name": "Dak Prescott",
           "team": "DAL",
           "position": "QB",
-          "points": -0.8,
+          "points": 11,
           "scoringPeriodId": 6,
           "projected": 17.1,
           "gameStats": [
             {
               "id": "0",
               "label": "PASSING ATTEMPTS",
-              "value": 14,
+              "value": 54,
               "projected": false
             },
             {
               "id": "1",
               "label": "PASSING COMPLETIONS",
-              "value": 10,
+              "value": 34,
               "projected": false
             },
             {
               "id": "2",
               "label": "INCOMPLETE PASSES",
-              "value": 4,
+              "value": 20,
               "projected": false
             },
             {
               "id": "3",
               "label": "PASSING YARDS",
-              "value": 80,
+              "value": 258,
+              "projected": false
+            },
+            {
+              "id": "4",
+              "label": "PASSING TOUCHDOWNS",
+              "value": 1,
               "projected": false
             },
             {
               "id": "5",
               "label": "STAT 5",
-              "value": 16,
+              "value": 51,
               "projected": false
             },
             {
               "id": "6",
               "label": "STAT 6",
-              "value": 8,
+              "value": 25,
               "projected": false
             },
             {
               "id": "7",
               "label": "STAT 7",
-              "value": 4,
+              "value": 12,
               "projected": false
             },
             {
               "id": "8",
               "label": "STAT 8",
-              "value": 3,
+              "value": 10,
               "projected": false
             },
             {
               "id": "9",
               "label": "STAT 9",
-              "value": 1,
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "10",
+              "label": "STAT 10",
+              "value": 2,
               "projected": false
             },
             {
               "id": "11",
               "label": "STAT 11",
-              "value": 2,
+              "value": 6,
               "projected": false
             },
             {
               "id": "12",
               "label": "STAT 12",
-              "value": 1,
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "13",
+              "label": "STAT 13",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "14",
+              "label": "STAT 14",
+              "value": 2,
               "projected": false
             },
             {
@@ -30787,19 +30902,73 @@
             {
               "id": "21",
               "label": "STAT 21",
-              "value": 71.43,
+              "value": 62.96,
               "projected": false
             },
             {
               "id": "22",
               "label": "STAT 22",
-              "value": 80,
+              "value": 258,
+              "projected": false
+            },
+            {
+              "id": "23",
+              "label": "RUSHING ATTEMPTS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "27",
+              "label": "STAT 27",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "39",
+              "label": "STAT 39",
+              "value": 3.5,
+              "projected": false
+            },
+            {
+              "id": "40",
+              "label": "STAT 40",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "64",
+              "label": "STAT 64",
+              "value": 1,
               "projected": false
             },
             {
               "id": "73",
               "label": "STAT 73",
               "value": 2,
+              "projected": false
+            },
+            {
+              "id": "156",
+              "label": "STAT 156",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "158",
+              "label": "STAT 158",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "175",
+              "label": "STAT 175",
+              "value": 1,
               "projected": false
             },
             {
@@ -30811,7 +30980,7 @@
             {
               "id": "211",
               "label": "STAT 211",
-              "value": 4,
+              "value": 16,
               "projected": false
             }
           ],
@@ -33123,7 +33292,7 @@
         "wins": 4,
         "losses": 1
       },
-      "total": 72.6,
+      "total": 92.4,
       "projected": 123.10000000000001,
       "starters": [
         {
@@ -33131,68 +33300,92 @@
           "name": "CeeDee Lamb",
           "team": "DAL",
           "position": "WR",
-          "points": 4.2,
+          "points": 16,
           "scoringPeriodId": 6,
           "projected": 18.6,
           "gameStats": [
             {
               "id": "41",
               "label": "RECEIVING TARGETS",
-              "value": 2,
+              "value": 9,
               "projected": false
             },
             {
               "id": "42",
               "label": "RECEIVING YARDS",
-              "value": 22,
+              "value": 70,
               "projected": false
             },
             {
               "id": "47",
               "label": "STAT 47",
-              "value": 4,
+              "value": 14,
               "projected": false
             },
             {
               "id": "48",
               "label": "STAT 48",
-              "value": 2,
+              "value": 7,
               "projected": false
             },
             {
               "id": "49",
               "label": "STAT 49",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "50",
+              "label": "STAT 50",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "51",
+              "label": "STAT 51",
               "value": 1,
               "projected": false
             },
             {
               "id": "53",
               "label": "RECEPTIONS",
-              "value": 2,
+              "value": 9,
+              "projected": false
+            },
+            {
+              "id": "54",
+              "label": "STAT 54",
+              "value": 1,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
-              "value": 6,
+              "value": 18,
               "projected": false
             },
             {
               "id": "59",
               "label": "STAT 59",
-              "value": 4,
+              "value": 23,
               "projected": false
             },
             {
               "id": "60",
               "label": "STAT 60",
-              "value": 11,
+              "value": 7.778,
               "projected": false
             },
             {
               "id": "61",
               "label": "STAT 61",
-              "value": 22,
+              "value": 70,
+              "projected": false
+            },
+            {
+              "id": "156",
+              "label": "STAT 156",
+              "value": 1,
               "projected": false
             },
             {
@@ -33204,7 +33397,7 @@
             {
               "id": "213",
               "label": "STAT 213",
-              "value": 1,
+              "value": 4,
               "projected": false
             }
           ],
@@ -33411,56 +33604,74 @@
           "name": "Javonte Williams",
           "team": "DAL",
           "position": "RB",
-          "points": 5,
+          "points": 13,
           "scoringPeriodId": 6,
           "projected": 16.9,
           "gameStats": [
             {
               "id": "23",
               "label": "RUSHING ATTEMPTS",
-              "value": 6,
+              "value": 11,
               "projected": false
             },
             {
               "id": "24",
               "label": "RUSHING YARDS",
-              "value": 21,
+              "value": 41,
+              "projected": false
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1,
               "projected": false
             },
             {
               "id": "27",
               "label": "STAT 27",
-              "value": 4,
+              "value": 8,
               "projected": false
             },
             {
               "id": "28",
               "label": "STAT 28",
-              "value": 2,
+              "value": 4,
               "projected": false
             },
             {
               "id": "29",
               "label": "STAT 29",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "30",
+              "label": "STAT 30",
               "value": 1,
               "projected": false
             },
             {
               "id": "33",
               "label": "STAT 33",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "34",
+              "label": "STAT 34",
               "value": 1,
               "projected": false
             },
             {
               "id": "39",
               "label": "STAT 39",
-              "value": 3.5,
+              "value": 3.727,
               "projected": false
             },
             {
               "id": "40",
               "label": "STAT 40",
-              "value": 21,
+              "value": 41,
               "projected": false
             },
             {
@@ -33512,6 +33723,24 @@
               "projected": false
             },
             {
+              "id": "156",
+              "label": "STAT 156",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "158",
+              "label": "STAT 158",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "179",
+              "label": "STAT 179",
+              "value": 1,
+              "projected": false
+            },
+            {
               "id": "210",
               "label": "STAT 210",
               "value": 1,
@@ -33520,7 +33749,7 @@
             {
               "id": "212",
               "label": "STAT 212",
-              "value": 1,
+              "value": 4,
               "projected": false
             }
           ],
@@ -37431,7 +37660,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 69.9,
+      "total": 80.6,
       "projected": 94.9,
       "starters": [
         {
@@ -37923,56 +38152,86 @@
           "name": "George Pickens",
           "team": "DAL",
           "position": "WR",
-          "points": 2.6,
+          "points": 13.3,
           "scoringPeriodId": 6,
           "projected": 13.6,
           "gameStats": [
             {
               "id": "41",
               "label": "RECEIVING TARGETS",
-              "value": 1,
+              "value": 6,
               "projected": false
             },
             {
               "id": "42",
               "label": "RECEIVING YARDS",
-              "value": 16,
+              "value": 73,
               "projected": false
             },
             {
               "id": "47",
               "label": "STAT 47",
-              "value": 3,
+              "value": 14,
               "projected": false
             },
             {
               "id": "48",
               "label": "STAT 48",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "49",
+              "label": "STAT 49",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "50",
+              "label": "STAT 50",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "51",
+              "label": "STAT 51",
               "value": 1,
               "projected": false
             },
             {
               "id": "53",
               "label": "RECEPTIONS",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "54",
+              "label": "STAT 54",
               "value": 1,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
-              "value": 1,
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 16,
               "projected": false
             },
             {
               "id": "60",
               "label": "STAT 60",
-              "value": 16,
+              "value": 12.167,
               "projected": false
             },
             {
               "id": "61",
               "label": "STAT 61",
-              "value": 16,
+              "value": 73,
               "projected": false
             },
             {
@@ -37988,6 +38247,12 @@
               "projected": false
             },
             {
+              "id": "156",
+              "label": "STAT 156",
+              "value": 1,
+              "projected": false
+            },
+            {
               "id": "210",
               "label": "STAT 210",
               "value": 1,
@@ -37996,7 +38261,7 @@
             {
               "id": "213",
               "label": "STAT 213",
-              "value": 1,
+              "value": 5,
               "projected": false
             }
           ],
@@ -40239,20 +40504,20 @@
           "name": "Matthew Golden",
           "team": "GB",
           "position": "WR",
-          "points": 17.1,
+          "points": 22.4,
           "scoringPeriodId": 6,
           "projected": 15.7,
           "gameStats": [
             {
               "id": "41",
               "label": "RECEIVING TARGETS",
-              "value": 4,
+              "value": 6,
               "projected": false
             },
             {
               "id": "42",
               "label": "RECEIVING YARDS",
-              "value": 71,
+              "value": 104,
               "projected": false
             },
             {
@@ -40264,61 +40529,79 @@
             {
               "id": "47",
               "label": "STAT 47",
-              "value": 14,
+              "value": 20,
               "projected": false
             },
             {
               "id": "48",
               "label": "STAT 48",
-              "value": 7,
+              "value": 10,
               "projected": false
             },
             {
               "id": "49",
               "label": "STAT 49",
-              "value": 3,
+              "value": 5,
               "projected": false
             },
             {
               "id": "50",
               "label": "STAT 50",
-              "value": 2,
+              "value": 4,
               "projected": false
             },
             {
               "id": "51",
               "label": "STAT 51",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "52",
+              "label": "STAT 52",
               "value": 1,
               "projected": false
             },
             {
               "id": "53",
               "label": "RECEPTIONS",
-              "value": 4,
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "54",
+              "label": "STAT 54",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "56",
+              "label": "STAT 56",
+              "value": 1,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
-              "value": 7,
+              "value": 13,
               "projected": false
             },
             {
               "id": "59",
               "label": "STAT 59",
-              "value": 18,
+              "value": 34,
               "projected": false
             },
             {
               "id": "60",
               "label": "STAT 60",
-              "value": 17.75,
+              "value": 17.333,
               "projected": false
             },
             {
               "id": "61",
               "label": "STAT 61",
-              "value": 71,
+              "value": 104,
               "projected": false
             },
             {
@@ -40330,6 +40613,12 @@
             {
               "id": "109",
               "label": "STAT 109",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "155",
+              "label": "STAT 155",
               "value": 1,
               "projected": false
             },
@@ -40354,7 +40643,7 @@
             {
               "id": "213",
               "label": "STAT 213",
-              "value": 2,
+              "value": 5,
               "projected": false
             }
           ],
@@ -41819,32 +42108,32 @@
           "name": "Jordan Love",
           "team": "GB",
           "position": "QB",
-          "points": 10.1,
+          "points": 20.2,
           "scoringPeriodId": 6,
           "projected": 20.9,
           "gameStats": [
             {
               "id": "0",
               "label": "PASSING ATTEMPTS",
-              "value": 21,
+              "value": 41,
               "projected": false
             },
             {
               "id": "1",
               "label": "PASSING COMPLETIONS",
-              "value": 13,
+              "value": 23,
               "projected": false
             },
             {
               "id": "2",
               "label": "INCOMPLETE PASSES",
-              "value": 8,
+              "value": 18,
               "projected": false
             },
             {
               "id": "3",
               "label": "PASSING YARDS",
-              "value": 169,
+              "value": 276,
               "projected": false
             },
             {
@@ -41856,54 +42145,60 @@
             {
               "id": "5",
               "label": "STAT 5",
-              "value": 33,
+              "value": 55,
               "projected": false
             },
             {
               "id": "6",
               "label": "STAT 6",
-              "value": 16,
+              "value": 27,
               "projected": false
             },
             {
               "id": "7",
               "label": "STAT 7",
-              "value": 8,
+              "value": 13,
               "projected": false
             },
             {
               "id": "8",
               "label": "STAT 8",
-              "value": 6,
+              "value": 11,
               "projected": false
             },
             {
               "id": "9",
               "label": "STAT 9",
-              "value": 3,
+              "value": 5,
               "projected": false
             },
             {
               "id": "10",
               "label": "STAT 10",
-              "value": 1,
+              "value": 2,
               "projected": false
             },
             {
               "id": "11",
               "label": "STAT 11",
-              "value": 2,
+              "value": 4,
               "projected": false
             },
             {
               "id": "12",
               "label": "STAT 12",
-              "value": 1,
+              "value": 2,
               "projected": false
             },
             {
               "id": "13",
               "label": "STAT 13",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "14",
+              "label": "STAT 14",
               "value": 1,
               "projected": false
             },
@@ -41916,25 +42211,31 @@
             {
               "id": "21",
               "label": "STAT 21",
-              "value": 61.9,
+              "value": 56.1,
               "projected": false
             },
             {
               "id": "22",
               "label": "STAT 22",
-              "value": 169,
+              "value": 276,
               "projected": false
             },
             {
               "id": "23",
               "label": "RUSHING ATTEMPTS",
-              "value": 1,
+              "value": 4,
               "projected": false
             },
             {
               "id": "24",
               "label": "RUSHING YARDS",
-              "value": 13,
+              "value": 12,
+              "projected": false
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1,
               "projected": false
             },
             {
@@ -41952,19 +42253,19 @@
             {
               "id": "39",
               "label": "STAT 39",
-              "value": 13,
+              "value": 3,
               "projected": false
             },
             {
               "id": "40",
               "label": "STAT 40",
-              "value": 13,
+              "value": 12,
               "projected": false
             },
             {
               "id": "64",
               "label": "STAT 64",
-              "value": 2,
+              "value": 3,
               "projected": false
             },
             {
@@ -41974,14 +42275,26 @@
               "projected": false
             },
             {
+              "id": "155",
+              "label": "STAT 155",
+              "value": 1,
+              "projected": false
+            },
+            {
               "id": "158",
               "label": "STAT 158",
-              "value": 6,
+              "value": 12,
               "projected": false
             },
             {
               "id": "175",
               "label": "STAT 175",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "179",
+              "label": "STAT 179",
               "value": 1,
               "projected": false
             },
@@ -41994,13 +42307,13 @@
             {
               "id": "211",
               "label": "STAT 211",
-              "value": 7,
+              "value": 13,
               "projected": false
             },
             {
               "id": "212",
               "label": "STAT 212",
-              "value": 1,
+              "value": 2,
               "projected": false
             }
           ],
@@ -51444,7 +51757,7 @@
         "wins": 2,
         "losses": 3
       },
-      "total": 42.3,
+      "total": 45.4,
       "projected": 68.60000000000001,
       "starters": [
         {
@@ -52262,38 +52575,38 @@
           "name": "Christian Watson",
           "team": "GB",
           "position": "WR",
-          "points": 7.5,
+          "points": 9.4,
           "scoringPeriodId": 6,
           "projected": 16.3,
           "gameStats": [
             {
               "id": "41",
               "label": "RECEIVING TARGETS",
-              "value": 2,
+              "value": 3,
               "projected": false
             },
             {
               "id": "42",
               "label": "RECEIVING YARDS",
-              "value": 55,
+              "value": 64,
               "projected": false
             },
             {
               "id": "47",
               "label": "STAT 47",
-              "value": 11,
+              "value": 12,
               "projected": false
             },
             {
               "id": "48",
               "label": "STAT 48",
-              "value": 5,
+              "value": 6,
               "projected": false
             },
             {
               "id": "49",
               "label": "STAT 49",
-              "value": 2,
+              "value": 3,
               "projected": false
             },
             {
@@ -52311,31 +52624,37 @@
             {
               "id": "53",
               "label": "RECEPTIONS",
-              "value": 2,
+              "value": 3,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
-              "value": 5,
+              "value": 8,
               "projected": false
             },
             {
               "id": "59",
               "label": "STAT 59",
-              "value": 23,
+              "value": 24,
               "projected": false
             },
             {
               "id": "60",
               "label": "STAT 60",
-              "value": 27.5,
+              "value": 21.333,
               "projected": false
             },
             {
               "id": "61",
               "label": "STAT 61",
-              "value": 55,
+              "value": 64,
+              "projected": false
+            },
+            {
+              "id": "155",
+              "label": "STAT 155",
+              "value": 1,
               "projected": false
             },
             {
@@ -52347,7 +52666,7 @@
             {
               "id": "213",
               "label": "STAT 213",
-              "value": 2,
+              "value": 3,
               "projected": false
             }
           ],
@@ -52804,37 +53123,61 @@
           "name": "MarShawn Lloyd",
           "team": "GB",
           "position": "RB",
-          "points": -0.2,
+          "points": 1,
           "scoringPeriodId": 6,
           "projected": 10.9,
           "gameStats": [
             {
               "id": "23",
               "label": "RUSHING ATTEMPTS",
-              "value": 3,
+              "value": 8,
               "projected": false
             },
             {
               "id": "24",
               "label": "RUSHING YARDS",
-              "value": -2,
+              "value": 10,
+              "projected": false
+            },
+            {
+              "id": "27",
+              "label": "STAT 27",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "28",
+              "label": "STAT 28",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "33",
+              "label": "STAT 33",
+              "value": 1,
               "projected": false
             },
             {
               "id": "39",
               "label": "STAT 39",
-              "value": -0.667,
+              "value": 1.25,
               "projected": false
             },
             {
               "id": "40",
               "label": "STAT 40",
-              "value": -2,
+              "value": 10,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "155",
+              "label": "STAT 155",
               "value": 1,
               "projected": false
             },
@@ -55982,7 +56325,7 @@
         "wins": 4,
         "losses": 1
       },
-      "total": 84.4,
+      "total": 90.2,
       "projected": 121,
       "starters": [
         {
@@ -57446,62 +57789,98 @@
           "name": "Tucker Kraft",
           "team": "GB",
           "position": "TE",
-          "points": 2.9,
+          "points": 8.7,
           "scoringPeriodId": 6,
           "projected": 12.1,
           "gameStats": [
             {
               "id": "41",
               "label": "RECEIVING TARGETS",
-              "value": 2,
+              "value": 5,
               "projected": false
             },
             {
               "id": "42",
               "label": "RECEIVING YARDS",
-              "value": 9,
+              "value": 37,
               "projected": false
             },
             {
               "id": "47",
               "label": "STAT 47",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "49",
+              "label": "STAT 49",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "50",
+              "label": "STAT 50",
               "value": 1,
               "projected": false
             },
             {
               "id": "53",
               "label": "RECEPTIONS",
-              "value": 2,
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "54",
+              "label": "STAT 54",
+              "value": 1,
               "projected": false
             },
             {
               "id": "58",
               "label": "TARGETS",
-              "value": 3,
+              "value": 8,
               "projected": false
             },
             {
               "id": "59",
               "label": "STAT 59",
-              "value": 11,
+              "value": 27,
               "projected": false
             },
             {
               "id": "60",
               "label": "STAT 60",
-              "value": 4.5,
+              "value": 7.4,
               "projected": false
             },
             {
               "id": "61",
               "label": "STAT 61",
-              "value": 9,
+              "value": 37,
+              "projected": false
+            },
+            {
+              "id": "155",
+              "label": "STAT 155",
+              "value": 1,
               "projected": false
             },
             {
               "id": "210",
               "label": "STAT 210",
               "value": 1,
+              "projected": false
+            },
+            {
+              "id": "213",
+              "label": "STAT 213",
+              "value": 2,
               "projected": false
             }
           ],
@@ -60787,8 +61166,8 @@
       "id": "31",
       "homeTeamId": "11",
       "awayTeamId": "12",
-      "homeTotal": 42.3,
-      "awayTotal": 84.38,
+      "homeTotal": 45.4,
+      "awayTotal": 90.18,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -60797,7 +61176,7 @@
       "homeTeamId": "10",
       "awayTeamId": "7",
       "homeTotal": 145.74,
-      "awayTotal": 72.6,
+      "awayTotal": 92.4,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -60806,7 +61185,7 @@
       "homeTeamId": "1",
       "awayTeamId": "5",
       "homeTotal": 102.98,
-      "awayTotal": 87.1,
+      "awayTotal": 88.1,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -60815,7 +61194,7 @@
       "homeTeamId": "2",
       "awayTeamId": "8",
       "homeTotal": 83.1,
-      "awayTotal": 69.9,
+      "awayTotal": 80.6,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -60823,7 +61202,7 @@
       "id": "35",
       "homeTeamId": "6",
       "awayTeamId": "4",
-      "homeTotal": 84,
+      "homeTotal": 95.82,
       "awayTotal": 110.66,
       "homeProjected": null,
       "awayProjected": null
