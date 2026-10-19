@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-19T01:22:36.705Z",
+  "generated_at": "2026-10-19T06:20:22.778Z",
   "season": 2026,
   "week": 6,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-19T01:22:36.705Z",
+      "updated_at": "2026-10-19T06:20:22.778Z",
       "count": 55,
       "access": "public fallback"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-19T01:22:36.705Z",
+      "updated_at": "2026-10-19T06:20:22.778Z",
       "count": 156
     },
     {
@@ -507,20 +507,20 @@
           "name": "Mike Evans",
           "team": "SF",
           "position": "WR",
-          "consensus": 16.4,
+          "consensus": 16.5,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
           "min": 16.3,
-          "max": 16.4,
-          "range": 0.1,
+          "max": 16.6,
+          "range": 0.3,
           "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 16.4,
+              "value": 16.6,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -537,7 +537,7 @@
           "outlier": {
             "source": "FantasyPros public",
             "value": 16.3,
-            "delta": 0.1
+            "delta": 0.2
           },
           "odds": [],
           "market": null
@@ -547,20 +547,20 @@
           "name": "Stefon Diggs",
           "team": "WAS",
           "position": "WR",
-          "consensus": 9.4,
+          "consensus": 9.5,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 9.4,
-          "max": 9.4,
+          "min": 9.5,
+          "max": 9.5,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 9.4,
+              "value": 9.5,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -839,14 +839,14 @@
           "week": 6,
           "scoring": "PPR",
           "min": 20.1,
-          "max": 20.8,
-          "range": 0.7,
+          "max": 20.9,
+          "range": 0.8,
           "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 20.8,
+              "value": 20.9,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -861,8 +861,8 @@
             }
           ],
           "outlier": {
-            "source": "FantasyPros public",
-            "value": 20.1,
+            "source": "Sleeper",
+            "value": 20.9,
             "delta": 0.4
           },
           "odds": [],
@@ -1012,15 +1012,15 @@
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 15,
+          "min": 15.1,
           "max": 15.3,
-          "range": 0.3,
+          "range": 0.2,
           "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 15,
+              "value": 15.1,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -1035,9 +1035,9 @@
             }
           ],
           "outlier": {
-            "source": "Sleeper",
-            "value": 15,
-            "delta": 0.2
+            "source": "FantasyPros public",
+            "value": 15.3,
+            "delta": 0.1
           },
           "odds": [],
           "market": null
@@ -1590,14 +1590,14 @@
           "name": "CeeDee Lamb",
           "team": "DAL",
           "position": "WR",
-          "consensus": 19.9,
+          "consensus": 20,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 19.4,
+          "min": 19.5,
           "max": 20.5,
-          "range": 1.1,
+          "range": 1,
           "sourceCount": 2,
           "sources": [
             {
@@ -1611,7 +1611,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 19.4,
+              "value": 19.5,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -1620,7 +1620,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 20.5,
-            "delta": 0.6
+            "delta": 0.5
           },
           "odds": [],
           "market": null
@@ -2571,20 +2571,20 @@
           "name": "Rachaad White",
           "team": "WAS",
           "position": "RB",
-          "consensus": 10.9,
+          "consensus": 11,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 10.9,
-          "max": 10.9,
+          "min": 11,
+          "max": 11,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 10.9,
+              "value": 11,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -2905,9 +2905,9 @@
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 18,
+          "min": 18.1,
           "max": 18.5,
-          "range": 0.5,
+          "range": 0.4,
           "sourceCount": 2,
           "sources": [
             {
@@ -2921,7 +2921,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 18,
+              "value": 18.1,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -2930,7 +2930,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 18.5,
-            "delta": 0.3
+            "delta": 0.2
           },
           "odds": [],
           "market": null
@@ -2940,20 +2940,20 @@
           "name": "Brock Purdy",
           "team": "SF",
           "position": "QB",
-          "consensus": 22.2,
+          "consensus": 22.4,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 22,
-          "max": 22.4,
+          "min": 22.2,
+          "max": 22.6,
           "range": 0.4,
           "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 22.4,
+              "value": 22.6,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -2961,7 +2961,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 22,
+              "value": 22.2,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -2969,7 +2969,7 @@
           ],
           "outlier": {
             "source": "Sleeper",
-            "value": 22.4,
+            "value": 22.6,
             "delta": 0.2
           },
           "odds": [],
@@ -3180,14 +3180,14 @@
           "name": "Tucker Kraft",
           "team": "GB",
           "position": "TE",
-          "consensus": 13,
+          "consensus": 13.1,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 12.8,
+          "min": 13,
           "max": 13.2,
-          "range": 0.4,
+          "range": 0.2,
           "sourceCount": 2,
           "sources": [
             {
@@ -3201,7 +3201,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 12.8,
+              "value": 13,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -3210,7 +3210,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 13.2,
-            "delta": 0.2
+            "delta": 0.1
           },
           "odds": [],
           "market": null
@@ -3736,14 +3736,14 @@
           "name": "Dalton Kincaid",
           "team": "BUF",
           "position": "TE",
-          "consensus": 11,
+          "consensus": 10.9,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 10.9,
+          "min": 10.8,
           "max": 11.1,
-          "range": 0.2,
+          "range": 0.3,
           "sourceCount": 2,
           "sources": [
             {
@@ -3757,7 +3757,7 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 10.9,
+              "value": 10.8,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -3766,7 +3766,7 @@
           "outlier": {
             "source": "Sleeper",
             "value": 11.1,
-            "delta": 0.1
+            "delta": 0.2
           },
           "odds": [],
           "market": null
@@ -3851,14 +3851,14 @@
           "name": "Brandon Aubrey",
           "team": "DAL",
           "position": "K",
-          "consensus": 8.4,
+          "consensus": 8.5,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 7.8,
+          "min": 8,
           "max": 9,
-          "range": 1.2,
+          "range": 1,
           "sourceCount": 2,
           "sources": [
             {
@@ -3872,16 +3872,16 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 7.8,
+              "value": 8,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
             }
           ],
           "outlier": {
-            "source": "FantasyPros public",
-            "value": 7.8,
-            "delta": 0.6
+            "source": "Sleeper",
+            "value": 9,
+            "delta": 0.5
           },
           "odds": [],
           "market": null
@@ -3971,20 +3971,20 @@
           "name": "Jayden Daniels",
           "team": "WAS",
           "position": "QB",
-          "consensus": 18.1,
+          "consensus": 18.2,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 17.3,
+          "min": 17.4,
           "max": 19,
-          "range": 1.7,
+          "range": 1.6,
           "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 17.3,
+              "value": 17.4,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
@@ -3999,9 +3999,9 @@
             }
           ],
           "outlier": {
-            "source": "FantasyPros public",
-            "value": 19,
-            "delta": 0.9
+            "source": "Sleeper",
+            "value": 17.4,
+            "delta": 0.8
           },
           "odds": [],
           "market": null
@@ -5634,14 +5634,14 @@
           "name": "Trey Smack",
           "team": "GB",
           "position": "K",
-          "consensus": 8.3,
+          "consensus": 8.4,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 7.7,
+          "min": 7.8,
           "max": 9,
-          "range": 1.3,
+          "range": 1.2,
           "sourceCount": 2,
           "sources": [
             {
@@ -5655,16 +5655,16 @@
             {
               "source": "fantasypros",
               "label": "FantasyPros public",
-              "value": 7.7,
+              "value": 7.8,
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
             }
           ],
           "outlier": {
-            "source": "Sleeper",
-            "value": 9,
-            "delta": 0.7
+            "source": "FantasyPros public",
+            "value": 7.8,
+            "delta": 0.6
           },
           "odds": [],
           "market": null
@@ -6394,20 +6394,20 @@
       "name": "Mike Evans",
       "team": "SF",
       "position": "WR",
-      "consensus": 16.4,
+      "consensus": 16.5,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
       "min": 16.3,
-      "max": 16.4,
-      "range": 0.1,
+      "max": 16.6,
+      "range": 0.3,
       "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 16.4,
+          "value": 16.6,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -6424,7 +6424,7 @@
       "outlier": {
         "source": "FantasyPros public",
         "value": 16.3,
-        "delta": 0.1
+        "delta": 0.2
       },
       "odds": [],
       "market": null
@@ -6434,20 +6434,20 @@
       "name": "Stefon Diggs",
       "team": "WAS",
       "position": "WR",
-      "consensus": 9.4,
+      "consensus": 9.5,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 9.4,
-      "max": 9.4,
+      "min": 9.5,
+      "max": 9.5,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 9.4,
+          "value": 9.5,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -6726,14 +6726,14 @@
       "week": 6,
       "scoring": "PPR",
       "min": 20.1,
-      "max": 20.8,
-      "range": 0.7,
+      "max": 20.9,
+      "range": 0.8,
       "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 20.8,
+          "value": 20.9,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -6748,8 +6748,8 @@
         }
       ],
       "outlier": {
-        "source": "FantasyPros public",
-        "value": 20.1,
+        "source": "Sleeper",
+        "value": 20.9,
         "delta": 0.4
       },
       "odds": [],
@@ -6899,15 +6899,15 @@
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 15,
+      "min": 15.1,
       "max": 15.3,
-      "range": 0.3,
+      "range": 0.2,
       "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 15,
+          "value": 15.1,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -6922,9 +6922,9 @@
         }
       ],
       "outlier": {
-        "source": "Sleeper",
-        "value": 15,
-        "delta": 0.2
+        "source": "FantasyPros public",
+        "value": 15.3,
+        "delta": 0.1
       },
       "odds": [],
       "market": null
@@ -7477,14 +7477,14 @@
       "name": "CeeDee Lamb",
       "team": "DAL",
       "position": "WR",
-      "consensus": 19.9,
+      "consensus": 20,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 19.4,
+      "min": 19.5,
       "max": 20.5,
-      "range": 1.1,
+      "range": 1,
       "sourceCount": 2,
       "sources": [
         {
@@ -7498,7 +7498,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 19.4,
+          "value": 19.5,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -7507,7 +7507,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 20.5,
-        "delta": 0.6
+        "delta": 0.5
       },
       "odds": [],
       "market": null
@@ -8458,20 +8458,20 @@
       "name": "Rachaad White",
       "team": "WAS",
       "position": "RB",
-      "consensus": 10.9,
+      "consensus": 11,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 10.9,
-      "max": 10.9,
+      "min": 11,
+      "max": 11,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 10.9,
+          "value": 11,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -8792,9 +8792,9 @@
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 18,
+      "min": 18.1,
       "max": 18.5,
-      "range": 0.5,
+      "range": 0.4,
       "sourceCount": 2,
       "sources": [
         {
@@ -8808,7 +8808,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 18,
+          "value": 18.1,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -8817,7 +8817,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 18.5,
-        "delta": 0.3
+        "delta": 0.2
       },
       "odds": [],
       "market": null
@@ -8827,20 +8827,20 @@
       "name": "Brock Purdy",
       "team": "SF",
       "position": "QB",
-      "consensus": 22.2,
+      "consensus": 22.4,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 22,
-      "max": 22.4,
+      "min": 22.2,
+      "max": 22.6,
       "range": 0.4,
       "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 22.4,
+          "value": 22.6,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -8848,7 +8848,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 22,
+          "value": 22.2,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -8856,7 +8856,7 @@
       ],
       "outlier": {
         "source": "Sleeper",
-        "value": 22.4,
+        "value": 22.6,
         "delta": 0.2
       },
       "odds": [],
@@ -9067,14 +9067,14 @@
       "name": "Tucker Kraft",
       "team": "GB",
       "position": "TE",
-      "consensus": 13,
+      "consensus": 13.1,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 12.8,
+      "min": 13,
       "max": 13.2,
-      "range": 0.4,
+      "range": 0.2,
       "sourceCount": 2,
       "sources": [
         {
@@ -9088,7 +9088,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 12.8,
+          "value": 13,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -9097,7 +9097,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 13.2,
-        "delta": 0.2
+        "delta": 0.1
       },
       "odds": [],
       "market": null
@@ -9623,14 +9623,14 @@
       "name": "Dalton Kincaid",
       "team": "BUF",
       "position": "TE",
-      "consensus": 11,
+      "consensus": 10.9,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 10.9,
+      "min": 10.8,
       "max": 11.1,
-      "range": 0.2,
+      "range": 0.3,
       "sourceCount": 2,
       "sources": [
         {
@@ -9644,7 +9644,7 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 10.9,
+          "value": 10.8,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -9653,7 +9653,7 @@
       "outlier": {
         "source": "Sleeper",
         "value": 11.1,
-        "delta": 0.1
+        "delta": 0.2
       },
       "odds": [],
       "market": null
@@ -9738,14 +9738,14 @@
       "name": "Brandon Aubrey",
       "team": "DAL",
       "position": "K",
-      "consensus": 8.4,
+      "consensus": 8.5,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 7.8,
+      "min": 8,
       "max": 9,
-      "range": 1.2,
+      "range": 1,
       "sourceCount": 2,
       "sources": [
         {
@@ -9759,16 +9759,16 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 7.8,
+          "value": 8,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
         }
       ],
       "outlier": {
-        "source": "FantasyPros public",
-        "value": 7.8,
-        "delta": 0.6
+        "source": "Sleeper",
+        "value": 9,
+        "delta": 0.5
       },
       "odds": [],
       "market": null
@@ -9858,20 +9858,20 @@
       "name": "Jayden Daniels",
       "team": "WAS",
       "position": "QB",
-      "consensus": 18.1,
+      "consensus": 18.2,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 17.3,
+      "min": 17.4,
       "max": 19,
-      "range": 1.7,
+      "range": 1.6,
       "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 17.3,
+          "value": 17.4,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
@@ -9886,9 +9886,9 @@
         }
       ],
       "outlier": {
-        "source": "FantasyPros public",
-        "value": 19,
-        "delta": 0.9
+        "source": "Sleeper",
+        "value": 17.4,
+        "delta": 0.8
       },
       "odds": [],
       "market": null
@@ -11521,14 +11521,14 @@
       "name": "Trey Smack",
       "team": "GB",
       "position": "K",
-      "consensus": 8.3,
+      "consensus": 8.4,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 7.7,
+      "min": 7.8,
       "max": 9,
-      "range": 1.3,
+      "range": 1.2,
       "sourceCount": 2,
       "sources": [
         {
@@ -11542,16 +11542,16 @@
         {
           "source": "fantasypros",
           "label": "FantasyPros public",
-          "value": 7.7,
+          "value": 7.8,
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
         }
       ],
       "outlier": {
-        "source": "Sleeper",
-        "value": 9,
-        "delta": 0.7
+        "source": "FantasyPros public",
+        "value": 7.8,
+        "delta": 0.6
       },
       "odds": [],
       "market": null
@@ -12095,20 +12095,12 @@
       "rank": "08"
     },
     {
-      "name": "Jayden Daniels",
-      "market": "PROJECTION OUTLIER",
-      "source": "FantasyPros public",
-      "delta": 0.9,
-      "range": 1.7,
-      "rank": "09"
-    },
-    {
       "name": "Kenneth Walker",
       "market": "PROJECTION OUTLIER",
       "source": "Sleeper",
       "delta": 0.9,
       "range": 1.8,
-      "rank": "10"
+      "rank": "09"
     },
     {
       "name": "Kansas City Chiefs",
@@ -12116,6 +12108,14 @@
       "source": "Sleeper",
       "delta": 0.8,
       "range": 1.5,
+      "rank": "10"
+    },
+    {
+      "name": "Jayden Daniels",
+      "market": "PROJECTION OUTLIER",
+      "source": "Sleeper",
+      "delta": 0.8,
+      "range": 1.6,
       "rank": "11"
     },
     {
