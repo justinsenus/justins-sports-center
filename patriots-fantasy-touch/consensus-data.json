@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-20T01:40:04.066Z",
+  "generated_at": "2026-10-20T06:36:04.765Z",
   "season": 2026,
   "week": 6,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-20T01:40:04.066Z",
+      "updated_at": "2026-10-20T06:36:04.765Z",
       "count": 56,
       "access": "public fallback"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-20T01:40:04.066Z",
+      "updated_at": "2026-10-20T06:36:04.765Z",
       "count": 155
     },
     {
@@ -467,25 +467,16 @@
           "name": "Davante Adams",
           "team": "LAR",
           "position": "WR",
-          "consensus": 16.4,
+          "consensus": null,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 16.4,
-          "max": 16.4,
-          "range": 0,
-          "sourceCount": 1,
-          "sources": [
-            {
-              "source": "fantasypros",
-              "label": "FantasyPros public",
-              "value": 16.4,
-              "season": 2026,
-              "week": 6,
-              "scoring": "PPR"
-            }
-          ],
+          "min": null,
+          "max": null,
+          "range": null,
+          "sourceCount": 0,
+          "sources": [],
           "outlier": null,
           "odds": [],
           "market": null
@@ -2714,15 +2705,15 @@
           "name": "Garrett Wilson",
           "team": "NYJ",
           "position": "WR",
-          "consensus": 15.5,
+          "consensus": 15.3,
           "method": "mean",
           "season": 2026,
           "week": 6,
           "scoring": "PPR",
-          "min": 15.5,
+          "min": 15.2,
           "max": 15.5,
-          "range": 0,
-          "sourceCount": 1,
+          "range": 0.3,
+          "sourceCount": 2,
           "sources": [
             {
               "source": "sleeper",
@@ -2731,9 +2722,21 @@
               "season": 2026,
               "week": 6,
               "scoring": "PPR"
+            },
+            {
+              "source": "fantasypros",
+              "label": "FantasyPros public",
+              "value": 15.2,
+              "season": 2026,
+              "week": 6,
+              "scoring": "PPR"
             }
           ],
-          "outlier": null,
+          "outlier": {
+            "source": "Sleeper",
+            "value": 15.5,
+            "delta": 0.2
+          },
           "odds": [],
           "market": null
         },
@@ -6350,25 +6353,16 @@
       "name": "Davante Adams",
       "team": "LAR",
       "position": "WR",
-      "consensus": 16.4,
+      "consensus": null,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 16.4,
-      "max": 16.4,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "fantasypros",
-          "label": "FantasyPros public",
-          "value": 16.4,
-          "season": 2026,
-          "week": 6,
-          "scoring": "PPR"
-        }
-      ],
+      "min": null,
+      "max": null,
+      "range": null,
+      "sourceCount": 0,
+      "sources": [],
       "outlier": null,
       "odds": [],
       "market": null
@@ -8597,15 +8591,15 @@
       "name": "Garrett Wilson",
       "team": "NYJ",
       "position": "WR",
-      "consensus": 15.5,
+      "consensus": 15.3,
       "method": "mean",
       "season": 2026,
       "week": 6,
       "scoring": "PPR",
-      "min": 15.5,
+      "min": 15.2,
       "max": 15.5,
-      "range": 0,
-      "sourceCount": 1,
+      "range": 0.3,
+      "sourceCount": 2,
       "sources": [
         {
           "source": "sleeper",
@@ -8614,9 +8608,21 @@
           "season": 2026,
           "week": 6,
           "scoring": "PPR"
+        },
+        {
+          "source": "fantasypros",
+          "label": "FantasyPros public",
+          "value": 15.2,
+          "season": 2026,
+          "week": 6,
+          "scoring": "PPR"
         }
       ],
-      "outlier": null,
+      "outlier": {
+        "source": "Sleeper",
+        "value": 15.5,
+        "delta": 0.2
+      },
       "odds": [],
       "market": null
     },
