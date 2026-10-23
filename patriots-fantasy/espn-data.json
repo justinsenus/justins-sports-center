@@ -1,7 +1,7 @@
 {
   "ready": true,
   "source": "PRIVATE SYNC",
-  "savedAt": "2026-10-22T22:26:50.966Z",
+  "savedAt": "2026-10-23T00:51:47.708Z",
   "season": "2026",
   "leagueId": "919590140",
   "scoringPeriodId": 7,
@@ -15,7 +15,7 @@
       "wins": 3,
       "losses": 3
     },
-    "total": 0,
+    "total": 16,
     "projected": 121,
     "starters": [
       {
@@ -647,7 +647,7 @@
             "projected": true
           }
         ],
-        "injuryStatus": "QUESTIONABLE",
+        "injuryStatus": "ACTIVE",
         "headshot": "",
         "starter": true
       },
@@ -1217,10 +1217,119 @@
         "name": "Cairo Santos",
         "team": "CHI",
         "position": "K",
-        "points": 0,
+        "points": 5,
         "scoringPeriodId": 7,
         "projected": 8.8,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "77",
+            "label": "STAT 77",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "78",
+            "label": "STAT 78",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "83",
+            "label": "STAT 83",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "84",
+            "label": "STAT 84",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "86",
+            "label": "STAT 86",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "87",
+            "label": "STAT 87",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "158",
+            "label": "STAT 158",
+            "value": 4,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "214",
+            "label": "STAT 214",
+            "value": 43,
+            "projected": false
+          },
+          {
+            "id": "216",
+            "label": "STAT 216",
+            "value": 43,
+            "projected": false
+          },
+          {
+            "id": "217",
+            "label": "STAT 217",
+            "value": 8,
+            "projected": false
+          },
+          {
+            "id": "218",
+            "label": "STAT 218",
+            "value": 4,
+            "projected": false
+          },
+          {
+            "id": "219",
+            "label": "STAT 219",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "220",
+            "label": "STAT 220",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "229",
+            "label": "STAT 229",
+            "value": 8,
+            "projected": false
+          },
+          {
+            "id": "230",
+            "label": "STAT 230",
+            "value": 4,
+            "projected": false
+          },
+          {
+            "id": "231",
+            "label": "STAT 231",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "232",
+            "label": "STAT 232",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "74",
@@ -1364,10 +1473,113 @@
         "name": "Bears D/ST",
         "team": "CHI",
         "position": "DEF",
-        "points": 0,
+        "points": 11,
         "scoringPeriodId": 7,
         "projected": 5,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "89",
+            "label": "DEFENSE SACKS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "90",
+            "label": "DEFENSE INTERCEPTIONS",
+            "value": 0,
+            "projected": false
+          },
+          {
+            "id": "91",
+            "label": "DEFENSE FUMBLES RECOVERED",
+            "value": 0,
+            "projected": false
+          },
+          {
+            "id": "92",
+            "label": "DEFENSE TOUCHDOWNS",
+            "value": 0,
+            "projected": false
+          },
+          {
+            "id": "99",
+            "label": "STAT 99",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "100",
+            "label": "STAT 100",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "107",
+            "label": "STAT 107",
+            "value": 8,
+            "projected": false
+          },
+          {
+            "id": "108",
+            "label": "STAT 108",
+            "value": 9,
+            "projected": false
+          },
+          {
+            "id": "109",
+            "label": "STAT 109",
+            "value": 17,
+            "projected": false
+          },
+          {
+            "id": "110",
+            "label": "STAT 110",
+            "value": 5,
+            "projected": false
+          },
+          {
+            "id": "111",
+            "label": "STAT 111",
+            "value": 3,
+            "projected": false
+          },
+          {
+            "id": "112",
+            "label": "STAT 112",
+            "value": 2,
+            "projected": false
+          },
+          {
+            "id": "115",
+            "label": "STAT 115",
+            "value": 7,
+            "projected": false
+          },
+          {
+            "id": "127",
+            "label": "STAT 127",
+            "value": 40,
+            "projected": false
+          },
+          {
+            "id": "128",
+            "label": "STAT 128",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "188",
+            "label": "STAT 188",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "89",
@@ -2368,7 +2580,7 @@
       "wins": 2,
       "losses": 4
     },
-    "total": 0,
+    "total": 3,
     "projected": 93,
     "starters": [
       {
@@ -2946,10 +3158,101 @@
         "name": "Rhamondre Stevenson",
         "team": "NE",
         "position": "RB",
-        "points": 0,
+        "points": 3,
         "scoringPeriodId": 7,
         "projected": 11.5,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "23",
+            "label": "RUSHING ATTEMPTS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "24",
+            "label": "RUSHING YARDS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "39",
+            "label": "STAT 39",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "40",
+            "label": "STAT 40",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "41",
+            "label": "RECEIVING TARGETS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "42",
+            "label": "RECEIVING YARDS",
+            "value": 19,
+            "projected": false
+          },
+          {
+            "id": "47",
+            "label": "STAT 47",
+            "value": 3,
+            "projected": false
+          },
+          {
+            "id": "48",
+            "label": "STAT 48",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "53",
+            "label": "RECEPTIONS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "59",
+            "label": "STAT 59",
+            "value": 8,
+            "projected": false
+          },
+          {
+            "id": "60",
+            "label": "STAT 60",
+            "value": 19,
+            "projected": false
+          },
+          {
+            "id": "61",
+            "label": "STAT 61",
+            "value": 19,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "213",
+            "label": "STAT 213",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "23",
@@ -4340,7 +4643,20 @@
         "points": 0,
         "scoringPeriodId": 7,
         "projected": 15.9,
-        "gameStats": [],
+        "gameStats": [
+          {
+            "id": "58",
+            "label": "TARGETS",
+            "value": 1,
+            "projected": false
+          },
+          {
+            "id": "210",
+            "label": "STAT 210",
+            "value": 1,
+            "projected": false
+          }
+        ],
         "projectedGameStats": [
           {
             "id": "42",
@@ -6470,7 +6786,7 @@
               "projected": true
             }
           ],
-          "injuryStatus": "ACTIVE",
+          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
         },
@@ -9430,10 +9746,59 @@
           "name": "DeMario Douglas",
           "team": "NE",
           "position": "WR",
-          "points": 0,
+          "points": 0.9,
           "scoringPeriodId": 7,
           "projected": 10.5,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": -1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": -1,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": -1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "42",
@@ -9590,7 +9955,7 @@
         "losses": 3
       },
       "total": 0,
-      "projected": 112.9,
+      "projected": 121.10000000000001,
       "starters": [
         {
           "id": "4362628",
@@ -9955,20 +10320,6 @@
             }
           ],
           "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": true
-        },
-        {
-          "id": "4870808",
-          "name": "Jeremiyah Love",
-          "team": "ARI",
-          "position": "RB",
-          "points": 0,
-          "scoringPeriodId": 7,
-          "projected": 0,
-          "gameStats": [],
-          "projectedGameStats": [],
-          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
         },
@@ -10816,6 +11167,231 @@
           "starter": true
         },
         {
+          "id": "3054850",
+          "name": "Alvin Kamara",
+          "team": "NO",
+          "position": "RB",
+          "points": 0,
+          "scoringPeriodId": 7,
+          "projected": 8.2,
+          "gameStats": [],
+          "projectedGameStats": [
+            {
+              "id": "23",
+              "label": "PROJ RUSHING ATTEMPTS",
+              "value": 4.855113873,
+              "projected": true
+            },
+            {
+              "id": "24",
+              "label": "PROJ RUSHING YARDS",
+              "value": 18.92282399,
+              "projected": true
+            },
+            {
+              "id": "25",
+              "label": "PROJ RUSHING TOUCHDOWNS",
+              "value": 0.132177276,
+              "projected": true
+            },
+            {
+              "id": "26",
+              "label": "PROJ STAT 26",
+              "value": 0.00647,
+              "projected": true
+            },
+            {
+              "id": "27",
+              "label": "PROJ STAT 27",
+              "value": 3,
+              "projected": true
+            },
+            {
+              "id": "28",
+              "label": "PROJ STAT 28",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "35",
+              "label": "PROJ STAT 35",
+              "value": 0.0093,
+              "projected": true
+            },
+            {
+              "id": "36",
+              "label": "PROJ STAT 36",
+              "value": 0.00651,
+              "projected": true
+            },
+            {
+              "id": "37",
+              "label": "PROJ STAT 37",
+              "value": 0.0156,
+              "projected": true
+            },
+            {
+              "id": "39",
+              "label": "PROJ STAT 39",
+              "value": 3.897503638,
+              "projected": true
+            },
+            {
+              "id": "40",
+              "label": "PROJ STAT 40",
+              "value": 37.84564797,
+              "projected": true
+            },
+            {
+              "id": "42",
+              "label": "PROJ RECEIVING YARDS",
+              "value": 20.89611481,
+              "projected": true
+            },
+            {
+              "id": "43",
+              "label": "PROJ RECEIVING TOUCHDOWNS",
+              "value": 0.058702923,
+              "projected": true
+            },
+            {
+              "id": "44",
+              "label": "PROJ STAT 44",
+              "value": 0.003213765,
+              "projected": true
+            },
+            {
+              "id": "45",
+              "label": "PROJ STAT 45",
+              "value": 0.002100904,
+              "projected": true
+            },
+            {
+              "id": "46",
+              "label": "PROJ STAT 46",
+              "value": 0.001372941,
+              "projected": true
+            },
+            {
+              "id": "47",
+              "label": "PROJ STAT 47",
+              "value": 4,
+              "projected": true
+            },
+            {
+              "id": "48",
+              "label": "PROJ STAT 48",
+              "value": 2,
+              "projected": true
+            },
+            {
+              "id": "49",
+              "label": "PROJ STAT 49",
+              "value": 1,
+              "projected": true
+            },
+            {
+              "id": "53",
+              "label": "PROJ RECEPTIONS",
+              "value": 3.058118159,
+              "projected": true
+            },
+            {
+              "id": "56",
+              "label": "PROJ STAT 56",
+              "value": 0.010095408,
+              "projected": true
+            },
+            {
+              "id": "58",
+              "label": "PROJ TARGETS",
+              "value": 3.995513151,
+              "projected": true
+            },
+            {
+              "id": "60",
+              "label": "PROJ STAT 60",
+              "value": 6.832997851,
+              "projected": true
+            },
+            {
+              "id": "61",
+              "label": "PROJ STAT 61",
+              "value": 41.79222961,
+              "projected": true
+            },
+            {
+              "id": "62",
+              "label": "PROJ STAT 62",
+              "value": 0.009680087,
+              "projected": true
+            },
+            {
+              "id": "66",
+              "label": "PROJ STAT 66",
+              "value": 0.030625164,
+              "projected": true
+            },
+            {
+              "id": "67",
+              "label": "PROJ STAT 67",
+              "value": 0.019290046,
+              "projected": true
+            },
+            {
+              "id": "68",
+              "label": "PROJ STAT 68",
+              "value": 0.049915211,
+              "projected": true
+            },
+            {
+              "id": "70",
+              "label": "PROJ STAT 70",
+              "value": 0.014087576,
+              "projected": true
+            },
+            {
+              "id": "71",
+              "label": "PROJ STAT 71",
+              "value": 0.010802426,
+              "projected": true
+            },
+            {
+              "id": "72",
+              "label": "PROJ FUMBLES LOST",
+              "value": 0.024890001,
+              "projected": true
+            },
+            {
+              "id": "73",
+              "label": "PROJ STAT 73",
+              "value": 0.024890001,
+              "projected": true
+            },
+            {
+              "id": "210",
+              "label": "PROJ STAT 210",
+              "value": 0.5,
+              "projected": true
+            },
+            {
+              "id": "212",
+              "label": "PROJ STAT 212",
+              "value": 1.154319012,
+              "projected": true
+            },
+            {
+              "id": "213",
+              "label": "PROJ STAT 213",
+              "value": 1.229653391,
+              "projected": true
+            }
+          ],
+          "injuryStatus": "QUESTIONABLE",
+          "headshot": "",
+          "starter": true
+        },
+        {
           "id": "4361411",
           "name": "Pat Freiermuth",
           "team": "PIT",
@@ -11379,6 +11955,20 @@
       ],
       "bench": [
         {
+          "id": "4870808",
+          "name": "Jeremiyah Love",
+          "team": "ARI",
+          "position": "RB",
+          "points": 0,
+          "scoringPeriodId": 7,
+          "projected": 0,
+          "gameStats": [],
+          "projectedGameStats": [],
+          "injuryStatus": "QUESTIONABLE",
+          "headshot": "",
+          "starter": false
+        },
+        {
           "id": "4685512",
           "name": "Jadarian Price",
           "team": "SEA",
@@ -11847,231 +12437,6 @@
           "gameStats": [],
           "projectedGameStats": [],
           "injuryStatus": "ACTIVE",
-          "headshot": "",
-          "starter": false
-        },
-        {
-          "id": "3054850",
-          "name": "Alvin Kamara",
-          "team": "NO",
-          "position": "RB",
-          "points": 0,
-          "scoringPeriodId": 7,
-          "projected": 8.2,
-          "gameStats": [],
-          "projectedGameStats": [
-            {
-              "id": "23",
-              "label": "PROJ RUSHING ATTEMPTS",
-              "value": 4.855113873,
-              "projected": true
-            },
-            {
-              "id": "24",
-              "label": "PROJ RUSHING YARDS",
-              "value": 18.92282399,
-              "projected": true
-            },
-            {
-              "id": "25",
-              "label": "PROJ RUSHING TOUCHDOWNS",
-              "value": 0.132177276,
-              "projected": true
-            },
-            {
-              "id": "26",
-              "label": "PROJ STAT 26",
-              "value": 0.00647,
-              "projected": true
-            },
-            {
-              "id": "27",
-              "label": "PROJ STAT 27",
-              "value": 3,
-              "projected": true
-            },
-            {
-              "id": "28",
-              "label": "PROJ STAT 28",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "35",
-              "label": "PROJ STAT 35",
-              "value": 0.0093,
-              "projected": true
-            },
-            {
-              "id": "36",
-              "label": "PROJ STAT 36",
-              "value": 0.00651,
-              "projected": true
-            },
-            {
-              "id": "37",
-              "label": "PROJ STAT 37",
-              "value": 0.0156,
-              "projected": true
-            },
-            {
-              "id": "39",
-              "label": "PROJ STAT 39",
-              "value": 3.897503638,
-              "projected": true
-            },
-            {
-              "id": "40",
-              "label": "PROJ STAT 40",
-              "value": 37.84564797,
-              "projected": true
-            },
-            {
-              "id": "42",
-              "label": "PROJ RECEIVING YARDS",
-              "value": 20.89611481,
-              "projected": true
-            },
-            {
-              "id": "43",
-              "label": "PROJ RECEIVING TOUCHDOWNS",
-              "value": 0.058702923,
-              "projected": true
-            },
-            {
-              "id": "44",
-              "label": "PROJ STAT 44",
-              "value": 0.003213765,
-              "projected": true
-            },
-            {
-              "id": "45",
-              "label": "PROJ STAT 45",
-              "value": 0.002100904,
-              "projected": true
-            },
-            {
-              "id": "46",
-              "label": "PROJ STAT 46",
-              "value": 0.001372941,
-              "projected": true
-            },
-            {
-              "id": "47",
-              "label": "PROJ STAT 47",
-              "value": 4,
-              "projected": true
-            },
-            {
-              "id": "48",
-              "label": "PROJ STAT 48",
-              "value": 2,
-              "projected": true
-            },
-            {
-              "id": "49",
-              "label": "PROJ STAT 49",
-              "value": 1,
-              "projected": true
-            },
-            {
-              "id": "53",
-              "label": "PROJ RECEPTIONS",
-              "value": 3.058118159,
-              "projected": true
-            },
-            {
-              "id": "56",
-              "label": "PROJ STAT 56",
-              "value": 0.010095408,
-              "projected": true
-            },
-            {
-              "id": "58",
-              "label": "PROJ TARGETS",
-              "value": 3.995513151,
-              "projected": true
-            },
-            {
-              "id": "60",
-              "label": "PROJ STAT 60",
-              "value": 6.832997851,
-              "projected": true
-            },
-            {
-              "id": "61",
-              "label": "PROJ STAT 61",
-              "value": 41.79222961,
-              "projected": true
-            },
-            {
-              "id": "62",
-              "label": "PROJ STAT 62",
-              "value": 0.009680087,
-              "projected": true
-            },
-            {
-              "id": "66",
-              "label": "PROJ STAT 66",
-              "value": 0.030625164,
-              "projected": true
-            },
-            {
-              "id": "67",
-              "label": "PROJ STAT 67",
-              "value": 0.019290046,
-              "projected": true
-            },
-            {
-              "id": "68",
-              "label": "PROJ STAT 68",
-              "value": 0.049915211,
-              "projected": true
-            },
-            {
-              "id": "70",
-              "label": "PROJ STAT 70",
-              "value": 0.014087576,
-              "projected": true
-            },
-            {
-              "id": "71",
-              "label": "PROJ STAT 71",
-              "value": 0.010802426,
-              "projected": true
-            },
-            {
-              "id": "72",
-              "label": "PROJ FUMBLES LOST",
-              "value": 0.024890001,
-              "projected": true
-            },
-            {
-              "id": "73",
-              "label": "PROJ STAT 73",
-              "value": 0.024890001,
-              "projected": true
-            },
-            {
-              "id": "210",
-              "label": "PROJ STAT 210",
-              "value": 0.5,
-              "projected": true
-            },
-            {
-              "id": "212",
-              "label": "PROJ STAT 212",
-              "value": 1.154319012,
-              "projected": true
-            },
-            {
-              "id": "213",
-              "label": "PROJ STAT 213",
-              "value": 1.229653391,
-              "projected": true
-            }
-          ],
-          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": false
         },
@@ -12665,7 +13030,7 @@
         "wins": 3,
         "losses": 3
       },
-      "total": 0,
+      "total": 18.5,
       "projected": 116.69999999999999,
       "starters": [
         {
@@ -12844,10 +13209,107 @@
           "name": "D'Andre Swift",
           "team": "CHI",
           "position": "RB",
-          "points": 0,
+          "points": 8.1,
           "scoringPeriodId": 7,
           "projected": 16.3,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "23",
+              "label": "RUSHING ATTEMPTS",
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "25",
+              "label": "RUSHING TOUCHDOWNS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "27",
+              "label": "STAT 27",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "28",
+              "label": "STAT 28",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "33",
+              "label": "STAT 33",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "39",
+              "label": "STAT 39",
+              "value": 2.2,
+              "projected": false
+            },
+            {
+              "id": "40",
+              "label": "STAT 40",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "158",
+              "label": "STAT 158",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "179",
+              "label": "STAT 179",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "212",
+              "label": "STAT 212",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -13105,10 +13567,95 @@
           "name": "Luther Burden III",
           "team": "CHI",
           "position": "WR",
-          "points": 0,
+          "points": 10.4,
           "scoringPeriodId": 7,
           "projected": 12.7,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 84,
+              "projected": false
+            },
+            {
+              "id": "47",
+              "label": "STAT 47",
+              "value": 16,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 8,
+              "projected": false
+            },
+            {
+              "id": "49",
+              "label": "STAT 49",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "50",
+              "label": "STAT 50",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "51",
+              "label": "STAT 51",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 57,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": 42,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": 84,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "213",
+              "label": "STAT 213",
+              "value": 2,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -13918,7 +14465,7 @@
               "projected": true
             }
           ],
-          "injuryStatus": "ACTIVE",
+          "injuryStatus": "QUESTIONABLE",
           "headshot": "",
           "starter": true
         },
@@ -17699,7 +18246,7 @@
         "wins": 3,
         "losses": 3
       },
-      "total": 0,
+      "total": 9.8,
       "projected": 125.4,
       "starters": [
         {
@@ -18589,10 +19136,89 @@
           "name": "Caleb Williams",
           "team": "CHI",
           "position": "QB",
-          "points": 0,
+          "points": 3.8,
           "scoringPeriodId": 7,
           "projected": 17.6,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "0",
+              "label": "PASSING ATTEMPTS",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "1",
+              "label": "PASSING COMPLETIONS",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "2",
+              "label": "INCOMPLETE PASSES",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 95,
+              "projected": false
+            },
+            {
+              "id": "5",
+              "label": "STAT 5",
+              "value": 19,
+              "projected": false
+            },
+            {
+              "id": "6",
+              "label": "STAT 6",
+              "value": 9,
+              "projected": false
+            },
+            {
+              "id": "7",
+              "label": "STAT 7",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "8",
+              "label": "STAT 8",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "9",
+              "label": "STAT 9",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "21",
+              "label": "STAT 21",
+              "value": 57.14,
+              "projected": false
+            },
+            {
+              "id": "22",
+              "label": "STAT 22",
+              "value": 95,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "211",
+              "label": "STAT 211",
+              "value": 3,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "0",
@@ -19405,10 +20031,119 @@
           "name": "Patriots D/ST",
           "team": "NE",
           "position": "DEF",
-          "points": 0,
+          "points": 6,
           "scoringPeriodId": 7,
           "projected": 4.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "89",
+              "label": "DEFENSE SACKS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "90",
+              "label": "DEFENSE INTERCEPTIONS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "91",
+              "label": "DEFENSE FUMBLES RECOVERED",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "92",
+              "label": "DEFENSE TOUCHDOWNS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "107",
+              "label": "STAT 107",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "108",
+              "label": "STAT 108",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "109",
+              "label": "STAT 109",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "110",
+              "label": "STAT 110",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "111",
+              "label": "STAT 111",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "114",
+              "label": "STAT 114",
+              "value": 51,
+              "projected": false
+            },
+            {
+              "id": "116",
+              "label": "STAT 116",
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "117",
+              "label": "STAT 117",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "120",
+              "label": "STAT 120",
+              "value": 10,
+              "projected": false
+            },
+            {
+              "id": "127",
+              "label": "STAT 127",
+              "value": 106,
+              "projected": false
+            },
+            {
+              "id": "129",
+              "label": "STAT 129",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "187",
+              "label": "STAT 187",
+              "value": 10,
+              "projected": false
+            },
+            {
+              "id": "190",
+              "label": "STAT 190",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "89",
@@ -25636,10 +26371,101 @@
           "name": "TreVeyon Henderson",
           "team": "NE",
           "position": "RB",
-          "points": 0,
+          "points": 4,
           "scoringPeriodId": 7,
           "projected": 7.1,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "23",
+              "label": "RUSHING ATTEMPTS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "27",
+              "label": "STAT 27",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "39",
+              "label": "STAT 39",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "40",
+              "label": "STAT 40",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 14,
+              "projected": false
+            },
+            {
+              "id": "47",
+              "label": "STAT 47",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 17,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": 14,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -26538,7 +27364,7 @@
         "wins": 2,
         "losses": 4
       },
-      "total": 0,
+      "total": 1.3,
       "projected": 107.60000000000001,
       "starters": [
         {
@@ -26966,10 +27792,89 @@
           "name": "Drake Maye",
           "team": "NE",
           "position": "QB",
-          "points": 0,
+          "points": 1.3,
           "scoringPeriodId": 7,
           "projected": 20.6,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "0",
+              "label": "PASSING ATTEMPTS",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "1",
+              "label": "PASSING COMPLETIONS",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "2",
+              "label": "INCOMPLETE PASSES",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "3",
+              "label": "PASSING YARDS",
+              "value": 32,
+              "projected": false
+            },
+            {
+              "id": "5",
+              "label": "STAT 5",
+              "value": 6,
+              "projected": false
+            },
+            {
+              "id": "6",
+              "label": "STAT 6",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "7",
+              "label": "STAT 7",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "8",
+              "label": "STAT 8",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "21",
+              "label": "STAT 21",
+              "value": 66.67,
+              "projected": false
+            },
+            {
+              "id": "22",
+              "label": "STAT 22",
+              "value": 32,
+              "projected": false
+            },
+            {
+              "id": "64",
+              "label": "STAT 64",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "211",
+              "label": "STAT 211",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "0",
@@ -29810,7 +30715,7 @@
         "wins": 2,
         "losses": 4
       },
-      "total": 0,
+      "total": 2.1,
       "projected": 123.9,
       "starters": [
         {
@@ -31252,10 +32157,77 @@
           "name": "Colston Loveland",
           "team": "CHI",
           "position": "TE",
-          "points": 0,
+          "points": 2.1,
           "scoringPeriodId": 7,
           "projected": 11.5,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "47",
+              "label": "STAT 47",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": 11,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "213",
+              "label": "STAT 213",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "42",
@@ -32299,7 +33271,7 @@
         "wins": 3,
         "losses": 3
       },
-      "total": 0,
+      "total": 16,
       "projected": 121,
       "starters": [
         {
@@ -32931,7 +33903,7 @@
               "projected": true
             }
           ],
-          "injuryStatus": "QUESTIONABLE",
+          "injuryStatus": "ACTIVE",
           "headshot": "",
           "starter": true
         },
@@ -33501,10 +34473,119 @@
           "name": "Cairo Santos",
           "team": "CHI",
           "position": "K",
-          "points": 0,
+          "points": 5,
           "scoringPeriodId": 7,
           "projected": 8.8,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "77",
+              "label": "STAT 77",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "78",
+              "label": "STAT 78",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "83",
+              "label": "STAT 83",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "84",
+              "label": "STAT 84",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "86",
+              "label": "STAT 86",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "87",
+              "label": "STAT 87",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "158",
+              "label": "STAT 158",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "214",
+              "label": "STAT 214",
+              "value": 43,
+              "projected": false
+            },
+            {
+              "id": "216",
+              "label": "STAT 216",
+              "value": 43,
+              "projected": false
+            },
+            {
+              "id": "217",
+              "label": "STAT 217",
+              "value": 8,
+              "projected": false
+            },
+            {
+              "id": "218",
+              "label": "STAT 218",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "219",
+              "label": "STAT 219",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "220",
+              "label": "STAT 220",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "229",
+              "label": "STAT 229",
+              "value": 8,
+              "projected": false
+            },
+            {
+              "id": "230",
+              "label": "STAT 230",
+              "value": 4,
+              "projected": false
+            },
+            {
+              "id": "231",
+              "label": "STAT 231",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "232",
+              "label": "STAT 232",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "74",
@@ -33648,10 +34729,113 @@
           "name": "Bears D/ST",
           "team": "CHI",
           "position": "DEF",
-          "points": 0,
+          "points": 11,
           "scoringPeriodId": 7,
           "projected": 5,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "89",
+              "label": "DEFENSE SACKS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "90",
+              "label": "DEFENSE INTERCEPTIONS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "91",
+              "label": "DEFENSE FUMBLES RECOVERED",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "92",
+              "label": "DEFENSE TOUCHDOWNS",
+              "value": 0,
+              "projected": false
+            },
+            {
+              "id": "99",
+              "label": "STAT 99",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "100",
+              "label": "STAT 100",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "107",
+              "label": "STAT 107",
+              "value": 8,
+              "projected": false
+            },
+            {
+              "id": "108",
+              "label": "STAT 108",
+              "value": 9,
+              "projected": false
+            },
+            {
+              "id": "109",
+              "label": "STAT 109",
+              "value": 17,
+              "projected": false
+            },
+            {
+              "id": "110",
+              "label": "STAT 110",
+              "value": 5,
+              "projected": false
+            },
+            {
+              "id": "111",
+              "label": "STAT 111",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "112",
+              "label": "STAT 112",
+              "value": 2,
+              "projected": false
+            },
+            {
+              "id": "115",
+              "label": "STAT 115",
+              "value": 7,
+              "projected": false
+            },
+            {
+              "id": "127",
+              "label": "STAT 127",
+              "value": 40,
+              "projected": false
+            },
+            {
+              "id": "128",
+              "label": "STAT 128",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "188",
+              "label": "STAT 188",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "89",
@@ -34652,7 +35836,7 @@
         "wins": 2,
         "losses": 4
       },
-      "total": 0,
+      "total": 3,
       "projected": 93,
       "starters": [
         {
@@ -35230,10 +36414,101 @@
           "name": "Rhamondre Stevenson",
           "team": "NE",
           "position": "RB",
-          "points": 0,
+          "points": 3,
           "scoringPeriodId": 7,
           "projected": 11.5,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "23",
+              "label": "RUSHING ATTEMPTS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "24",
+              "label": "RUSHING YARDS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "39",
+              "label": "STAT 39",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "40",
+              "label": "STAT 40",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "41",
+              "label": "RECEIVING TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "42",
+              "label": "RECEIVING YARDS",
+              "value": 19,
+              "projected": false
+            },
+            {
+              "id": "47",
+              "label": "STAT 47",
+              "value": 3,
+              "projected": false
+            },
+            {
+              "id": "48",
+              "label": "STAT 48",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "53",
+              "label": "RECEPTIONS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "59",
+              "label": "STAT 59",
+              "value": 8,
+              "projected": false
+            },
+            {
+              "id": "60",
+              "label": "STAT 60",
+              "value": 19,
+              "projected": false
+            },
+            {
+              "id": "61",
+              "label": "STAT 61",
+              "value": 19,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "213",
+              "label": "STAT 213",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "23",
@@ -36624,7 +37899,20 @@
           "points": 0,
           "scoringPeriodId": 7,
           "projected": 15.9,
-          "gameStats": [],
+          "gameStats": [
+            {
+              "id": "58",
+              "label": "TARGETS",
+              "value": 1,
+              "projected": false
+            },
+            {
+              "id": "210",
+              "label": "STAT 210",
+              "value": 1,
+              "projected": false
+            }
+          ],
           "projectedGameStats": [
             {
               "id": "42",
@@ -41127,8 +42415,8 @@
       "id": "37",
       "homeTeamId": "10",
       "awayTeamId": "11",
-      "homeTotal": 0,
-      "awayTotal": 0,
+      "homeTotal": 16,
+      "awayTotal": 3,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -41154,7 +42442,7 @@
       "id": "40",
       "homeTeamId": "5",
       "awayTeamId": "6",
-      "homeTotal": 0,
+      "homeTotal": 9.8,
       "awayTotal": 0,
       "homeProjected": null,
       "awayProjected": null
@@ -41163,8 +42451,8 @@
       "id": "41",
       "homeTeamId": "8",
       "awayTeamId": "3",
-      "homeTotal": 0,
-      "awayTotal": 0,
+      "homeTotal": 1.28,
+      "awayTotal": 18.5,
       "homeProjected": null,
       "awayProjected": null
     },
@@ -41173,7 +42461,7 @@
       "homeTeamId": "4",
       "awayTeamId": "9",
       "homeTotal": 0,
-      "awayTotal": 0,
+      "awayTotal": 2.1,
       "homeProjected": null,
       "awayProjected": null
     }
