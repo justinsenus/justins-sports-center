@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-23T01:53:49.610Z",
+  "generated_at": "2026-10-23T06:41:01.521Z",
   "season": 2026,
   "week": 7,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "error",
-      "updated_at": "2026-10-23T01:53:49.610Z",
+      "updated_at": "2026-10-23T06:41:01.521Z",
       "count": 0,
       "error": "Public projection table unavailable; add FANTASYPROS_API_KEY for JSON access"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-23T01:53:49.610Z",
+      "updated_at": "2026-10-23T06:41:01.521Z",
       "count": 161
     },
     {
@@ -978,6 +978,34 @@
           "odds": [],
           "market": null
         },
+        "4950": {
+          "player_id": "4950",
+          "name": "Christian Kirk",
+          "team": "SF",
+          "position": "WR",
+          "consensus": 5.5,
+          "method": "mean",
+          "season": 2026,
+          "week": 7,
+          "scoring": "PPR",
+          "min": 5.5,
+          "max": 5.5,
+          "range": 0,
+          "sourceCount": 1,
+          "sources": [
+            {
+              "source": "sleeper",
+              "label": "Sleeper",
+              "value": 5.5,
+              "season": 2026,
+              "week": 7,
+              "scoring": "PPR"
+            }
+          ],
+          "outlier": null,
+          "odds": [],
+          "market": null
+        },
         "4983": {
           "player_id": "4983",
           "name": "DJ Moore",
@@ -1012,6 +1040,34 @@
           "range": null,
           "sourceCount": 0,
           "sources": [],
+          "outlier": null,
+          "odds": [],
+          "market": null
+        },
+        "4993": {
+          "player_id": "4993",
+          "name": "Mike Gesicki",
+          "team": "CIN",
+          "position": "TE",
+          "consensus": 8.2,
+          "method": "mean",
+          "season": 2026,
+          "week": 7,
+          "scoring": "PPR",
+          "min": 8.2,
+          "max": 8.2,
+          "range": 0,
+          "sourceCount": 1,
+          "sources": [
+            {
+              "source": "sleeper",
+              "label": "Sleeper",
+              "value": 8.2,
+              "season": 2026,
+              "week": 7,
+              "scoring": "PPR"
+            }
+          ],
           "outlier": null,
           "odds": [],
           "market": null
@@ -3458,34 +3514,6 @@
           "odds": [],
           "market": null
         },
-        "11559": {
-          "player_id": "11559",
-          "name": "Michael Penix Jr.",
-          "team": "ATL",
-          "position": "QB",
-          "consensus": 15.1,
-          "method": "mean",
-          "season": 2026,
-          "week": 7,
-          "scoring": "PPR",
-          "min": 15.1,
-          "max": 15.1,
-          "range": 0,
-          "sourceCount": 1,
-          "sources": [
-            {
-              "source": "sleeper",
-              "label": "Sleeper",
-              "value": 15.1,
-              "season": 2026,
-              "week": 7,
-              "scoring": "PPR"
-            }
-          ],
-          "outlier": null,
-          "odds": [],
-          "market": null
-        },
         "11560": {
           "player_id": "11560",
           "name": "Caleb Williams",
@@ -4947,34 +4975,6 @@
           "odds": [],
           "market": null
         },
-        "13294": {
-          "player_id": "13294",
-          "name": "Makai Lemon",
-          "team": "PHI",
-          "position": "WR",
-          "consensus": 5.8,
-          "method": "mean",
-          "season": 2026,
-          "week": 7,
-          "scoring": "PPR",
-          "min": 5.8,
-          "max": 5.8,
-          "range": 0,
-          "sourceCount": 1,
-          "sources": [
-            {
-              "source": "sleeper",
-              "label": "Sleeper",
-              "value": 5.8,
-              "season": 2026,
-              "week": 7,
-              "scoring": "PPR"
-            }
-          ],
-          "outlier": null,
-          "odds": [],
-          "market": null
-        },
         "13301": {
           "player_id": "13301",
           "name": "Antonio Williams",
@@ -5293,25 +5293,25 @@
           "odds": [],
           "market": null
         },
-        "NE": {
-          "player_id": "NE",
-          "name": "New England Patriots",
-          "team": "NE",
+        "CAR": {
+          "player_id": "CAR",
+          "name": "Carolina Panthers",
+          "team": "CAR",
           "position": "DEF",
-          "consensus": 6.3,
+          "consensus": 7.8,
           "method": "mean",
           "season": 2026,
           "week": 7,
           "scoring": "PPR",
-          "min": 6.3,
-          "max": 6.3,
+          "min": 7.8,
+          "max": 7.8,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 6.3,
+              "value": 7.8,
               "season": 2026,
               "week": 7,
               "scoring": "PPR"
@@ -6269,6 +6269,34 @@
       "odds": [],
       "market": null
     },
+    "4950": {
+      "player_id": "4950",
+      "name": "Christian Kirk",
+      "team": "SF",
+      "position": "WR",
+      "consensus": 5.5,
+      "method": "mean",
+      "season": 2026,
+      "week": 7,
+      "scoring": "PPR",
+      "min": 5.5,
+      "max": 5.5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "sleeper",
+          "label": "Sleeper",
+          "value": 5.5,
+          "season": 2026,
+          "week": 7,
+          "scoring": "PPR"
+        }
+      ],
+      "outlier": null,
+      "odds": [],
+      "market": null
+    },
     "4983": {
       "player_id": "4983",
       "name": "DJ Moore",
@@ -6303,6 +6331,34 @@
       "range": null,
       "sourceCount": 0,
       "sources": [],
+      "outlier": null,
+      "odds": [],
+      "market": null
+    },
+    "4993": {
+      "player_id": "4993",
+      "name": "Mike Gesicki",
+      "team": "CIN",
+      "position": "TE",
+      "consensus": 8.2,
+      "method": "mean",
+      "season": 2026,
+      "week": 7,
+      "scoring": "PPR",
+      "min": 8.2,
+      "max": 8.2,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "sleeper",
+          "label": "Sleeper",
+          "value": 8.2,
+          "season": 2026,
+          "week": 7,
+          "scoring": "PPR"
+        }
+      ],
       "outlier": null,
       "odds": [],
       "market": null
@@ -8749,34 +8805,6 @@
       "odds": [],
       "market": null
     },
-    "11559": {
-      "player_id": "11559",
-      "name": "Michael Penix Jr.",
-      "team": "ATL",
-      "position": "QB",
-      "consensus": 15.1,
-      "method": "mean",
-      "season": 2026,
-      "week": 7,
-      "scoring": "PPR",
-      "min": 15.1,
-      "max": 15.1,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "sleeper",
-          "label": "Sleeper",
-          "value": 15.1,
-          "season": 2026,
-          "week": 7,
-          "scoring": "PPR"
-        }
-      ],
-      "outlier": null,
-      "odds": [],
-      "market": null
-    },
     "11560": {
       "player_id": "11560",
       "name": "Caleb Williams",
@@ -10238,34 +10266,6 @@
       "odds": [],
       "market": null
     },
-    "13294": {
-      "player_id": "13294",
-      "name": "Makai Lemon",
-      "team": "PHI",
-      "position": "WR",
-      "consensus": 5.8,
-      "method": "mean",
-      "season": 2026,
-      "week": 7,
-      "scoring": "PPR",
-      "min": 5.8,
-      "max": 5.8,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "sleeper",
-          "label": "Sleeper",
-          "value": 5.8,
-          "season": 2026,
-          "week": 7,
-          "scoring": "PPR"
-        }
-      ],
-      "outlier": null,
-      "odds": [],
-      "market": null
-    },
     "13301": {
       "player_id": "13301",
       "name": "Antonio Williams",
@@ -10584,25 +10584,25 @@
       "odds": [],
       "market": null
     },
-    "NE": {
-      "player_id": "NE",
-      "name": "New England Patriots",
-      "team": "NE",
+    "CAR": {
+      "player_id": "CAR",
+      "name": "Carolina Panthers",
+      "team": "CAR",
       "position": "DEF",
-      "consensus": 6.3,
+      "consensus": 7.8,
       "method": "mean",
       "season": 2026,
       "week": 7,
       "scoring": "PPR",
-      "min": 6.3,
-      "max": 6.3,
+      "min": 7.8,
+      "max": 7.8,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 6.3,
+          "value": 7.8,
           "season": 2026,
           "week": 7,
           "scoring": "PPR"
