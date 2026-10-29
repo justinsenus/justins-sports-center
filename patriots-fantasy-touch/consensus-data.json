@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-10-28T23:34:58.974Z",
+  "generated_at": "2026-10-29T02:47:28.574Z",
   "season": 2026,
   "week": 8,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "error",
-      "updated_at": "2026-10-28T23:34:58.974Z",
+      "updated_at": "2026-10-29T02:47:28.574Z",
       "count": 0,
       "error": "Public projection table unavailable; add FANTASYPROS_API_KEY for JSON access"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-10-28T23:34:58.974Z",
+      "updated_at": "2026-10-29T02:47:28.574Z",
       "count": 168
     },
     {
@@ -623,6 +623,34 @@
               "source": "sleeper",
               "label": "Sleeper",
               "value": 9.4,
+              "season": 2026,
+              "week": 8,
+              "scoring": "PPR"
+            }
+          ],
+          "outlier": null,
+          "odds": [],
+          "market": null
+        },
+        "3257": {
+          "player_id": "3257",
+          "name": "Jacoby Brissett",
+          "team": "ARI",
+          "position": "QB",
+          "consensus": 18.7,
+          "method": "mean",
+          "season": 2026,
+          "week": 8,
+          "scoring": "PPR",
+          "min": 18.7,
+          "max": 18.7,
+          "range": 0,
+          "sourceCount": 1,
+          "sources": [
+            {
+              "source": "sleeper",
+              "label": "Sleeper",
+              "value": 18.7,
               "season": 2026,
               "week": 8,
               "scoring": "PPR"
@@ -1704,20 +1732,20 @@
           "name": "DeVonta Smith",
           "team": "PHI",
           "position": "WR",
-          "consensus": 11.5,
+          "consensus": 12,
           "method": "mean",
           "season": 2026,
           "week": 8,
           "scoring": "PPR",
-          "min": 11.5,
-          "max": 11.5,
+          "min": 12,
+          "max": 12,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 11.5,
+              "value": 12,
               "season": 2026,
               "week": 8,
               "scoring": "PPR"
@@ -3410,34 +3438,6 @@
           "odds": [],
           "market": null
         },
-        "11559": {
-          "player_id": "11559",
-          "name": "Michael Penix Jr.",
-          "team": "ATL",
-          "position": "QB",
-          "consensus": 14.5,
-          "method": "mean",
-          "season": 2026,
-          "week": 8,
-          "scoring": "PPR",
-          "min": 14.5,
-          "max": 14.5,
-          "range": 0,
-          "sourceCount": 1,
-          "sources": [
-            {
-              "source": "sleeper",
-              "label": "Sleeper",
-              "value": 14.5,
-              "season": 2026,
-              "week": 8,
-              "scoring": "PPR"
-            }
-          ],
-          "outlier": null,
-          "odds": [],
-          "market": null
-        },
         "11560": {
           "player_id": "11560",
           "name": "Caleb Williams",
@@ -3770,20 +3770,20 @@
           "name": "Brian Thomas Jr.",
           "team": "JAX",
           "position": "WR",
-          "consensus": 3.4,
+          "consensus": 3.5,
           "method": "mean",
           "season": 2026,
           "week": 8,
           "scoring": "PPR",
-          "min": 3.4,
-          "max": 3.4,
+          "min": 3.5,
+          "max": 3.5,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 3.4,
+              "value": 3.5,
               "season": 2026,
               "week": 8,
               "scoring": "PPR"
@@ -4818,20 +4818,20 @@
           "name": "Makai Lemon",
           "team": "PHI",
           "position": "WR",
-          "consensus": 7.8,
+          "consensus": 8.3,
           "method": "mean",
           "season": 2026,
           "week": 8,
           "scoring": "PPR",
-          "min": 7.8,
-          "max": 7.8,
+          "min": 8.3,
+          "max": 8.3,
           "range": 0,
           "sourceCount": 1,
           "sources": [
             {
               "source": "sleeper",
               "label": "Sleeper",
-              "value": 7.8,
+              "value": 8.3,
               "season": 2026,
               "week": 8,
               "scoring": "PPR"
@@ -5929,6 +5929,34 @@
       "odds": [],
       "market": null
     },
+    "3257": {
+      "player_id": "3257",
+      "name": "Jacoby Brissett",
+      "team": "ARI",
+      "position": "QB",
+      "consensus": 18.7,
+      "method": "mean",
+      "season": 2026,
+      "week": 8,
+      "scoring": "PPR",
+      "min": 18.7,
+      "max": 18.7,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "sleeper",
+          "label": "Sleeper",
+          "value": 18.7,
+          "season": 2026,
+          "week": 8,
+          "scoring": "PPR"
+        }
+      ],
+      "outlier": null,
+      "odds": [],
+      "market": null
+    },
     "3294": {
       "player_id": "3294",
       "name": "Dak Prescott",
@@ -7001,20 +7029,20 @@
       "name": "DeVonta Smith",
       "team": "PHI",
       "position": "WR",
-      "consensus": 11.5,
+      "consensus": 12,
       "method": "mean",
       "season": 2026,
       "week": 8,
       "scoring": "PPR",
-      "min": 11.5,
-      "max": 11.5,
+      "min": 12,
+      "max": 12,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 11.5,
+          "value": 12,
           "season": 2026,
           "week": 8,
           "scoring": "PPR"
@@ -8707,34 +8735,6 @@
       "odds": [],
       "market": null
     },
-    "11559": {
-      "player_id": "11559",
-      "name": "Michael Penix Jr.",
-      "team": "ATL",
-      "position": "QB",
-      "consensus": 14.5,
-      "method": "mean",
-      "season": 2026,
-      "week": 8,
-      "scoring": "PPR",
-      "min": 14.5,
-      "max": 14.5,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "sleeper",
-          "label": "Sleeper",
-          "value": 14.5,
-          "season": 2026,
-          "week": 8,
-          "scoring": "PPR"
-        }
-      ],
-      "outlier": null,
-      "odds": [],
-      "market": null
-    },
     "11560": {
       "player_id": "11560",
       "name": "Caleb Williams",
@@ -9067,20 +9067,20 @@
       "name": "Brian Thomas Jr.",
       "team": "JAX",
       "position": "WR",
-      "consensus": 3.4,
+      "consensus": 3.5,
       "method": "mean",
       "season": 2026,
       "week": 8,
       "scoring": "PPR",
-      "min": 3.4,
-      "max": 3.4,
+      "min": 3.5,
+      "max": 3.5,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 3.4,
+          "value": 3.5,
           "season": 2026,
           "week": 8,
           "scoring": "PPR"
@@ -10115,20 +10115,20 @@
       "name": "Makai Lemon",
       "team": "PHI",
       "position": "WR",
-      "consensus": 7.8,
+      "consensus": 8.3,
       "method": "mean",
       "season": 2026,
       "week": 8,
       "scoring": "PPR",
-      "min": 7.8,
-      "max": 7.8,
+      "min": 8.3,
+      "max": 8.3,
       "range": 0,
       "sourceCount": 1,
       "sources": [
         {
           "source": "sleeper",
           "label": "Sleeper",
-          "value": 7.8,
+          "value": 8.3,
           "season": 2026,
           "week": 8,
           "scoring": "PPR"
