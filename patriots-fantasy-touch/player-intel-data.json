@@ -2,7 +2,7 @@
   "schema_version": 1,
   "season": 2026,
   "week": 8,
-  "checked_at": "2026-10-29T02:55:48.862Z",
+  "checked_at": "2026-10-29T09:47:56.714Z",
   "source_count": 30,
   "sources": [
     {
@@ -10,7 +10,7 @@
       "name": "NFL.com",
       "url": "https://www.nfl.com/news/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 69,
       "matched_count": 7
     },
@@ -19,7 +19,7 @@
       "name": "ESPN",
       "url": "https://www.espn.com/nfl/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 50,
       "matched_count": 28
     },
@@ -28,7 +28,7 @@
       "name": "CBS Sports",
       "url": "https://www.cbssports.com/fantasy/football/players/news/all/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 22,
       "matched_count": 0
     },
@@ -37,16 +37,16 @@
       "name": "Yahoo Sports",
       "url": "https://sports.yahoo.com/nfl/rss.xml",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 50,
-      "matched_count": 15
+      "matched_count": 13
     },
     {
       "id": "nbc",
       "name": "NBC Sports",
       "url": "https://www.nbcsports.com/fantasy/football/player-news",
       "status": "no_public_headlines",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 0,
       "matched_count": 0,
       "feed": "https://www.nbcsports.com/fantasy/football/player-news.atom"
@@ -56,7 +56,7 @@
       "name": "FOX Sports",
       "url": "https://www.foxsports.com/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 54,
       "matched_count": 19
     },
@@ -65,8 +65,8 @@
       "name": "USA TODAY",
       "url": "https://www.usatoday.com/sports/nfl/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
-      "article_count": 22,
+      "checked_at": "2026-10-29T09:47:56.714Z",
+      "article_count": 23,
       "matched_count": 5
     },
     {
@@ -74,7 +74,7 @@
       "name": "Associated Press",
       "url": "https://apnews.com/hub/nfl",
       "status": "unavailable",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 0,
       "matched_count": 0,
       "reason": "HTTP 403"
@@ -84,44 +84,44 @@
       "name": "Sports Illustrated",
       "url": "https://www.si.com/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 45,
-      "matched_count": 7
+      "matched_count": 6
     },
     {
       "id": "athletic",
       "name": "The Athletic",
       "url": "https://www.nytimes.com/athletic/nfl/",
-      "status": "unavailable",
-      "checked_at": "2026-10-29T02:55:48.862Z",
-      "article_count": 0,
-      "matched_count": 0,
-      "reason": "HTTP 504"
+      "status": "available",
+      "checked_at": "2026-10-29T09:47:56.714Z",
+      "article_count": 100,
+      "matched_count": 35,
+      "feed": "https://www.nytimes.com/athletic/rss/nfl/"
     },
     {
       "id": "bleacher",
       "name": "Bleacher Report",
       "url": "https://bleacherreport.com/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
-      "article_count": 138,
-      "matched_count": 14
+      "checked_at": "2026-10-29T09:47:56.714Z",
+      "article_count": 97,
+      "matched_count": 8
     },
     {
       "id": "sportingnews",
       "name": "Sporting News",
       "url": "https://www.sportingnews.com/us/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
-      "article_count": 15,
-      "matched_count": 5
+      "checked_at": "2026-10-29T09:47:56.714Z",
+      "article_count": 16,
+      "matched_count": 4
     },
     {
       "id": "fantasypros",
       "name": "FantasyPros",
       "url": "https://www.fantasypros.com/nfl/player-news.php",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 24,
       "matched_count": 5
     },
@@ -130,7 +130,7 @@
       "name": "RotoBaller",
       "url": "https://www.rotoballer.com/feed",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 15,
       "matched_count": 5
     },
@@ -139,7 +139,7 @@
       "name": "RotoWire",
       "url": "https://www.rotowire.com/rss/news.php?sport=NFL",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 5,
       "matched_count": 5
     },
@@ -148,7 +148,7 @@
       "name": "Footballguys",
       "url": "https://www.footballguys.com/news",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 65,
       "matched_count": 25
     },
@@ -157,7 +157,7 @@
       "name": "4for4",
       "url": "https://www.4for4.com/news",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 50,
       "matched_count": 4,
       "feed": "https://www.4for4.com/articles/rss.xml"
@@ -167,7 +167,7 @@
       "name": "Fantasy Life",
       "url": "https://www.fantasylife.com/articles/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 23,
       "matched_count": 2
     },
@@ -176,7 +176,7 @@
       "name": "Fantasy Alarm",
       "url": "https://www.fantasyalarm.com/articles/nfl",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 153,
       "matched_count": 3
     },
@@ -185,7 +185,7 @@
       "name": "FFToday",
       "url": "https://www.fftoday.com/news/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 1,
       "matched_count": 0
     },
@@ -194,7 +194,7 @@
       "name": "Draft Sharks",
       "url": "https://www.draftsharks.com/fantasy-football-news",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 25,
       "matched_count": 19
     },
@@ -203,7 +203,7 @@
       "name": "Establish The Run",
       "url": "https://establishtherun.com/feed/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 1,
       "matched_count": 0
     },
@@ -212,7 +212,7 @@
       "name": "Fantasy Points",
       "url": "https://www.fantasypoints.com/nfl/articles",
       "status": "no_public_headlines",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 0,
       "matched_count": 0
     },
@@ -221,7 +221,7 @@
       "name": "PFF",
       "url": "https://www.pff.com/news",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 25,
       "matched_count": 4,
       "feed": "https://www.pff.com/feed"
@@ -231,7 +231,7 @@
       "name": "PlayerProfiler",
       "url": "https://www.playerprofiler.com/news/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 100,
       "matched_count": 26,
       "feed": "https://www.playerprofiler.com/news/feed/"
@@ -240,17 +240,17 @@
       "id": "sixpack",
       "name": "Fantasy Six Pack",
       "url": "https://fantasysixpack.net/feed/",
-      "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
-      "article_count": 10,
-      "matched_count": 1
+      "status": "no_public_headlines",
+      "checked_at": "2026-10-29T09:47:56.714Z",
+      "article_count": 0,
+      "matched_count": 0
     },
     {
       "id": "razzball",
       "name": "Razzball",
       "url": "https://football.razzball.com/feed/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 30,
       "matched_count": 0
     },
@@ -259,16 +259,16 @@
       "name": "Pro Football Network",
       "url": "https://www.profootballnetwork.com/feed/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 50,
-      "matched_count": 17
+      "matched_count": 13
     },
     {
       "id": "patriots",
       "name": "Patriots.com",
       "url": "https://www.patriots.com/news/",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 543,
       "matched_count": 62
     },
@@ -277,9 +277,9 @@
       "name": "Pro Football Rumors",
       "url": "https://www.profootballrumors.com/feed",
       "status": "available",
-      "checked_at": "2026-10-29T02:55:48.862Z",
+      "checked_at": "2026-10-29T09:47:56.714Z",
       "article_count": 15,
-      "matched_count": 6
+      "matched_count": 5
     }
   ],
   "injury_sources": [
@@ -314,7 +314,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -324,7 +324,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -337,14 +337,6 @@
           "title": "Braelon Allen's Week 8 fantasy outlook",
           "url": "https://www.espn.com/video/clip/_/id/50309182/braelon-allen-week-8-fantasy-outlook",
           "published_at": "2026-10-28T16:40:55Z"
-        },
-        {
-          "player_key": "braelonallen:NYJ",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 3d Henry Hypes Braelon Allen 💪 Ravens RB shows love to 'Manchild' for work as Jets' starter (ESPN)",
-          "url": "https://bleacherreport.com/articles/25520046-manchild-braelon-allen-hyped-derrick-henry-amid-jets-rb-breece-halls-injury-recovery",
-          "published_at": null
         }
       ],
       "reports": [
@@ -360,7 +352,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "braelonallen:NYJ",
@@ -375,7 +367,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -383,7 +375,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -393,7 +385,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -414,7 +406,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -427,7 +419,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -448,7 +440,7 @@
           "practice": null,
           "injury": "Knee",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -458,7 +450,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -477,7 +469,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "malikwashington:MIA",
@@ -492,7 +484,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -500,7 +492,7 @@
           "practice": null,
           "injury": "Knee",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -510,7 +502,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -531,7 +523,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -544,7 +536,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -564,7 +556,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -577,7 +569,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -598,7 +590,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -611,7 +603,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -632,7 +624,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -645,7 +637,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -666,7 +658,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -696,7 +688,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -717,7 +709,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -727,7 +719,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -771,7 +763,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "jeremiyahlove:ARI",
@@ -786,7 +778,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -794,7 +786,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -804,7 +796,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -856,7 +848,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -869,7 +861,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -890,7 +882,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -920,7 +912,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -941,7 +933,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -963,7 +955,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -995,7 +987,7 @@
           "practice": null,
           "injury": "Quadriceps",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1005,20 +997,12 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
-        {
-          "player_key": "breecehall:NYJ",
-          "source": "yahoo",
-          "source_name": "Yahoo Sports",
-          "title": "NFL Injury Report, Week 8: Latest news, updates on Lamar Jackson, Breece Hall, more players for fantasy football",
-          "url": "https://sports.yahoo.com/fantasy/article/nfl-injury-report-week-8-latest-news-updates-on-lamar-jackson-breece-hall-more-players-for-fantasy-football-170704038.html",
-          "published_at": "2026-10-26T17:07:04.000Z"
-        },
         {
           "player_key": "breecehall:NYJ",
           "source": "draftsharks",
@@ -1041,7 +1025,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "breecehall:NYJ",
@@ -1056,7 +1040,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -1064,7 +1048,7 @@
           "practice": null,
           "injury": "Quadriceps",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1074,7 +1058,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1095,7 +1079,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1108,7 +1092,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1129,12 +1113,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "calebwilliams:CHI",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Chicago Bears QB Caleb Williams hums during games. Here’s the science behind it",
+          "url": "https://www.nytimes.com/athletic/7733877/2026/10/29/caleb-williams-humming-science-calm/",
+          "published_at": "2026-10-29T09:00:45.000Z"
+        },
         {
           "player_key": "calebwilliams:CHI",
           "source": "yahoo",
@@ -1150,6 +1142,14 @@
           "title": "Bears' Caleb Williams to continue wearing Caddix 'smart cleats' despite fine",
           "url": "https://www.espn.com/nfl/story/_/id/50311661/bears-qb-caleb-williams-continue-wearing-caddix-cleats-fine",
           "published_at": "2026-10-28T23:33:40Z"
+        },
+        {
+          "player_key": "calebwilliams:CHI",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Caleb Williams outduels draft classmate Drake Maye as Bears hang on against Patriots",
+          "url": "https://www.nytimes.com/athletic/7714509/2026/10/22/patriots-bears-score-results-takeaways-thursday-night-football/",
+          "published_at": "2026-10-23T03:28:08.000Z"
         }
       ],
       "reports": [
@@ -1159,7 +1159,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1180,7 +1180,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1202,7 +1202,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1223,7 +1223,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1236,7 +1236,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1256,7 +1256,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1292,7 +1292,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "tylerwarren:IND",
@@ -1307,7 +1307,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -1315,7 +1315,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1336,7 +1336,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1349,7 +1349,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1370,7 +1370,7 @@
           "practice": null,
           "injury": "Achilles",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1380,12 +1380,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "mikeevans:SF",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Fantasy Football Week 7 inactives and injuries: Mike Evans, Lamar Jackson out",
+          "url": "https://www.nytimes.com/athletic/7723332/2026/10/25/fantasy-football-week-7-inactives-and-injuries-mike-evans-lamar-jackson-out/",
+          "published_at": "2026-10-25T15:56:29.000Z"
+        },
         {
           "player_key": "mikeevans:SF",
           "source": "playerprofiler",
@@ -1418,7 +1426,7 @@
           "practice": null,
           "injury": "Achilles",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1428,7 +1436,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1449,7 +1457,7 @@
           "practice": null,
           "injury": "Hand",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1459,7 +1467,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1511,7 +1519,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "stefondiggs:WAS",
@@ -1526,7 +1534,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -1534,7 +1542,7 @@
           "practice": null,
           "injury": "Hand",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1544,7 +1552,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1565,7 +1573,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1578,7 +1586,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1599,7 +1607,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1621,7 +1629,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1642,7 +1650,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1652,7 +1660,7 @@
           "player_key": "tonypollard:TEN",
           "source": "bleacher",
           "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 13h Tony Pollard Top Trade Candidate Titans RB considered 'more likely' to be moved than JT (ESPN)",
+          "title": "Bleacher Report • 20h Tony Pollard Top Trade Candidate Titans RB considered 'more likely' to be moved than JT (ESPN)",
           "url": "https://bleacherreport.com/articles/25521491-new-nfl-trade-rumors-titans-tony-pollard-amid-jonathan-taylor-buzz-2026-deadline",
           "published_at": null
         }
@@ -1664,7 +1672,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1685,7 +1693,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1695,7 +1703,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1740,7 +1748,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -1748,7 +1756,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1758,7 +1766,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1779,12 +1787,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "javontewilliams:DAL",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Cowboys handle Eagles behind Javonte Williams’ career-high 155 rushing yards",
+          "url": "https://www.nytimes.com/athletic/7728447/2026/10/26/cowboys-eagles-nfl-week-7-monday-night-football-takeaways/",
+          "published_at": "2026-10-27T03:24:31.000Z"
+        },
         {
           "player_key": "javontewilliams:DAL",
           "source": "nfl",
@@ -1801,7 +1817,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1822,7 +1838,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1835,7 +1851,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1856,7 +1872,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1868,7 +1884,7 @@
           "source_name": "Pro Football Rumors",
           "title": "Texans, C.J. Stroud Were Close On Offseason Extension; Deal Expected In 2027",
           "url": "https://www.profootballrumors.com/2026/10/texans-c-j-stroud-were-close-on-offseason-extension-deal-expected-in-2027",
-          "published_at": "2026-10-28T19:57:44.000Z"
+          "published_at": "2026-10-29T04:07:44.000Z"
         }
       ],
       "reports": [
@@ -1878,7 +1894,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1899,7 +1915,7 @@
           "practice": null,
           "injury": "Calf",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1909,7 +1925,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1937,7 +1953,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "brockbowers:LV",
@@ -1952,7 +1968,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -1960,7 +1976,7 @@
           "practice": null,
           "injury": "Calf",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -1970,7 +1986,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -1991,7 +2007,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2010,7 +2026,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -2018,7 +2034,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2039,7 +2055,7 @@
           "practice": null,
           "injury": "Leg",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2049,7 +2065,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2062,7 +2078,7 @@
           "practice": null,
           "injury": "Leg",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2072,7 +2088,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2093,7 +2109,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2106,7 +2122,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2127,7 +2143,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2137,7 +2153,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2173,7 +2189,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "carnelltate:TEN",
@@ -2188,7 +2204,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -2196,7 +2212,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2206,7 +2222,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2227,7 +2243,7 @@
           "practice": null,
           "injury": "Chest",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2237,7 +2253,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2250,7 +2266,7 @@
           "practice": null,
           "injury": "Chest",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2260,7 +2276,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2301,7 +2317,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2322,6 +2338,14 @@
           "title": "How far can Kyler Murray take the Vikings this season?",
           "url": "https://www.espn.com/video/clip/_/id/50307797/how-far-kyler-murray-take-vikings-season",
           "published_at": "2026-10-28T14:04:15Z"
+        },
+        {
+          "player_key": "kylermurray:MIN",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "QB stock report, Week 8: Should Vikings give up on Kyler Murray or stay patient?",
+          "url": "https://www.nytimes.com/athletic/7726821/2026/10/27/vikings-kyler-murray-qb-stock-report-rankings/",
+          "published_at": "2026-10-27T09:31:00.000Z"
         }
       ],
       "reports": [
@@ -2331,7 +2355,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2352,7 +2376,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2362,7 +2386,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2406,7 +2430,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "jakobimeyers:JAX",
@@ -2421,7 +2445,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -2429,7 +2453,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2439,7 +2463,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2460,7 +2484,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2473,7 +2497,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2494,7 +2518,7 @@
           "practice": null,
           "injury": "Undisclosed",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2504,20 +2528,12 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
-        {
-          "player_key": "jaylenwaddle:DEN",
-          "source": "si",
-          "source_name": "Sports Illustrated",
-          "title": "Broncos' Week 8 Injury Report Discouraging Sign for Jaylen Waddle",
-          "url": "https://www.si.com/nfl/broncos/onsi/jaylen-waddle-chest-injury-practice-report-chiefs",
-          "published_at": "2026-10-29T02:25:18.000Z"
-        },
         {
           "player_key": "jaylenwaddle:DEN",
           "source": "sportingnews",
@@ -2556,7 +2572,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "jaylenwaddle:DEN",
@@ -2571,7 +2587,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -2579,7 +2595,7 @@
           "practice": null,
           "injury": "Undisclosed",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2589,7 +2605,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2610,7 +2626,7 @@
           "practice": null,
           "injury": "Heel",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2620,7 +2636,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2633,7 +2649,7 @@
           "practice": null,
           "injury": "Heel",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2643,7 +2659,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2664,7 +2680,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2677,7 +2693,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2698,7 +2714,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2711,7 +2727,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2732,7 +2748,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2745,7 +2761,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2766,7 +2782,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2779,7 +2795,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2800,7 +2816,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2810,7 +2826,7 @@
           "player_key": "emanuelwilson:SEA",
           "source": "bleacher",
           "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 2d Seahawks Spoil K9's Homecoming 😈 Emanuel Wilson records 100-yd rush game and score in front of former Seattle RB",
+          "title": "Bleacher Report • 3d Seahawks Spoil K9's Homecoming 😈 Emanuel Wilson records 100-yd rush game and score in front of former Seattle RB",
           "url": "https://bleacherreport.com/articles/25520380-seahawks-beat-chiefs-box-score-stats-highlights-walker-mahomes-darnold-kelce-top-players",
           "published_at": null
         }
@@ -2822,7 +2838,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2843,7 +2859,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2853,21 +2869,12 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
-      "news": [
-        {
-          "player_key": "camskattebo:NYG",
-          "source": "pfn",
-          "source_name": "Pro Football Network",
-          "title": "‘I Hope He Keeps Doing It’ — Ex-NFL QB Reacts to Cam Skattebo Getting Punished by Refs for Controversial Reason",
-          "url": "https://www.profootballnetwork.com/cam-skattebo-punished-refs-controversial/",
-          "published_at": "2026-10-28T15:53:43.000Z"
-        }
-      ],
+      "news": [],
       "reports": [
         {
           "source": "Sleeper roster",
@@ -2875,7 +2882,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -2885,7 +2892,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2906,7 +2913,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2936,7 +2943,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -2990,7 +2997,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3003,6 +3010,22 @@
           "title": "NFL quarterback rankings: Joe Burrow leads the way, Dak Prescott surges",
           "url": "https://www.pff.com/news/nfl-quarterback-rankings/",
           "published_at": "2026-10-28T10:15:00.000Z"
+        },
+        {
+          "player_key": "joeburrow:CIN",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL MVP odds: Joe Burrow rises while Josh Allen separates from Brock Purdy",
+          "url": "https://www.nytimes.com/athletic/7664501/2026/10/27/nfl-mvp-odds-tracker-favorites/",
+          "published_at": "2026-10-27T05:30:28.000Z"
+        },
+        {
+          "player_key": "joeburrow:CIN",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Joe Burrow explodes in second half as Bengals deal Ravens all-too-familiar defeat",
+          "url": "https://www.nytimes.com/athletic/7723995/2026/10/25/bengals-ravens-nfl-week-7-result-takeaways/",
+          "published_at": "2026-10-25T19:58:26.000Z"
         },
         {
           "player_key": "joeburrow:CIN",
@@ -3020,7 +3043,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3041,7 +3064,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3054,7 +3077,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3075,7 +3098,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3085,7 +3108,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3098,7 +3121,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3108,7 +3131,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3129,7 +3152,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3139,7 +3162,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3175,7 +3198,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "amonrastbrown:DET",
@@ -3190,7 +3213,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -3198,7 +3221,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3208,7 +3231,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3229,7 +3252,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3239,7 +3262,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3277,7 +3300,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3287,7 +3310,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3308,7 +3331,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3321,7 +3344,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3342,12 +3365,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "brockpurdy:SF",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL MVP odds: Joe Burrow rises while Josh Allen separates from Brock Purdy",
+          "url": "https://www.nytimes.com/athletic/7664501/2026/10/27/nfl-mvp-odds-tracker-favorites/",
+          "published_at": "2026-10-27T05:30:28.000Z"
+        },
         {
           "player_key": "brockpurdy:SF",
           "source": "fox",
@@ -3380,7 +3411,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3401,12 +3432,28 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "joshdowns:IND",
+          "source": "rumors",
+          "source_name": "Pro Football Rumors",
+          "title": "Colts’ Jonathan Taylor Has Not Requested Trade; Josh Downs Wants Out",
+          "url": "https://www.profootballrumors.com/2026/10/colts-jonathan-taylor-has-not-requested-trade-josh-downs-drawing-interest",
+          "published_at": "2026-10-29T04:10:04.000Z"
+        },
+        {
+          "player_key": "joshdowns:IND",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Colts WR Josh Downs on trade rumors: 'I'm open to whatever'",
+          "url": "https://www.nytimes.com/athletic/7732720/2026/10/28/colts-josh-downs-trade-rumors/",
+          "published_at": "2026-10-28T19:03:14.000Z"
+        },
         {
           "player_key": "joshdowns:IND",
           "source": "espn",
@@ -3430,14 +3477,6 @@
           "title": "‘Makes Sense for Both Sides,’ ‘He’s Seen Enough of Daniel Jones’ — NFL World Reacts to Josh Downs Requesting Trade From Colts",
           "url": "https://www.profootballnetwork.com/josh-downs-trade-request-colts-reaction/",
           "published_at": "2026-10-28T17:34:16.000Z"
-        },
-        {
-          "player_key": "joshdowns:IND",
-          "source": "rumors",
-          "source_name": "Pro Football Rumors",
-          "title": "Colts’ Jonathan Taylor Has Not Requested Trade; Josh Downs Wants Out",
-          "url": "https://www.profootballrumors.com/2026/10/colts-jonathan-taylor-has-not-requested-trade-josh-downs-drawing-interest",
-          "published_at": "2026-10-28T16:18:04.000Z"
         },
         {
           "player_key": "joshdowns:IND",
@@ -3471,7 +3510,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3503,7 +3542,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3516,7 +3555,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3568,7 +3607,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3581,7 +3620,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3602,12 +3641,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "matthewstafford:LAR",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Matthew Stafford, Rams roll Raiders in get-right win. Can they build on their momentum?",
+          "url": "https://www.nytimes.com/athletic/7723992/2026/10/25/rams-raiders-nfl-week-7-result-takeaways/",
+          "published_at": "2026-10-25T23:44:31.000Z"
+        },
         {
           "player_key": "matthewstafford:LAR",
           "source": "4for4",
@@ -3632,7 +3679,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3653,7 +3700,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3666,7 +3713,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3687,7 +3734,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3697,7 +3744,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3719,7 +3766,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -3729,7 +3776,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3750,7 +3797,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3763,7 +3810,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3784,7 +3831,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3797,7 +3844,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3818,7 +3865,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3831,7 +3878,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3852,12 +3899,28 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "jonathantaylor:IND",
+          "source": "rumors",
+          "source_name": "Pro Football Rumors",
+          "title": "Colts’ Jonathan Taylor Has Not Requested Trade; Josh Downs Wants Out",
+          "url": "https://www.profootballrumors.com/2026/10/colts-jonathan-taylor-has-not-requested-trade-josh-downs-drawing-interest",
+          "published_at": "2026-10-29T04:10:04.000Z"
+        },
+        {
+          "player_key": "jonathantaylor:IND",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Why the Vikings are a strong fit for Jonathan Taylor",
+          "url": "https://www.nytimes.com/athletic/7733693/2026/10/28/why-the-vikings-are-a-strong-fit-for-jonathan-taylor/",
+          "published_at": "2026-10-28T21:49:13.000Z"
+        },
         {
           "player_key": "jonathantaylor:IND",
           "source": "pfn",
@@ -3884,6 +3947,14 @@
         },
         {
           "player_key": "jonathantaylor:IND",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Jonathan Taylor's wife reacts to Quenton Nelson trade: 'Do I need to start packing our bags?'",
+          "url": "https://www.nytimes.com/athletic/7725694/2026/10/28/jonathan-taylor-wife-social-media-trade-rumors/",
+          "published_at": "2026-10-28T16:35:23.000Z"
+        },
+        {
+          "player_key": "jonathantaylor:IND",
           "source": "si",
           "source_name": "Sports Illustrated",
           "title": "The Pros and Cons of the Colts Trading Jonathan Taylor",
@@ -3892,19 +3963,19 @@
         },
         {
           "player_key": "jonathantaylor:IND",
-          "source": "rumors",
-          "source_name": "Pro Football Rumors",
-          "title": "Colts’ Jonathan Taylor Has Not Requested Trade; Josh Downs Wants Out",
-          "url": "https://www.profootballrumors.com/2026/10/colts-jonathan-taylor-has-not-requested-trade-josh-downs-drawing-interest",
-          "published_at": "2026-10-28T16:18:04.000Z"
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL trade deadline targets: Jonathan Taylor, Brian Thomas Jr. among players who could be dealt",
+          "url": "https://www.nytimes.com/athletic/7730346/2026/10/28/nfl-trade-deadline-players-to-watch/",
+          "published_at": "2026-10-28T06:20:44.000Z"
         },
         {
           "player_key": "jonathantaylor:IND",
-          "source": "pfn",
-          "source_name": "Pro Football Network",
-          "title": "‘Holding Jonathan Taylor Hostage’ — Ex-NFL DT Takes Shot at Colts Owner Carlie Irsay-Gordon’s Questionable Decisions",
-          "url": "https://www.profootballnetwork.com/breiden-fehoko-carlie-irsay-gordon-colts/",
-          "published_at": "2026-10-28T16:10:15.000Z"
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "What I’m Hearing: Deshaun Watson’s Cleveland future, Jonathan Taylor rumors, Lions' LaPorta dilemma",
+          "url": "https://www.nytimes.com/athletic/7718241/2026/10/24/deshaun-watson-cleveland-jonathan-taylor-rumors-sam-laporta-jalen-hurts/",
+          "published_at": "2026-10-24T07:00:27.000Z"
         },
         {
           "player_key": "jonathantaylor:IND",
@@ -3940,30 +4011,6 @@
         },
         {
           "player_key": "jonathantaylor:IND",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 3d 5 Teams Eyeing Jonathan Taylor Packers, Vikings, Seahawks among teams likely to consider trading for RB (ESPN)",
-          "url": "https://bleacherreport.com/articles/25520020-new-jonathan-taylor-trade-rumors-reveal-every-team-eyeing-colts-star-nfl-landing-spot",
-          "published_at": null
-        },
-        {
-          "player_key": "jonathantaylor:IND",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 4d Jonathan Taylor Landing Spots 📍 Ideal fits for star RB amid possible Colts rebuild",
-          "url": "https://bleacherreport.com/articles/25519333-top-landing-spots-colts-rb-jonathan-taylor-amid-latest-nfl-trade-rumors",
-          "published_at": null
-        },
-        {
-          "player_key": "jonathantaylor:IND",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 6d Teams Watching Jonathan Taylor RB drawing interest, while Colts uncertain about being sellers at deadline (ESPN)",
-          "url": "https://bleacherreport.com/articles/25519189-new-jonathan-taylor-trade-rumors-colts-rb-talks-potential-deal-nfl-deadline",
-          "published_at": null
-        },
-        {
-          "player_key": "jonathantaylor:IND",
           "source": "sportingnews",
           "source_name": "Sporting News",
           "title": "Colts HC reveals if Jonathan Taylor has requested a trade This is a noteworthy update on a key player in Indianapolis. Matt Sullivan",
@@ -3978,7 +4025,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -3999,7 +4046,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4012,7 +4059,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4033,7 +4080,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4061,7 +4108,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -4069,7 +4116,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4090,7 +4137,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4109,7 +4156,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -4117,7 +4164,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4138,7 +4185,7 @@
           "practice": null,
           "injury": "Knee - ACL",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4148,12 +4195,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "zachcharbonnet:SEA",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Seahawks RB Zach Charbonnet won't return vs. Chiefs, Walker; Nick Emmanwori has new injury",
+          "url": "https://www.nytimes.com/athletic/7718327/2026/10/23/zach-charbonnet-injury-seahawks-nick-emmanwori/",
+          "published_at": "2026-10-23T21:08:27.000Z"
+        },
         {
           "player_key": "zachcharbonnet:SEA",
           "source": "playerprofiler",
@@ -4185,7 +4240,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -4193,7 +4248,7 @@
           "practice": null,
           "injury": "Knee - ACL",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4203,7 +4258,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4224,7 +4279,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4246,7 +4301,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4267,7 +4322,7 @@
           "practice": null,
           "injury": "Chest",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4277,7 +4332,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4289,14 +4344,6 @@
           "source_name": "FantasyPros",
           "title": "Dalton Kincaid (chest) limited in practice Wednesday",
           "url": "https://www.fantasypros.com/nfl/news/616328/dalton-kincaid-chest-limited-practice-wednesday.php",
-          "published_at": null
-        },
-        {
-          "player_key": "daltonkincaid:BUF",
-          "source": "footballguys",
-          "source_name": "Footballguys",
-          "title": "Dalton Kincaid player page",
-          "url": "https://www.footballguys.com/player/Dalton+Kincaid/KincDa00",
           "published_at": null
         },
         {
@@ -4321,7 +4368,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "daltonkincaid:BUF",
@@ -4336,7 +4383,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -4344,7 +4391,7 @@
           "practice": null,
           "injury": "Chest",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4354,7 +4401,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4375,7 +4422,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4397,7 +4444,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4414,11 +4461,27 @@
       "news": [
         {
           "player_key": "brianthomas:JAX",
+          "source": "yahoo",
+          "source_name": "Yahoo Sports",
+          "title": "Brian Thomas Jr. to Chiefs? 8 trade deadline deals we'd love to see",
+          "url": "https://sports.yahoo.com/articles/brian-thomas-jr-chiefs-8-093102968.html",
+          "published_at": "2026-10-29T09:31:02.000Z"
+        },
+        {
+          "player_key": "brianthomas:JAX",
           "source": "espn",
           "source_name": "ESPN",
           "title": "Brian Thomas Jr. trying to ignore trade talk, 'keep working hard' for Jaguars",
           "url": "https://www.espn.com/nfl/story/_/id/50311100/jaguars-brian-thomas-jr-trying-ignore-trade-talk",
           "published_at": "2026-10-28T21:42:47Z"
+        },
+        {
+          "player_key": "brianthomas:JAX",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL trade deadline targets: Jonathan Taylor, Brian Thomas Jr. among players who could be dealt",
+          "url": "https://www.nytimes.com/athletic/7730346/2026/10/28/nfl-trade-deadline-players-to-watch/",
+          "published_at": "2026-10-28T06:20:44.000Z"
         },
         {
           "player_key": "brianthomas:JAX",
@@ -4462,7 +4525,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4475,7 +4538,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4496,7 +4559,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4518,7 +4581,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4539,7 +4602,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4561,7 +4624,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4582,7 +4645,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4603,6 +4666,14 @@
           "title": "NFL quarterback rankings: Joe Burrow leads the way, Dak Prescott surges",
           "url": "https://www.pff.com/news/nfl-quarterback-rankings/",
           "published_at": "2026-10-28T10:15:00.000Z"
+        },
+        {
+          "player_key": "dakprescott:DAL",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Dak Prescott's newest football cards going viral because of wrist-tape message",
+          "url": "https://www.nytimes.com/athletic/7730156/2026/10/27/dak-prescott-football-cards-cancer-message/",
+          "published_at": "2026-10-27T20:28:46.000Z"
         }
       ],
       "reports": [
@@ -4612,7 +4683,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4633,7 +4704,7 @@
           "practice": null,
           "injury": "Shoulder - AC Joint",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4643,7 +4714,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4662,7 +4733,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -4670,7 +4741,7 @@
           "practice": null,
           "injury": "Shoulder - AC Joint",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -4680,7 +4751,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4701,7 +4772,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4731,7 +4802,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4752,7 +4823,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4765,7 +4836,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4786,7 +4857,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4799,7 +4870,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4820,7 +4891,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4833,7 +4904,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4854,12 +4925,28 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "pukanacua:LAR",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Rams WR Puka Nacua misses practice, questionable vs. Raiders with calf injury",
+          "url": "https://www.nytimes.com/athletic/7715458/2026/10/23/puka-nacua-injury-rams-raiders/",
+          "published_at": "2026-10-23T18:35:43.000Z"
+        },
+        {
+          "player_key": "pukanacua:LAR",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Fantasy football injury report: All eyes on Puka Nacua's calf injury",
+          "url": "https://www.nytimes.com/athletic/7715203/2026/10/23/fantasy-football-injury-report-streamers-pivots-week-7/",
+          "published_at": "2026-10-23T14:10:07.000Z"
+        },
         {
           "player_key": "pukanacua:LAR",
           "source": "playerprofiler",
@@ -4884,7 +4971,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4905,7 +4992,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4918,7 +5005,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4939,7 +5026,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4952,7 +5039,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4973,7 +5060,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -4986,7 +5073,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5007,7 +5094,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5020,7 +5107,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5041,7 +5128,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5054,7 +5141,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5075,7 +5162,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5129,7 +5216,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5170,7 +5257,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5183,7 +5270,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5259,7 +5346,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5278,7 +5365,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -5286,7 +5373,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5343,7 +5430,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5353,7 +5440,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5405,7 +5492,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "georgepickens:DAL",
@@ -5420,7 +5507,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -5428,7 +5515,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5438,7 +5525,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5459,7 +5546,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5481,7 +5568,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5522,7 +5609,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5544,7 +5631,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5565,7 +5652,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5578,7 +5665,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5599,7 +5686,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5612,7 +5699,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5633,7 +5720,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5646,7 +5733,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5667,7 +5754,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5677,7 +5764,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5729,7 +5816,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "matthewgolden:GB",
@@ -5744,7 +5831,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -5752,7 +5839,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5762,7 +5849,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5825,7 +5912,7 @@
           "practice": null,
           "injury": "Undisclosed",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5835,7 +5922,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5879,7 +5966,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "aaronjones:MIN",
@@ -5894,7 +5981,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -5902,7 +5989,7 @@
           "practice": null,
           "injury": "Undisclosed",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -5912,7 +5999,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5933,7 +6020,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5941,11 +6028,11 @@
       "news": [
         {
           "player_key": "joshallen:BUF",
-          "source": "sixpack",
-          "source_name": "Fantasy Six Pack",
-          "title": "2026 Fantasy Football Goal Line Guide Week 8: Josh Allen, Bills and Key Players Inside the 5",
-          "url": "https://fantasysixpack.net/2026-fantasy-football-goal-line-guide-week-8/",
-          "published_at": "2026-10-28T11:30:58.000Z"
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL MVP odds: Joe Burrow rises while Josh Allen separates from Brock Purdy",
+          "url": "https://www.nytimes.com/athletic/7664501/2026/10/27/nfl-mvp-odds-tracker-favorites/",
+          "published_at": "2026-10-27T05:30:28.000Z"
         },
         {
           "player_key": "joshallen:BUF",
@@ -5971,7 +6058,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -5992,7 +6079,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6005,7 +6092,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6026,7 +6113,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6036,7 +6123,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6055,7 +6142,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "ajbrown:NE",
@@ -6070,7 +6157,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -6078,7 +6165,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6088,7 +6175,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6109,7 +6196,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6139,7 +6226,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6160,7 +6247,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6170,7 +6257,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6214,7 +6301,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "jahmyrgibbs:DET",
@@ -6229,7 +6316,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -6237,7 +6324,7 @@
           "practice": null,
           "injury": "Shoulder",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6247,7 +6334,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6268,7 +6355,7 @@
           "practice": null,
           "injury": "Concussion",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6278,7 +6365,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6308,7 +6395,7 @@
           "practice": null,
           "injury": "Concussion",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6318,7 +6405,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6339,7 +6426,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6349,9 +6436,9 @@
           "player_key": "kirkcousins:LV",
           "source": "pfn",
           "source_name": "Pro Football Network",
-          "title": "‘(Kirk) Cousins Has Been Awful’ — NFL Analyst Has ‘Major Problem’ With Raiders for Not Giving QB1 Spot to Fernando Mendoza After 4 Straight Losses",
-          "url": "https://www.profootballnetwork.com/kirk-cousins-awful-nfl-analyst-fernando-mendoza/",
-          "published_at": "2026-10-28T16:10:40.000Z"
+          "title": "‘Kirk Cousins Is Not Coming Back to Minnesota,’ ‘He Took Enough of Our Money’ — Vikings’ Hall of Famer Rejects Reunion With 4-Time Pro Bowl QB",
+          "url": "https://www.profootballnetwork.com/kirk-cousins-not-coming-vikings-cris-carter-rejects-reunion/",
+          "published_at": "2026-10-29T09:10:09.000Z"
         },
         {
           "player_key": "kirkcousins:LV",
@@ -6379,14 +6466,6 @@
         },
         {
           "player_key": "kirkcousins:LV",
-          "source": "sportingnews",
-          "source_name": "Sporting News",
-          "title": "Raiders' Kirk Cousins already floated as a trade target Las Vegas Raiders quarterback Kirk Cousins may not want to get too comfy in his new home. Anne Erickson",
-          "url": "https://www.sportingnews.com/us/nfl/las-vegas-raiders/news/raiders-kirk-cousins-already-floated-trade-target/bb17028f96e59fb7733d55fa",
-          "published_at": null
-        },
-        {
-          "player_key": "kirkcousins:LV",
           "source": "footballguys",
           "source_name": "Footballguys",
           "title": "Kirk Cousins player page",
@@ -6401,7 +6480,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6453,7 +6532,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6466,7 +6545,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6487,7 +6566,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6497,7 +6576,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6510,7 +6589,7 @@
           "practice": null,
           "injury": "Groin",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6520,7 +6599,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6541,7 +6620,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6554,7 +6633,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6575,7 +6654,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6588,7 +6667,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6609,7 +6688,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6622,7 +6701,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6663,7 +6742,7 @@
           "practice": null,
           "injury": "Back",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6673,12 +6752,20 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "saquonbarkley:PHI",
+          "source": "pfn",
+          "source_name": "Pro Football Network",
+          "title": "‘Doesn’t Apply to Owners,’ ‘But (Adam) Schefter and Robert Kraft Can Own It’ — Fans Call Out NFL’s Double Standards Over Saquon Barkley’s ‘Forced’ Business Move",
+          "url": "https://www.profootballnetwork.com/nfl-fans-call-out-double-standards-saquon-barkley-business/",
+          "published_at": "2026-10-29T07:15:49.000Z"
+        },
         {
           "player_key": "saquonbarkley:PHI",
           "source": "yahoo",
@@ -6766,7 +6853,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -6774,7 +6861,7 @@
           "practice": null,
           "injury": "Back",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6784,7 +6871,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6805,7 +6892,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6815,7 +6902,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6855,11 +6942,27 @@
         },
         {
           "player_key": "lamarjackson:BAL",
-          "source": "yahoo",
-          "source_name": "Yahoo Sports",
-          "title": "NFL Injury Report, Week 8: Latest news, updates on Lamar Jackson, Breece Hall, more players for fantasy football",
-          "url": "https://sports.yahoo.com/fantasy/article/nfl-injury-report-week-8-latest-news-updates-on-lamar-jackson-breece-hall-more-players-for-fantasy-football-170704038.html",
-          "published_at": "2026-10-26T17:07:04.000Z"
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "The influence of Robert Griffin III on Lamar Jackson's approach to injuries",
+          "url": "https://www.nytimes.com/athletic/7731278/2026/10/27/the-influence-of-robert-griffin-iii-on-lamar-jacksons-approach-to-injuries/",
+          "published_at": "2026-10-28T01:22:43.000Z"
+        },
+        {
+          "player_key": "lamarjackson:BAL",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "A familiar mystery in Baltimore: The confusion around Lamar Jackson’s health",
+          "url": "https://www.nytimes.com/athletic/7728142/2026/10/27/lamar-jackson-injury-update-ravens/",
+          "published_at": "2026-10-27T10:00:16.000Z"
+        },
+        {
+          "player_key": "lamarjackson:BAL",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Fantasy Football Week 7 inactives and injuries: Mike Evans, Lamar Jackson out",
+          "url": "https://www.nytimes.com/athletic/7723332/2026/10/25/fantasy-football-week-7-inactives-and-injuries-mike-evans-lamar-jackson-out/",
+          "published_at": "2026-10-25T15:56:29.000Z"
         },
         {
           "player_key": "lamarjackson:BAL",
@@ -6939,7 +7042,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "lamarjackson:BAL",
@@ -6954,7 +7057,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -6962,7 +7065,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -6972,7 +7075,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -6993,7 +7096,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7006,7 +7109,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7027,7 +7130,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7049,7 +7152,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7125,7 +7228,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7135,7 +7238,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7171,7 +7274,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "rasheerice:KC",
@@ -7186,7 +7289,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -7194,7 +7297,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7204,7 +7307,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7236,7 +7339,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7249,7 +7352,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7270,7 +7373,7 @@
           "practice": null,
           "injury": "Concussion",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7280,7 +7383,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7293,6 +7396,14 @@
           "title": "Emeka Egbuka (concussion/foot) OUT for Week 7",
           "url": "https://www.playerprofiler.com/news/emeka-egbuka-concussion-foot-out-for-week-7/",
           "published_at": "2026-10-25T03:15:50.000Z"
+        },
+        {
+          "player_key": "emekaegbuka:TB",
+          "source": "footballguys",
+          "source_name": "Footballguys",
+          "title": "Emeka Egbuka player page",
+          "url": "https://www.footballguys.com/player/Emeka+Egbuka/EgbuEm00",
+          "published_at": null
         },
         {
           "player_key": "emekaegbuka:TB",
@@ -7316,7 +7427,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "emekaegbuka:TB",
@@ -7331,7 +7442,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -7339,7 +7450,7 @@
           "practice": null,
           "injury": "Concussion",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7349,7 +7460,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7381,7 +7492,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7391,7 +7502,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7437,7 +7548,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7447,7 +7558,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7467,7 +7578,7 @@
           "practice": null,
           "injury": "Knee - ACL",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7480,7 +7591,7 @@
           "practice": null,
           "injury": "Knee - ACL",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7501,7 +7612,7 @@
           "practice": null,
           "injury": "Calf",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7511,7 +7622,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7533,7 +7644,7 @@
           "practice": null,
           "injury": "Calf",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7543,7 +7654,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7564,7 +7675,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7577,14 +7688,6 @@
           "title": "Patrick Mahomes a full participant Wednesday",
           "url": "https://sports.yahoo.com/articles/patrick-mahomes-full-participant-wednesday-005646381.html",
           "published_at": "2026-10-29T00:56:46.000Z"
-        },
-        {
-          "player_key": "patrickmahomes:KC",
-          "source": "pfn",
-          "source_name": "Pro Football Network",
-          "title": "‘I’m Making The Call’ — Russell Wilson Pushes NFC Heavyweights To Rival Patrick Mahomes’ Chiefs in Tussle For Jets’ Garrett Wilson",
-          "url": "https://www.profootballnetwork.com/russell-wilson-patrick-mahomes-jets-garrett-wilson/",
-          "published_at": "2026-10-28T14:28:09.000Z"
         },
         {
           "player_key": "patrickmahomes:KC",
@@ -7608,7 +7711,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -7616,7 +7719,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7637,7 +7740,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7656,7 +7759,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -7664,7 +7767,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7685,7 +7788,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7698,7 +7801,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7719,7 +7822,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7729,7 +7832,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7742,7 +7845,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -7752,7 +7855,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7784,7 +7887,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7797,7 +7900,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7818,7 +7921,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7831,7 +7934,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7852,7 +7955,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7865,7 +7968,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7886,7 +7989,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7899,7 +8002,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7920,7 +8023,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7933,7 +8036,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7954,7 +8057,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -7973,7 +8076,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -7981,7 +8084,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8002,7 +8105,7 @@
           "practice": null,
           "injury": "Toe",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8012,7 +8115,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8041,7 +8144,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -8049,7 +8152,7 @@
           "practice": null,
           "injury": "Toe",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8059,7 +8162,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8108,7 +8211,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8154,7 +8257,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8174,21 +8277,12 @@
           "practice": null,
           "injury": "Knee",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
-      "news": [
-        {
-          "player_key": "terrymclaurin:WAS",
-          "source": "rumors",
-          "source_name": "Pro Football Rumors",
-          "title": "Commanders Designate DT Jer’Zhan Newton For Return, Place WR Terry McLaurin On IR",
-          "url": "https://www.profootballrumors.com/2026/10/commanders-designate-dt-jerzhan-newton-for-return-place-wr-terry-mclaurin-on-ir",
-          "published_at": "2026-10-28T16:55:46.000Z"
-        }
-      ],
+      "news": [],
       "reports": [
         {
           "source": "Sleeper roster",
@@ -8196,7 +8290,7 @@
           "practice": null,
           "injury": "Knee",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8217,7 +8311,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8230,7 +8324,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8251,7 +8345,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8261,7 +8355,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8289,7 +8383,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "jamarrchase:CIN",
@@ -8304,7 +8398,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -8312,7 +8406,7 @@
           "practice": null,
           "injury": "Ankle",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8322,7 +8416,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8343,7 +8437,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8356,7 +8450,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8377,7 +8471,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8390,7 +8484,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8431,7 +8525,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8444,7 +8538,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8465,7 +8559,7 @@
           "practice": null,
           "injury": "Toe",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8475,7 +8569,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8527,7 +8621,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "tylerallgeier:ARI",
@@ -8542,7 +8636,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -8550,7 +8644,7 @@
           "practice": null,
           "injury": "Toe",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8560,7 +8654,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8581,7 +8675,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8613,14 +8707,6 @@
         },
         {
           "player_key": "garrettwilson:NYJ",
-          "source": "pfn",
-          "source_name": "Pro Football Network",
-          "title": "‘I’m Making The Call’ — Russell Wilson Pushes NFC Heavyweights To Rival Patrick Mahomes’ Chiefs in Tussle For Jets’ Garrett Wilson",
-          "url": "https://www.profootballnetwork.com/russell-wilson-patrick-mahomes-jets-garrett-wilson/",
-          "published_at": "2026-10-28T14:28:09.000Z"
-        },
-        {
-          "player_key": "garrettwilson:NYJ",
           "source": "footballguys",
           "source_name": "Footballguys",
           "title": "Garrett Wilson player page",
@@ -8635,7 +8721,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8667,7 +8753,7 @@
           "practice": null,
           "injury": "Ribs",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8677,7 +8763,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8705,7 +8791,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "michaelwilson:ARI",
@@ -8720,7 +8806,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -8728,7 +8814,7 @@
           "practice": null,
           "injury": "Ribs",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -8738,7 +8824,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8759,7 +8845,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -8772,6 +8858,14 @@
           "title": "Drake Maye’s hot streak continues",
           "url": "https://www.playerprofiler.com/news/drake-mayes-hot-streak-continues/",
           "published_at": "2026-10-24T22:49:27.000Z"
+        },
+        {
+          "player_key": "drakemaye:NE",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Caleb Williams outduels draft classmate Drake Maye as Bears hang on against Patriots",
+          "url": "https://www.nytimes.com/athletic/7714509/2026/10/22/patriots-bears-score-results-takeaways-thursday-night-football/",
+          "published_at": "2026-10-23T03:28:08.000Z"
         },
         {
           "player_key": "drakemaye:NE",
@@ -8996,14 +9090,6 @@
           "title": "After Further Review: Breaking Down QB Drake Maye, the Patriots Defense and Quick-Hit Film Notes From Sunday's Loss to the Bills",
           "url": "https://www.patriots.com/news/after-further-review-breaking-down-qb-drake-maye-the-patriots-defense-and-quick-hit-film-notes-from-sunday-s-loss-to-the-bills",
           "published_at": null
-        },
-        {
-          "player_key": "drakemaye:NE",
-          "source": "patriots",
-          "source_name": "Patriots.com",
-          "title": "After Further Review: Breaking Down Patriots QB Drake Maye, the Run Defense and Quick-Hit Film Notes From the Win Over the Giants",
-          "url": "https://www.patriots.com/news/after-further-review-breaking-down-patriots-qb-drake-maye-the-run-defense-and-quick-hit-film-notes-from-the-win-over-the-giants",
-          "published_at": null
         }
       ],
       "reports": [
@@ -9019,7 +9105,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -9027,7 +9113,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9048,7 +9134,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9061,7 +9147,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9082,7 +9168,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9095,7 +9181,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9115,7 +9201,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9128,7 +9214,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9160,7 +9246,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9194,7 +9280,7 @@
           "player_key": "jaredgoff:DET",
           "source": "bleacher",
           "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 23h Jared Goff's 'Waterboy' Costume 💧 Lions QB, wife nailed Adam Sandler classic",
+          "title": "Bleacher Report • 1d Jared Goff's 'Waterboy' Costume 💧 Lions QB, wife nailed Adam Sandler classic",
           "url": "https://bleacherreport.com/articles/25521330-lions-jared-goff-wife-christen-show-waterboy-halloween-costumes-trending-video-photos",
           "published_at": null
         }
@@ -9206,7 +9292,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9227,7 +9313,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9240,7 +9326,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9261,7 +9347,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9274,7 +9360,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9295,7 +9381,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9308,7 +9394,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9329,7 +9415,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9359,7 +9445,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9380,7 +9466,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9393,7 +9479,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9414,12 +9500,52 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
       "news": [
+        {
+          "player_key": "kennethwalker:KC",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Seahawks remember who they are in rout of Chiefs, Kenneth Walker III",
+          "url": "https://www.nytimes.com/athletic/7725939/2026/10/26/seahawks-chiefs-kenneth-walker-homecoming/",
+          "published_at": "2026-10-26T10:00:28.000Z"
+        },
+        {
+          "player_key": "kennethwalker:KC",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Seahawks shut down Kenneth Walker, hand Chiefs first loss in battle of NFL heavyweights",
+          "url": "https://www.nytimes.com/athletic/7723944/2026/10/25/chiefs-seahawks-nfl-week-7-result-takeaways/",
+          "published_at": "2026-10-26T03:17:52.000Z"
+        },
+        {
+          "player_key": "kennethwalker:KC",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL Week 7 viewing guide: J.J. McCarthy’s test, division clashes, Kenneth Walker Bowl",
+          "url": "https://www.nytimes.com/athletic/7717399/2026/10/25/nfl-week-7-what-to-watch-jj-mccarthy/",
+          "published_at": "2026-10-25T09:30:13.000Z"
+        },
+        {
+          "player_key": "kennethwalker:KC",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Five Week 7 NFL storylines, from Kenneth Walker III's return to Bo Nix's struggles",
+          "url": "https://www.nytimes.com/athletic/7719863/2026/10/24/five-week-7-nfl-storylines-from-kenneth-walker-iiis-return-to-bo-nixs-struggles/",
+          "published_at": "2026-10-24T11:57:29.000Z"
+        },
+        {
+          "player_key": "kennethwalker:KC",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "The Seahawks sorely miss Kenneth Walker III. Now they must stop him at his best",
+          "url": "https://www.nytimes.com/athletic/7706826/2026/10/22/kenneth-walker-chiefs-seahawks-former-team/",
+          "published_at": "2026-10-22T09:30:41.000Z"
+        },
         {
           "player_key": "kennethwalker:KC",
           "source": "nfl",
@@ -9444,7 +9570,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9465,7 +9591,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -9475,7 +9601,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9511,7 +9637,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "brianrobinson:ATL",
@@ -9526,7 +9652,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "Sleeper roster",
@@ -9534,7 +9660,7 @@
           "practice": null,
           "injury": "Hamstring",
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         },
@@ -9544,7 +9670,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9565,7 +9691,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9603,7 +9729,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9623,7 +9749,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9636,7 +9762,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9656,7 +9782,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9669,7 +9795,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9689,7 +9815,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9702,7 +9828,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9722,7 +9848,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9743,14 +9869,6 @@
           "title": "Eagles place RB Dameon Pierce on IR, sign Jaydon Blue to active roster",
           "url": "https://sports.yahoo.com/articles/eagles-place-rb-dameon-pierce-220457803.html",
           "published_at": "2026-10-28T22:04:57.000Z"
-        },
-        {
-          "player_key": "dameonpierce:PHI",
-          "source": "yahoo",
-          "source_name": "Yahoo Sports",
-          "title": "Eagles roster news includes Dameon Pierce to injured reserve",
-          "url": "https://sports.yahoo.com/articles/eagles-roster-news-includes-dameon-213727031.html",
-          "published_at": "2026-10-28T21:37:27.000Z"
         },
         {
           "player_key": "dameonpierce:PHI",
@@ -9776,7 +9894,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9796,7 +9914,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9809,7 +9927,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9829,7 +9947,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9848,7 +9966,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -9856,7 +9974,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9876,7 +9994,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9884,19 +10002,19 @@
       "news": [
         {
           "player_key": "jalenhurts:PHI",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL, NFLPA 'working together' to review Jalen Hurts' medical care by Eagles",
+          "url": "https://www.nytimes.com/athletic/7722890/2026/10/25/jalen-hurts-eagles-nfl-nflpa-review/",
+          "published_at": "2026-10-25T13:02:45.000Z"
+        },
+        {
+          "player_key": "jalenhurts:PHI",
           "source": "playerprofiler",
           "source_name": "PlayerProfiler",
           "title": "Jalen Hurts out for season with blood clots",
           "url": "https://www.playerprofiler.com/news/jalen-hurts-out-for-season-with-blood-clots/",
           "published_at": "2026-10-23T01:52:03.000Z"
-        },
-        {
-          "player_key": "jalenhurts:PHI",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 3d NFL Investigating Eagles League, NFLPA looking into how Philly handled Jalen Hurts' blood clot situation",
-          "url": "https://bleacherreport.com/articles/25520034-eagles-under-investigation-over-jalen-hurts-blood-clots-nfl-and-nflpa-confirm-joint-statement",
-          "published_at": null
         }
       ],
       "reports": [
@@ -9906,7 +10024,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9926,7 +10044,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9939,7 +10057,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9959,7 +10077,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -9981,7 +10099,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10001,7 +10119,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10014,7 +10132,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10034,7 +10152,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10047,7 +10165,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10067,7 +10185,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10080,7 +10198,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10100,7 +10218,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10113,7 +10231,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10133,7 +10251,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10146,6 +10264,14 @@
           "title": "‘Would Be a Daniel Jones Type Failure,’ ‘A Huge Mistake’ — NFL Fans Warn Browns Against Giving Deshaun Watson New Contract Amid Extension Speculation",
           "url": "https://www.profootballnetwork.com/nfl-fans-warn-browns-deshaun-watson-new-contract/",
           "published_at": "2026-10-28T21:50:45.000Z"
+        },
+        {
+          "player_key": "deshaunwatson:CLE",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "What I’m Hearing: Deshaun Watson’s Cleveland future, Jonathan Taylor rumors, Lions' LaPorta dilemma",
+          "url": "https://www.nytimes.com/athletic/7718241/2026/10/24/deshaun-watson-cleveland-jonathan-taylor-rumors-sam-laporta-jalen-hurts/",
+          "published_at": "2026-10-24T07:00:27.000Z"
         }
       ],
       "reports": [
@@ -10155,7 +10281,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10175,7 +10301,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10188,7 +10314,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10208,7 +10334,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10221,7 +10347,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10241,7 +10367,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10269,7 +10395,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "calvinridley:TEN",
@@ -10284,7 +10410,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -10292,7 +10418,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10312,7 +10438,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10331,7 +10457,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "player_key": "tyjaespears:TEN",
@@ -10346,7 +10472,7 @@
           "reported_at": null,
           "play_probability": null,
           "probability_type": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -10354,7 +10480,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10374,7 +10500,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10412,7 +10538,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10432,7 +10558,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10445,7 +10571,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10465,7 +10591,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10478,6 +10604,38 @@
           "title": "‘We Don’t Need to Overreact’ — Giants Analyst Pumps Brakes on J.J. McCarthy, Jaxson Dart Comparison After New York’s Big Win vs. Texans",
           "url": "https://www.profootballnetwork.com/giants-analysts-jj-mccarthy-jaxson-dart-comparison/",
           "published_at": "2026-10-28T21:00:27.000Z"
+        },
+        {
+          "player_key": "jjmccarthy:NYG",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL Week 7 Quick Outs: J.J. McCarthy shows improvement, Steelers' O-line keeps rolling",
+          "url": "https://www.nytimes.com/athletic/7729572/2026/10/28/nfl-week-7-recap-mccarthy-giants-steelers/",
+          "published_at": "2026-10-28T10:03:37.000Z"
+        },
+        {
+          "player_key": "jjmccarthy:NYG",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "Why didn't Giants QB J.J. McCarthy wear his signature eye black vs. Texans?",
+          "url": "https://www.nytimes.com/athletic/7727326/2026/10/27/new-york-giants-j-j-mccarthy-eye-black-michigan-ohio-state-c-j-stroud/",
+          "published_at": "2026-10-27T18:20:09.000Z"
+        },
+        {
+          "player_key": "jjmccarthy:NYG",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "J.J. McCarthy validates Giants' decision to turn to him in overtime win vs. Texans",
+          "url": "https://www.nytimes.com/athletic/7723295/2026/10/25/giants-texans-nfl-week-7-result-takeaways/",
+          "published_at": "2026-10-25T20:36:03.000Z"
+        },
+        {
+          "player_key": "jjmccarthy:NYG",
+          "source": "athletic",
+          "source_name": "The Athletic",
+          "title": "NFL Week 7 viewing guide: J.J. McCarthy’s test, division clashes, Kenneth Walker Bowl",
+          "url": "https://www.nytimes.com/athletic/7717399/2026/10/25/nfl-week-7-what-to-watch-jj-mccarthy/",
+          "published_at": "2026-10-25T09:30:13.000Z"
         },
         {
           "player_key": "jjmccarthy:NYG",
@@ -10519,7 +10677,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10539,7 +10697,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10567,7 +10725,7 @@
           "play_probability": null,
           "probability_type": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z"
+          "checked_at": "2026-10-29T09:47:56.714Z"
         },
         {
           "source": "ESPN roster",
@@ -10575,7 +10733,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10595,21 +10753,12 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
       ],
-      "news": [
-        {
-          "player_key": "cairosantos:CHI",
-          "source": "bleacher",
-          "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 5d Cold Bears Kicker Quote 😮‍💨 Cairo Santos was ready for primetime moment",
-          "url": "https://bleacherreport.com/articles/25519326-cairo-santos-lobbied-bears-coaches-attempt-game-sealing-58-yard-fg-vs-patriots",
-          "published_at": null
-        }
-      ],
+      "news": [],
       "reports": [
         {
           "source": "ESPN roster",
@@ -10617,7 +10766,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10637,7 +10786,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10650,7 +10799,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10670,7 +10819,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10692,7 +10841,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10712,7 +10861,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10725,7 +10874,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10745,7 +10894,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10758,7 +10907,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10778,7 +10927,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10816,7 +10965,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10836,7 +10985,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10844,17 +10993,9 @@
       "news": [
         {
           "player_key": "harrisonbutker:KC",
-          "source": "pfn",
-          "source_name": "Pro Football Network",
-          "title": "‘If You Can’t Make 58-Yarders in the NFL Now, It’s Time to Move On’ — Skip Bayless Clashes With Broncos Champ Over Harrison Butker’s Chiefs Future",
-          "url": "https://www.profootballnetwork.com/skip-bayless-harrison-butker-chiefs-future/",
-          "published_at": "2026-10-28T16:28:40.000Z"
-        },
-        {
-          "player_key": "harrisonbutker:KC",
           "source": "bleacher",
           "source_name": "Bleacher Report",
-          "title": "Bleacher Report • 13h Chiefs Sign Justin Tucker Kicker joining practice squad amid Harrison Butker's struggles",
+          "title": "Bleacher Report • 20h Chiefs Sign Justin Tucker Kicker joining practice squad amid Harrison Butker's struggles",
           "url": "https://bleacherreport.com/articles/25521489-justin-tucker-chiefs-reportedly-agree-contract-amid-harrison-butkers-struggles",
           "published_at": null
         }
@@ -10866,7 +11007,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10886,7 +11027,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10908,7 +11049,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10928,7 +11069,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
@@ -10941,7 +11082,7 @@
           "practice": null,
           "injury": null,
           "reported_at": null,
-          "checked_at": "2026-10-29T02:55:48.862Z",
+          "checked_at": "2026-10-29T09:47:56.714Z",
           "week": null,
           "play_probability": null
         }
