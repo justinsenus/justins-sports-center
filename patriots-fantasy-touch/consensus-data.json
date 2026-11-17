@@ -3,7 +3,7 @@
   "method": "mean",
   "scoring": "PPR",
   "status": "partial",
-  "generated_at": "2026-11-16T18:51:12.336Z",
+  "generated_at": "2026-11-17T02:09:03.615Z",
   "season": 2026,
   "week": 10,
   "source_catalog_count": 30,
@@ -14,7 +14,7 @@
       "name": "FantasyPros",
       "type": "projection",
       "status": "error",
-      "updated_at": "2026-11-16T18:51:12.336Z",
+      "updated_at": "2026-11-17T02:09:03.615Z",
       "count": 0,
       "error": "Public projection table unavailable; add FANTASYPROS_API_KEY for JSON access"
     },
@@ -55,7 +55,7 @@
       "name": "Sleeper",
       "type": "projection",
       "status": "live",
-      "updated_at": "2026-11-16T18:51:12.336Z",
+      "updated_at": "2026-11-17T02:09:03.615Z",
       "count": 155
     },
     {
@@ -698,6 +698,34 @@
               "source": "sleeper",
               "label": "Sleeper",
               "value": 8.5,
+              "season": 2026,
+              "week": 10,
+              "scoring": "PPR"
+            }
+          ],
+          "outlier": null,
+          "odds": [],
+          "market": null
+        },
+        "4033": {
+          "player_id": "4033",
+          "name": "David Njoku",
+          "team": "LAC",
+          "position": "TE",
+          "consensus": 5,
+          "method": "mean",
+          "season": 2026,
+          "week": 10,
+          "scoring": "PPR",
+          "min": 5,
+          "max": 5,
+          "range": 0,
+          "sourceCount": 1,
+          "sources": [
+            {
+              "source": "sleeper",
+              "label": "Sleeper",
+              "value": 5,
               "season": 2026,
               "week": 10,
               "scoring": "PPR"
@@ -2212,34 +2240,6 @@
           "range": null,
           "sourceCount": 0,
           "sources": [],
-          "outlier": null,
-          "odds": [],
-          "market": null
-        },
-        "8122": {
-          "player_id": "8122",
-          "name": "Zonovan Knight",
-          "team": "ARI",
-          "position": "RB",
-          "consensus": 8.3,
-          "method": "mean",
-          "season": 2026,
-          "week": 10,
-          "scoring": "PPR",
-          "min": 8.3,
-          "max": 8.3,
-          "range": 0,
-          "sourceCount": 1,
-          "sources": [
-            {
-              "source": "sleeper",
-              "label": "Sleeper",
-              "value": 8.3,
-              "season": 2026,
-              "week": 10,
-              "scoring": "PPR"
-            }
-          ],
           "outlier": null,
           "odds": [],
           "market": null
@@ -5925,6 +5925,34 @@
       "odds": [],
       "market": null
     },
+    "4033": {
+      "player_id": "4033",
+      "name": "David Njoku",
+      "team": "LAC",
+      "position": "TE",
+      "consensus": 5,
+      "method": "mean",
+      "season": 2026,
+      "week": 10,
+      "scoring": "PPR",
+      "min": 5,
+      "max": 5,
+      "range": 0,
+      "sourceCount": 1,
+      "sources": [
+        {
+          "source": "sleeper",
+          "label": "Sleeper",
+          "value": 5,
+          "season": 2026,
+          "week": 10,
+          "scoring": "PPR"
+        }
+      ],
+      "outlier": null,
+      "odds": [],
+      "market": null
+    },
     "4034": {
       "player_id": "4034",
       "name": "Christian McCaffrey",
@@ -7430,34 +7458,6 @@
       "range": null,
       "sourceCount": 0,
       "sources": [],
-      "outlier": null,
-      "odds": [],
-      "market": null
-    },
-    "8122": {
-      "player_id": "8122",
-      "name": "Zonovan Knight",
-      "team": "ARI",
-      "position": "RB",
-      "consensus": 8.3,
-      "method": "mean",
-      "season": 2026,
-      "week": 10,
-      "scoring": "PPR",
-      "min": 8.3,
-      "max": 8.3,
-      "range": 0,
-      "sourceCount": 1,
-      "sources": [
-        {
-          "source": "sleeper",
-          "label": "Sleeper",
-          "value": 8.3,
-          "season": 2026,
-          "week": 10,
-          "scoring": "PPR"
-        }
-      ],
       "outlier": null,
       "odds": [],
       "market": null
